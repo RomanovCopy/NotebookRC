@@ -40,5 +40,11 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public ICommand InstalKey => installKey ??= new RelayCommand(HomeMenuEncryptionModel.Execute_InstalKey, HomeMenuEncryptionModel.CanExecute_InstalKey);
         private RelayCommand installKey;
+
+
+
+        public ICommand EncryptIndividualFile => encryptIndividualFile ??= new RelayCommand( HomeMenuEncryptionModel.Execute_EncryptIndividualFile,
+            HomeMenuEncryptionModel.CanExecute_EncryptIndividualFile );
+        private RelayCommand encryptIndividualFile;
     }
 }

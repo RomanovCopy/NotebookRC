@@ -175,6 +175,10 @@
                           Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"
                           Command="{Binding DeleteKey, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem x:Name="individual_files" 
+                          Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding EncryptIndividualFile, UpdateSourceTrigger=PropertyChanged}"/>
             </MenuItem>
             <MenuItem x:Name="content" DataContext="{StaticResource menucontent}" Width="100"
                       Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}">

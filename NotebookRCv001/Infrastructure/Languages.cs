@@ -426,6 +426,7 @@ namespace NotebookRCv001.Infrastructure
 
         #endregion
 
+
         #region _________________File uploader______________________________
 
 
@@ -595,6 +596,53 @@ namespace NotebookRCv001.Infrastructure
 
         #endregion
 
+
+        #region ************ EncryptIndividualFile ******************************
+
+
+        /// <summary>
+        /// заголовки и подсказки для EncryptIndividualFile
+        /// </summary>
+        public ObservableCollection<string> EncryptIndividualFile => DictionaryEncryptIndividualFile[Key];
+        private Dictionary<string, ObservableCollection<string>> DictionaryEncryptIndividualFile
+        {
+            get => dictionaryEncryptIndividualFile ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                {"ru-RU", new ObservableCollection<string>()
+                {
+                    "Шифровальщик",//00
+                }
+                },
+                {"en-US", new ObservableCollection<string>()
+                {
+                    "Encoder",//00
+                }
+                }
+            };
+        }
+        private Dictionary<string, ObservableCollection<string>> dictionaryEncryptIndividualFile;
+        public ObservableCollection<string> ToolTipsEncryptIndividualFile => DictionaryToolTipsEncryptIndividualFile[Key];
+        Dictionary<string, ObservableCollection<string>> DictionaryToolTipsEncryptIndividualFile
+        {
+            get => dictionaryToolTipsEncryptIndividualFile ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                {"ru-RU", new ObservableCollection<string>()
+                {
+                    "Выберите файл и создайте его зашифрованную копию",//00
+                }
+                },
+                {"en-US", new ObservableCollection<string>()
+                {
+                    "Select a file and create an encrypted copy of it",//00
+                }
+                }
+            };
+        }
+        Dictionary<string, ObservableCollection<string>> dictionaryToolTipsEncryptIndividualFile;
+
+        #endregion
+
+
         #region _______________________________HOME__________________________________________
 
         /// <summary>
@@ -749,6 +797,7 @@ namespace NotebookRCv001.Infrastructure
                             "Установить ключ шифрования",//01
                             "Удалить ключ шифрования",//02
                             "Рабочая диретория",//03
+                            "Шифрование файла",//04
                         }
                     },
                     {
@@ -758,6 +807,7 @@ namespace NotebookRCv001.Infrastructure
                             "Set Encryption Key",//01
                             "Delete Encryption Key",//02
                             "Working Directory",//03
+                            "File encryption",//04
                         }
                     }
             };
@@ -774,6 +824,7 @@ namespace NotebookRCv001.Infrastructure
                             "Шифрование файлов",//00
                             "Задать ключ шифрования",//01
                             "Сохраняемые файлы не будут шифроваться, а зашифрованные файлы не будут расшифровываться",//02
+                            "Зашифровать отдельный файл",//03
                         }
                     },
                     {
@@ -782,6 +833,7 @@ namespace NotebookRCv001.Infrastructure
                             "Encrypting files",//00
                             "Set Encryption Key",//01
                             "Stored files will not be encrypted and encrypted files will not be decrypted",//02
+                            "Encrypt Individual File",//03
                         }
                     }
             };

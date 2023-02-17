@@ -101,6 +101,32 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
+        /// <summary>
+        /// шифрование отдельного файла
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_EncryptIndividualFile( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = !string.IsNullOrWhiteSpace( KeyCrypt ) && !MainWindowViewModel.FrameList.Any( ( x ) => x is MyControls.EncryptIndividualFile );
+                return c;
+            }catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_EncryptIndividualFile( object obj )
+        {
+            try
+            {
+                var page = new MyControls.EncryptIndividualFile();
+                if (MainWindowViewModel.FrameListAddPage.CanExecute( page ))
+                    MainWindowViewModel.FrameListAddPage.Execute( page );
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
         private void InputWindow_Closing( object s, CancelEventArgs e )
         {
             try
