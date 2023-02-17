@@ -1,0 +1,100 @@
+﻿<Page x:Class="NotebookRCv001.Views.SearchForFiles"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+      xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+      xmlns:local="clr-namespace:NotebookRCv001.Views"
+      mc:Ignorable="d" Name="page"
+      Title="Search for files">
+    <Page.Resources>
+        <ResourceDictionary>
+            <viewmodels:SearchForFilesViewModel x:Key="viewmodel"/>
+            <converters:ColumnsWidthConverter x:Key="columnswidth"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Page.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </Page.DataContext>
+
+    <Grid Background="Gray">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="menu" Height="Auto"/>
+            <RowDefinition x:Name="list" Height="*"/>
+            <RowDefinition x:Name="bar" Height="Auto"/>
+        </Grid.RowDefinitions>
+            <Grid   Grid.Row="0"  >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+            <Menu Grid.Column="0"/>
+            <Button x:Name="pageclose" Style="{StaticResource CloseButton}" Grid.Column="2" 
+                    Command="{Binding PageClose, UpdateSourceTrigger=PropertyChanged}"
+                    CommandParameter="{Binding ElementName=page}"/>
+            </Grid>
+        <ListView x:Name="listview" Grid.Row="1" Padding="0" 
+              ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+              ItemsSource="{Binding DetectedFiles, UpdateSourceTrigger=PropertyChanged}" 
+              VirtualizingPanel.IsVirtualizing="True"
+              HorizontalAlignment="Stretch" Focusable="True" BorderThickness="0" >
+            <ListView.View>
+                <GridView x:Name="gridview">
+                    <GridViewColumn x:Name="serialnumber"
+                                        Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" 
+                                        Width="{Binding ColumnsWidth[0], Converter={StaticResource columnswidth} , 
+                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="name" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" 
+                                        TextAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="pathtofile"
+                                        Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                                        Width="{Binding ColumnsWidth[1], Converter={StaticResource columnswidth}, 
+                    Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="path" Text="{Binding Path=FullName, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center"
+                                           ContextMenu="{StaticResource mycontextmenu}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="data"
+                                        Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                                        Width="{Binding ColumnsWidth[2],  Converter={StaticResource columnswidth},
+                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ConverterParameter=last }" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate >
+                                <TextBlock x:Name="name1" 
+                                               MinWidth="30"  
+                                               Text ="{Binding CreationTime, UpdateSourceTrigger=PropertyChanged}" 
+                                       TextAlignment="Center">
+                                </TextBlock>
+                            </DataTemplate >
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding ListViewLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                           CommandParameter="{Binding ElementName=listview}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ListViewSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                       CommandParameter="{Binding ElementName=listview, Path=SelectedItem}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewMouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding ListViewPreviewMouseDoubleClick, UpdateSourceTrigger=PropertyChanged}"
+                                       CommandParameter="{Binding ElementName=listview, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+    </Grid>
+</Page>

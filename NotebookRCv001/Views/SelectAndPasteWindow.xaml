@@ -1,0 +1,390 @@
+﻿<Window x:Class="NotebookRCv001.Views.SelectAndPasteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+        xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+        xmlns:local="clr-namespace:NotebookRCv001.Views"
+        mc:Ignorable="d"
+        Style="{StaticResource ParameterEntryStyle}"
+        x:Name="window">
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:SizeLocationConverter x:Key="sizeconverter"/>
+            <viewmodels:SelectAndPasteWindowViewModel x:Key="viewmodel"/>
+            <Style TargetType="Button" x:Key="buttonsselect">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="Padding" Value="2"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="button" CornerRadius="5" 
+                                    Background="Gray"
+                                    BorderThickness="1"
+                                    BorderBrush="Black">
+                                <Grid>
+                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Opacity" Value="1"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="textbox" TargetType="TextBox">
+                <Setter Property="Background" Value="Gray"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="textblock" TargetType="TextBlock">
+                <Setter Property="Height" Value="18"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Margin" Value="1"/>
+            </Style>
+            <Style TargetType="{x:Type Slider}">
+                <Setter Property="Minimum" Value="0"/>
+                <Setter Property="Maximum" Value="200"/>
+                <Setter Property="MinWidth" Value="200"/>
+                <Setter Property="IsEnabled" Value="{Binding ElementName=proportionaly, Path=IsEnabled}"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </Window.DataContext>
+    <Window.Title>
+        <Binding Path="Headers[0]" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Title>
+    <Window.Width>
+        <Binding Path="WindowWidth" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="width" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Width>
+    <Window.Height>
+        <Binding Path="WindowHeight" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="height" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Height>
+    <Window.Top>
+        <Binding Path="WindowTop" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="top" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Top>
+    <Window.Left>
+        <Binding Path="WindowLeft" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="left" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Left>
+    <Window.WindowState>
+        <Binding Path="WindowState" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="state" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.WindowState>
+    <Border Background="Gray">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="85*"/>
+            </Grid.RowDefinitions>
+            <!-- Select PathFile-->
+            <Border Grid.Row="0" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="left" Width="10*"/>
+                        <ColumnDefinition x:Name="fortextbox" Width="65*"/>
+                        <ColumnDefinition x:Name="forbutton" Width="15*"/>
+                        <ColumnDefinition x:Name="right" Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" >
+                        <StackPanel Orientation="Vertical"  VerticalAlignment="Center" >
+                            <Border>
+                                <TextBlock x:Name="pathtodirectory"  Text="{Binding DirectoryName, UpdateSourceTrigger=PropertyChanged}" 
+                               ToolTip="{Binding PathToDirectory, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textblock}"/>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <Border>
+                                <TextBlock x:Name="pathtofile"  Text="{Binding FileName, UpdateSourceTrigger=PropertyChanged}" 
+                               ToolTip="{Binding PathToFile, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textblock}"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="2" VerticalAlignment="Center" >
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,0,2">
+                            <Button x:Name="browsedirectory" Content="{Binding Headers[20], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttonsselect}" 
+                                Command="{Binding SelectDirectory, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Center"  Margin="0,2,0,0">
+                            <Button x:Name="browsefile" Content="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttonsselect}" 
+                                Command="{Binding SelectFile, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--Image-->
+                    <Border Grid.Column="0" >
+                        <Image Source="{Binding BitMap, UpdateSourceTrigger=PropertyChanged}" />
+                    </Border>
+                    <!--Settings-->
+                    <Border Grid.Column="1">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20*"/>
+                                <RowDefinition Height="20*"/>
+                                <RowDefinition Height="20*"/>
+                                <RowDefinition Height="20*"/>
+                                <RowDefinition Height="20*"/>
+                            </Grid.RowDefinitions>
+                            <!--Resizing-->
+                            <Border Grid.Row="0" >
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="75*"/>
+                                        <!--for resizing-->
+                                        <ColumnDefinition Width="25*"/>
+                                        <!--for proportionaly-->
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <Grid.ColumnDefinitions>
+                                            <!--for headers-->
+                                            <ColumnDefinition Width="20*"/>
+                                            <!--for slider-->
+                                            <ColumnDefinition Width="60*"/>
+                                            <!--for percents-->
+                                            <ColumnDefinition Width="20*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel x:Name="headerresize" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" 
+                                                    HorizontalAlignment="Center">
+                                            <Label x:Name="headerWidth" Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                                                   Margin="5,5,0,5"/>
+                                            <Label x:Name="headerheight" Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                                   Margin="5,0,0,5"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="resize" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" 
+                                                    HorizontalAlignment="Stretch">
+                                            <Slider Name="width"  Margin="0,5,0,5" Value="{Binding PercentWidth, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Width="{Binding ElementName=resize, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged }">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                        <i:InvokeCommandAction Command="{Binding SizeChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                                               CommandParameter="width"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Slider>
+                                            <Slider Name="height"  Margin="0,10,0,5" Value="{Binding PercentHeight, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Width="{Binding ElementName=resize, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                        <i:InvokeCommandAction Command="{Binding SizeChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                                               CommandParameter="height"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Slider>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBox Text="{Binding StringFormat={}{0:F1}%, Path=PercentWidth, UpdateSourceTrigger=PropertyChanged}"
+                                                     Style="{StaticResource textbox}" Margin="0,0,5,5"/>
+                                            <TextBox Text="{Binding StringFormat={}{0:F1}%, Path=PercentHeight, UpdateSourceTrigger=PropertyChanged}"
+                                                     Style="{StaticResource textbox}" Margin="0,5,5,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <!--Proportionaly-->
+                                        <Border >
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="50*"/>
+                                                    <RowDefinition Height="50*"/>
+                                                </Grid.RowDefinitions>
+                                                <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                    Content="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"/>
+                                                <CheckBox x:Name="proportionaly" Grid.Row="1" HorizontalAlignment="Center" 
+                                                        IsChecked="{Binding Proportionally, UpdateSourceTrigger=PropertyChanged}"
+                                                          Command="{Binding ProportionallyChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                          CommandParameter="{Binding ElementName=proportionaly, Path=IsChecked}"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                            <!--current Sizes-->
+                            <Border Grid.Row="1" >
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25*"/>
+                                        <!--Current Width-->
+                                        <ColumnDefinition Width="25*"/>
+                                        <!--Current Height-->
+                                        <ColumnDefinition Width="25*"/>
+                                        <!--Stretch-->
+                                        <ColumnDefinition Width="25*"/>
+                                        <!--WrapDirection-->
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Label Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding StringFormat={}{0:F2},Path=ChangedWidth, 
+                                            UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Label Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding StringFormat={}{0:F2}, Path=ChangedHeight, 
+                                            UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Label Content="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}"/>
+                                        <CheckBox Name="checkfill" HorizontalAlignment="Center" 
+                                            IsChecked="{Binding StretchFill, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                                                  Command="{Binding StretchFillChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="{Binding ElementName=checkfill, Path=IsChecked}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Label Content="{Binding Headers[13], UpdateSourceTrigger=PropertyChanged}"/>
+                                        <CheckBox x:Name="wrap" HorizontalAlignment="Center" 
+                                            IsChecked="{Binding WrapDirectionBoth, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                                            Command="{Binding WrapDirectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                            CommandParameter="{Binding ElementName=wrap, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <!--Horizontal alignment-->
+                            <Border Grid.Row="2" >
+                                <Grid  VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25*"/>
+                                        <ColumnDefinition Width="25*"/>
+                                        <ColumnDefinition Width="25*"/>
+                                        <ColumnDefinition Width="25*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
+                                        <Label Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding HorizontalAlignmentLeft, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="left" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
+                                        <Label Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding HorizontalAlignmentCenter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="center" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" >
+                                        <Label Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding HorizontalAlignmentRight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="right" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" >
+                                        <Label Content="{Binding Headers[21], UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding Merge, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="merge" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <!--Rotate-->
+                            <Border Grid.Row="3" >
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25*"/>
+                                        <ColumnDefinition Width="25*"/>
+                                        <ColumnDefinition Width="25*"/>
+                                        <ColumnDefinition Width="25*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel x:Name="rotate0" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
+                                        <Label Content="0&#176;" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding Rotation0, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding ImageRotation, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="rotate0" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="rotate90" Grid.Column="1" Orientation="Vertical"  HorizontalAlignment="Center">
+                                        <Label Content="90&#176;" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding Rotation90, UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
+                                                  Command="{Binding ImageRotation, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="rotate90" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="rotate180" Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center">
+                                        <Label Content="180&#176;" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding Rotation180, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding ImageRotation, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="rotate180" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="rotate270" Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center">
+                                        <Label Content="270&#176;" Margin="0,0,0,10"/>
+                                        <CheckBox IsChecked="{Binding Rotation270, UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
+                                                  Command="{Binding ImageRotation, UpdateSourceTrigger=PropertyChanged}"
+                                                  CommandParameter="rotate270" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <!--Accept or Cancel-->
+                            <Border Grid.Row="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20*"/>
+                                        <!--for Is empty-->
+                                        <ColumnDefinition Width="20*"/>
+                                        <!--for button Apply-->
+                                        <ColumnDefinition Width="20*"/>
+                                        <!--for button Cancel-->
+                                        <ColumnDefinition Width="20*"/>
+                                        <!--for button Save-->
+                                        <ColumnDefinition Width="20*"/>
+                                        <!--for Is empty-->
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="apply" Grid.Column="1" Content="{Binding Headers[17], UpdateSourceTrigger=PropertyChanged}" 
+                                            Style="{StaticResource buttonsselect}"
+                                            Command="{Binding ClickButtonApply, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button x:Name="cancel" Grid.Column="2" Content="{Binding Headers[18], UpdateSourceTrigger=PropertyChanged}" 
+                                            Style="{StaticResource buttonsselect}"
+                                            Command="{Binding ClickButtonCancel, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button x:Name="save" Grid.Column="3" Content="{Binding Headers[19], UpdateSourceTrigger=PropertyChanged}" 
+                                            Style="{StaticResource buttonsselect}"
+                                            Command="{Binding ClickButtonSave, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoaded, UpdateSourceTrigger=PropertyChanged}" 
+                                   CommandParameter="{Binding ElementName=window}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding WindowClosing, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Window>

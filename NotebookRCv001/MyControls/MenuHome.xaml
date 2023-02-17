@@ -1,0 +1,206 @@
+﻿<UserControl x:Class="NotebookRCv001.MyControls.MenuHome"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+             xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+             xmlns:local="clr-namespace:NotebookRCv001.MyControls"
+             mc:Ignorable="d"
+             x:Name="menuhome">
+    <UserControl.Resources>
+        <viewmodels:MenuHomeViewModel x:Key="menuhome"/>
+        <viewmodels:HomeMenuFileViewModel x:Key="menufile"/>
+        <viewmodels:HomeMenuEncryptionViewModel x:Key="menuencryption"/>
+        <viewmodels:HomeMenuSettingsViewModel x:Key="menusettings"/>
+        <viewmodels:HomeMenuContentViewModel x:Key="menucontent"/>
+        <converters:ColorToColorConverter x:Key="colorconvert"/>
+        <Style TargetType="ToolTip" BasedOn="{StaticResource tooltips}">
+            <Setter Property="Placement" Value="Left"/>
+        </Style>
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource menuhome}"/>
+    </UserControl.DataContext>
+    <Grid>
+        <Menu x:Name="menu" >
+            <MenuItem Name="file" DataContext="{StaticResource menufile}" Width="40"
+                      Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}"
+                      ToolTip="{Binding ToolTips[0], UpdateSourceTrigger=PropertyChanged}" >
+                <MenuItem Name="new" 
+                          Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[1], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding NewFile, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="open" 
+                          Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding OpenFile, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="save" 
+                          Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding SaveFile, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="saveas" 
+                          Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[4], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding SaveAsFile, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="uploadingfiles" 
+                          Header="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[8], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding UploadingFiles, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="workingdirectory" 
+                          Header="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
+                          ToolTip="{Binding ToolTips[5], UpdateSourceTrigger=PropertyChanged}" 
+                          Command="{Binding SelectingAWorkingDirectory, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="synchronization" 
+                          Header="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" 
+                          ToolTip="{Binding ToolTips[7], UpdateSourceTrigger=PropertyChanged}" 
+                          Command="{Binding WorkingDirectorySynchronization, UpdateSourceTrigger=PropertyChanged}"/>
+            </MenuItem>
+            <MenuItem x:Name="settings"  Width="80" DataContext="{StaticResource menusettings}"
+                      Header="{Binding Path=Headers[0], UpdateSourceTrigger=PropertyChanged}" 
+                      ToolTip="{Binding Path=ToolTips[0], UpdateSourceTrigger=PropertyChanged}">
+                <MenuItem x:Name="ink" Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding HomeMyColors, UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="border" Height="15" Width="100" CornerRadius="3" ToolTip="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Background="{Binding Path=. ,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource colorconvert}}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding Source={StaticResource menusettings}, Path=SelectColorForeground}"
+                                                               CommandParameter="{Binding ElementName=border, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Border>
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
+                <MenuItem x:Name="fontbackground" Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[4], UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding HomeMyColors, UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="border" Height="15" Width="100" CornerRadius="3" ToolTip="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Background="{Binding Path=. ,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource colorconvert}}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding Source={StaticResource menusettings}, Path=SelectColorFontBackground}"
+                                                               CommandParameter="{Binding ElementName=border, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Border>
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
+                <MenuItem x:Name="background" Header="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[5], UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding HomeMyColors, UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="border" Height="15" Width="100" CornerRadius="3" ToolTip="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Background="{Binding Path=. ,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource colorconvert}}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding Source={StaticResource menusettings}, Path=SelectColorBackground}"
+                                                               CommandParameter="{Binding ElementName=border, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Border>
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
+                <MenuItem x:Name="encodings" 
+                          Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[1], UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem x:Name="unicode"
+                              Header="{Binding HomeEncodings[0].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[0], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="bigendian" Header="{Binding HomeEncodings[1].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[1], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="utf32" Header="{Binding HomeEncodings[2].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[2], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="utf32bigendian" Header="{Binding HomeEncodings[3].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[3], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="ascii" Header="{Binding HomeEncodings[4].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[4], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="iso" Header="{Binding HomeEncodings[5].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[5], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="utf8" Header="{Binding HomeEncodings[6].DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding SelectEncoding, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding HomeEncodings[6], UpdateSourceTrigger=PropertyChanged}"/>
+                </MenuItem>
+                <MenuItem x:Name="localization"
+                          Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem x:Name="ruru" Header="{Binding LanguagesKey[0], UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding InstallingLocalization, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding LanguagesKey[0], UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem x:Name="enus" Header="{Binding LanguagesKey[1], UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding InstallingLocalization, UpdateSourceTrigger=PropertyChanged}"
+                              CommandParameter="{Binding LanguagesKey[1], UpdateSourceTrigger=PropertyChanged}"/>
+                </MenuItem>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding HomeMenuSettingsLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem x:Name="encryption" DataContext="{StaticResource menuencryption}" Width="100"
+                      Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" 
+                      ToolTip="{Binding ToolTips[0], UpdateSourceTrigger=PropertyChanged}">
+                <MenuItem x:Name="instalkey" 
+                          Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[1], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding InstalKey, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem x:Name="deletekey" 
+                          Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding DeleteKey, UpdateSourceTrigger=PropertyChanged}"/>
+            </MenuItem>
+            <MenuItem x:Name="content" DataContext="{StaticResource menucontent}" Width="100"
+                      Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}">
+                <MenuItem x:Name="insertcontent" 
+                          Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[1], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding InsertImage, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem x:Name="inserttext" 
+                          Header="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[5], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding InsertText, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem x:Name="documenttree" 
+                          Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding OpenDocumentTree, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem x:Name="reading" 
+                          Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding Reading, UpdateSourceTrigger=PropertyChanged}"/>
+            </MenuItem>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding MenuLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                           CommandParameter="{Binding ElementName=menuhome}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Menu>
+    </Grid>
+</UserControl>

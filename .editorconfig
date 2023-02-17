@@ -1,0 +1,64 @@
+﻿[*.cs]
+
+# IDE0052: Удалить непрочитанные закрытые члены
+dotnet_diagnostic.IDE0052.severity = none
+
+# IDE0060: Удалите неиспользуемый параметр
+dotnet_diagnostic.IDE0060.severity = none
+
+# CA1822: Пометьте члены как статические
+dotnet_diagnostic.CA1822.severity = none
+
+# IDE0090: Используйте "new(...)".
+dotnet_diagnostic.IDE0090.severity = none
+
+# IDE0017: Упростите инициализацию объекта
+dotnet_diagnostic.IDE0017.severity = none
+
+# IDE0063: Использовать простой оператор using
+dotnet_diagnostic.IDE0063.severity = none
+
+# IDE0051: Удалите неиспользуемые закрытые члены
+dotnet_diagnostic.IDE0051.severity = none
+
+# IDE1006: Стили именования
+dotnet_diagnostic.IDE1006.severity = none
+
+# CA1507: Используйте nameof для выражения имен символов
+dotnet_diagnostic.CA1507.severity = none
+
+# CA1824: Пометьте сборки с помощью NeutralResourcesLanguageAttribute
+dotnet_diagnostic.CA1824.severity = none
+
+# CA1825: Нежелательность выделения массивов нулевой длины
+dotnet_diagnostic.CA1825.severity = none
+
+# CA2016: Перенаправьте параметр "CancellationToken" в методы
+dotnet_diagnostic.CA2016.severity = none
+
+# CA2014: Запрет использования stackalloc в циклах
+dotnet_diagnostic.CA2014.severity = none
+
+# CA1016: Пометить сборки версией сборки
+dotnet_diagnostic.CA1016.severity = none
+
+# CA1018: Пометить атрибуты как AttributeUsageAttribute
+dotnet_diagnostic.CA1018.severity = none
+
+# CA1417: Запрет на использование "OutAttribute" в строковых параметрах для вызовов P/Invoke
+dotnet_diagnostic.CA1417.severity = none
+
+# CA1416: Проверка совместимости платформы
+dotnet_diagnostic.CA1416.severity = none
+
+# CA1831: При необходимости используйте AsSpan или AsMemory вместо индексаторов на основе диапазонов
+dotnet_diagnostic.CA1831.severity = none
+
+# IDE0020: Используйте сопоставление шаблонов
+dotnet_diagnostic.IDE0020.severity = none
+
+# SYSLIB0022: Тип или член устарел
+dotnet_diagnostic.SYSLIB0022.severity = none
+
+# SYSLIB0014: Тип или член устарел
+dotnet_diagnostic.SYSLIB0014.severity = none

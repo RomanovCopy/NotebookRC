@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="NotebookRCv001.MyControls.ToolBarStatus"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+             xmlns:local="clr-namespace:NotebookRCv001.MyControls"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <viewmodels:ToolBarStatusViewModel x:Key="viewmodel"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </UserControl.DataContext>
+    <Grid >
+        <ToolBarPanel  Background="Gray" Orientation="Horizontal" >
+            <TextBlock x:Name="encodingheader" 
+                       ToolTip="{Binding ToolTips[0], UpdateSourceTrigger=PropertyChanged}" 
+                       Text="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" 
+                       Margin="10,2,10,2"/>
+            <TextBlock x:Name="encoding"
+                       Text="{Binding Path=HomeEncoding, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" 
+                       Margin="0,2,10,2"/>
+            <TextBlock x:Name="encriptyonstatusheader"
+                       ToolTip="{Binding ToolTips[1], UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                       Margin="10,2,10,2"/>
+            <TextBlock  x:Name="encryptionstatus"
+                       Text="{Binding EncryptionStatus, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,10,2">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="On">
+                                <Setter Property="Foreground" Value="Green"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="Off">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock x:Name="workingdirectoryheader"
+                Text="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" Margin="10,2,10,2"
+                       ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock x:Name="workingdirectory" 
+                       Text="{Binding WorkingDirectoryName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,10,2" Width="200"
+                       ToolTip="{Binding WorkingDirectory, UpdateSourceTrigger=PropertyChanged}"/>
+        </ToolBarPanel>
+    </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ToolBarStatusLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</UserControl>

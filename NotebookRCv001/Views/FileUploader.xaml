@@ -1,0 +1,310 @@
+﻿<Page x:Class="NotebookRCv001.Views.FileUploader"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:res="clr-namespace:NotebookRCv001.Resources"
+      xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+      xmlns:mycontrols="clr-namespace:NotebookRCv001.MyControls"
+      xmlns:helpers="clr-namespace:NotebookRCv001.Helpers"
+      xmlns:local="clr-namespace:NotebookRCv001.Views"
+      xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+      mc:Ignorable="d"
+      x:Name="Page"
+      Title="File uploader">
+    <Page.Resources>
+        <viewmodels:FileUploaderViewModel x:Key="viewmodel"/>
+        <converters:ColumnsWidthConverter x:Key="columnswidth"/>
+        <mycontrols:ButtonsClearAndClose x:Key="buttons"/>
+        <converters:ToStringConverter x:Key="tostringconvert"/>
+        <Style x:Key="but" TargetType="Button">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Border x:Name="PART_border"
+                            Background="Gray"
+                            Opacity="1"
+                            Padding="3,0,3,0"
+                            BorderBrush="White"
+                            CornerRadius="3"
+                            BorderThickness="0">
+                                <Grid >
+                                    <ContentPresenter/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PART_border" Property="Background" Value="white" />
+                                <Setter TargetName="PART_border" Property="Opacity" Value="0.75" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="PART_border" Property="Background" Value="#FFF"/>
+                                <Setter TargetName="PART_border" Property="Opacity" Value="1" />
+                                <Setter Property="Foreground" Value="#FFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Page.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </Page.DataContext>
+
+    <Grid Background="{Binding ElementName=file, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="formenu" Height="Auto"/>
+            <RowDefinition x:Name="foranother" Height="Auto"/>
+            <RowDefinition x:Name="forlist" Height="*"/>
+            <RowDefinition x:Name="forstatusbar" Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Menu Grid.Column="0">
+                <MenuItem x:Name="file" Header="{Binding Headers[9], UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" BorderBrush="White">
+                    <MenuItem x:Name="dir" Header="{Binding Headers[10], UpdateSourceTrigger=PropertyChanged}" 
+                              Command="{Binding DirectoryForDownloadedFiles, UpdateSourceTrigger=PropertyChanged}"/>
+                </MenuItem>
+            </Menu>
+            <TextBox x:Name="url" Grid.Column="1" MaxLines="1">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding TextBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                               CommandParameter="{Binding ElementName=behaviorTBox}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <i:Interaction.Behaviors>
+                    <helpers:BehaviorTextBox x:Name="behaviorTBox"/>
+                </i:Interaction.Behaviors>
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="paste_cmtb" Header="{Binding Headers[11], UpdateSourceTrigger=PropertyChanged}"
+                                  Command="{Binding PasteToTextBox, UpdateSourceTrigger=PropertyChanged}"/>
+                        <MenuItem Name="select_all_cmtb" Header="{Binding Headers[12], UpdateSourceTrigger=PropertyChanged}"
+                                  Command="{Binding TextBoxSelectAll, UpdateSourceTrigger=PropertyChanged}"/>
+                        <MenuItem Name="copy_cmtb" Header="{Binding Headers[13], UpdateSourceTrigger=PropertyChanged}"
+                                  Command="{Binding TexBoxCopy, UpdateSourceTrigger=PropertyChanged}"/>
+                        <MenuItem Name="clear_cmtb" Header="{Binding Headers[14], UpdateSourceTrigger=PropertyChanged}"
+                                  Command="{Binding TextBoxClear, UpdateSourceTrigger=PropertyChanged}"/>
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
+            <Button  Content="Paste" Grid.Column="2"  Style="{StaticResource but}" 
+                     Command="{Binding PasteToTextBox, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Clear" Grid.Column="3" Style="{StaticResource but}" 
+                    Command="{Binding ListClear, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Browse" Grid.Column="4" Style="{StaticResource but}" 
+                    Command="{Binding SelectASpecialDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                    CommandParameter="{Binding ElementName=list,Path=SelectedItems, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Add" Grid.Column="5" Style="{StaticResource but}"
+                    Command="{Binding AddNewDownloadItem, UpdateSourceTrigger=PropertyChanged}"
+                    CommandParameter="{Binding ElementName=url,Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <ContentPresenter Grid.Column="6" Content="{StaticResource buttons}"/>
+        </Grid>
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" CornerRadius="0" Background="Gray" Margin="0,1,0,2">
+
+            <ListView x:Name="list"   ItemsSource="{Binding ListDownoadItems, UpdateSourceTrigger=PropertyChanged}"  
+                   HorizontalAlignment="Stretch" Focusable="True"
+                   VirtualizingPanel.IsVirtualizing="True" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                <ListView.View >
+                    <GridView>
+                        <GridViewColumn x:Name="actions" Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="{Binding ListView_ColumnsWidth[0], Mode=TwoWay, Converter={StaticResource columnswidth},
+                        UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Focusable="True">
+                                        <Button x:Name="start" 
+                                            Style="{StaticResource Button_FL}"
+                                            Command="{Binding Start, UpdateSourceTrigger=PropertyChanged}">
+                                            <Border BorderThickness="0" Height="20" Width="20">
+                                                <Image Source="{StaticResource startimage}" />
+                                            </Border>
+                                        </Button>
+                                        <Button x:Name="pause" 
+                                            Style="{StaticResource Button_FL}"
+                                            Command="{Binding Pause, UpdateSourceTrigger=PropertyChanged}">
+                                            <Border BorderThickness="0" Height="20" Width="20">
+                                                <Image Source="{StaticResource pauseimage}" />
+                                            </Border>
+                                        </Button>
+                                        <Button x:Name="reload"
+                                            Style="{StaticResource Button_FL}"
+                                            Command="{Binding Reload, UpdateSourceTrigger=PropertyChanged}">
+                                            <Border BorderThickness="0" Height="20" Width="20">
+                                                <Image Source="{StaticResource reloadminiimage}" />
+                                            </Border>
+                                        </Button>
+                                        <Button x:Name="stop" Style="{StaticResource Button_FL}"
+                                            Command="{Binding Stop, UpdateSourceTrigger=PropertyChanged}">
+                                            <Border BorderThickness="0" Height="20" Width="20">
+                                                <Image Source="{StaticResource stopimage}" />
+                                            </Border>
+
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="id" Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                                   Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}" 
+                                               ToolTip="{Binding FullPath, UpdateSourceTrigger=PropertyChanged}">
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="pagename" Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, Mode=TwoWay, 
+                            UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="pn" Text ="{Binding SuggestedFileName, UpdateSourceTrigger=PropertyChanged}"
+                                               ToolTip="{Binding FullPath, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem x:Name="rename" Header="{Binding Source={StaticResource viewmodel}, Path=Headers[15],
+                                                    UpdateSourceTrigger=PropertyChanged}" 
+                                                          Command="{Binding RenameTheFileYouWantToDownload, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <MenuItem x:Name="deleting" Header="{Binding Source={StaticResource viewmodel}, Path=Headers[16],
+                                                    UpdateSourceTrigger=PropertyChanged}"
+                                                          Command="{Binding Source={StaticResource viewmodel}, Path=ListRemove, 
+                                                    UpdateSourceTrigger=PropertyChanged}" 
+                                                          CommandParameter="{Binding Path=. , UpdateSourceTrigger=PropertyChanged}"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:InvokeCommandAction Command="{Binding TextBlockPageNameLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                                       CommandParameter="{Binding ElementName=pn, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="size" Header="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
+                        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text ="{Binding TotalBytes, Converter={StaticResource tostringconvert}, 
+                                        ConverterParameter=Byte_Size, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="type" Header="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="{Binding ListView_ColumnsWidth[4], Converter={StaticResource columnswidth}, 
+                            Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text ="{Binding MimeType, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="progress" Header="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}"
+                                    Width="{Binding ListView_ColumnsWidth[5], 
+                        Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <ProgressBar x:Name="progressBar" 
+                                                     HorizontalAlignment="Stretch"
+                                                     Background="Black"
+                                                     BorderBrush="White"
+                                                     BorderThickness="1"
+                                                     Margin="1" 
+                                                     Minimum="0" 
+                                                     Maximum="100"
+                                                     IsIndeterminate="{Binding FileSizeUnknown, UpdateSourceTrigger=PropertyChanged}"
+                                     Value="{Binding Path=PercentComplete, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Text="{Binding Path=PercentComplete, StringFormat={}{0:0}%, UpdateSourceTrigger=PropertyChanged}" 
+                                                   HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center"
+                                                   Padding="3"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="speed" Header="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="{Binding ListView_ColumnsWidth[5], 
+                        Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text ="{Binding Path=CurrentSpeed, Converter={StaticResource tostringconvert}, 
+                                        ConverterParameter=Byte_Speed, UpdateSourceTrigger=PropertyChanged, Mode=OneWay }"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="status" Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                      Width="{Binding ListView_ColumnsWidth[6], Converter={StaticResource columnswidth}, 
+                             Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn  Header=" " 
+                                      Width="{Binding ListView_ColumnsWidth[7], Converter={StaticResource columnswidth}, 
+                            ConverterParameter=last,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text=""/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Foreground" Value="YellowGreen"/>
+                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="GreenYellow"/>
+                                <Setter Property="FontSize" Value="14"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding ListViewLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                               CommandParameter="{Binding ElementName=list}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+        </Border>
+    </Grid>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="SizeChanged">
+            <i:InvokeCommandAction Command="{Binding PageSizeChanged, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Page>

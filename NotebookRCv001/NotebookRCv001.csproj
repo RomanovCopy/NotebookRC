@@ -1,0 +1,196 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <StartupObject>NotebookRCv001.App</StartupObject>
+    <UseWindowsForms>True</UseWindowsForms>
+    <AnalysisLevel>preview-recommended</AnalysisLevel>
+    <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <Platforms>AnyCPU;x64</Platforms>
+    <ApplicationIcon>bin\Debug\net7.0-windows10.0.17763.0\Icons\icon1.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <IsPublishable>True</IsPublishable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>full</DebugType>
+    <WarningLevel>5</WarningLevel>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebugType>full</DebugType>
+    <WarningLevel>5</WarningLevel>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
+    <Compile Remove="bin\Debug\net5.0-windows\**" />
+    <Compile Remove="Command_executors\**" />
+    <Compile Remove="Icons\**" />
+    <Compile Remove="Views\Images\**" />
+    <EmbeddedResource Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
+    <EmbeddedResource Remove="bin\Debug\net5.0-windows\**" />
+    <EmbeddedResource Remove="Command_executors\**" />
+    <EmbeddedResource Remove="Icons\**" />
+    <EmbeddedResource Remove="Views\Images\**" />
+    <None Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
+    <None Remove="bin\Debug\net5.0-windows\**" />
+    <None Remove="Command_executors\**" />
+    <None Remove="Icons\**" />
+    <None Remove="Views\Images\**" />
+    <Page Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
+    <Page Remove="bin\Debug\net5.0-windows\**" />
+    <Page Remove="Command_executors\**" />
+    <Page Remove="Icons\**" />
+    <Page Remove="Views\Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="docxaml.cs" />
+    <Compile Remove="Executors.cs" />
+    <Compile Remove="Helpers\TextBoxHeleper.cs" />
+    <Compile Remove="Helpers\WordHelper2.cs" />
+    <Compile Remove="Infrastructure\Encodings.cs" />
+    <Compile Remove="Infrastructure\RTB_DependencyPropertiesi.cs" />
+    <Compile Remove="Interfaces\IPD_Page_ViewModel.cs" />
+    <Compile Remove="Models\ContextMenuImageModel.cs" />
+    <Compile Remove="MyControls\ContextMenuHome.xaml.cs" />
+    <Compile Remove="MyControls\ContextMenuImage.xaml.cs" />
+    <Compile Remove="MyControls\SfRichTextBox.xaml.cs" />
+    <Compile Remove="Resources\en-US.Designer.cs" />
+    <Compile Remove="Resources\Image.Designer.cs" />
+    <Compile Remove="Resources\ru-RU.Designer.cs" />
+    <Compile Remove="RichTextbox.cs" />
+    <Compile Remove="SelectionPropertyAndMethod.cs" />
+    <Compile Remove="SystemWindowsDocuments.cs" />
+    <Compile Remove="TextPointer.cs" />
+    <Compile Remove="TextRange.cs" />
+    <Compile Remove="ViewModels\ContextMenuHomeViewModel.cs" />
+    <Compile Remove="ViewModels\ContextMenuImageViewModel.cs" />
+    <Compile Remove="Views\FlowDocRead.xaml.cs" />
+    <Compile Remove="Views\FlowDocumentEditor.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\en-US.resx" />
+    <EmbeddedResource Remove="Resources\Image.resx" />
+    <EmbeddedResource Remove="Resources\ru-RU.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\start.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="MyControls\ContextMenuHome.xaml" />
+    <Page Remove="MyControls\ContextMenuImage.xaml" />
+    <Page Remove="MyControls\SfRichTextBox.xaml" />
+    <Page Remove="Views\FlowDocRead.xaml" />
+    <Page Remove="Views\FlowDocumentEditor.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>2df8d04c-5bfa-101b-bde5-00aa0044de52</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+      <CopyLocal>True</CopyLocal>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Icons\icon1.ico" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\aligncenter.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\alignjustify.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\alignleft.PNG" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\alignright.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\back.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\codeblock.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\codeinline.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editcopy.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editcut.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editpaste.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editredo.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editundo.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\filesave.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontbold.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontgrow.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontitalic.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontshrink.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontunderline.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\forward.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\icon.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\indentdecrease.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\indentincrease.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\listbullets.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\listnumbers.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\normaltext.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\pause.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\reload.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\separator.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\start.png" />
+    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\stop.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Command_executors\Command_executors.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

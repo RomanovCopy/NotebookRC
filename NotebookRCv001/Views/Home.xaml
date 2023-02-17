@@ -1,0 +1,47 @@
+﻿<Page x:Class="NotebookRCv001.Views.Home"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="clr-namespace:NotebookRCv001.MyControls"
+      xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+      xmlns:local="clr-namespace:NotebookRCv001.Views"
+      Background="Transparent"
+      mc:Ignorable="d"
+      x:Name="page"
+      Title="Home">
+    <Page.Resources>
+        <ResourceDictionary>
+            <controls:MenuHome x:Key="menuhome"/>
+            <controls:RichTextBox x:Key="richtextbox"/>
+            <controls:ButtonsClearAndClose x:Key="buttonsclearandclose"/>
+            <viewmodels:HomeViewModel x:Key="homeviewmodel"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Page.DataContext>
+        <Binding Source="{StaticResource homeviewmodel}"/>
+    </Page.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition x:Name="formenu" Width="*"/>
+                <ColumnDefinition x:Name="forbuttons" Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl x:Name="menu" Content="{Binding Source={StaticResource menuhome}}" Grid.Column="0"/>
+            <ContentControl x:Name="buttons" Content="{Binding Source={StaticResource buttonsclearandclose}}" Grid.Column="1"/>
+        </Grid>
+        <ContentControl x:Name="rich" Content="{Binding Source={StaticResource richtextbox}}" Grid.Row="1"/>
+    </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=HomeLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                   CommandParameter="{Binding ElementName=page }"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Page>

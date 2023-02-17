@@ -1,0 +1,435 @@
+﻿<UserControl x:Class="NotebookRCv001.MyControls.RichTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:res="clr-namespace:NotebookRCv001.Resources" 
+             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels" 
+             xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+             xmlns:helpers="clr-namespace:NotebookRCv001.Helpers"
+             xmlns:mycontrols="clr-namespace:NotebookRCv001.MyControls"
+             xmlns:local="clr-namespace:NotebookRCv001.MyControls"
+             Background="Transparent" 
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <viewmodels:RichTextBoxViewModel x:Key="viewmodel"/>
+        <converters:ColorToColorConverter x:Key="colorconvert"/>
+        <Style x:Key="typeoffont" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger 
+                    Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl,
+                    Mode=FindAncestor},Path=DataContext.ButtonBoldIsChecked}" Value="True">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </DataTrigger>
+                <DataTrigger 
+                    Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl,
+                    Mode=FindAncestor},Path=DataContext.ButtonItalicIsChecked}" Value="True">
+                    <Setter Property="FontStyle" Value="Italic"/>
+                </DataTrigger>
+                <DataTrigger 
+                    Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl,
+                    Mode=FindAncestor},Path=DataContext.ButtonUnderlineIsChecked}" Value="True">
+                    <Setter Property="TextDecorations" Value="Underline"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="quick_color_change_buttons" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="3">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <ContextMenu x:Key="for_quick_color_bar" DataContext="{StaticResource viewmodel}">
+            <MenuItem Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MyColors, UpdateSourceTrigger=PropertyChanged}">
+                <MenuItem.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="border" Height="15" Width="100" CornerRadius="3" ToolTip="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Background="{Binding Path=. ,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource colorconvert}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction 
+                                    Command="{Binding Source={StaticResource viewmodel}, Path=ToSetAColorInTheQuickSelectToolbar, 
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                    CommandParameter="{Binding ElementName=border, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </UserControl.DataContext>
+    <Grid Background="{Binding MyBackground, UpdateSourceTrigger=PropertyChanged}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+            BorderThickness="1" 
+            BorderBrush="WhiteSmoke" 
+            SnapsToDevicePixels="True" 
+                Background="Gray">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Background="Gray" Grid.Column="0">
+                    <!--FontFamily-->
+                    <ComboBox x:Name="FontFamilyCombo"  Margin="5,2,0,2" Tag="{Binding ElementName=TextBox}" MinWidth="100"
+                          VirtualizingPanel.VirtualizationMode="Standard"
+                          VirtualizingPanel.IsVirtualizing="True"
+                        ToolTip="{Binding ToolTipsToolBar[0], UpdateSourceTrigger=PropertyChanged}" 
+                          ItemsSource="{Binding FontFamilies, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding Path=., UpdateSourceTrigger=PropertyChanged}" 
+                                            FontFamily="{Binding Path=., UpdateSourceTrigger=PropertyChanged}">
+                                </ContentControl>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <i:Interaction.Behaviors>
+                            <helpers:BehaviorComboBox x:Name="fontfamilybehavior"/>
+                        </i:Interaction.Behaviors>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding OnFontFamilySelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding ElementName=FontFamilyCombo, 
+                                Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding FontFamilyComboLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding ElementName=fontfamilybehavior}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                    <!--FontSize-->
+                    <ComboBox x:Name="fontsizecombo" Margin="5,2,5,2" Tag="{Binding ElementName=TextBox}" 
+                          ItemsSource="{Binding FontSizes, UpdateSourceTrigger=PropertyChanged}" 
+                        ToolTip="{Binding ToolTipsToolBar[1], UpdateSourceTrigger=PropertyChanged}" 
+                          >
+                        <i:Interaction.Behaviors>
+                            <helpers:BehaviorComboBox x:Name="fontsizebehavior"/>
+                        </i:Interaction.Behaviors>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding OnFontSizeSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding ElementName=fontsizecombo, 
+                                Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding FontSizeComboLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding ElementName=fontsizebehavior}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+
+                    <!--Cut-->
+                    <Button Command="ApplicationCommands.Cut" CommandTarget="{Binding ElementName=TextBox}" 
+                        ToolTip="{Binding ToolTipsToolBar[2], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}"  Margin="0,1,0,1">
+                        <Image Source="{StaticResource editcutimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--Copy-->
+                    <Button Command="ApplicationCommands.Copy" CommandTarget="{Binding ElementName=TextBox}" 
+                        ToolTip="{Binding ToolTipsToolBar[3], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource editcopyimage}" Stretch="None" SnapsToDevicePixels="True"/>
+                    </Button>
+                    <!--Paste-->
+                    <Button Command="{Binding OnPasteButtonClick, UpdateSourceTrigger=PropertyChanged}"  
+                        ToolTip="{Binding ToolTipsToolBar[4], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource editpasteimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--Undo-->
+                    <Button Command="{Binding OnUndoButtonClick, UpdateSourceTrigger=PropertyChanged}"  
+                        ToolTip="{Binding ToolTipsToolBar[5], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}"  Margin="0,1,0,1">
+                        <Image Source="{StaticResource editundoimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--Redo-->
+                    <Button Command="ApplicationCommands.Redo" CommandTarget="{Binding ElementName=TextBox}" 
+                        ToolTip="{Binding ToolTipsToolBar[6], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}"  Margin="0,1,0,1">
+                        <Image Source="{StaticResource editredoimage}" Stretch="None"  SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--Separator-->
+                    <Image Source="{StaticResource separatorimage}"  
+                       Stretch="None" SnapsToDevicePixels="True" />
+                    <!--Font Bold-->
+                    <ToggleButton x:Name="BoldButton" 
+                              Command="{Binding OnBoldButtonClick, UpdateSourceTrigger=PropertyChanged}"
+                              ToolTip="{Binding ToolTipsToolBar[7], UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonBoldIsChecked, UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource fontboldimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--Italic-->
+                    <ToggleButton x:Name="ItalicButton" 
+                              ToolTip="{Binding ToolTipsToolBar[8], UpdateSourceTrigger=PropertyChanged}" 
+                              Command="{Binding OnItalicButtonClick, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonItalicIsChecked, UpdateSourceTrigger=PropertyChanged}"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource fontitalicimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--Underline-->
+                    <ToggleButton x:Name="UnderlineButton" 
+                              ToolTip="{Binding ToolTipsToolBar[9], UpdateSourceTrigger=PropertyChanged}" 
+                              Command="{Binding OnUnderlineButtonClick, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonUnderlineIsChecked, UpdateSourceTrigger=PropertyChanged}"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource fontunderlineimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--Separator-->
+                    <Image Source="{StaticResource separatorimage}" 
+                       Stretch="None" SnapsToDevicePixels="True" />
+                    <!--NormalText-->
+                    <Button x:Name="normaltext" 
+                        ToolTip="{Binding ToolTipsToolBar[10], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}"  
+                        Command="{Binding ButtonOnNormalTextClick, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=normaltext}">
+                        <Image Source="{StaticResource normaltextimage}" Stretch="None" SnapsToDevicePixels="True" Opacity="0.6"/>
+                    </Button>
+                    <!--LineSpacingDecrease-->
+                    <Button x:Name="decrease"
+                        ToolTip="{Binding ToolTipsToolBar[11], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}" Margin="0,2,0,2"
+                     Command="{Binding ButtonOnDecreaseClick, UpdateSourceTrigger=PropertyChanged}">
+                        <Image Source="{StaticResource linespacingdecrease}" Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--LineSpacingIncrease-->
+                    <Button x:Name="increase"
+                        ToolTip="{Binding ToolTipsToolBar[12], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}" Margin="0,2,0,2"
+                         Command="{Binding ButtonOnIncreaseClick, UpdateSourceTrigger=PropertyChanged}" >
+                        <Image Source="{StaticResource linespacingincrease}" 
+                           Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--Separator-->
+                    <Image Source="{StaticResource separatorimage}" 
+                       Stretch="None" SnapsToDevicePixels="True"/>
+                    <!--AlignLeft-->
+                    <ToggleButton x:Name="LeftButton" Command="{Binding ButtonOnAlignLeftButtonClick, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonAlignLeftIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                              ToolTip="{Binding ToolTipsToolBar[13], UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" 
+                              Margin="0,1,0,1">
+                        <Image Source="{StaticResource alignleftimage}" Stretch="None" SnapsToDevicePixels="True"/>
+                    </ToggleButton>
+                    <!--AlignCenter-->
+                    <ToggleButton x:Name="CenterButton" Command="{Binding ButtonOnAlignCenterButtonClick, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonAlignCenterIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                              ToolTip="{Binding ToolTipsToolBar[14], UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource aligncenterimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--AlignRight-->
+                    <ToggleButton x:Name="RightButton" Command="{Binding ButtonOnAlignRightButtonClick, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonAlignRightIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                              ToolTip="{Binding ToolTipsToolBar[15], UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" Margin="0,1,0,1">
+                        <Image Source="{StaticResource alignrightimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--AlignJustify-->
+                    <ToggleButton x:Name="JustifyButton" Command="{Binding ButtonOnAlignJustifyButtonClick, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonAlignJustifyIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                              ToolTip="{Binding ToolTipsToolBar[16], UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}" Margin="0,1,0,1" >
+                        <Image Source="{StaticResource alignjustifyimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--Separator-->
+                    <Image Source="{StaticResource separatorimage}" 
+                       Stretch="None" SnapsToDevicePixels="True" />
+                    <!--Bullets-->
+                    <ToggleButton x:Name="BulletsButton" Command="{Binding ButtonOnToggleBullets, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonOnToggleBulletsIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              ToolTip="{Binding ToolTipsToolBar[17], UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"  
+                              Margin="0,1,0,1" >
+                        <Image Source="{StaticResource listbulletsimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--Numbering-->
+                    <ToggleButton x:Name="NumberingButton" Command="{Binding ButtonOnToggleNumbering, UpdateSourceTrigger=PropertyChanged}" 
+                              IsChecked="{Binding ButtonOnToggleNumberingIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              ToolTip="{Binding ToolTipsToolBar[18], UpdateSourceTrigger=PropertyChanged}" 
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"  Margin="0,1,0,1" >
+                        <Image Source="{StaticResource listnumbersimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </ToggleButton>
+                    <!--Separator-->
+                    <Image Source="{StaticResource separatorimage}" Stretch="None" />
+                    <!--Increase Indentation-->
+                    <Button Command="EditingCommands.IncreaseIndentation" 
+                        CommandTarget="{Binding ElementName=TextBox}" 
+                        ToolTip="{Binding ToolTipsToolBar[19], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}"  
+                        Margin="0,1,0,1">
+                        <Image Source="{StaticResource indentincreaseimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--Decrease Indentation-->
+                    <Button Command="EditingCommands.DecreaseIndentation" 
+                        CommandTarget="{Binding ElementName=TextBox}" 
+                        ToolTip="{Binding ToolTipsToolBar[20], UpdateSourceTrigger=PropertyChanged}" 
+                        Template="{StaticResource FlatButtonControlTemplate}"  Margin="0,1,0,1">
+                        <Image Source="{StaticResource indentdecreaseimage}" Stretch="None" SnapsToDevicePixels="True" />
+                    </Button>
+                    <!--writing font-->
+                    <Border x:Name="writingfont" Height="24" BorderBrush="Black" BorderThickness="1" 
+                        IsEnabled="{Binding ButtonTransparentFontBackground, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                        Background="{Binding MyBackground, UpdateSourceTrigger=PropertyChanged}"
+                        VerticalAlignment="Center" Margin="10,0,3,0" 
+                        CornerRadius="5">
+                        <TextBlock Text=" AaBbCc " Foreground="{Binding MyForeground, UpdateSourceTrigger=PropertyChanged}" 
+                               Background="{Binding MyFontBackground, UpdateSourceTrigger=PropertyChanged}" 
+                               HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
+                               FontFamily="{Binding ElementName=FontFamilyCombo, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"
+                               Style="{StaticResource typeoffont}">
+                        </TextBlock>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="0.5"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding OnTransparentFontBackground, UpdateSourceTrigger=PropertyChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Background="Gray" Grid.Column="1" VerticalAlignment="Center"
+                            ToolTip="{Binding ToolTips[0], UpdateSourceTrigger=PropertyChanged}">
+                    <Button x:Name="color0"  Style="{StaticResource quick_color_change_buttons}"
+                            Command="{Binding QuickColorSelection, UpdateSourceTrigger=PropertyChanged}" 
+                            CommandParameter="{Binding ElementName=border0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Border x:Name="border0" Background="{Binding QuickSelectColorCollection[0], UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource colorconvert}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="3"
+                                ContextMenu="{StaticResource for_quick_color_bar}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ContextMenuOpening">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
+                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="0"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </Button>
+                    <Button x:Name="color1" Style="{StaticResource quick_color_change_buttons}"
+                            Command="{Binding QuickColorSelection, UpdateSourceTrigger=PropertyChanged}" 
+                            CommandParameter="{Binding ElementName=border1, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Border x:Name="border1" Background="{Binding QuickSelectColorCollection[1], UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource colorconvert}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="3"
+                                ContextMenu="{StaticResource for_quick_color_bar}"  >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ContextMenuOpening">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
+                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="1"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </Button>
+                    <Button x:Name="color2" Style="{StaticResource quick_color_change_buttons}"
+                            Command="{Binding QuickColorSelection, UpdateSourceTrigger=PropertyChanged}" 
+                            CommandParameter="{Binding ElementName=border2, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Border x:Name="border2" Background="{Binding QuickSelectColorCollection[2], UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource colorconvert}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="3"
+                                ContextMenu="{StaticResource for_quick_color_bar}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ContextMenuOpening">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
+                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="2"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </Button>
+                    <Button x:Name="color3" Style="{StaticResource quick_color_change_buttons}"
+                            Command="{Binding QuickColorSelection, UpdateSourceTrigger=PropertyChanged}" 
+                            CommandParameter="{Binding ElementName=border3, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Border x:Name="border3" Background="{Binding QuickSelectColorCollection[3], UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource colorconvert}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="3"
+                                ContextMenu="{StaticResource for_quick_color_bar}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ContextMenuOpening">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
+                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="3"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </Button>
+                    <Button x:Name="color4" Style="{StaticResource quick_color_change_buttons}"
+                            Command="{Binding QuickColorSelection, UpdateSourceTrigger=PropertyChanged}" 
+                            CommandParameter="{Binding ElementName=border4, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Border x:Name="border4" Background="{Binding QuickSelectColorCollection[4], UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource colorconvert}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="3"
+                                ContextMenu="{StaticResource for_quick_color_bar}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ContextMenuOpening">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
+                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="4"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border  Margin="20,5,20,0" BorderBrush="Black" BorderThickness="1,1,1,0" Grid.Row="1" >
+            <RichTextBox x:Name="TextBox" 
+                     TextOptions.TextFormattingMode="Display" 
+                     TextOptions.TextRenderingMode="Auto" 
+                     AcceptsTab="True"
+                     AcceptsReturn="True"  
+                     VerticalScrollBarVisibility="Auto" 
+                     HorizontalScrollBarVisibility="Auto"
+                         ContextMenu="{StaticResource mycontextmenu}"
+                         IsDocumentEnabled="True">
+                <i:Interaction.Behaviors>
+                    <helpers:BehaviorRichTextBox x:Name="richbehavior"/>
+                </i:Interaction.Behaviors>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction 
+                        Command="{Binding RichTextBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
+                        CommandParameter="{Binding ElementName=richbehavior}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RichTextBox>
+        </Border>
+    </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding PageUnloaded, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</UserControl>
