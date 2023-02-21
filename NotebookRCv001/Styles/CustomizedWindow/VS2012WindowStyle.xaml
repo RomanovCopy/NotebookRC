@@ -17,40 +17,41 @@
 
 
     <!--#region *************** IMAGES **************** -->
-    
-    <BitmapImage x:Key="iconimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Icons[0]}"/>
-    <BitmapImage x:Key="aligncenterimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[0]}"/>
-    <BitmapImage x:Key="alignjustifyimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[1]}"/>
-    <BitmapImage x:Key="alignleftimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[2]}"/>
-    <BitmapImage x:Key="alignrightimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[3]}"/>
-    <BitmapImage x:Key="backimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[4]}"/>
-    <BitmapImage x:Key="codeblockimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[5]}"/>
-    <BitmapImage x:Key="codeinlineimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[6]}"/>
-    <BitmapImage x:Key="editcopyimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[7]}"/>
-    <BitmapImage x:Key="editcutimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[8]}"/>
-    <BitmapImage x:Key="editpasteimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[9]}"/>
-    <BitmapImage x:Key="editredoimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[10]}"/>
-    <BitmapImage x:Key="editundoimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[11]}"/>
-    <BitmapImage x:Key="filesaveimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[12]}"/>
-    <BitmapImage x:Key="fontboldimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[13]}"/>
-    <BitmapImage x:Key="fontgrowimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[14]}"/>
-    <BitmapImage x:Key="fontitalicimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[15]}"/>
-    <BitmapImage x:Key="fontshrinkimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[16]}"/>
-    <BitmapImage x:Key="fontunderlineimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[17]}"/>
-    <BitmapImage x:Key="forwardimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[18]}"/>
-    <BitmapImage x:Key="indentdecreaseimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[20]}"/>
-    <BitmapImage x:Key="indentincreaseimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[21]}"/>
-    <BitmapImage x:Key="listbulletsimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[22]}"/>
-    <BitmapImage x:Key="listnumbersimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[23]}"/>
-    <BitmapImage x:Key="normaltextimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[24]}"/>
-    <BitmapImage x:Key="pauseimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[25]}"/>
-    <BitmapImage x:Key="reloadimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[26]}"/>
-    <BitmapImage x:Key="separatorimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[27]}"/>
-    <BitmapImage x:Key="startimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[28]}"/>
-    <BitmapImage x:Key="stopimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[29]}"/>
-    <BitmapImage x:Key="reloadminiimage" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[30]}"/>
-    <BitmapImage x:Key="linespacingdecrease" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[31]}"/>
-    <BitmapImage x:Key="linespacingincrease" UriSource="{Binding Source={StaticResource navigateservice}, Path=Images[32]}"/>
+
+
+    <BitmapImage x:Key="iconimage" UriSource="\Resources\Icons\icon1.ico"/>
+    <BitmapImage x:Key="aligncenterimage" UriSource="\Resources\Images\000_aligncenter.png"/>
+    <BitmapImage x:Key="alignjustifyimage" UriSource="\Resources\Images\001_alignjustify.png"/>
+    <BitmapImage x:Key="alignleftimage" UriSource="\Resources\Images\002_alignleft.PNG"/>
+    <BitmapImage x:Key="alignrightimage" UriSource="\Resources\Images\003_alignright.png"/>
+    <BitmapImage x:Key="backimage" UriSource="\Resources\Images\004_back.png"/>
+    <BitmapImage x:Key="codeblockimage" UriSource="\Resources\Images\005_codeblock.png"/>
+    <BitmapImage x:Key="codeinlineimage" UriSource="\Resources\Images\006_codeinline.png"/>
+    <BitmapImage x:Key="editcopyimage" UriSource="\Resources\Images\007_editcopy.png"/>
+    <BitmapImage x:Key="editcutimage" UriSource="\Resources\Images\008_editcut.png"/>
+    <BitmapImage x:Key="editpasteimage" UriSource="\Resources\Images\009_editpaste.png"/>
+    <BitmapImage x:Key="editredoimage" UriSource="\Resources\Images\010_editredo.png"/>
+    <BitmapImage x:Key="editundoimage" UriSource="\Resources\Images\011_editundo.png"/>
+    <BitmapImage x:Key="filesaveimage" UriSource="\Resources\Images\012_filesave.png"/>
+    <BitmapImage x:Key="fontboldimage" UriSource="\Resources\Images\013_fontbold.png"/>
+    <BitmapImage x:Key="fontgrowimage" UriSource="\Resources\Images\014_fontgrow.png"/>
+    <BitmapImage x:Key="fontitalicimage" UriSource="\Resources\Images\015_fontitalic.png"/>
+    <BitmapImage x:Key="fontshrinkimage" UriSource="\Resources\Images\016_fontshrink.png"/>
+    <BitmapImage x:Key="fontunderlineimage" UriSource="\Resources\Images\017_fontunderline.png"/>
+    <BitmapImage x:Key="forwardimage" UriSource="\Resources\Images\018_forward.png"/>
+    <BitmapImage x:Key="indentdecreaseimage" UriSource="\Resources\Images\020_indentdecrease.png"/>
+    <BitmapImage x:Key="indentincreaseimage" UriSource="\Resources\Images\021_indentincrease.png"/>
+    <BitmapImage x:Key="listbulletsimage" UriSource="\Resources\Images\022_listbullets.png"/>
+    <BitmapImage x:Key="listnumbersimage" UriSource="\Resources\Images\023_listnumbers.png"/>
+    <BitmapImage x:Key="normaltextimage" UriSource="\Resources\Images\024_normaltext.png"/>
+    <BitmapImage x:Key="pauseimage" UriSource="\Resources\Images\025_pause.png"/>
+    <BitmapImage x:Key="reloadimage" UriSource="\Resources\Images\026_reload.png"/>
+    <BitmapImage x:Key="separatorimage" UriSource="\Resources\Images\027_separator.png"/>
+    <BitmapImage x:Key="startimage" UriSource="\Resources\Images\028_start.png"/>
+    <BitmapImage x:Key="stopimage" UriSource="\Resources\Images\029_stop.png"/>
+    <BitmapImage x:Key="reloadminiimage" UriSource="\Resources\Images\030_reload_mini.png"/>
+    <BitmapImage x:Key="linespacingdecrease" UriSource="\Resources\Images\031linespacingdecrease.png"/>
+    <BitmapImage x:Key="linespacingincrease" UriSource="\Resources\Images\032linespacingincrease .png"/>
     
     
     <!--#endregion-->
@@ -410,17 +411,15 @@
                                             Style="{StaticResource VS2012WindowStyleNavigationButton}">
                                             <Image Source="{StaticResource forwardimage}"/>
                                         </Button>
-                                        <Image
-                                            x:Name="Icon"
+                                        <Image x:Name="Icon"
                                             DataContext="{StaticResource navigateservice}"
                                             Grid.Column="2"
-                                            Source="{StaticResource iconimage}" 
                                             HorizontalAlignment="Center"
                                             Margin="4,0,0,0"
                                             Width="24"
                                             Height="24"
                                             Opacity="1"
-                                            />
+                                            Source="{StaticResource iconimage}"/>
                                         <TextBlock
                                             x:Name="Caption"
                                             Grid.Column="3"

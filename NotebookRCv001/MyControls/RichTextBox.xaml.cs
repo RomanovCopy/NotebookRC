@@ -26,16 +26,5 @@ namespace NotebookRCv001.MyControls
         {
             InitializeComponent();
         }
-
-        //private void TextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-        //{
-        //    if(sender is System.Windows.Controls.RichTextBox textbox)
-        //    {
-        //        var datacontext = (RichTextBoxViewModel)textbox.DataContext;
-        //        var contextmenu = (System.Windows.Controls.ContextMenu)textbox.ContextMenu;
-        //        var viewmodel = (MyContextMenuViewModel)textbox.ContextMenu.DataContext;
-
-        //    }
-        //}
     }
 }

@@ -19,6 +19,7 @@ using NotebookRCv001.ViewModels;
 using NotebookRCv001.Helpers;
 using System.Windows.Controls;
 using NotebookRCv001.Interfaces;
+using System.Drawing;
 
 namespace NotebookRCv001.Styles.CustomizedWindow
 {
@@ -46,37 +47,11 @@ namespace NotebookRCv001.Styles.CustomizedWindow
         }
         string lastFileName;
 
-        /// <summary>
-        /// коллекция путей к иконкам
-        /// </summary>
-        public ObservableCollection<string> Icons { get => icons; set => SetProperty(ref icons, value); }
-        private ObservableCollection<string> icons;
-
-        /// <summary>
-        /// коллекция путей к изображениям
-        /// </summary>
-        public ObservableCollection<string> Images { get => images; set => SetProperty(ref images, value); }
-        private ObservableCollection<string> images;
-
-
         public NavigateService()
         {
             //подписываемся на изменения в коллекции страниц фрейма(FrameList)
             MainWindowViewModel.FrameList.CollectionChanged += FrameList_CollectionChanged;
             //заносим адреса изображений в коллекции для дальнейшего помещения их в ресурсы
-            Icons = new();
-            Images = new();
-            var dir = Environment.CurrentDirectory;
-            foreach (string path in Directory.GetFiles(Path.Combine(dir, "Icons")))
-            {
-                if (!string.IsNullOrWhiteSpace(path))
-                    Icons.Add(path);
-            }
-            foreach (string path in Directory.GetFiles(Path.Combine(dir, "Images")))
-            {
-                if (!string.IsNullOrWhiteSpace(path))
-                    Images.Add(path);
-            }
             MainWindowViewModel.Language.PropertyChanged += (s, e) =>
             OnPropertyChanged(new string[] { "ToolTips", "Headers" });
         }

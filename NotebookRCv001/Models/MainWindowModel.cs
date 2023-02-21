@@ -17,6 +17,7 @@ using NotebookRCv001.ViewModels;
 using System.Reflection;
 using System.Collections;
 using System.Net.Http;
+using System.Resources;
 
 namespace NotebookRCv001.Models
 {
@@ -318,6 +319,8 @@ namespace NotebookRCv001.Models
                     HomeEncodings.Add(info);
                 HomeEncoding = Encoding.GetEncoding(Properties.Settings.Default.EncodingCodePage);
                 Execute_FrameListAddPage(new Views.Home() { KeepAlive = true });
+                GetResources();
+
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -362,6 +365,31 @@ namespace NotebookRCv001.Models
                 Properties.Settings.Default.Save();
             }
             catch (Exception e) { ErrorWindow(e); }
+        }
+
+        private void GetResources()
+        {
+            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string resxFile = @"D:\VisualStudio\Projects\NotebookRC\NotebookRCv001\Properties\Resources.resx";
+            var _assembly = Assembly.GetExecutingAssembly();
+            var resNames = _assembly.GetManifestResourceNames();
+            foreach (var resName in resNames)
+            {
+                var fileName = resName.Substring( resName.IndexOf( "." ) + 1 ); //Вырезаем пространство имён
+                using (var streamIn = _assembly.GetManifestResourceStream( resName ))
+                {
+                    using (var rer = new BinaryReader( streamIn ))
+                    {
+                        using (FileStream streamOut = new FileStream( fileName, FileMode.Create ))
+                        {
+                            using (BinaryWriter wrer = new BinaryWriter( streamOut ))
+                            {
+                                wrer.Write( rer.ReadBytes( (int)streamIn.Length ) );
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 

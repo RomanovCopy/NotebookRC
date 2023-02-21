@@ -117,4 +117,107 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="icon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Icons\icon1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_000_aligncenter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\000_aligncenter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_001_alignjustify" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\001_alignjustify.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_002_alignleft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\002_alignleft.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_003_alignright" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\003_alignright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_004_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\004_back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_005_codeblock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\005_codeblock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_006_codeinline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\006_codeinline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_007_editcopy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\007_editcopy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_008_editcut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\008_editcut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_009_editpaste" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\009_editpaste.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_010_editredo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\010_editredo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_011_editundo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\011_editundo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_012_filesave" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\012_filesave.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_013_fontbold" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\013_fontbold.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_014_fontgrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\014_fontgrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_015_fontitalic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\015_fontitalic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_016_fontshrink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\016_fontshrink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_017_fontunderline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\017_fontunderline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_018_forward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\018_forward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_019_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\019_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_020_indentdecrease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\020_indentdecrease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_021_indentincrease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\021_indentincrease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_022_listbullets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\022_listbullets.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_023_listnumbers" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\023_listnumbers.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_024_normaltext" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\024_normaltext.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_025_pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\025_pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_026_reload" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\026_reload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_027_separator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\027_separator.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_028_start" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\028_start.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_029_stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\029_stop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_030_reload_mini" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\030_reload_mini.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_031linespacingdecrease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\031linespacingdecrease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_032linespacingincrease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\032linespacingincrease .png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

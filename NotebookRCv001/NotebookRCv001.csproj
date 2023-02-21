@@ -11,7 +11,7 @@
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <Platforms>AnyCPU;x64</Platforms>
-    <ApplicationIcon>bin\Debug\net7.0-windows10.0.17763.0\Icons\icon1.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\icon1.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <IsPublishable>True</IsPublishable>
   </PropertyGroup>
@@ -90,12 +90,47 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Properties\Resources.resx" />
     <EmbeddedResource Remove="Resources\en-US.resx" />
     <EmbeddedResource Remove="Resources\Image.resx" />
     <EmbeddedResource Remove="Resources\ru-RU.resx" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\icon1.ico" />
+    <None Remove="Resources\Images\000_aligncenter.png" />
+    <None Remove="Resources\Images\001_alignjustify.png" />
+    <None Remove="Resources\Images\002_alignleft.PNG" />
+    <None Remove="Resources\Images\003_alignright.png" />
+    <None Remove="Resources\Images\004_back.png" />
+    <None Remove="Resources\Images\005_codeblock.png" />
+    <None Remove="Resources\Images\006_codeinline.png" />
+    <None Remove="Resources\Images\007_editcopy.png" />
+    <None Remove="Resources\Images\008_editcut.png" />
+    <None Remove="Resources\Images\009_editpaste.png" />
+    <None Remove="Resources\Images\010_editredo.png" />
+    <None Remove="Resources\Images\011_editundo.png" />
+    <None Remove="Resources\Images\012_filesave.png" />
+    <None Remove="Resources\Images\013_fontbold.png" />
+    <None Remove="Resources\Images\014_fontgrow.png" />
+    <None Remove="Resources\Images\015_fontitalic.png" />
+    <None Remove="Resources\Images\016_fontshrink.png" />
+    <None Remove="Resources\Images\017_fontunderline.png" />
+    <None Remove="Resources\Images\018_forward.png" />
+    <None Remove="Resources\Images\019_icon.png" />
+    <None Remove="Resources\Images\020_indentdecrease.png" />
+    <None Remove="Resources\Images\021_indentincrease.png" />
+    <None Remove="Resources\Images\022_listbullets.png" />
+    <None Remove="Resources\Images\023_listnumbers.png" />
+    <None Remove="Resources\Images\024_normaltext.png" />
+    <None Remove="Resources\Images\025_pause.png" />
+    <None Remove="Resources\Images\026_reload.png" />
+    <None Remove="Resources\Images\027_separator.png" />
+    <None Remove="Resources\Images\028_start.png" />
+    <None Remove="Resources\Images\029_stop.png" />
+    <None Remove="Resources\Images\030_reload_mini.png" />
+    <None Remove="Resources\Images\031linespacingdecrease.png" />
+    <None Remove="Resources\Images\032linespacingincrease .png" />
     <None Remove="Resources\start.bmp" />
   </ItemGroup>
 
@@ -121,40 +156,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Icons\icon1.ico" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\aligncenter.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\alignjustify.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\alignleft.PNG" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\alignright.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\back.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\codeblock.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\codeinline.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editcopy.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editcut.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editpaste.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editredo.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\editundo.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\filesave.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontbold.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontgrow.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontitalic.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontshrink.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\fontunderline.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\forward.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\icon.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\indentdecrease.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\indentincrease.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\listbullets.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\listnumbers.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\normaltext.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\pause.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\reload.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\separator.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\start.png" />
-    <Content Include="bin\Debug\net7.0-windows10.0.17763.0\Images\stop.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -164,6 +165,47 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Command_executors\Command_executors.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </Resource>
+    <Resource Include="Resources\Icons\icon1.ico" />
+    <Resource Include="Resources\Images\000_aligncenter.png" />
+    <Resource Include="Resources\Images\001_alignjustify.png" />
+    <Resource Include="Resources\Images\002_alignleft.PNG" />
+    <Resource Include="Resources\Images\003_alignright.png" />
+    <Resource Include="Resources\Images\004_back.png" />
+    <Resource Include="Resources\Images\005_codeblock.png" />
+    <Resource Include="Resources\Images\006_codeinline.png" />
+    <Resource Include="Resources\Images\007_editcopy.png" />
+    <Resource Include="Resources\Images\008_editcut.png" />
+    <Resource Include="Resources\Images\009_editpaste.png" />
+    <Resource Include="Resources\Images\010_editredo.png" />
+    <Resource Include="Resources\Images\011_editundo.png" />
+    <Resource Include="Resources\Images\012_filesave.png" />
+    <Resource Include="Resources\Images\013_fontbold.png" />
+    <Resource Include="Resources\Images\014_fontgrow.png" />
+    <Resource Include="Resources\Images\015_fontitalic.png" />
+    <Resource Include="Resources\Images\016_fontshrink.png" />
+    <Resource Include="Resources\Images\017_fontunderline.png" />
+    <Resource Include="Resources\Images\018_forward.png" />
+    <Resource Include="Resources\Images\019_icon.png" />
+    <Resource Include="Resources\Images\020_indentdecrease.png" />
+    <Resource Include="Resources\Images\021_indentincrease.png" />
+    <Resource Include="Resources\Images\022_listbullets.png" />
+    <Resource Include="Resources\Images\023_listnumbers.png" />
+    <Resource Include="Resources\Images\024_normaltext.png" />
+    <Resource Include="Resources\Images\025_pause.png" />
+    <Resource Include="Resources\Images\026_reload.png" />
+    <Resource Include="Resources\Images\027_separator.png" />
+    <Resource Include="Resources\Images\028_start.png" />
+    <Resource Include="Resources\Images\029_stop.png" />
+    <Resource Include="Resources\Images\030_reload_mini.png" />
+    <Resource Include="Resources\Images\031linespacingdecrease.png" />
+    <Resource Include="Resources\Images\032linespacingincrease .png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -177,12 +219,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Images.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Images.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
+    <EmbeddedResource Update="Resources\Images.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Images.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -191,6 +238,10 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net7.0-windows10.0.17763.0\" />
   </ItemGroup>
 
 </Project>
