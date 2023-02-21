@@ -36,33 +36,30 @@
 
     <Grid Background="Gray">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="1"/>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="1"/>
-            <RowDefinition Height="25*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25*"/>
-                <RowDefinition Height="25*"/>
-                <RowDefinition Height="25*"/>
-                <RowDefinition Height="25*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="1" Content="Romanov" FontSize="20" HorizontalContentAlignment="Center" 
-                   VerticalContentAlignment="Center"/>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10*"/>
                     <ColumnDefinition Width="60*"/>
                     <ColumnDefinition Width="20*"/>
                     <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Sergey" Grid.Column="1" FontSize="16" Height="30"/>
+                <Label Grid.Column="1" Content="Open File" FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" 
+                   VerticalContentAlignment="Center"/>
+                <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5">
+                    <TextBlock Text="Sergey" FontSize="16" Height="25" TextAlignment="Center" HorizontalAlignment="Center" />
+                </Border>
                 <Button Content="Browse" Grid.Column="2" Style="{StaticResource buttons}"/>
             </Grid>
         </Grid>
-        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Black"/>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -71,7 +68,6 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
         </Grid>
-        <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" Background="Black"/>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition/>
