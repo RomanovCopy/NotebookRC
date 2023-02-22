@@ -21,6 +21,26 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<string> ToolTips => encryptIndividualFileModel.ToolTips;
         public Action BehaviorReady { get => encryptIndividualFileModel.BehaviorReady; set => encryptIndividualFileModel.BehaviorReady = value; }
 
+        /// <summary>
+        /// путь к открываемому файлу
+        /// </summary>
+        public string PathToOpenFile { get => encryptIndividualFileModel.PathToOpenFile; set => encryptIndividualFileModel.PathToOpenFile = value; }
+        /// <summary>
+        /// путь к сохраняемому файлу
+        /// </summary>
+        public string PathToSaveFile { get => encryptIndividualFileModel.PathToSaveFile; set => encryptIndividualFileModel.PathToSaveFile = value; }
+        /// <summary>
+        /// путь к открываемой директории
+        /// </summary>
+        public string PathToOpenDirectory { get => encryptIndividualFileModel.PathToOpenDirectory; 
+            set => encryptIndividualFileModel.PathToOpenDirectory = value; }
+        /// <summary>
+        /// путь к сохраняемой директории
+        /// </summary>
+        public string PathToSaveDirectory { get => encryptIndividualFileModel.PathToSaveDirectory; 
+            set => encryptIndividualFileModel.PathToSaveDirectory = value; }
+
+
 
         public EncryptIndividualFileViewModel()
         {

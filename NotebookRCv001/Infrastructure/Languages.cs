@@ -611,11 +611,27 @@ namespace NotebookRCv001.Infrastructure
                 {"ru-RU", new ObservableCollection<string>()
                 {
                     "Шифровальщик",//00
+                    "Открыть файл",//01
+                    "Сохранить файл",//02
+                    "Обзор",//03
+                    "Очистить",//04
+                    "Шифровать",//05
+                    "Дешифровать",//06
+                    "Открыть директорию",//07
+                    "Сохранить директорию",//08
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
                 {
                     "Encoder",//00
+                    "Open file",//01
+                    "Save File",//02
+                    "Browse",//03 
+                    "Clear",//04
+                    "Encrypt",//05
+                    "Decrypt",//06
+                    "Open directory",//07
+                    "Save directory",//08
                 }
                 }
             };
@@ -628,12 +644,10 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-                    "Выберите файл и создайте его зашифрованную копию",//00
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
                 {
-                    "Select a file and create an encrypted copy of it",//00
                 }
                 }
             };

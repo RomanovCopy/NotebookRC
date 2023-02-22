@@ -11,12 +11,11 @@
         <viewmodels:EncryptIndividualFileViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="clearandclose"/>
         <Style x:Key="buttons" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Height" Value="25"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border BorderBrush="Black" CornerRadius="5" Background="White" BorderThickness="1" >
+                        <Border BorderBrush="Black" CornerRadius="5" Background="Gray" BorderThickness="1" >
                             <ContentPresenter Content="{Binding Path=Content, Mode=OneWay,
                                               RelativeSource={RelativeSource TemplatedParent}}" 
                                               TextBlock.FontSize="14" TextBlock.Foreground="Black"
@@ -39,9 +38,6 @@
     <Page.Title>
         <Binding Path="Headers[0]" UpdateSourceTrigger="PropertyChanged"/>
     </Page.Title>
-    <Page.ToolTip>
-        <Binding Path="ToolTips[0]" UpdateSourceTrigger="PropertyChanged"/>
-    </Page.ToolTip>
 
     <Grid Background="Gray">
         <Grid.RowDefinitions>
@@ -68,9 +64,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Open File" FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" 
-                   VerticalContentAlignment="Center"/>
-                    <Grid Grid.Row="1">
+                    <Label Grid.Row="0" Content="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Grid x:Name="openfile" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="60*"/>
@@ -79,10 +75,14 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="Sergey" FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding PathToOpenFile, UpdateSourceTrigger=PropertyChanged}" 
+                                       FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
+                                       ToolTip="{Binding PathToOpenFile, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
-                        <Button Content="Browse" Grid.Column="2" Style="{StaticResource buttons}"/>
-                        <Button Content="Clear" Grid.Column="3" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                                Grid.Column="2" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                Grid.Column="3" Style="{StaticResource buttons}"/>
                     </Grid>
                 </Grid>
                 <Grid DockPanel.Dock="Bottom">
@@ -90,9 +90,9 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Save File" FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" 
-                   VerticalContentAlignment="Center"/>
-                    <Grid Grid.Row="1">
+                    <Label Grid.Row="0" Content="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Grid x:Name="savefile" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="60*"/>
@@ -101,10 +101,12 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="Mihailovich" FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding PathToSaveFile, UpdateSourceTrigger=PropertyChanged}" 
+                                       FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
+                                       ToolTip="{Binding PathToSaveFile, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
-                        <Button Content="Browse" Grid.Column="2" Style="{StaticResource buttons}"/>
-                        <Button Content="Clear" Grid.Column="3" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{StaticResource buttons}"/>
                     </Grid>
                 </Grid>
             </DockPanel>
@@ -116,9 +118,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Open File" FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" 
-                   VerticalContentAlignment="Center"/>
-                    <Grid Grid.Row="1">
+                    <Label Grid.Row="0" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Grid x:Name="opendirectory" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="60*"/>
@@ -127,10 +129,14 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="Sergey" FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding PathToOpenDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                                       FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
+                                       ToolTip="{Binding PathToOpenDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
-                        <Button Content="Browse" Grid.Column="2" Style="{StaticResource buttons}"/>
-                        <Button Content="Clear" Grid.Column="3" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                                Grid.Column="2" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                Grid.Column="3" Style="{StaticResource buttons}"/>
                     </Grid>
                 </Grid>
                 <Grid DockPanel.Dock="Bottom">

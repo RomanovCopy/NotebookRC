@@ -29,6 +29,30 @@ namespace NotebookRCv001.Models
         Action behaviorReady;
 
 
+
+        /// <summary>
+        /// путь к открываемому файлу
+        /// </summary>
+        internal string PathToOpenFile { get => pathToOpenFile; set => SetProperty( ref pathToOpenFile, value ); }
+        private string pathToOpenFile;
+        /// <summary>
+        /// путь к сохраняемому файлу
+        /// </summary>
+        internal string PathToSaveFile { get => pathToSaveFile; set => SetProperty( ref pathToSaveFile, value ); }
+        private string pathToSaveFile;
+
+        /// <summary>
+        /// путь к открываемой директории
+        /// </summary>
+        internal string PathToOpenDirectory { get => pathToOpenDirectory; set => SetProperty( ref pathToOpenDirectory, value ); }
+        private string pathToOpenDirectory;
+        /// <summary>
+        /// путь к сохраняемой директории
+        /// </summary>
+        internal string PathToSaveDirectory { get => pathToSaveDirectory; set => SetProperty( ref pathToSaveDirectory, value ); }
+        private string pathToSaveDirectory;
+
+
         internal EncryptIndividualFileModel()
         {
             mainWindowViewModel = (ViewModels.MainWindowViewModel)Application.Current.MainWindow.DataContext;
