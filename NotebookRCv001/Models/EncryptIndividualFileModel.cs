@@ -66,6 +66,65 @@ namespace NotebookRCv001.Models
 
 
 
+        /// <summary>
+        /// выбор пути к открываемому файлу
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        internal void Execute_SelectOpenFile( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        internal bool CanExecute_SelectOpenFile( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// очистка пути к открываемому файлу
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClearOpenFile( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        internal void Execute_ClearOpenFile( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// выбор пути к открываемой директории
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_SelectOpenDirectory( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        internal void Execute_SelectOpenDirectory( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// очистка пути к открываемой директории
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClearOpenDirectory(object obj)
+        {
+            throw new NotImplementedException();
+        }
+        internal void Execute_ClearOpenDirectory(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
 
         /// <summary>
         /// окончание загрузки страницы

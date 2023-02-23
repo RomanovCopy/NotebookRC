@@ -38,13 +38,12 @@
     <Page.Title>
         <Binding Path="Headers[0]" UpdateSourceTrigger="PropertyChanged"/>
     </Page.Title>
-
-    <Grid Background="Gray">
+    <Grid Background="Gray" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="33*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Black">
             <Grid.ColumnDefinitions>
@@ -80,15 +79,17 @@
                                        ToolTip="{Binding PathToOpenFile, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
                         <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
-                                Grid.Column="2" Style="{StaticResource buttons}"/>
+                                Grid.Column="2" Style="{StaticResource buttons}" 
+                                Command="{Binding SelectOpenFile, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
-                                Grid.Column="3" Style="{StaticResource buttons}"/>
+                                Grid.Column="3" Style="{StaticResource buttons}"
+                                Command="{Binding ClearOpenFile, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Grid>
                 <Grid DockPanel.Dock="Bottom">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Content="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" 
                            FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -134,17 +135,20 @@
                                        ToolTip="{Binding PathToOpenDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
                         <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
-                                Grid.Column="2" Style="{StaticResource buttons}"/>
+                                Grid.Column="2" Style="{StaticResource buttons}"
+                                Command="{Binding SelectOpenDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
-                                Grid.Column="3" Style="{StaticResource buttons}"/>
+                                Grid.Column="3" Style="{StaticResource buttons}"
+                                Command="{Binding ClearOpenDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Grid>
                 <Grid DockPanel.Dock="Bottom">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Save File" FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" 
+                    <Label Grid.Row="0" Content="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="16" FontStyle="Italic" HorizontalContentAlignment="Center" 
                    VerticalContentAlignment="Center"/>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -155,15 +159,19 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="Mihailovich" FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding PathToSaveDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                                       FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
+                                       ToolTip="{Binding PathToSaveDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
-                        <Button Content="Browse" Grid.Column="2" Style="{StaticResource buttons}"/>
-                        <Button Content="Clear" Grid.Column="3" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                                Grid.Column="2" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                Grid.Column="3" Style="{StaticResource buttons}"/>
                     </Grid>
                 </Grid>
             </DockPanel>
         </Border>
-        <Border Grid.Row="3" Style="{StaticResource borders}" Padding="20,20,20,20" VerticalAlignment="Center" >
+        <Border Grid.Row="3" Style="{StaticResource borders}" Padding="20,0,20,20" >
             <DockPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -179,8 +187,10 @@
                             <ColumnDefinition Width="20*"/>
                             <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="1" Content="Encrypt" Style="{StaticResource buttons}"/>
-                        <Button Grid.Column="3" Content="Decrypt" Style="{StaticResource buttons}"/>
+                        <Button Grid.Column="1" Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttons}"/>
+                        <Button Grid.Column="3" Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttons}"/>
                     </Grid>
                 </Grid>
             </DockPanel>

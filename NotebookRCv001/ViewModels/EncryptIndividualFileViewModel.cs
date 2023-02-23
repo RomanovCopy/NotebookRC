@@ -48,6 +48,20 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.PropertyChanged += ( s, e ) => OnPropertyChanged( e.PropertyName );
         }
 
+        public ICommand SelectOpenFile => selectOpenFile ??= new RelayCommand( encryptIndividualFileModel.Execute_SelectOpenFile,
+            encryptIndividualFileModel.CanExecute_SelectOpenFile );
+        RelayCommand selectOpenFile;
+        public ICommand ClearOpenFile => clearOpenFile ??= new RelayCommand( encryptIndividualFileModel.Execute_ClearOpenFile,
+            encryptIndividualFileModel.CanExecute_ClearOpenFile );
+        private RelayCommand clearOpenFile;
+        public ICommand SelectOpenDirectory => selectOpenDirectory ??= new RelayCommand( encryptIndividualFileModel.Execute_SelectOpenDirectory,
+            encryptIndividualFileModel.CanExecute_SelectOpenDirectory );
+        private RelayCommand selectOpenDirectory;
+        public ICommand ClearOpenDirectory => clearOpenDirectory ??= new RelayCommand( encryptIndividualFileModel.Execute_ClearOpenDirectory,
+            encryptIndividualFileModel.CanExecute_ClearOpenDirectory);
+        private RelayCommand clearOpenDirectory;
+
+
 
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( encryptIndividualFileModel.Execute_PageLoaded, encryptIndividualFileModel.CanExecute_PageLoaded );
         RelayCommand pageLoaded;
@@ -59,5 +73,7 @@ namespace NotebookRCv001.ViewModels
         public ICommand PageClear => pageClear ??= new RelayCommand( encryptIndividualFileModel.Execute_PageClear, 
             encryptIndividualFileModel.CanExecute_PageClear );
         RelayCommand pageClear;
+
+
     }
 }
