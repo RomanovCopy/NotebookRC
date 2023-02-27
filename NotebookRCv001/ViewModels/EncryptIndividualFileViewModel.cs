@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,11 @@ namespace NotebookRCv001.ViewModels
         /// путь к открываемому файлу
         /// </summary>
         public string PathToOpenFile { get => encryptIndividualFileModel.PathToOpenFile; set => encryptIndividualFileModel.PathToOpenFile = value; }
+
+        /// <summary>
+        /// имя открываемого для шифрования файла
+        /// </summary>
+        public string NameOpenFile => encryptIndividualFileModel.NameOpenFile;
         /// <summary>
         /// путь к сохраняемому файлу
         /// </summary>
