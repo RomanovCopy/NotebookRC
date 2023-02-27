@@ -106,8 +106,10 @@
                                        FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
                                        ToolTip="{Binding PathToSaveFile, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
-                        <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{StaticResource buttons}"/>
-                        <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{StaticResource buttons}"/>
+                        <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{StaticResource buttons}"
+                                Command="{Binding SelectSaveFile, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{StaticResource buttons}"
+                                Command="{Binding ClearSaveFile, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Grid>
             </DockPanel>
@@ -164,9 +166,11 @@
                                        ToolTip="{Binding PathToSaveDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
                         <Button Content="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
-                                Grid.Column="2" Style="{StaticResource buttons}"/>
+                                Grid.Column="2" Style="{StaticResource buttons}"
+                                Command="{Binding SelectSaveDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
-                                Grid.Column="3" Style="{StaticResource buttons}"/>
+                                Grid.Column="3" Style="{StaticResource buttons}"
+                                Command="{Binding ClearSaveDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Grid>
             </DockPanel>

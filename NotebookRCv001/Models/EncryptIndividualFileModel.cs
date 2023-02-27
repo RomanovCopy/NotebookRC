@@ -71,13 +71,22 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="obj"></param>
         /// <exception cref="NotImplementedException"></exception>
-        internal void Execute_SelectOpenFile( object obj )
-        {
-            throw new NotImplementedException();
-        }
         internal bool CanExecute_SelectOpenFile( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_SelectOpenFile( object obj )
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// очистка пути к открываемому файлу
@@ -87,11 +96,66 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ClearOpenFile( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_ClearOpenFile( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// выбор пути к сохраняемому файлу
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_SelectSaveFile(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_SelectSaveFile(object obj)
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// очистка пути к сохраняемому файлу
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClearSaveFile(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_ClearSaveFile(object obj)
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// выбор пути к открываемой директории
@@ -101,11 +165,20 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_SelectOpenDirectory( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_SelectOpenDirectory( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// очистка пути к открываемой директории
@@ -115,14 +188,67 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ClearOpenDirectory(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_ClearOpenDirectory(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
-
-
+        /// <summary>
+        /// выбор пути к сохраняемой директории
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_SelectSaveDirectory(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_SelectSaveDirectory(object obj)
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// очистка пути к сохраняемой директории
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClearSaveDirectory(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_ClearSaveDirectory(object obj)
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
 
 
 

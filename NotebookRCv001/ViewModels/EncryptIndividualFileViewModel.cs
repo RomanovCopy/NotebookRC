@@ -54,6 +54,14 @@ namespace NotebookRCv001.ViewModels
         public ICommand ClearOpenFile => clearOpenFile ??= new RelayCommand( encryptIndividualFileModel.Execute_ClearOpenFile,
             encryptIndividualFileModel.CanExecute_ClearOpenFile );
         private RelayCommand clearOpenFile;
+
+        public ICommand SelectSaveFile => selectSaveFile ??= new RelayCommand(encryptIndividualFileModel.Execute_SelectSaveFile,
+            encryptIndividualFileModel.CanExecute_SelectSaveFile);
+        RelayCommand selectSaveFile;
+
+        public ICommand ClearSaveFile => clearSaveFile ??= new RelayCommand(encryptIndividualFileModel.Execute_ClearSaveFile,
+            encryptIndividualFileModel.CanExecute_ClearSaveFile);
+        RelayCommand clearSaveFile;
         public ICommand SelectOpenDirectory => selectOpenDirectory ??= new RelayCommand( encryptIndividualFileModel.Execute_SelectOpenDirectory,
             encryptIndividualFileModel.CanExecute_SelectOpenDirectory );
         private RelayCommand selectOpenDirectory;
@@ -61,7 +69,13 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.CanExecute_ClearOpenDirectory);
         private RelayCommand clearOpenDirectory;
 
+        public ICommand SelectSaveDirectory => selectSaveDirectory ??= new RelayCommand(encryptIndividualFileModel.Execute_SelectSaveDirectory,
+            encryptIndividualFileModel.CanExecute_SelectSaveDirectory);
+        RelayCommand selectSaveDirectory;
 
+        public ICommand ClearSaveDirectory => clearSaveDirectory ??= new RelayCommand(encryptIndividualFileModel.Execute_ClearSaveDirectory,
+            encryptIndividualFileModel.CanExecute_ClearSaveDirectory);
+        RelayCommand clearSaveDirectory;
 
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( encryptIndividualFileModel.Execute_PageLoaded, encryptIndividualFileModel.CanExecute_PageLoaded );
         RelayCommand pageLoaded;
