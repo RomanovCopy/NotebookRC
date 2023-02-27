@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ using System.Threading;
 
 namespace NotebookRCv001.Models
 {
-    internal class EncryptIndividualFileModel:ViewModelBase
+    internal class EncryptIndividualFileModel : ViewModelBase
     {
         private readonly ViewModels.MainWindowViewModel mainWindowViewModel;
         private readonly ViewModels.HomeViewModel homeViewModel;
@@ -33,8 +34,15 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// путь к открываемому файлу
         /// </summary>
-        internal string PathToOpenFile { get => pathToOpenFile; set => SetProperty( ref pathToOpenFile, value ); }
+        internal string PathToOpenFile { get => pathToOpenFile; set => SetProperty( ref pathToOpenFile, value,
+            new string[] { "PathToOpenFile", "NameOpenFile" } ); }
         private string pathToOpenFile;
+        /// <summary>
+        /// имя открываемого для шифрования файла
+        /// </summary>
+        internal string NameOpenFile => nameOpenFile = string.IsNullOrWhiteSpace( PathToOpenFile ) ? nameOpenFile??" " : 
+            new FileInfo( PathToOpenFile ).Name;
+        private string nameOpenFile;
         /// <summary>
         /// путь к сохраняемому файлу
         /// </summary>
@@ -76,17 +84,20 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = string.IsNullOrWhiteSpace( PathToOpenDirectory ) && string.IsNullOrWhiteSpace( PathToSaveDirectory );
                 return c;
             }
-            catch(Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_SelectOpenFile( object obj )
         {
             try
             {
+                var path = Command_executors.Executors.OpenFileDialog( Headers[9], "",
+                    "", "" );
+                PathToOpenFile = string.IsNullOrWhiteSpace( path ) ? PathToOpenFile : path;
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// очистка пути к открываемому файлу
@@ -99,10 +110,10 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = !string.IsNullOrWhiteSpace( PathToOpenFile );
                 return c;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ClearOpenFile( object obj )
         {
@@ -168,17 +179,18 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = string.IsNullOrWhiteSpace( PathToOpenFile ) && string.IsNullOrWhiteSpace( PathToSaveFile );
                 return c;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_SelectOpenDirectory( object obj )
         {
             try
             {
+
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// очистка пути к открываемой директории
@@ -186,15 +198,15 @@ namespace NotebookRCv001.Models
         /// <param name="obj"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_ClearOpenDirectory(object obj)
+        internal bool CanExecute_ClearOpenDirectory( object obj )
         {
             try
             {
                 bool c = false;
-                c = true;
+                c = !string.IsNullOrWhiteSpace( PathToOpenDirectory );
                 return c;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ClearOpenDirectory(object obj)
         {
@@ -266,7 +278,7 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch(Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_PageLoaded( object obj )
         {
@@ -320,6 +332,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
+
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
