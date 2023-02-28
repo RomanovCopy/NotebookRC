@@ -67,7 +67,7 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// путь к открываемому файлу
         /// </summary>
-        internal string PathToOpenFile { get => pathToOpenFile; set => SetProperty( ref pathToOpenFile, value); }
+        internal string PathToOpenFile { get => pathToOpenFile; set => SetProperty( ref pathToOpenFile, value ); }
         private string pathToOpenFile;
         /// <summary>
         /// имя открываемого для шифрования файла
@@ -354,11 +354,30 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ClickButtonEncrypt( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                bool a = !string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile );
+                bool b = !string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory );
+                c = a || b;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ClickButtonEncrypt( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(!string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
+                {//шифрование файла
+
+                }
+                else
+                {//щифрование каталога
+
+                }
+            }
+            catch(Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// деифрование и сохранение выбранного файла/каталога
@@ -368,11 +387,30 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ClickButtonDecrypt( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                bool a = !string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile );
+                bool b = !string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory );
+                c = a || b;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ClickButtonDecrypt( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
+                {//дешифрование файла
+
+                }
+                else
+                {//дешифрование каталога
+
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
         }
 
         /// <summary>
