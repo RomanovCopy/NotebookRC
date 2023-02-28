@@ -110,7 +110,7 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="{Binding PathToSaveFile, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBlock Text="{Binding NameSaveFile, UpdateSourceTrigger=PropertyChanged}" 
                                        FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
                                        ToolTip="{Binding PathToSaveFile, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
@@ -140,7 +140,7 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="{Binding PathToOpenDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBlock Text="{Binding NameOpenDirectory, UpdateSourceTrigger=PropertyChanged}" 
                                        FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
                                        ToolTip="{Binding PathToOpenDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
@@ -169,7 +169,7 @@
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" CornerRadius="5" Height="25">
-                            <TextBlock Text="{Binding PathToSaveDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBlock Text="{Binding NameSaveDirectory, UpdateSourceTrigger=PropertyChanged}" 
                                        FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" 
                                        ToolTip="{Binding PathToSaveDirectory, UpdateSourceTrigger=PropertyChanged}"/>
                         </Border>
@@ -199,10 +199,12 @@
                             <ColumnDefinition Width="20*"/>
                             <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="1" Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
-                                Style="{StaticResource buttons}"/>
-                        <Button Grid.Column="3" Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
-                                Style="{StaticResource buttons}"/>
+                        <Button x:Name="encrypt" Grid.Column="1" Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttons}" 
+                                Command="{Binding ClickButtonEncrypt, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button x:Name="decrypt" Grid.Column="3" Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttons}"
+                                Command="{Binding ClickButtonDecrypt, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Grid>
             </DockPanel>

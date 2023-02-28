@@ -96,6 +96,15 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.CanExecute_ClearSaveDirectory);
         RelayCommand clearSaveDirectory;
 
+
+        public ICommand ClickButtonEncrypt => clickButtonEncrypt ??= new RelayCommand( encryptIndividualFileModel.Execute_ClickButtonEncrypt,
+            encryptIndividualFileModel.CanExecute_ClickButtonEncrypt );
+        RelayCommand clickButtonEncrypt;
+
+        public ICommand ClickButtonDecrypt => clickButtonDecrypt ??= new RelayCommand( encryptIndividualFileModel.Execute_ClickButtonDecrypt,
+            encryptIndividualFileModel.CanExecute_ClickButtonDecrypt );
+        RelayCommand clickButtonDecrypt;
+
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( encryptIndividualFileModel.Execute_PageLoaded, encryptIndividualFileModel.CanExecute_PageLoaded );
         RelayCommand pageLoaded;
 

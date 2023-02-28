@@ -255,7 +255,7 @@ namespace NotebookRCv001.Models
                 var initionalDirectory = "";
                 if (!string.IsNullOrWhiteSpace( EncryptPathtoLastDirectoryOpen ) && Directory.Exists( EncryptPathtoLastDirectoryOpen ))
                     initionalDirectory = new DirectoryInfo( EncryptPathtoLastDirectoryOpen ).FullName;
-                var path = Command_executors.Executors.FolderBrowserDialog( Headers[11], initionalDirectory );
+                var path = Command_executors.Executors.FolderBrowserDialog( "", initionalDirectory );
                 PathToOpenDirectory = string.IsNullOrWhiteSpace( path ) ? PathToOpenDirectory : path;
                 if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ))
                 {
@@ -310,14 +310,14 @@ namespace NotebookRCv001.Models
             try
             {
                 var initionalDirectory = "";
-                if (!string.IsNullOrWhiteSpace( EncryptPathtoLastDirectoryOpen ) && Directory.Exists( EncryptPathtoLastDirectoryOpen ))
-                    initionalDirectory = new DirectoryInfo( EncryptPathtoLastDirectoryOpen ).FullName;
-                var path = Command_executors.Executors.FolderBrowserDialog( Headers[11], initionalDirectory );
-                PathToOpenDirectory = string.IsNullOrWhiteSpace( path ) ? PathToOpenDirectory : path;
-                if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ))
+                if (!string.IsNullOrWhiteSpace( EncryptPathtoLastDirectorySave ) && Directory.Exists( EncryptPathtoLastDirectorySave ))
+                    initionalDirectory = new DirectoryInfo( EncryptPathtoLastDirectorySave ).FullName;
+                var path = Command_executors.Executors.FolderBrowserDialog( "", initionalDirectory );
+                PathToSaveDirectory = string.IsNullOrWhiteSpace( path ) ? PathToSaveDirectory : path;
+                if (!string.IsNullOrWhiteSpace( PathToSaveDirectory ))
                 {
-                    EncryptPathtoLastDirectoryOpen = PathToOpenDirectory;
-                    NameOpenDirectory = new DirectoryInfo( PathToOpenDirectory ).Name;
+                    EncryptPathtoLastDirectorySave = PathToSaveDirectory;
+                    NameSaveDirectory = new DirectoryInfo( PathToSaveDirectory ).Name;
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -333,7 +333,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = !string.IsNullOrWhiteSpace( PathToSaveDirectory );
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -342,11 +342,38 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                PathToSaveDirectory = NameSaveDirectory = "";
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
-
-
+        /// <summary>
+        /// шифрование и сохранение выбранного файла/каталога
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClickButtonEncrypt( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        internal void Execute_ClickButtonEncrypt( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// деифрование и сохранение выбранного файла/каталога
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClickButtonDecrypt( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        internal void Execute_ClickButtonDecrypt( object obj )
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// окончание загрузки страницы

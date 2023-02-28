@@ -1230,7 +1230,6 @@ namespace Command_executors
             {
                 Forms.FolderBrowserDialog folderBrowserDialog = new Forms.FolderBrowserDialog()
                 {
-                    
                     ShowNewFolderButton = true,
                     Description = title,
                     SelectedPath = selectedCatalog
@@ -1442,6 +1441,7 @@ namespace Command_executors
                 return null;
             }
         }
+
     }
 
 }
