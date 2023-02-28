@@ -619,7 +619,10 @@ namespace NotebookRCv001.Infrastructure
                     "Дешифровать",//06
                     "Открыть директорию",//07
                     "Сохранить директорию",//08
-                    "Выбрать файл для шифрования",//09
+                    "Выбрать файл для шифрования/дешифрования",//09
+                    "Выбрать место сохранения зашифрованного/дешифрованного файла",//10
+                    "Выбрать каталог для шифрования/дешифрования",//11
+                    "Выбрать директорию для сохраненмя зашифрованного/дешифрованного каталога",//12
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -633,7 +636,10 @@ namespace NotebookRCv001.Infrastructure
                     "Decrypt",//06
                     "Open directory",//07
                     "Save directory",//08
-                    "Select file to encrypt",//09
+                    "Select file to encrypt/decrypt",//09
+                    "Select where to save the encrypted/decrypted file",//10
+                    "Select directory for encryption/decryption",//11
+                    "Select a directory to save the encrypted/decrypted directory",//12
                 }
                 }
             };

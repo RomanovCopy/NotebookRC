@@ -1175,7 +1175,6 @@ namespace Command_executors
         {
             try
             {
-                string path = null;
                 Forms.SaveFileDialog saveFileDialog = new Forms.SaveFileDialog()
                 {
                     AddExtension = true,
@@ -1187,8 +1186,7 @@ namespace Command_executors
                     ValidateNames = true
                 };
                 saveFileDialog.ShowDialog();
-                saveFileDialog.FileOk += (s, e) => { path = saveFileDialog.FileName; };
-                return path;
+                return saveFileDialog.FileName;
             }
             catch { return null; }
         }
@@ -1232,6 +1230,7 @@ namespace Command_executors
             {
                 Forms.FolderBrowserDialog folderBrowserDialog = new Forms.FolderBrowserDialog()
                 {
+                    
                     ShowNewFolderButton = true,
                     Description = title,
                     SelectedPath = selectedCatalog

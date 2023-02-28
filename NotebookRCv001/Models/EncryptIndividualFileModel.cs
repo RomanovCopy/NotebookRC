@@ -80,15 +80,30 @@ namespace NotebookRCv001.Models
         internal string PathToSaveFile { get => pathToSaveFile; set => SetProperty( ref pathToSaveFile, value ); }
         private string pathToSaveFile;
         /// <summary>
+        /// имя сохраняемого файла
+        /// </summary>
+        internal string NameSaveFile { get => nameSaveFile; set => SetProperty( ref nameSaveFile, value ); }
+        private string nameSaveFile;
+        /// <summary>
         /// путь к открываемой директории
         /// </summary>
         internal string PathToOpenDirectory { get => pathToOpenDirectory; set => SetProperty( ref pathToOpenDirectory, value ); }
         private string pathToOpenDirectory;
         /// <summary>
+        /// имя открываемого для шифрования/дешифрования каталога
+        /// </summary>
+        internal string NameOpenDirectory { get => nameOpenDirectory; set => SetProperty( ref nameOpenDirectory, value ); }
+        private string nameOpenDirectory;
+        /// <summary>
         /// путь к сохраняемой директории
         /// </summary>
         internal string PathToSaveDirectory { get => pathToSaveDirectory; set => SetProperty( ref pathToSaveDirectory, value ); }
         private string pathToSaveDirectory;
+        /// <summary>
+        /// имя директории для сохранения зашфрованного/дешифрованного каталога
+        /// </summary>
+        internal string NameSaveDirectory { get => nameSaveDirectory; set => SetProperty( ref nameSaveDirectory, value ); }
+        private string nameSaveDirectory;
 
 
         internal EncryptIndividualFileModel()
@@ -171,7 +186,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = !string.IsNullOrWhiteSpace( PathToOpenFile ) && File.Exists( PathToOpenFile );
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -180,6 +195,16 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                var initionalDirectory = "";
+                if (!string.IsNullOrWhiteSpace( EncryptPathtoLastFileSave ) && File.Exists( EncryptPathtoLastFileSave ))
+                    initionalDirectory = new FileInfo( EncryptPathtoLastFileSave ).DirectoryName;
+                var path = Command_executors.Executors.SaveFileDialog( Headers[10], initionalDirectory, "", "" );
+                PathToSaveFile = string.IsNullOrWhiteSpace( path ) ? PathToSaveFile : path;
+                if (!string.IsNullOrWhiteSpace( PathToSaveFile ))
+                {
+                    EncryptPathtoLastFileSave = PathToSaveFile;
+                    NameSaveFile = new FileInfo( PathToSaveFile ).Name;
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -194,7 +219,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = !string.IsNullOrWhiteSpace( PathToSaveFile );
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -203,6 +228,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                PathToSaveFile = NameSaveFile = "";
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -226,7 +252,16 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                var initionalDirectory = "";
+                if (!string.IsNullOrWhiteSpace( EncryptPathtoLastDirectoryOpen ) && Directory.Exists( EncryptPathtoLastDirectoryOpen ))
+                    initionalDirectory = new DirectoryInfo( EncryptPathtoLastDirectoryOpen ).FullName;
+                var path = Command_executors.Executors.FolderBrowserDialog( Headers[11], initionalDirectory );
+                PathToOpenDirectory = string.IsNullOrWhiteSpace( path ) ? PathToOpenDirectory : path;
+                if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ))
+                {
+                    EncryptPathtoLastDirectoryOpen = PathToOpenDirectory;
+                    NameOpenDirectory = new DirectoryInfo( PathToOpenDirectory ).Name;
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -250,6 +285,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                PathToOpenDirectory = NameOpenDirectory = "";
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -264,7 +300,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = !string.IsNullOrWhiteSpace( PathToOpenDirectory ) && Directory.Exists( PathToOpenDirectory );
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -273,6 +309,16 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                var initionalDirectory = "";
+                if (!string.IsNullOrWhiteSpace( EncryptPathtoLastDirectoryOpen ) && Directory.Exists( EncryptPathtoLastDirectoryOpen ))
+                    initionalDirectory = new DirectoryInfo( EncryptPathtoLastDirectoryOpen ).FullName;
+                var path = Command_executors.Executors.FolderBrowserDialog( Headers[11], initionalDirectory );
+                PathToOpenDirectory = string.IsNullOrWhiteSpace( path ) ? PathToOpenDirectory : path;
+                if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ))
+                {
+                    EncryptPathtoLastDirectoryOpen = PathToOpenDirectory;
+                    NameOpenDirectory = new DirectoryInfo( PathToOpenDirectory ).Name;
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }

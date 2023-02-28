@@ -28,7 +28,7 @@ namespace NotebookRCv001.ViewModels
         public string PathToOpenFile { get => encryptIndividualFileModel.PathToOpenFile; set => encryptIndividualFileModel.PathToOpenFile = value; }
 
         /// <summary>
-        /// имя открываемого для шифрования файла
+        /// имя открываемого для шифрования/дешифрования файла
         /// </summary>
         public string NameOpenFile => encryptIndividualFileModel.NameOpenFile;
         /// <summary>
@@ -36,16 +36,29 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public string PathToSaveFile { get => encryptIndividualFileModel.PathToSaveFile; set => encryptIndividualFileModel.PathToSaveFile = value; }
         /// <summary>
+        /// имя сохраняемого после шифрования/дешифрования файла
+        /// </summary>
+        public string NameSaveFile { get => encryptIndividualFileModel.NameSaveFile; set => encryptIndividualFileModel.NameSaveFile = value; }
+        /// <summary>
         /// путь к открываемой директории
         /// </summary>
         public string PathToOpenDirectory { get => encryptIndividualFileModel.PathToOpenDirectory; 
             set => encryptIndividualFileModel.PathToOpenDirectory = value; }
         /// <summary>
+        /// имя открываемого для шифрования/дешифрования каталога
+        /// </summary>
+        public string NameOpenDirectory { get => encryptIndividualFileModel.NameOpenDirectory;
+            set => encryptIndividualFileModel.NameOpenDirectory = value; }
+        /// <summary>
         /// путь к сохраняемой директории
         /// </summary>
         public string PathToSaveDirectory { get => encryptIndividualFileModel.PathToSaveDirectory; 
             set => encryptIndividualFileModel.PathToSaveDirectory = value; }
-
+        /// <summary>
+        /// имя директории для сохранения зашфрованного/дешифрованного каталога
+        /// </summary>
+        public string NameSaveDirectory { get => encryptIndividualFileModel.NameSaveDirectory;
+            set => encryptIndividualFileModel.NameSaveDirectory = value; }
 
 
         public EncryptIndividualFileViewModel()
