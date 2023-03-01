@@ -12,6 +12,9 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Security.Cryptography;
+using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NotebookRCv001.Models
 {
@@ -108,7 +111,7 @@ namespace NotebookRCv001.Models
 
         internal EncryptIndividualFileModel()
         {
-            mainWindowViewModel = (ViewModels.MainWindowViewModel)Application.Current.MainWindow.DataContext;
+            mainWindowViewModel = (ViewModels.MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
             var home = (Views.Home)mainWindowViewModel.FrameList.Where( ( x ) => x is Views.Home ).FirstOrDefault();
             homeViewModel = (ViewModels.HomeViewModel)home.DataContext;
             var menu = (MyControls.MenuHome)home.FindResource( "menuhome" );
@@ -362,22 +365,38 @@ namespace NotebookRCv001.Models
                 c = a || b;
                 return c;
             }
-            catch(Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ClickButtonEncrypt( object obj )
         {
             try
             {
-                if(!string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
+                if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                 {//шифрование файла
-
+                    byte[] bytes = null;
+                    using (FileStream fs = new FileStream( PathToOpenFile, FileMode.Open ))
+                    {
+                        bytes = new byte[fs.Length];
+                        fs.Seek( 0, SeekOrigin.Begin );
+                        fs.Read( bytes, 0, bytes.Length );
+                        var crypt = Command_executors.Executors.Encrypt( bytes, homeMenuEncryptionViewModel.KeyCript );
+                        if (crypt is byte[] array)
+                        {
+                            bytes = new byte[array.Length];
+                            array.CopyTo( bytes, 0 );
+                        }
+                    }
+                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.OpenOrCreate ))
+                    {
+                        fs.Write( bytes, 0, bytes.Length );
+                    }
                 }
                 else
                 {//щифрование каталога
 
                 }
             }
-            catch(Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// деифрование и сохранение выбранного файла/каталога
@@ -403,7 +422,18 @@ namespace NotebookRCv001.Models
             {
                 if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                 {//дешифрование файла
-
+                    byte[] bytes = null;
+                    using (FileStream fs = new FileStream( PathToOpenFile, FileMode.Open ))
+                    {
+                        bytes = new byte[fs.Length];
+                        fs.Seek( 0, SeekOrigin.Begin );
+                        fs.Read( bytes, 0, bytes.Length );
+                        bytes = Command_executors.Executors.Decrypt( bytes, homeMenuEncryptionViewModel.KeyCript );
+                    }
+                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.OpenOrCreate ))
+                    {
+                        fs.Write( bytes, 0, bytes.Length );
+                    }
                 }
                 else
                 {//дешифрование каталога
@@ -486,6 +516,58 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
+
+
+        public byte[] Encrypt( byte[] array, string key )
+        {
+            byte[] result = new byte[0];
+            try
+            {
+                if (array is byte[] data && data.Length > 0)
+                {
+                    SymmetricAlgorithm Sa = Rijndael.Create();
+                    using (var encryptor = Sa.CreateEncryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                        result = PerformCryptography( encryptor, data );
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                ErrorWindow( e );
+                return result;
+            }
+        }
+        public byte[] Decrypt( byte[] array, string key )
+        {
+            byte[] result = new byte[0];
+            try
+            {
+                if (array is byte[] data && data.Length > 0)
+                {
+                    SymmetricAlgorithm Sa = Rijndael.Create();
+                    using (var decryptor = Sa.CreateDecryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                        result = PerformCryptography( decryptor, data );
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                ErrorWindow( e );
+                return result;
+            }
+        }
+        private byte[] PerformCryptography( ICryptoTransform cryptoTransform, byte[] data )
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream( memoryStream, cryptoTransform, CryptoStreamMode.Write ))
+                {
+                    cryptoStream.Write( data, 0, data.Length );
+                    cryptoStream.FlushFinalBlock();
+                    return memoryStream.ToArray();
+                }
+            }
+        }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {

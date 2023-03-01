@@ -14,6 +14,7 @@ using System.Runtime.Serialization;
 using System.Runtime.CompilerServices;
 using Forms = System.Windows.Forms;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace Command_executors
 {
@@ -1386,8 +1387,66 @@ namespace Command_executors
             catch { return null; }
         }
 
-
-
+        /// <summary>
+        /// шифрование массива по ключу
+        /// </summary>
+        /// <param name="array">массив для шифрования</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>зашифрованный массив</returns>
+        public static byte[] Encrypt( byte[] array, string key )
+        {
+            byte[] result = new byte[0];
+            try
+            {
+                if (array is byte[] data && data.Length > 0)
+                {
+                    SymmetricAlgorithm Sa = Rijndael.Create();
+                    using (var encryptor = Sa.CreateEncryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                        result = PerformCryptography( encryptor, data );
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                return result;
+            }
+        }
+        /// <summary>
+        /// дешифрование зашифрованного массива по ключу
+        /// </summary>
+        /// <param name="array">зашифрованный массив</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>дешифрованный массив</returns>
+        public static byte[] Decrypt( byte[] array, string key )
+        {
+            byte[] result = new byte[0];
+            try
+            {
+                if (array is byte[] data && data.Length > 0)
+                {
+                    SymmetricAlgorithm Sa = Rijndael.Create();
+                    using (var decryptor = Sa.CreateDecryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                        result = PerformCryptography( decryptor, data );
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                return result;
+            }
+        }
+        private static byte[] PerformCryptography( ICryptoTransform cryptoTransform, byte[] data )
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream( memoryStream, cryptoTransform, CryptoStreamMode.Write ))
+                {
+                    cryptoStream.Write( data, 0, data.Length );
+                    cryptoStream.FlushFinalBlock();
+                    return memoryStream.ToArray();
+                }
+            }
+        }
 
 
         /// <summary>
