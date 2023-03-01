@@ -59,11 +59,11 @@ namespace Command_executors
         /// </summary>
         /// <param name="name">имя команды</param>
         /// <returns>true - команда с одним параметром</returns>
-        public static bool IsOneParameter(string name)
+        public static bool IsOneParameter( string name )
         {
             try
             {
-                return OneParameter.Any((x) => x == name);
+                return OneParameter.Any( ( x ) => x == name );
             }
             catch
             {
@@ -75,11 +75,11 @@ namespace Command_executors
         /// </summary>
         /// <param name="name">имя команды</param>
         /// <returns>true - команда не имеет параметров</returns>
-        public static bool IsWithoutParameters(string name)
+        public static bool IsWithoutParameters( string name )
         {
             try
             {
-                return WithoutParameters.Any((x) => x == name);
+                return WithoutParameters.Any( ( x ) => x == name );
             }
             catch
             {
@@ -91,11 +91,11 @@ namespace Command_executors
         /// </summary>
         /// <param name="name">имя команды</param>
         /// <returns>true - команда может быть использована в макросах</returns>
-        public static bool IsForMacros(string name)
+        public static bool IsForMacros( string name )
         {
             try
             {
-                return ForMacros.Any((x) => x == name);
+                return ForMacros.Any( ( x ) => x == name );
             }
             catch
             {
@@ -107,11 +107,11 @@ namespace Command_executors
         /// </summary>
         /// <param name="name">имя команды</param>
         /// <returns>true - команда с таким именем существует</returns>
-        public static bool IsAllcommands(string name)
+        public static bool IsAllcommands( string name )
         {
             try
             {
-                return AllCommands.Any((x) => x == name);
+                return AllCommands.Any( ( x ) => x == name );
             }
             catch
             {
@@ -123,11 +123,11 @@ namespace Command_executors
         /// </summary>
         /// <param name="name">имя команды</param>
         /// <returns>true - команда отображается в меню Command главного окна</returns>
-        public static bool IsForMenuCommand(string name)
+        public static bool IsForMenuCommand( string name )
         {
             try
             {
-                return ForMenuCommand.Any((x) => x == name);
+                return ForMenuCommand.Any( ( x ) => x == name );
             }
             catch
             {
@@ -144,7 +144,7 @@ namespace Command_executors
         /// <param name="substring">добавляемая подстрока</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>преобразованная коллекция</returns>
-        public static ObservableCollection<string> Concat(Action<object> execute, ObservableCollection<string> L1, string substring)
+        public static ObservableCollection<string> Concat( Action<object> execute, ObservableCollection<string> L1, string substring )
         {
             try
             {
@@ -155,8 +155,8 @@ namespace Command_executors
                     double LCount = L1.Count;
                     foreach (string str in L1)
                     {
-                        list.Add(string.Concat(str, substring));
-                        execute.Invoke((count += 1.0) / LCount * 100.0);
+                        list.Add( string.Concat( str, substring ) );
+                        execute.Invoke( (count += 1.0) / LCount * 100.0 );
                     }
                     return list;
                 }
@@ -175,7 +175,7 @@ namespace Command_executors
         /// <param name="substring">массив параметров</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>преобразованная коллекция</returns>
-        public static ObservableCollection<string> Contains(Action<object> execute, ObservableCollection<string> L1, string substring)
+        public static ObservableCollection<string> Contains( Action<object> execute, ObservableCollection<string> L1, string substring )
         {
             try
             {
@@ -186,12 +186,12 @@ namespace Command_executors
                     double LCount = L1.Count;
                     foreach (string str in L1)
                     {
-                        if (str.ToLower().Contains(substring.ToLower()))
+                        if (str.ToLower().Contains( substring.ToLower() ))
                         {
-                            list.Add(str);
+                            list.Add( str );
                         }
                         count++;
-                        execute.Invoke((count / LCount) * 100.0);
+                        execute.Invoke( (count / LCount) * 100.0 );
                     }
                     return list;
                 }
@@ -209,7 +209,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>преобразованная коллекция</returns>
-        public static ObservableCollection<string> Copies(Action<object> execute, ObservableCollection<string> L1)
+        public static ObservableCollection<string> Copies( Action<object> execute, ObservableCollection<string> L1 )
         {
             try
             {
@@ -221,9 +221,9 @@ namespace Command_executors
                     IEnumerable<string> l1 = L1.Distinct();
                     foreach (string str in l1)
                     {
-                        list.Add(str);
+                        list.Add( str );
                         count++;
-                        execute.Invoke((count / LCount) * 100.0);
+                        execute.Invoke( (count / LCount) * 100.0 );
                     }
                     return list;
                 }
@@ -261,7 +261,7 @@ namespace Command_executors
         /// <param name="substring"></param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>преобразованная коллекция</returns>
-        public static ObservableCollection<string> EndsWith(Action<object> execute, ObservableCollection<string> L1, string substring)
+        public static ObservableCollection<string> EndsWith( Action<object> execute, ObservableCollection<string> L1, string substring )
         {
             try
             {
@@ -272,10 +272,10 @@ namespace Command_executors
                     double LCount = L1.Count;
                     foreach (string str in L1)
                     {
-                        if (str.EndsWith(substring))
-                            list.Add(str);
+                        if (str.EndsWith( substring ))
+                            list.Add( str );
                         count++;
-                        execute.Invoke((count / LCount) * 100.0);
+                        execute.Invoke( (count / LCount) * 100.0 );
                     }
                     return list;
                 }
@@ -294,7 +294,7 @@ namespace Command_executors
         /// <param name="L1">коллекция строк HTML-кода</param>
         /// <param name="extension">массив искомых расширений(void delegate(double procent))</param>
         /// <returns>коллекция строк с найденными расширениями</returns>
-        public static ObservableCollection<string> FindExtensions(Action<object> execute, ObservableCollection<string> L1, string[] extensions)
+        public static ObservableCollection<string> FindExtensions( Action<object> execute, ObservableCollection<string> L1, string[] extensions )
         {
             try
             {
@@ -307,13 +307,13 @@ namespace Command_executors
                     foreach (var ex in extensions)
                     {
                         string e = ex[0] == '.' ? ex.ToLower() : $".{ex.ToLower()}";
-                        if (c = str.ToLower().Contains(e))
+                        if (c = str.ToLower().Contains( e ))
                             break;
                     }
                     if (c)
-                        list.Add(str);
+                        list.Add( str );
                     count++;
-                    execute.Invoke((count / LCount) * 100.0);
+                    execute.Invoke( (count / LCount) * 100.0 );
                 }
                 return list;
             }
@@ -330,7 +330,7 @@ namespace Command_executors
         /// <param name="tag">имя тега в котором находится атрибут</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>коллекция значений атрибутов</returns>
-        public static ObservableCollection<string> GetAttribute(Action<object> execute, ObservableCollection<string> L1, string tag, string atribute)
+        public static ObservableCollection<string> GetAttribute( Action<object> execute, ObservableCollection<string> L1, string tag, string atribute )
         {
             try
             {
@@ -339,18 +339,18 @@ namespace Command_executors
                 {
                     double count = 0;
                     double LCount = 0;
-                    CQ dom = CQ.Create(ListText(L1));
+                    CQ dom = CQ.Create( ListText( L1 ) );
                     var elements = dom[tag];
                     if ((LCount = elements.Length) > 0 && elements != null)
                     {
                         foreach (var a in elements)
                         {
                             var attributes = a.Attributes;
-                            var attribut = attributes.GetAttribute(atribute);
-                            if (!string.IsNullOrEmpty(attribut))
-                                list.Add(attribut);
+                            var attribut = attributes.GetAttribute( atribute );
+                            if (!string.IsNullOrEmpty( attribut ))
+                                list.Add( attribut );
                             count++;
-                            execute.Invoke((count / LCount) * 100.0);
+                            execute.Invoke( (count / LCount) * 100.0 );
                         }
                         elements = null;
                     }
@@ -375,21 +375,21 @@ namespace Command_executors
         /// <param name="ID">ID элемента</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>искомый элемент</returns>
-        public static ObservableCollection<string> GetElementByID(Action<object> execute, ObservableCollection<string> L1, string ID)
+        public static ObservableCollection<string> GetElementByID( Action<object> execute, ObservableCollection<string> L1, string ID )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
                 if (execute != null && L1 != null && ID != null)
                 {
-                    CQ Dom = CQ.Create(ListText(L1));
-                    var element = Dom.Document.GetElementById(ID);
+                    CQ Dom = CQ.Create( ListText( L1 ) );
+                    var element = Dom.Document.GetElementById( ID );
                     if (element != null)
-                        list = TextList(element.Render());
+                        list = TextList( element.Render() );
                 }
                 else
                     return L1;
-                execute.Invoke(100.0);
+                execute.Invoke( 100.0 );
                 return list;
             }
             catch
@@ -404,24 +404,24 @@ namespace Command_executors
         /// <param name="ClassName">имя класса</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>коллекция искомых элементов</returns>
-        public static ObservableCollection<string> GetElementsByClassName(Action<object> execute, ObservableCollection<string> L1, string ClassName)
+        public static ObservableCollection<string> GetElementsByClassName( Action<object> execute, ObservableCollection<string> L1, string ClassName )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
                 if (execute != null && L1 != null && ClassName != null)
                 {
-                    CQ Dom = CQ.Create(ListText(L1));
-                    string nameClass = ClassName.Trim(' ').Split(' ')[0];
+                    CQ Dom = CQ.Create( ListText( L1 ) );
+                    string nameClass = ClassName.Trim( ' ' ).Split( ' ' )[0];
                     Dom = Dom[$".{nameClass}"];
                     if (Dom != null)
                     {
                         for (int i = 0; i < Dom.Length; i++)
                         {
-                            list.Add(Dom[i].Render());
+                            list.Add( Dom[i].Render() );
                         }
                     }
-                    execute.Invoke(100.0);
+                    execute.Invoke( 100.0 );
                 }
                 else
                     return L1;
@@ -439,24 +439,24 @@ namespace Command_executors
         /// <param name="TagName">имя тега</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>коллекция искомых элементов</returns>
-        public static ObservableCollection<string> GetElementsByTagName(Action<object> execute, ObservableCollection<string> L1, string TagName)
+        public static ObservableCollection<string> GetElementsByTagName( Action<object> execute, ObservableCollection<string> L1, string TagName )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
                 if (execute != null && L1 != null && TagName != null)
                 {
-                    CQ Dom = CQ.Create(ListText(L1));
-                    var elements = Dom.Document.GetElementsByTagName(TagName).ToList();
+                    CQ Dom = CQ.Create( ListText( L1 ) );
+                    var elements = Dom.Document.GetElementsByTagName( TagName ).ToList();
                     if (elements != null && elements.Count > 0)
                     {
                         for (int i = 0; i < elements.Count; i++)
                         {
-                            list.Add(elements[i].ToString());
+                            list.Add( elements[i].ToString() );
                             //execute.Invoke(i / elements.Count * 100);
                         }
                     }
-                    execute.Invoke(100.0);
+                    execute.Invoke( 100.0 );
                 }
                 else
                     return L1;
@@ -474,23 +474,23 @@ namespace Command_executors
         /// <param name="options">массив параметров(options[0]- имя тега</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>HTML код преобразованный в коллекцию строк</returns>
-        public static ObservableCollection<string> GetInnerHTML(Action<object> execute, ObservableCollection<string> L1, string TagName)
+        public static ObservableCollection<string> GetInnerHTML( Action<object> execute, ObservableCollection<string> L1, string TagName )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
                 if (execute != null && L1 != null && TagName != null)
                 {
-                    CQ Dom = CQ.Create(ListText(L1));
+                    CQ Dom = CQ.Create( ListText( L1 ) );
                     var elements = Dom[TagName];
                     if (elements != null)
                     {
                         for (int i = 0; i < elements.Length; i++)
                         {
-                            list.Add(elements[i].InnerHTML);
+                            list.Add( elements[i].InnerHTML );
                         }
                     }
-                    execute.Invoke(100.0);
+                    execute.Invoke( 100.0 );
                 }
                 else
                     return L1;
@@ -509,14 +509,14 @@ namespace Command_executors
         /// <param name="TagName">имя тега</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>текст преобразованный в коллекцию строк</returns>
-        public static ObservableCollection<string> GetText(Action<object> execute, ObservableCollection<string> L1, string TagName)
+        public static ObservableCollection<string> GetText( Action<object> execute, ObservableCollection<string> L1, string TagName )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
                 if (execute != null && L1 != null && TagName != null)
                 {
-                    CQ Dom = CQ.Create(ListText(L1));
+                    CQ Dom = CQ.Create( ListText( L1 ) );
                     var elements = Dom[TagName];//получаем коллекцию тегов с заданным именем
                     if (elements != null)
                     {
@@ -530,15 +530,15 @@ namespace Command_executors
                                 string t1 = "";
                                 foreach (char ch in t)//оставляем в тексте только буквенные, цифровые и символы пунктуации
                                 {
-                                    if (char.IsLetterOrDigit(ch) || char.IsPunctuation(ch))
+                                    if (char.IsLetterOrDigit( ch ) || char.IsPunctuation( ch ))
                                     {
                                         t1 = $"{t1}{ch}";
                                     }
                                 }
-                                list.Add(t1);
+                                list.Add( t1 );
                             }
                             count++;
-                            execute.Invoke((count / LCount) * 100.0);
+                            execute.Invoke( (count / LCount) * 100.0 );
                         }
                     }
                 }
@@ -557,28 +557,28 @@ namespace Command_executors
         /// <param name="L1">коллекция строк HTML-кода</param>
         /// <param name="execute">обновление прогресса выполнения операции(void delegate(double procent))</param>
         /// <returns>коллекция найденных Title</returns>
-        public static ObservableCollection<string> GetTitles(Action<object> execute, string html)
+        public static ObservableCollection<string> GetTitles( Action<object> execute, string html )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
-                if (!string.IsNullOrEmpty(html))
+                if (!string.IsNullOrEmpty( html ))
                 {
-                    CsQuery.CQ dom = CsQuery.CQ.CreateDocument(html);
+                    CsQuery.CQ dom = CsQuery.CQ.CreateDocument( html );
                     if (execute != null)
-                        execute.Invoke(30);
-                    var title = dom.Find("title");
+                        execute.Invoke( 30 );
+                    var title = dom.Find( "title" );
                     if (execute != null)
-                        execute.Invoke(100);
+                        execute.Invoke( 100 );
                     if (title != null)
                     {
                         foreach (var a in title)
                         {
-                            list.Add(a.Cq().Text());
+                            list.Add( a.Cq().Text() );
                         }
                     }
                     if (execute != null)
-                        execute.Invoke(100.0);
+                        execute.Invoke( 100.0 );
                 }
                 else
                     return null;
@@ -599,7 +599,7 @@ namespace Command_executors
         /// <param name="start">позиция вставки</param>
         /// <param name="substring">вставляемая подстрока</param>
         /// <returns>преобразованная коллекция</returns>
-        public static ObservableCollection<string> Insert(Action<object> execute, ObservableCollection<string> L1, int start, string substring)
+        public static ObservableCollection<string> Insert( Action<object> execute, ObservableCollection<string> L1, int start, string substring )
         {
             try
             {
@@ -612,10 +612,10 @@ namespace Command_executors
                     {
                         if (str != null && start <= str.Length)
                         {
-                            list.Add(str.Insert(start, substring));
+                            list.Add( str.Insert( start, substring ) );
                         }
                         count++;
-                        execute.Invoke((count / LCount) * 100.0);
+                        execute.Invoke( (count / LCount) * 100.0 );
                     }
                 }
                 else
@@ -634,16 +634,16 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="substring">подстрока</param>
         /// <returns></returns>
-        public static ObservableCollection<string> NotContains(Action<object> execute, ObservableCollection<string> L1, string substring)
+        public static ObservableCollection<string> NotContains( Action<object> execute, ObservableCollection<string> L1, string substring )
         {
             try
             {
                 ObservableCollection<string> list = new ObservableCollection<string>();
                 if (execute != null && L1 != null && substring != null)
                 {
-                    var s1 = L1.Where((s) => !s.ToLower().Contains(substring.ToLower()));
-                    foreach (var s2 in s1) list.Add(s2);
-                    execute.Invoke(100.0);
+                    var s1 = L1.Where( ( s ) => !s.ToLower().Contains( substring.ToLower() ) );
+                    foreach (var s2 in s1) list.Add( s2 );
+                    execute.Invoke( 100.0 );
                     return list;
                 }
                 else
@@ -651,7 +651,7 @@ namespace Command_executors
             }
             catch
             {
-                execute.Invoke(0);
+                execute.Invoke( 0 );
                 return null;
             }
         }
@@ -663,8 +663,8 @@ namespace Command_executors
         /// <param name="start">позиция старта</param>
         /// <param name="length">длина вырезаемого участка</param>
         /// <returns></returns>
-        public static ObservableCollection<string> RemoveLength(Action<object> execute, ObservableCollection<string> L1, int start,
-            int length)
+        public static ObservableCollection<string> RemoveLength( Action<object> execute, ObservableCollection<string> L1, int start,
+            int length )
         {
             try
             {
@@ -676,10 +676,10 @@ namespace Command_executors
                     foreach (string str in L1)
                     {
                         if (str.Length > (start + length))
-                            list.Add(str.Remove(start, length));
+                            list.Add( str.Remove( start, length ) );
                         else if (str.Length > start)
-                            list.Add(str.Remove(start, (str.Length - start)));
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                            list.Add( str.Remove( start, (str.Length - start) ) );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -698,7 +698,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="start">позиция обрезки строки</param>
         /// <returns>результирующая коллекция</returns>
-        public static ObservableCollection<string> RemoveStart(Action<object> execute, ObservableCollection<string> L1, int start)
+        public static ObservableCollection<string> RemoveStart( Action<object> execute, ObservableCollection<string> L1, int start )
         {
             try
             {
@@ -710,8 +710,8 @@ namespace Command_executors
                     foreach (string str in L1)
                     {
                         if (str.Length > start)
-                            list.Add(str.Remove(start));
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                            list.Add( str.Remove( start ) );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -731,8 +731,8 @@ namespace Command_executors
         /// <param name="target">заменяемый участок строки</param>
         /// <param name="value">новое значение заменённого участка</param>
         /// <returns>результирующая коллекция</returns>
-        public static ObservableCollection<string> Replace(Action<object> execute, ObservableCollection<string> L1, string target,
-            string value)
+        public static ObservableCollection<string> Replace( Action<object> execute, ObservableCollection<string> L1, string target,
+            string value )
         {
             try
             {
@@ -743,8 +743,8 @@ namespace Command_executors
                 {
                     foreach (string str in L1)
                     {
-                        list.Add(str.Replace(target, value));
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                        list.Add( str.Replace( target, value ) );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -763,7 +763,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция строк</param>
         /// <param name="separator">массив с символами, в соответствии с которыми будут разбиваться строки</param>
         /// <returns>результирующая коллекция строк</returns>
-        public static ObservableCollection<string> Split(Action<object> execute, ObservableCollection<string> L1, char[] separator)
+        public static ObservableCollection<string> Split( Action<object> execute, ObservableCollection<string> L1, char[] separator )
         {
             try
             {
@@ -774,10 +774,10 @@ namespace Command_executors
                 {
                     foreach (string str in L1)
                     {
-                        string[] l1 = str.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                        string[] l1 = str.Split( separator, StringSplitOptions.RemoveEmptyEntries );
                         foreach (string str1 in l1)
-                            list.Add(str1);
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                            list.Add( str1 );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -796,7 +796,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="substring">контрольная подстрока</param>
         /// <returns>результирующая коллекция</returns>
-        public static ObservableCollection<string> StartsWith(Action<object> execute, ObservableCollection<string> L1, string substring)
+        public static ObservableCollection<string> StartsWith( Action<object> execute, ObservableCollection<string> L1, string substring )
         {
             try
             {
@@ -807,9 +807,9 @@ namespace Command_executors
                 {
                     foreach (string str in L1)
                     {
-                        if (str.StartsWith(substring))
-                            list.Add(str);
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                        if (str.StartsWith( substring ))
+                            list.Add( str );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -828,7 +828,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="separator">мвссив с заданными символами по которым будет проводиться обрезка строк </param>
         /// <returns>результирующая коллекция</returns>
-        public static ObservableCollection<string> Trim(Action<object> execute, ObservableCollection<string> L1, char[] separator)
+        public static ObservableCollection<string> Trim( Action<object> execute, ObservableCollection<string> L1, char[] separator )
         {
             try
             {
@@ -839,8 +839,8 @@ namespace Command_executors
                 {
                     foreach (string str in L1)
                     {
-                        list.Add(str.Trim(separator));
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                        list.Add( str.Trim( separator ) );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -859,7 +859,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="separstor">контрольные символы</param>
         /// <returns>результирующая коллекция</returns>
-        public static ObservableCollection<string> TrimEnd(Action<object> execute, ObservableCollection<string> L1, char[] separstor)
+        public static ObservableCollection<string> TrimEnd( Action<object> execute, ObservableCollection<string> L1, char[] separstor )
         {
             try
             {
@@ -870,8 +870,8 @@ namespace Command_executors
                 {
                     foreach (string str in L1)
                     {
-                        list.Add(str.TrimEnd(separstor));
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                        list.Add( str.TrimEnd( separstor ) );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -890,7 +890,7 @@ namespace Command_executors
         /// <param name="L1">обрабатываемая коллекция</param>
         /// <param name="separator">массив контрольных символов</param>
         /// <returns>результирующая коллекция</returns>
-        public static ObservableCollection<string> TrimStart(Action<object> execute, ObservableCollection<string> L1, char[] separator)
+        public static ObservableCollection<string> TrimStart( Action<object> execute, ObservableCollection<string> L1, char[] separator )
         {
             try
             {
@@ -901,8 +901,8 @@ namespace Command_executors
                 {
                     foreach (string str in L1)
                     {
-                        list.Add(str.TrimStart(separator));
-                        execute.Invoke((count += 1) / LCount * 100.0);
+                        list.Add( str.TrimStart( separator ) );
+                        execute.Invoke( (count += 1) / LCount * 100.0 );
                     }
                 }
                 else
@@ -925,7 +925,7 @@ namespace Command_executors
         /// <param name="extensionDefault">индекс расширения по умолчанию в коллекции расширений</param>
         /// <param name="Extensions">коллекция расширений</param>
         /// <param name="timeOut">время ожидания ответа сервера (мс)</param>
-        public static async void DownloadAsinc(Action<object> download, Action<object> uploaded, string url, string path, int extensionDefault, List<string> Extensions, int timeOut)
+        public static async void DownloadAsinc( Action<object> download, Action<object> uploaded, string url, string path, int extensionDefault, List<string> Extensions, int timeOut )
         {
             try
             {
@@ -935,32 +935,32 @@ namespace Command_executors
                 long Size = 0;//размер файла в байтах
                 long SizeUploaded = 0;//загружено байт всего
                 int ByteSize = 0;//загружено байт за проход
-                using (HttpWebResponse response = Request(url, timeOut, 0).Result)
+                using (HttpWebResponse response = Request( url, timeOut, 0 ).Result)
                 {
-                    Extension = string.IsNullOrEmpty(response.ContentType) ? Extensions[extensionDefault] : response.ContentType;
+                    Extension = string.IsNullOrEmpty( response.ContentType ) ? Extensions[extensionDefault] : response.ContentType;
                     Size = response.ContentLength;//размер файла в байтах
                     if (download != null)
-                        download.Invoke((double)Size);
+                        download.Invoke( (double)Size );
                     SizeUploaded = 0;//загружено байт всего
                     ByteSize = 0;//загружено байт за проход
                     Stream streamResponse = response.GetResponseStream();
-                    using (FileStream SaveFileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    using (FileStream SaveFileStream = new FileStream( path, FileMode.Create, FileAccess.Write ))
                     {
-                        await Task.Run(() =>
+                        await Task.Run( () =>
                         {
                             do
                             {
-                                ByteSize = streamResponse.Read(bufer, 0, bufer.Length);
+                                ByteSize = streamResponse.Read( bufer, 0, bufer.Length );
                                 SizeUploaded += ByteSize;
                                 if (path != null)
                                 {
-                                    SaveFileStream.Write(bufer, 0, ByteSize);//пишем на диск
+                                    SaveFileStream.Write( bufer, 0, ByteSize );//пишем на диск
                                     if (uploaded != null)
-                                        uploaded.Invoke((double)SizeUploaded);
+                                        uploaded.Invoke( (double)SizeUploaded );
                                 }
                             }
                             while (ByteSize > 0);
-                        });
+                        } );
                     }
                 }
             }
@@ -975,7 +975,7 @@ namespace Command_executors
         /// <param name="token"'>токен отмены загрузки</param>
         /// <param name="path">полный путь для сохранения файла на диск</param>
         /// <param name="offset">позиция в загружаемом файле, с которой необходимо начать загрузку</param>
-        public static async Task<bool> DownloadAsinc(Action<long> uploaded, HttpWebResponse response, CancellationToken token, string path)
+        public static async Task<bool> DownloadAsinc( Action<long> uploaded, HttpWebResponse response, CancellationToken token, string path )
         {
             try
             {
@@ -986,18 +986,18 @@ namespace Command_executors
                 int count = 3;//допустимое колличество попыток загрузки
                 using (Stream streamResponse = response?.GetResponseStream())
                 {
-                    if (!File.Exists(path))
+                    if (!File.Exists( path ))
                     {//файл на диске еще не создан
-                        using (FileStream SaveFileStream = new FileStream(path, FileMode.Append, FileAccess.Write))
+                        using (FileStream SaveFileStream = new FileStream( path, FileMode.Append, FileAccess.Write ))
                         {
-                            await Task.Factory.StartNew(() =>
+                            await Task.Factory.StartNew( () =>
                             {
                                 do
                                 {
-                                    ByteSize = streamResponse.Read(bufer, 0, bufer.Length);
-                                    SaveFileStream.Write(bufer, 0, ByteSize);//пишем на диск
+                                    ByteSize = streamResponse.Read( bufer, 0, bufer.Length );
+                                    SaveFileStream.Write( bufer, 0, ByteSize );//пишем на диск
                                     SizeUploaded += ByteSize;
-                                    uploaded?.Invoke(SizeUploaded);
+                                    uploaded?.Invoke( SizeUploaded );
                                     count--;
                                 }
                                 while
@@ -1005,26 +1005,26 @@ namespace Command_executors
                                 ByteSize > 0 ||
                                 (ByteSize == 0 && count >= 0 && (SizeUploaded < response?.ContentLength) ||
                                 response?.ContentLength < 0));
-                            });
+                            } );
                         }
                     }
                     else
                     {//файл на диске создан, но его необходимо дописать
-                        SizeUploaded = new FileInfo(path).Length;
-                        response = await Request(response.ResponseUri.AbsoluteUri, 50000, SizeUploaded);
+                        SizeUploaded = new FileInfo( path ).Length;
+                        response = await Request( response.ResponseUri.AbsoluteUri, 50000, SizeUploaded );
                         using (Stream stream = response.GetResponseStream())
                         {
-                            using (FileStream fileStream = File.OpenWrite(path))
+                            using (FileStream fileStream = File.OpenWrite( path ))
                             {
-                                fileStream.Seek(SizeUploaded, SeekOrigin.Begin);
-                                await Task.Factory.StartNew(() =>
+                                fileStream.Seek( SizeUploaded, SeekOrigin.Begin );
+                                await Task.Factory.StartNew( () =>
                                 {
                                     do
                                     {
-                                        ByteSize = stream.Read(bufer, 0, bufer.Length);
-                                        fileStream.Write(bufer, 0, ByteSize);//пишем на диск
+                                        ByteSize = stream.Read( bufer, 0, bufer.Length );
+                                        fileStream.Write( bufer, 0, ByteSize );//пишем на диск
                                         SizeUploaded += ByteSize;
-                                        uploaded?.Invoke(SizeUploaded);
+                                        uploaded?.Invoke( SizeUploaded );
                                         count--;
                                     }
                                     while
@@ -1032,7 +1032,7 @@ namespace Command_executors
                                     ByteSize > 0 ||
                                     (ByteSize == 0 && count >= 0 && (SizeUploaded < response?.ContentLength) ||
                                     response?.ContentLength < 0));
-                                });
+                                } );
                             }
                         }
                     }
@@ -1042,22 +1042,22 @@ namespace Command_executors
                 return c;
             }
             catch (Exception e)
-            { MessageBox.Show(e.Message); response?.Dispose(); return false; }
+            { MessageBox.Show( e.Message ); response?.Dispose(); return false; }
         }
 
 
 
-        public static byte[] Open(string path)
+        public static byte[] Open( string path )
         {
             try
             {
                 byte[] array = null;
-                using (FileStream reader = new FileStream(path, FileMode.Open))
+                using (FileStream reader = new FileStream( path, FileMode.Open ))
                 {
                     array = new byte[reader.Length];
                     if (reader.CanRead)
                     {
-                        reader.Read(array, 0, (int)reader.Length);
+                        reader.Read( array, 0, (int)reader.Length );
                     }
                 }
                 return array;
@@ -1067,15 +1067,15 @@ namespace Command_executors
                 return null;
             }
         }
-        public static async void Save(string path, byte[] array)
+        public static async void Save( string path, byte[] array )
         {
             try
             {
-                using (FileStream writer = new FileStream(path, FileMode.Create))
+                using (FileStream writer = new FileStream( path, FileMode.Create ))
                 {
                     if (writer.CanWrite)
                     {
-                        await writer.WriteAsync(array, 0, array.Length);
+                        await writer.WriteAsync( array, 0, array.Length );
                     }
                 }
             }
@@ -1091,19 +1091,19 @@ namespace Command_executors
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static T Open<T>(string path)
+        public static T Open<T>( string path )
         {
             try
             {
-                T file = default(T);
-                using (FileStream reader = new FileStream(path, FileMode.Open))
+                T file = default( T );
+                using (FileStream reader = new FileStream( path, FileMode.Open ))
                 {
                     if (reader.CanRead)
                     {
                         try
                         {
                             BinaryFormatter formatter = new BinaryFormatter();
-                            file = (T)formatter.Deserialize(reader);
+                            file = (T)formatter.Deserialize( reader );
                         }
                         catch
                         {
@@ -1114,7 +1114,7 @@ namespace Command_executors
             }
             catch
             {
-                return default(T);
+                return default( T );
             }
         }
 
@@ -1123,16 +1123,16 @@ namespace Command_executors
         /// </summary>
         /// <param name="path">адресс записи файла</param>
         /// <param name="file">записывваемый файл</param>
-        public static async void Save<T>(string path, T file)
+        public static async void Save<T>( string path, T file )
         {
             try
             {
-                using (FileStream writer = new FileStream(path, FileMode.Create))
+                using (FileStream writer = new FileStream( path, FileMode.Create ))
                 {
                     if (writer.CanWrite)
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
-                        await Task.Run(() => formatter.Serialize(writer, file));
+                        await Task.Run( () => formatter.Serialize( writer, file ) );
                     }
                 }
             }
@@ -1145,11 +1145,11 @@ namespace Command_executors
         /// </summary>
         /// <param name="path">путь к файлу</param>
         /// <returns>"true" - файл найден и удален, "false" - файл не существует, либо его удаление не возможно</returns>
-        public static bool Delete(string path)
+        public static bool Delete( string path )
         {
             try
             {
-                FileInfo fileInfo = new FileInfo(path);
+                FileInfo fileInfo = new FileInfo( path );
                 if (fileInfo.Exists)
                 {
                     fileInfo.Delete();
@@ -1172,7 +1172,7 @@ namespace Command_executors
         /// <param name="filter">текущая строка фильтра расширений файлов</param>
         /// <param name="defaultExt">расширение файла по умолчанию</param>
         /// <returns>имя файла выбранное в диалоговом окне</returns>
-        public static string SaveFileDialog(string title, string initialDirectory, string filter, string defaultExt)
+        public static string SaveFileDialog( string title, string initialDirectory, string filter, string defaultExt )
         {
             try
             {
@@ -1200,7 +1200,7 @@ namespace Command_executors
         /// <param name="filter">текущая строка фильтра расширений файлов</param>
         /// <param name="defaultExt">расширение файла по умолчанию</param>
         /// <returns>имя файла выбранное в диалоговом окне</returns>
-        public static string OpenFileDialog(string title, string initialDirectory, string filter, string defaultExt)
+        public static string OpenFileDialog( string title, string initialDirectory, string filter, string defaultExt )
         {
             try
             {
@@ -1225,7 +1225,7 @@ namespace Command_executors
         /// </summary>
         /// <param name="title">заголовок окна</param>
         /// <returns></returns>
-        public static string FolderBrowserDialog(string title, string selectedCatalog)
+        public static string FolderBrowserDialog( string title, string selectedCatalog )
         {
             try
             {
@@ -1247,28 +1247,28 @@ namespace Command_executors
         /// <param name="directory">целевая директория, где будет располагаться каталог</param>
         /// <param name="name">имя создаваемого каталога</param>
         /// <returns>полный путь к созданному каталогу </returns>
-        public static string DirectoryPath_Create(string directory, string name)
+        public static string DirectoryPath_Create( string directory, string name )
         {
             try
             {
                 char[] array = name.ToArray();
                 string path = "";
-                StringBuilder sb = new StringBuilder(array.Length);
+                StringBuilder sb = new StringBuilder( array.Length );
                 for (int i = 0; i < array.Length; i++)
                 {
-                    if (char.IsLetterOrDigit(array[i]))//только буквы и десятичные цифры
+                    if (char.IsLetterOrDigit( array[i] ))//только буквы и десятичные цифры
                     {
-                        if (!(path.Length == 0 && char.IsDigit(array[i])))//первый символ только буква
-                            sb.Append(array[i]);
+                        if (!(path.Length == 0 && char.IsDigit( array[i] )))//первый символ только буква
+                            sb.Append( array[i] );
                     }
-                    else if (char.IsWhiteSpace(array[i]))//замена пробелов
-                        sb.Append('_');
+                    else if (char.IsWhiteSpace( array[i] ))//замена пробелов
+                        sb.Append( '_' );
                 }
                 path = sb.ToString();
-                if (!string.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty( path ))
                 {
-                    string path1 = Path.Combine(directory, path);
-                    path = Directory.CreateDirectory(path1).FullName;
+                    string path1 = Path.Combine( directory, path );
+                    path = Directory.CreateDirectory( path1 ).FullName;
                 }
                 return path;
             }
@@ -1281,7 +1281,7 @@ namespace Command_executors
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static string CastToValidURL(string url)
+        public static string CastToValidURL( string url )
         {
             try
             {
@@ -1289,9 +1289,9 @@ namespace Command_executors
                 {
                     string result = "";
                     result = url.Trim();
-                    if (!url.Contains("http"))
+                    if (!url.Contains( "http" ))
                         result = $"http://{url}";
-                    string[] temp = url.Split('.');
+                    string[] temp = url.Split( '.' );
                     if (temp.Length < 2)
                         result = "about:blank";
                     return result;
@@ -1308,13 +1308,13 @@ namespace Command_executors
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async static Task<string> DownLoad_PrimaryHTML(string url)
+        public async static Task<string> DownLoad_PrimaryHTML( string url )
         {
             try
             {
                 string str = null;
                 HttpClient client = new HttpClient();
-                str = await client.GetStringAsync(url);
+                str = await client.GetStringAsync( url );
                 return str;
             }
             catch (HttpRequestException e)
@@ -1327,13 +1327,13 @@ namespace Command_executors
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static string DownLoad_SecondaryHTML(string url)
+        public static string DownLoad_SecondaryHTML( string url )
         {
             try
             {
                 bool c = false;
                 string html = null;
-                var dom = CQ.CreateFromUrl(url);
+                var dom = CQ.CreateFromUrl( url );
                 html = ((CQ)dom).Render();
                 //     ChromiumWebBrowser browser = new ChromiumWebBrowser(url);
                 //     browser.FrameLoadEnd += async (s, e) =>
@@ -1358,7 +1358,7 @@ namespace Command_executors
         /// <param name="url"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static async Task<HttpWebResponse> Request(string url, int timeOut, long range)
+        public static async Task<HttpWebResponse> Request( string url, int timeOut, long range )
         {
             try
             {
@@ -1368,15 +1368,15 @@ namespace Command_executors
                 {
                     try
                     {
-                        HttpWebRequest request = WebRequest.Create(new Uri(url, UriKind.Absolute)) as HttpWebRequest;
-                        request.Headers.Add(HttpRequestHeader.Range, string.Format("bytes={0}-", range));
+                        HttpWebRequest request = WebRequest.Create( new Uri( url, UriKind.Absolute ) ) as HttpWebRequest;
+                        request.Headers.Add( HttpRequestHeader.Range, string.Format( "bytes={0}-", range ) );
                         request.Timeout = timeOut;
                         request.Method = "GET";
                         request.ContentType = "application/x-www-form-urlencoded";
                         request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36 OPR/63.0.3368.71";
                         request.CookieContainer = request.CookieContainer ?? new CookieContainer();
-                        request.CookieContainer.Add(new Uri(url), new System.Net.Cookie("beget", "begetok"));
-                        request.AddRange(range);
+                        request.CookieContainer.Add( new Uri( url ), new System.Net.Cookie( "beget", "begetok" ) );
+                        request.AddRange( range );
                         response = (HttpWebResponse)await request.GetResponseAsync();
                     }
                     catch { response = null; }
@@ -1430,20 +1430,40 @@ namespace Command_executors
                 }
                 return result;
             }
-            catch (Exception e)
+            catch
             {
                 return result;
             }
         }
         private static byte[] PerformCryptography( ICryptoTransform cryptoTransform, byte[] data )
         {
-            using (var memoryStream = new MemoryStream())
+            byte[] result = new byte[0];
+            try
             {
-                using (var cryptoStream = new CryptoStream( memoryStream, cryptoTransform, CryptoStreamMode.Write ))
+                using (var memoryStream = new MemoryStream())
                 {
-                    cryptoStream.Write( data, 0, data.Length );
-                    cryptoStream.FlushFinalBlock();
-                    return memoryStream.ToArray();
+                    using (var cryptoStream = new CryptoStream( memoryStream, cryptoTransform, CryptoStreamMode.Write ))
+                    {
+                        cryptoStream.Write( data, 0, data.Length );
+                        cryptoStream.FlushFinalBlock();
+                    }
+                    result = memoryStream.ToArray();
+                }
+                return result;
+            }
+            catch
+            {
+                try
+                {
+                    if (cryptoTransform.GetType().Name == "UniversalCryptoDecryptor")
+                    {
+
+                    }
+                    return result;
+                }
+                catch
+                {
+                    return result;
                 }
             }
         }
@@ -1454,7 +1474,7 @@ namespace Command_executors
         /// </summary>
         /// <param name="line">строка</param>
         /// <returns>коллекция строк</returns>
-        public static ObservableCollection<string> TextList(string line)
+        public static ObservableCollection<string> TextList( string line )
         {
             try
             {
@@ -1462,14 +1482,14 @@ namespace Command_executors
                 if (line != null)
                 {
                     char[] separator = new char[] { '\r', '\n' };
-                    string[] l = line.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                    string[] l = line.Split( separator, StringSplitOptions.RemoveEmptyEntries );
                     foreach (string line1 in l)
                     {
-                        if (!string.IsNullOrEmpty(line1))
+                        if (!string.IsNullOrEmpty( line1 ))
                         {
-                            line1.Trim(new char[] { ' ', '\r', '\n' });
+                            line1.Trim( new char[] { ' ', '\r', '\n' } );
                             if (line1.Length > 0)
-                                ls.Add(line1.Trim());
+                                ls.Add( line1.Trim() );
                         }
                     }
                 }
@@ -1486,13 +1506,13 @@ namespace Command_executors
         /// </summary>
         /// <param name="list">коллекция строк</param>
         /// <returns>результирующая строка</returns>
-        public static string ListText(ObservableCollection<string> list)
+        public static string ListText( ObservableCollection<string> list )
         {
             try
             {
                 string str = null;
                 if (list != null && list.Count > 0)
-                    str = list.Aggregate((a, b) => $"{a}\r\n{b}");
+                    str = list.Aggregate( ( a, b ) => $"{a}\r\n{b}" );
                 return str;
             }
             catch

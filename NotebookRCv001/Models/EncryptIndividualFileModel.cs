@@ -374,12 +374,23 @@ namespace NotebookRCv001.Models
                 if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                 {//шифрование файла
                     byte[] bytes = FileEncrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
-                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.OpenOrCreate ))
+                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
                         fs.Write( bytes, 0, bytes.Length );
                 }
-                else
+                else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
                 {//щифрование каталога
-
+                    if (Directory.Exists( PathToOpenDirectory ))
+                    {
+                        string[] files = Directory.GetFiles( PathToOpenDirectory );
+                        foreach(var file in files)
+                        {
+                            var name = new FileInfo( file ).Name;
+                            var pathToSave = Path.Combine( PathToSaveDirectory, name );
+                            byte[] bytes = FileEncrypt( file, homeMenuEncryptionViewModel.KeyCript );
+                            using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
+                                fs.Write( bytes, 0, bytes.Length );
+                        }
+                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -409,12 +420,23 @@ namespace NotebookRCv001.Models
                 if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                 {//дешифрование файла
                     byte[] bytes = FileDecrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
-                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.OpenOrCreate ))
+                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
                         fs.Write( bytes, 0, bytes.Length );
                 }
-                else
-                {//дешифрование каталога
-
+                else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
+                {//дещифрование каталога
+                    if (Directory.Exists( PathToOpenDirectory ))
+                    {
+                        string[] files = Directory.GetFiles( PathToOpenDirectory );
+                        foreach (var file in files)
+                        {
+                            var name = new FileInfo( file ).Name;
+                            var pathToSave = Path.Combine( PathToSaveDirectory, name );
+                            byte[] bytes = FileDecrypt( file, homeMenuEncryptionViewModel.KeyCript );
+                            using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
+                                fs.Write( bytes, 0, bytes.Length );
+                        }
+                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
