@@ -229,7 +229,7 @@ namespace NotebookRCv001.Models
                                 {
                                     using (MemoryStream ms = new MemoryStream( bytes ))
                                     {
-                                        textRange.Load( ms, extension == ".rtf" ? DataFormats.Rtf : DataFormats.XamlPackage );
+                                        textRange.Load( ms, (extension == ".rtf" ? DataFormats.Rtf : DataFormats.XamlPackage) );
                                     }
                                 }
                                 catch
@@ -237,6 +237,7 @@ namespace NotebookRCv001.Models
                                     throw new Exception( mainWindowViewModel.Language.MessagesMyMessages[1] );
                                 }
                             }
+                            //textRange.ApplyPropertyValue( TextElement.BackgroundProperty, richTextBoxViewModel.MyFontBackground );
                         }
                         else if (extension == ".txt" || extension == ".cs")
                         {
