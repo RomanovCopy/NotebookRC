@@ -190,6 +190,9 @@ namespace NotebookRCv001.Models
                     flowDocument = richTextBoxViewModel.Document;//редактирование
                     var viewmodel = (HomeViewModel)home.DataContext;
                     viewmodel.PathToLastFile = PathToLastFile;
+                    var menu = (MyControls.MenuHome)home.FindResource( "menuhome" );
+                    var menuVM = ((ViewModels.MenuHomeViewModel)menu.DataContext);
+                    encoding = menuVM.HomeEncoding;
                 }
                 else if (mainWindowViewModel.CurrentPage is Views.FlowDocumentReader reader)
                 {
@@ -241,16 +244,9 @@ namespace NotebookRCv001.Models
                         {
                             if (!string.IsNullOrWhiteSpace(keyCrypt))
                             {
-                                fs.Close();
                                 string text = null;
-                                using (StreamReader reader = new StreamReader(path))
-                                {
-                                    try
-                                    {
-                                        text = encryptionModel.Decryption(reader.ReadToEnd(), keyCrypt);
-                                    }
-                                    catch { throw new Exception(mainWindowViewModel.Language.MessagesMyMessages[1]); }
-                                }
+                                bytes = Command_executors.Executors.Decrypt( bytes, keyCrypt );
+                                text = encoding.GetString( bytes );
                                 textRange.Text = string.IsNullOrEmpty(text) ? "" : text;
                             }
                             else
@@ -277,17 +273,10 @@ namespace NotebookRCv001.Models
                         {
                             if (!string.IsNullOrWhiteSpace(keyCrypt))
                             {
-                                var crypt = encryptionModel.Decrypt(bytes, keyCrypt);
-                                if (crypt != null)
+                                bytes = Command_executors.Executors.Decrypt( bytes, keyCrypt );
+                                using(MemoryStream ms=new MemoryStream( bytes ))
                                 {
-                                    textRange.Load(crypt, DataFormats.XamlPackage);
-                                    crypt.Close();
-                                }
-                                else
-                                {
-                                    if (crypt != null)
-                                        crypt.Close();
-                                    throw new Exception(mainWindowViewModel.Language.MessagesMyMessages[1]);
+                                    textRange.Load( ms, DataFormats.XamlPackage );
                                 }
                             }
                             else
