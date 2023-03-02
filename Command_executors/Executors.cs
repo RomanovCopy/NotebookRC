@@ -1402,7 +1402,7 @@ namespace Command_executors
                 {
                     SymmetricAlgorithm Sa = Rijndael.Create();
                     using (var encryptor = Sa.CreateEncryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
-                        result = PerformCryptography( encryptor, data );
+                        result = PerformCryptography( encryptor, data, key );
                 }
                 return result;
             }
@@ -1426,7 +1426,7 @@ namespace Command_executors
                 {
                     SymmetricAlgorithm Sa = Rijndael.Create();
                     using (var decryptor = Sa.CreateDecryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
-                        result = PerformCryptography( decryptor, data );
+                        result = PerformCryptography( decryptor, data, key );
                 }
                 return result;
             }
@@ -1435,7 +1435,7 @@ namespace Command_executors
                 return result;
             }
         }
-        private static byte[] PerformCryptography( ICryptoTransform cryptoTransform, byte[] data )
+        private static byte[] PerformCryptography( ICryptoTransform cryptoTransform, byte[] data, string key )
         {
             byte[] result = new byte[0];
             try
@@ -1451,22 +1451,12 @@ namespace Command_executors
                 }
                 return result;
             }
-            catch
+            catch 
             {
-                try
-                {
-                    if (cryptoTransform.GetType().Name == "UniversalCryptoDecryptor")
-                    {
-
-                    }
-                    return result;
-                }
-                catch
-                {
-                    return result;
-                }
+                return result;
             }
         }
+
 
 
         /// <summary>

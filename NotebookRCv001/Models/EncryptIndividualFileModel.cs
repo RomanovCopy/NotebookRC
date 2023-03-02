@@ -14,7 +14,9 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+//using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Documents;
+//using System.Windows.Shapes;
 
 namespace NotebookRCv001.Models
 {
@@ -551,6 +553,35 @@ namespace NotebookRCv001.Models
                 return result;
             }
             catch (Exception e) { ErrorWindow( e ); return result; }
+        }
+
+        /// <summary>
+        /// расшифровка каталога текстовых файлов старого образца
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private void ReencryptionOfLineFiles(  )
+        {
+            var decrypter = homeMenuEncryptionViewModel.HomeMenuEncryptionModel;
+            string[] files = Directory.GetFiles( PathToOpenDirectory );
+            foreach (var file in files)
+            {
+                var name = new FileInfo( file ).Name;
+                var pathToSave = System.IO.Path.Combine( PathToSaveDirectory, name );
+                string text = null;
+                using (StreamReader reader = new StreamReader( file ))
+                {
+                    try
+                    {
+                        text = decrypter.Decryption( reader.ReadToEnd(), homeMenuEncryptionViewModel.KeyCript );
+                    }
+                    catch { throw new Exception( mainWindowViewModel.Language.MessagesMyMessages[1] ); }
+                }
+                using (StreamWriter writer = new StreamWriter( pathToSave ))
+                {
+                    if (!string.IsNullOrEmpty( text ))
+                        writer.Write( text );
+                }
+            }
         }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
