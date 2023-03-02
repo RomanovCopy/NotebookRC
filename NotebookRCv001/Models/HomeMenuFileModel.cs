@@ -216,28 +216,14 @@ namespace NotebookRCv001.Models
                         if (extension == ".rtf" || extension == ".xaml")
                         {
                             if (!string.IsNullOrWhiteSpace( keyCrypt ))
-                            {
                                 bytes = Command_executors.Executors.Decrypt( bytes, keyCrypt );
-                                using (MemoryStream ms = new MemoryStream( bytes ))
-                                {
-                                    textRange.Load( ms, extension == ".rtf" ? DataFormats.Rtf : DataFormats.XamlPackage );
-                                }
-                            }
-                            else
+                            using (MemoryStream ms = new MemoryStream( bytes ))
                             {
-                                try
-                                {
-                                    using (MemoryStream ms = new MemoryStream( bytes ))
-                                    {
-                                        textRange.Load( ms, (extension == ".rtf" ? DataFormats.Rtf : DataFormats.XamlPackage) );
-                                    }
-                                }
-                                catch
-                                {
-                                    throw new Exception( mainWindowViewModel.Language.MessagesMyMessages[1] );
-                                }
+                                if (extension == ".rtf")
+                                    textRange.Load( fs, DataFormats.Rtf);
+                                else
+                                    textRange.Load( ms, DataFormats.XamlPackage);
                             }
-                            //textRange.ApplyPropertyValue( TextElement.BackgroundProperty, richTextBoxViewModel.MyFontBackground );
                         }
                         else if (extension == ".txt" || extension == ".cs")
                         {
@@ -359,10 +345,10 @@ namespace NotebookRCv001.Models
                             {
                                 textRange.Save( ms, DataFormats.Rtf );
                                 bytes = ms.ToArray();
+                                if (!string.IsNullOrWhiteSpace( keyCrypt ))
+                                    bytes = Command_executors.Executors.Encrypt( bytes, keyCrypt );
+                                fs.Write( bytes );
                             }
-                            if (!string.IsNullOrWhiteSpace( keyCrypt ))
-                                bytes = Command_executors.Executors.Encrypt( bytes, keyCrypt );
-                            fs.Write( bytes );
                         }
                         else if (extension == ".txt" || extension == ".cs")
                         {
