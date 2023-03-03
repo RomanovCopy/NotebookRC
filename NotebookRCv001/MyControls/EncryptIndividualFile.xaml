@@ -53,6 +53,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Black">
             <Grid.ColumnDefinitions>
@@ -63,13 +64,7 @@
             <Menu  Grid.Column="0">
                 <MenuItem Header=""/>
             </Menu>
-            <ContentPresenter Grid.Column="2" Content="{StaticResource clearandclose}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:InvokeCommandAction Command="{Binding ButtonsClearAndCloseLoaded}" CommandParameter="{Binding ElementName=encryptpage}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ContentPresenter>
+            <ContentPresenter Grid.Column="2" Content="{StaticResource clearandclose}"/>
         </Grid>
         <Border Grid.Row="1" Style="{StaticResource borders}" Padding="20,0,20,20">
             <DockPanel>
@@ -216,5 +211,6 @@
                 </Grid>
             </DockPanel>
         </Border>
+        <Border Grid.Row="4" Style="{StaticResource borders}" />
     </Grid>
 </Page>

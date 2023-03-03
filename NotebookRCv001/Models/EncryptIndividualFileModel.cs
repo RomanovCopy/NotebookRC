@@ -20,13 +20,12 @@ using System.Windows.Documents;
 
 namespace NotebookRCv001.Models
 {
-    internal class EncryptIndividualFileModel : ViewModelBase
+    internal class EncryptIndividualFileModel : ViewModelBase, IDisplayProgressTarget
     {
         private readonly ViewModels.MainWindowViewModel mainWindowViewModel;
         private readonly ViewModels.HomeViewModel homeViewModel;
         private readonly ViewModels.HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
         private Languages language => mainWindowViewModel.Language;
-        private object encryptIndividualFile { get; set; }
         internal ObservableCollection<string> Headers => language.EncryptIndividualFile;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsEncryptIndividualFile;
@@ -109,6 +108,11 @@ namespace NotebookRCv001.Models
         /// </summary>
         internal string NameSaveDirectory { get => nameSaveDirectory; set => SetProperty( ref nameSaveDirectory, value ); }
         private string nameSaveDirectory;
+        /// <summary>
+        /// прогресс шифрования файла/каталога
+        /// </summary>
+        public double ProgressValue { get => progressValue; set => SetProperty( ref progressValue, value ); }
+        private double progressValue;
 
 
         internal EncryptIndividualFileModel()
@@ -373,27 +377,41 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
-                {//шифрование файла
-                    byte[] bytes = FileEncrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
-                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
-                        fs.Write( bytes, 0, bytes.Length );
-                }
-                else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
-                {//щифрование каталога
-                    if (Directory.Exists( PathToOpenDirectory ))
-                    {
-                        string[] files = Directory.GetFiles( PathToOpenDirectory );
-                        foreach(var file in files)
+                var progress = new Views.DisplayProgress();
+                var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
+                progressVM.Target = this;
+                PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
+                Task.Factory.StartNew( () =>
+                {
+                    if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
+                    {//шифрование файла
+                        byte[] bytes = FileEncrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
+                        using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
+                            fs.Write( bytes, 0, bytes.Length );
+                        ProgressValue = 100;
+                    }
+                    else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
+                    {//щифрование каталога
+                        if (Directory.Exists( PathToOpenDirectory ))
                         {
-                            var name = new FileInfo( file ).Name;
-                            var pathToSave = Path.Combine( PathToSaveDirectory, name );
-                            byte[] bytes = FileEncrypt( file, homeMenuEncryptionViewModel.KeyCript );
-                            using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
-                                fs.Write( bytes, 0, bytes.Length );
+                            string[] files = Directory.GetFiles( PathToOpenDirectory );
+                            if (files.Length == 0) return;
+                            double count = 0;
+                            foreach (var file in files)
+                            {
+                                var name = new FileInfo( file ).Name;
+                                var pathToSave = Path.Combine( PathToSaveDirectory, name );
+                                byte[] bytes = FileEncrypt( file, homeMenuEncryptionViewModel.KeyCript );
+                                using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
+                                    fs.Write( bytes, 0, bytes.Length );
+                                ProgressValue = count / (double)files.Length * 100.0;
+                                count++;
+                            }
+                            ProgressValue = 100;
                         }
                     }
-                }
+                } );
+                progress.ShowDialog();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -419,50 +437,41 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
-                {//дешифрование файла
-                    byte[] bytes = FileDecrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
-                    using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
-                        fs.Write( bytes, 0, bytes.Length );
-                }
-                else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
-                {//дещифрование каталога
-                    if (Directory.Exists( PathToOpenDirectory ))
-                    {
-                        string[] files = Directory.GetFiles( PathToOpenDirectory );
-                        foreach (var file in files)
+                var progress = new Views.DisplayProgress();
+                var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
+                progressVM.Target = this;
+                PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
+                Task.Factory.StartNew( () =>
+                {
+                    if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
+                    {//дешифрование файла
+                        byte[] bytes = FileDecrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
+                        using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
+                            fs.Write( bytes, 0, bytes.Length );
+                        ProgressValue = 100;
+                    }
+                    else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
+                    {//дещифрование каталога
+                        if (Directory.Exists( PathToOpenDirectory ))
                         {
-                            var name = new FileInfo( file ).Name;
-                            var pathToSave = Path.Combine( PathToSaveDirectory, name );
-                            byte[] bytes = FileDecrypt( file, homeMenuEncryptionViewModel.KeyCript );
-                            using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
-                                fs.Write( bytes, 0, bytes.Length );
+                            string[] files = Directory.GetFiles( PathToOpenDirectory );
+                            if (files.Length == 0) return;
+                            double count = 0;
+                            foreach (var file in files)
+                            {
+                                var name = new FileInfo( file ).Name;
+                                var pathToSave = Path.Combine( PathToSaveDirectory, name );
+                                byte[] bytes = FileDecrypt( file, homeMenuEncryptionViewModel.KeyCript );
+                                using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
+                                    fs.Write( bytes, 0, bytes.Length );
+                                ProgressValue = count / (double)files.Length * 100.0;
+                                count++;
+                            }
+                            ProgressValue = 100;
                         }
                     }
-                }
-            }
-            catch (Exception e) { ErrorWindow( e ); }
-        }
-        /// <summary>
-        /// загрузка панели с кнопками Close и Clear
-        /// </summary>
-        /// <param name="obj"> ButtonsClearAndClose </param>
-        internal bool CanExecute_ButtonsClearAndCloseLoaded( object obj )
-        {
-            try
-            {
-                bool c = false;
-                c = true;
-                return c;
-            }
-            catch(Exception e) { ErrorWindow( e ); return false; }
-        }
-        internal void Execute_ButtonsClearAndCloseLoaded( object obj )
-        {
-            try
-            {
-                if (obj != null)
-                    encryptIndividualFile = obj;
+                } );
+                progress.ShowDialog();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -502,7 +511,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = obj != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -511,8 +520,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (mainWindowViewModel.FrameListRemovePage.CanExecute( encryptIndividualFile ))
-                    mainWindowViewModel.FrameListRemovePage.Execute( encryptIndividualFile );
+                if (mainWindowViewModel.FrameListRemovePage.CanExecute( obj ))
+                    mainWindowViewModel.FrameListRemovePage.Execute( obj );
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -584,7 +593,7 @@ namespace NotebookRCv001.Models
         /// расшифровка каталога текстовых файлов старого образца
         /// </summary>
         /// <exception cref="Exception"></exception>
-        private void ReencryptionOfLineFiles(  )
+        private void ReencryptionOfLineFiles()
         {
             var decrypter = homeMenuEncryptionViewModel.HomeMenuEncryptionModel;
             string[] files = Directory.GetFiles( PathToOpenDirectory );

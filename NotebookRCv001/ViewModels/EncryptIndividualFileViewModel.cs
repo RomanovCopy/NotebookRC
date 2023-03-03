@@ -15,7 +15,7 @@ using NotebookRCv001.Models;
 
 namespace NotebookRCv001.ViewModels
 {
-    public class EncryptIndividualFileViewModel:ViewModelBase, IPageViewModel
+    public class EncryptIndividualFileViewModel:ViewModelBase, IPageViewModel, IDisplayProgressTarget
     {
         private readonly EncryptIndividualFileModel encryptIndividualFileModel;
         public ObservableCollection<string> Headers => encryptIndividualFileModel.Headers;
@@ -59,6 +59,11 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public string NameSaveDirectory { get => encryptIndividualFileModel.NameSaveDirectory;
             set => encryptIndividualFileModel.NameSaveDirectory = value; }
+
+
+        public double ProgressValue { get => encryptIndividualFileModel.ProgressValue;
+            set => encryptIndividualFileModel.ProgressValue = value; }
+
 
 
         public EncryptIndividualFileViewModel()
@@ -105,9 +110,6 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.CanExecute_ClickButtonDecrypt );
         RelayCommand clickButtonDecrypt;
 
-        public ICommand ButtonsClearAndCloseLoaded => buttonsClearAndCloseLoaded ??= new RelayCommand(
-            encryptIndividualFileModel.Execute_ButtonsClearAndCloseLoaded, encryptIndividualFileModel.CanExecute_ButtonsClearAndCloseLoaded );
-        RelayCommand buttonsClearAndCloseLoaded;
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( encryptIndividualFileModel.Execute_PageLoaded, encryptIndividualFileModel.CanExecute_PageLoaded );
         RelayCommand pageLoaded;
 
