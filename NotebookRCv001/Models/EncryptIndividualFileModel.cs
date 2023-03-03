@@ -26,7 +26,7 @@ namespace NotebookRCv001.Models
         private readonly ViewModels.HomeViewModel homeViewModel;
         private readonly ViewModels.HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
         private Languages language => mainWindowViewModel.Language;
-
+        private object encryptIndividualFile { get; set; }
         internal ObservableCollection<string> Headers => language.EncryptIndividualFile;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsEncryptIndividualFile;
@@ -443,6 +443,29 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+        /// <summary>
+        /// загрузка панели с кнопками Close и Clear
+        /// </summary>
+        /// <param name="obj"> ButtonsClearAndClose </param>
+        internal bool CanExecute_ButtonsClearAndCloseLoaded( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_ButtonsClearAndCloseLoaded( object obj )
+        {
+            try
+            {
+                if (obj != null)
+                    encryptIndividualFile = obj;
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
         /// <summary>
         /// окончание загрузки страницы
@@ -488,6 +511,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                if (mainWindowViewModel.FrameListRemovePage.CanExecute( encryptIndividualFile ))
+                    mainWindowViewModel.FrameListRemovePage.Execute( encryptIndividualFile );
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -503,7 +528,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                //c = true;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -590,6 +615,7 @@ namespace NotebookRCv001.Models
             thread.SetApartmentState( ApartmentState.STA );
             thread.Start();
         }
+
 
     }
 }

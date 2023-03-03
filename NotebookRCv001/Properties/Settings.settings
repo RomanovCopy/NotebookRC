@@ -111,7 +111,7 @@
       <Value Profile="(Default)">5,0,0,0</Value>
     </Setting>
     <Setting Name="MyBackground" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">AliceBlue</Value>
+      <Value Profile="(Default)">Transparent</Value>
     </Setting>
     <Setting Name="MyMessagesFirstStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

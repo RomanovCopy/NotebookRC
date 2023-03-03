@@ -42,16 +42,16 @@ namespace NotebookRCv001.Helpers
                 if (Selection == null)
                 {
                     if (Document != null)
-                        return new TextRange(Document.ContentStart, Document.ContentEnd);
+                        return new TextRange( Document.ContentStart, Document.ContentEnd );
                     else
                         return null;
                 }
                 else
                 {
                     if (Selection.IsEmpty)
-                        return new TextRange(Document.ContentStart, Document.ContentEnd);
+                        return new TextRange( Document.ContentStart, Document.ContentEnd );
                     else
-                        return new TextRange(Selection.Start, Selection.End);
+                        return new TextRange( Selection.Start, Selection.End );
                 }
             }
         }
@@ -146,10 +146,10 @@ namespace NotebookRCv001.Helpers
         #region __________"Dependency Properties"__________
 
 
-        internal FlowDocument Document { get => (FlowDocument)GetValue(DocumentProperty); set => SetValue(DocumentProperty, value); }
+        internal FlowDocument Document { get => (FlowDocument)GetValue( DocumentProperty ); set => SetValue( DocumentProperty, value ); }
         public static readonly DependencyProperty DocumentProperty;
 
-        internal BitmapImage Bitmap { get => (BitmapImage)GetValue(BitmapProperty); set => SetValue(BitmapProperty, value); }
+        internal BitmapImage Bitmap { get => (BitmapImage)GetValue( BitmapProperty ); set => SetValue( BitmapProperty, value ); }
         public static readonly DependencyProperty BitmapProperty;
 
         /// <summary>
@@ -157,86 +157,86 @@ namespace NotebookRCv001.Helpers
         /// </summary>
         internal object ImagePath
         {
-            get => GetValue(ImagePathProperty);
-            set => SetValue(ImagePathProperty, value);
+            get => GetValue( ImagePathProperty );
+            set => SetValue( ImagePathProperty, value );
         }
         public static readonly DependencyProperty ImagePathProperty;
 
         internal object ImageOptions
         {
-            get => (object[])GetValue(ImageOptionsProperty);
-            set => SetValue(ImageOptionsProperty, value);
+            get => (object[])GetValue( ImageOptionsProperty );
+            set => SetValue( ImageOptionsProperty, value );
         }
         public static readonly DependencyProperty ImageOptionsProperty;
 
         internal TextPointer CaretPosition
         {
-            get => (TextPointer)GetValue(CaretPositionProperty);
-            set => SetValue(CaretPositionProperty, value);
+            get => (TextPointer)GetValue( CaretPositionProperty );
+            set => SetValue( CaretPositionProperty, value );
         }
         public static readonly DependencyProperty CaretPositionProperty;
 
         internal FontFamily FontFamily
         {
-            get => (FontFamily)GetValue(FontFamilyProperty);
+            get => (FontFamily)GetValue( FontFamilyProperty );
             set
             {
                 if (Selection.IsEmpty)
-                    SetValue(FontFamilyProperty, value);
+                    SetValue( FontFamilyProperty, value );
                 else
-                    Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, value);
+                    Selection.ApplyPropertyValue( TextElement.FontFamilyProperty, value );
             }
         }
         public static readonly DependencyProperty FontFamilyProperty;
 
         internal double FontSize
         {
-            get => (double)GetValue(FontSizeProperty);
+            get => (double)GetValue( FontSizeProperty );
             set
             {
                 if (Selection.IsEmpty)
-                    SetValue(FontSizeProperty, value);
+                    SetValue( FontSizeProperty, value );
                 else
-                    Selection.ApplyPropertyValue(TextElement.FontSizeProperty, value);
+                    Selection.ApplyPropertyValue( TextElement.FontSizeProperty, value );
             }
         }
         public static readonly DependencyProperty FontSizeProperty;
 
         internal FontWeight FontWeight
         {
-            get => (FontWeight)GetValue(FontWeightProperty);
+            get => (FontWeight)GetValue( FontWeightProperty );
             set
             {
                 if (Selection.IsEmpty)
-                    SetValue(FontWeightProperty, value);
+                    SetValue( FontWeightProperty, value );
                 else
-                    Selection.ApplyPropertyValue(TextElement.FontWeightProperty, value);
+                    Selection.ApplyPropertyValue( TextElement.FontWeightProperty, value );
             }
         }
         public static readonly DependencyProperty FontWeightProperty;
 
         internal FontStyle FontStyle
         {
-            get => (FontStyle)GetValue(FontStyleProperty);
+            get => (FontStyle)GetValue( FontStyleProperty );
             set
             {
                 if (Selection.IsEmpty)
-                    SetValue(FontStyleProperty, value);
+                    SetValue( FontStyleProperty, value );
                 else
-                    Selection.ApplyPropertyValue(TextElement.FontStyleProperty, value);
+                    Selection.ApplyPropertyValue( TextElement.FontStyleProperty, value );
             }
         }
         public static readonly DependencyProperty FontStyleProperty;
 
         internal TextDecorationCollection TextDecoration
         {
-            get => (TextDecorationCollection)GetValue(TextDecorationsProperty);
+            get => (TextDecorationCollection)GetValue( TextDecorationsProperty );
             set
             {
                 if (Selection.IsEmpty)
-                    SetValue(TextDecorationsProperty, value);
+                    SetValue( TextDecorationsProperty, value );
                 else
-                    Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, value);
+                    Selection.ApplyPropertyValue( Inline.TextDecorationsProperty, value );
             }
         }
         public static readonly DependencyProperty TextDecorationsProperty;
@@ -246,46 +246,46 @@ namespace NotebookRCv001.Helpers
         /// </summary>
         internal Thickness LineSpacing
         {
-            get => (Thickness)GetValue(LineSpacingProperty);
-            set => SetValue(LineSpacingProperty, value);
+            get => (Thickness)GetValue( LineSpacingProperty );
+            set => SetValue( LineSpacingProperty, value );
         }
         public static readonly DependencyProperty LineSpacingProperty;
 
         internal Brush MyForeground
         {
-            get => (Brush)GetValue(MyForegroundProperty);
+            get => (Brush)GetValue( MyForegroundProperty );
             set
             {
                 if (Selection.IsEmpty)
-                    SetValue(MyForegroundProperty, value);
+                    SetValue( MyForegroundProperty, value );
                 else
-                    Selection.ApplyPropertyValue(TextElement.ForegroundProperty, value);
+                    Selection.ApplyPropertyValue( TextElement.ForegroundProperty, value );
             }
         }
         public static readonly DependencyProperty MyForegroundProperty;
 
         internal Brush MyBackground
         {
-            get => (Brush)GetValue(MyBackgroundProperty);
+            get => (Brush)GetValue( MyBackgroundProperty );
             set
             {
-                if (Selection.IsEmpty)
-                    SetValue(MyBackgroundProperty, value);
-                else
-                    Selection.ApplyPropertyValue(Control.BackgroundProperty, value);
+                if (Selection != null && Selection.IsEmpty)
+                    SetValue( MyBackgroundProperty, value );
+                else if (Selection != null)
+                    Selection.ApplyPropertyValue( Control.BackgroundProperty, value );
             }
         }
         public static readonly DependencyProperty MyBackgroundProperty;
 
         internal Brush MyFontBackground
         {
-            get => (Brush)GetValue(MyFontBackgroundProperty);
+            get => (Brush)GetValue( MyFontBackgroundProperty );
             set
             {
-                if (Selection.IsEmpty)
-                    SetValue(MyFontBackgroundProperty, value);
-                else
-                    Selection.ApplyPropertyValue(TextElement.BackgroundProperty, value);
+                if (Selection != null && Selection.IsEmpty)
+                    SetValue( MyFontBackgroundProperty, value );
+                else if (Selection != null)
+                    Selection.ApplyPropertyValue( TextElement.BackgroundProperty, value );
             }
         }
         public static readonly DependencyProperty MyFontBackgroundProperty;
@@ -296,8 +296,8 @@ namespace NotebookRCv001.Helpers
         /// </summary>
         internal Brush MyHighlightColor
         {
-            get => (Brush)GetValue(MyHighlightColorProperty);
-            set => SetValue(MyHighlightColorProperty, value);
+            get => (Brush)GetValue( MyHighlightColorProperty );
+            set => SetValue( MyHighlightColorProperty, value );
         }
         public static readonly DependencyProperty MyHighlightColorProperty;
 
@@ -311,66 +311,67 @@ namespace NotebookRCv001.Helpers
         public BehaviorRichTextBox()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
-            MyHighlightColor = (Brush)Converter.Convert(Properties.Settings.Default.MyHighlightColor, typeof(Brush), null, null);
+            MyHighlightColor = (Brush)Converter.Convert( Properties.Settings.Default.MyHighlightColor, typeof( Brush ), null, null );
             first = true;
         }
 
         static BehaviorRichTextBox()
         {
-            DocumentProperty = DependencyProperty.Register("Document", typeof(FlowDocument),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(DocumentChanged)));
-            BitmapProperty = DependencyProperty.Register("Bitmap", typeof(BitmapImage),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(BitmapChanged)));
-            ImagePathProperty = DependencyProperty.Register("ImagePath", typeof(object),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(ImagePathChanged)));
-            ImageOptionsProperty = DependencyProperty.Register("ImageOptions", typeof(object),
-                typeof(BehaviorRichTextBox), new PropertyMetadata(new PropertyChangedCallback(ImageOptionsChanged)));
-            CaretPositionProperty = DependencyProperty.Register("CaretPosition", typeof(TextPointer),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(CaretPositionChanged)));
+            DocumentProperty = DependencyProperty.Register( "Document", typeof( FlowDocument ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( DocumentChanged ) ) );
+            BitmapProperty = DependencyProperty.Register( "Bitmap", typeof( BitmapImage ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( BitmapChanged ) ) );
+            ImagePathProperty = DependencyProperty.Register( "ImagePath", typeof( object ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( ImagePathChanged ) ) );
+            ImageOptionsProperty = DependencyProperty.Register( "ImageOptions", typeof( object ),
+                typeof( BehaviorRichTextBox ), new PropertyMetadata( new PropertyChangedCallback( ImageOptionsChanged ) ) );
+            CaretPositionProperty = DependencyProperty.Register( "CaretPosition", typeof( TextPointer ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( CaretPositionChanged ) ) );
 
-            FontFamilyProperty = DependencyProperty.Register("FontFamily", typeof(FontFamily),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(FontFamilyChanged)));
+            FontFamilyProperty = DependencyProperty.Register( "FontFamily", typeof( FontFamily ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( FontFamilyChanged ) ) );
 
-            FontSizeProperty = DependencyProperty.Register("FontSize", typeof(double),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(FontSizeChanged)));
+            FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( FontSizeChanged ) ) );
 
-            FontWeightProperty = DependencyProperty.Register("FontWeight", typeof(FontWeight),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(default(FontWeight), new PropertyChangedCallback(FontWeightChanged)));
+            FontWeightProperty = DependencyProperty.Register( "FontWeight", typeof( FontWeight ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( default( FontWeight ), new PropertyChangedCallback( FontWeightChanged ) ) );
 
-            FontStyleProperty = DependencyProperty.Register("FontStyle", typeof(FontStyle),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(FontStyleChanged)));
+            FontStyleProperty = DependencyProperty.Register( "FontStyle", typeof( FontStyle ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( FontStyleChanged ) ) );
 
-            TextDecorationsProperty = DependencyProperty.Register("TextDecoration", typeof(TextDecorationCollection),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(TextDecorationChanged)));
+            TextDecorationsProperty = DependencyProperty.Register( "TextDecoration", typeof( TextDecorationCollection ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( TextDecorationChanged ) ) );
 
-            LineSpacingProperty = DependencyProperty.Register("LineSpacing", typeof(Thickness),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(default(Thickness), new PropertyChangedCallback(LineSpacingChanged)));
+            LineSpacingProperty = DependencyProperty.Register( "LineSpacing", typeof( Thickness ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( default( Thickness ), new PropertyChangedCallback( LineSpacingChanged ) ) );
             //цвет текста
-            MyForegroundProperty = DependencyProperty.Register("MyForeground", typeof(Brush),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(MyForegroundChanged)));
+            MyForegroundProperty = DependencyProperty.Register( "MyForeground", typeof( Brush ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( MyForegroundChanged ) ) );
             //цвет фона текста
-            MyBackgroundProperty = DependencyProperty.Register("MyBackground", typeof(Brush),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(MyBackgroundChanged)));
+            MyBackgroundProperty = DependencyProperty.Register( "MyBackground", typeof( Brush ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( MyBackgroundChanged ) ) );
             //цвет бумаги
-            MyFontBackgroundProperty = DependencyProperty.Register("MyFontBackground", typeof(Brush),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(MyFontBackgroundChanged)));
+            MyFontBackgroundProperty = DependencyProperty.Register( "MyFontBackground", typeof( Brush ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( MyFontBackgroundChanged ) ) );
             //цвет выделения BorderBrush блоков документа
-            MyHighlightColorProperty = DependencyProperty.Register("MyHighlightColor", typeof(Brush),
-                typeof(BehaviorRichTextBox),
-                new PropertyMetadata(new PropertyChangedCallback(MyHighlightColorChanged)));
+            MyHighlightColorProperty = DependencyProperty.Register( "MyHighlightColor", typeof( Brush ),
+                typeof( BehaviorRichTextBox ),
+                new PropertyMetadata( new PropertyChangedCallback( MyHighlightColorChanged ) ) );
+
         }
 
 
@@ -383,16 +384,17 @@ namespace NotebookRCv001.Helpers
                 CaretPosition = Document.ContentEnd;
                 Document.IsOptimalParagraphEnabled = true;
                 Document.IsHyphenationEnabled = true;
-                FontFamily = new FontFamily(Properties.Settings.Default.FontFamilyName);
+                FontFamily = new FontFamily( Properties.Settings.Default.FontFamilyName );
                 FontSize = Properties.Settings.Default.FontSize;
                 FontWeight = Properties.Settings.Default.FontWeightName == "Bold" ? FontWeights.Bold : FontWeights.Normal;
                 FontStyle = Properties.Settings.Default.FontStyleName == "Italic" ? FontStyles.Italic : FontStyles.Normal;
-                var array = Properties.Settings.Default.LineSpacing.Split(',');
-                LineSpacing = new Thickness(double.Parse(array[0]), double.Parse(array[1]), double.Parse(array[2]), double.Parse(array[3]));
-                MyBackground = (Brush)Converter.Convert(Properties.Settings.Default.MyBackground, typeof(Brush), null, null);
-                MyFontBackground = (Brush)Converter.Convert(Properties.Settings.Default.MyFontBackground, typeof(Brush), null, null);
-                MyForeground = (Brush)Converter.Convert(Properties.Settings.Default.MyForeground, typeof(Brush), null, null);
+                var array = Properties.Settings.Default.LineSpacing.Split( ',' );
+                LineSpacing = new Thickness( double.Parse( array[0] ), double.Parse( array[1] ), double.Parse( array[2] ), double.Parse( array[3] ) );
+                MyBackground = (Brush)Converter.Convert( Properties.Settings.Default.MyBackground, typeof( Brush ), null, null );
+                MyFontBackground = (Brush)Converter.Convert( Properties.Settings.Default.MyFontBackground, typeof( Brush ), null, null );
+                MyForeground = (Brush)Converter.Convert( Properties.Settings.Default.MyForeground, typeof( Brush ), null, null );
                 SelectionChanged += BehaviorRichTextBox_SelectionChanged;
+                AssociatedObject.Padding = new Thickness( 30 );
                 AssociatedObject.IsVisibleChanged += AssociatedObject_IsVisibleChanged;
                 AssociatedObject.ContextMenuOpening += AssociatedObject_ContextMenuOpening;
                 AssociatedObject.ContextMenuClosing += AssociatedObject_ContextMenuClosing;
@@ -401,7 +403,7 @@ namespace NotebookRCv001.Helpers
                 ServiceKeys = new Key[] { Key.Enter, Key.Back, Key.Delete, Key.Insert, Key.Return };
                 OriginalTextChanged = false;
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
 
 
@@ -413,7 +415,7 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception e)
             {
-                ErrorWindow(e);
+                ErrorWindow( e );
             }
         }
 
@@ -490,38 +492,38 @@ namespace NotebookRCv001.Helpers
 
 
 
-        private static void DocumentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void DocumentChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox behavior && e.OldValue != null)
                 {
-                    behavior.newDocumentCreated = !e.NewValue.Equals(e.OldValue);
+                    behavior.newDocumentCreated = !e.NewValue.Equals( e.OldValue );
                     behavior.AssociatedObject.Document = behavior.Document;
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private void AssociatedObject_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void AssociatedObject_IsVisibleChanged( object sender, DependencyPropertyChangedEventArgs e )
         {
             try
             {
 
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void BitmapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void BitmapChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (e.NewValue is BitmapImage bitmap && d is BehaviorRichTextBox behavior)
                 {
-                    behavior.richTextBoxViewModel.OnPropertyChanged("Bitmap");
+                    behavior.richTextBoxViewModel.OnPropertyChanged( "Bitmap" );
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void ImagePathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ImagePathChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -530,21 +532,21 @@ namespace NotebookRCv001.Helpers
                 {
                     if (e.NewValue is string path)
                     {
-                        image = behavior.CreateImageFromPath(path);
+                        image = behavior.CreateImageFromPath( path );
                     }
                     else if (e.NewValue is BitmapSource source)
                     {
-                        image = behavior.CreateImageFromBitmapSource(source);
+                        image = behavior.CreateImageFromBitmapSource( source );
                     }
                     if (image == null)
                         return;
-                    Figure figure = behavior.CreateFigure(image);
-                    behavior.AddingFigureToFlowdocument(figure);
+                    Figure figure = behavior.CreateFigure( image );
+                    behavior.AddingFigureToFlowdocument( figure );
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void ImageOptionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ImageOptionsChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -554,7 +556,7 @@ namespace NotebookRCv001.Helpers
                     {//выравнивание по горизонтали
                         behavior.figureHorizontalAnchor = horizontalAnchor;
                     }
-                    else if (e.NewValue is string option && option.Contains("Merge"))
+                    else if (e.NewValue is string option && option.Contains( "Merge" ))
                     {//склеивание изображений
                         behavior.merge = option == "MergeOn";
                     }
@@ -568,11 +570,11 @@ namespace NotebookRCv001.Helpers
                     }
                     else if (e.NewValue is Size size)
                     {//размер изображения
-                        if (!size.IsEmpty && size != new Size(0, 0))
+                        if (!size.IsEmpty && size != new Size( 0, 0 ))
                         {
                             behavior.ChangedWidth = size.Width;
                             behavior.ChangedHeight = size.Height;
-                            behavior.size = new Size(behavior.ChangedWidth, behavior.ChangedHeight);
+                            behavior.size = new Size( behavior.ChangedWidth, behavior.ChangedHeight );
                         }
                         else
                         {
@@ -589,21 +591,21 @@ namespace NotebookRCv001.Helpers
                     }
                     if (behavior.Bitmap != null)
                     {
-                        var image = behavior.ImagePath is string ? behavior.CreateImageFromPath((string)behavior.ImagePath) :
-                            behavior.CreateImageFromBitmapSource((BitmapSource)behavior.ImagePath);
+                        var image = behavior.ImagePath is string ? behavior.CreateImageFromPath( (string)behavior.ImagePath ) :
+                            behavior.CreateImageFromBitmapSource( (BitmapSource)behavior.ImagePath );
                         var parent = (Paragraph)behavior.CurrentFigure.Parent;
-                        parent.Inlines.Remove(behavior.CurrentFigure);
-                        behavior.CurrentFigure = behavior.CreateFigure(image);
+                        parent.Inlines.Remove( behavior.CurrentFigure );
+                        behavior.CurrentFigure = behavior.CreateFigure( image );
                         var a = behavior.CurrentFigure.WrapDirection;
-                        parent.Inlines.Add(behavior.CurrentFigure);
+                        parent.Inlines.Add( behavior.CurrentFigure );
                         //if (behavior.wrapDirection == WrapDirection.Both)
                         //    parent.Inlines.Add(new Run(""));
                     }
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void CaretPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void CaretPositionChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -618,9 +620,9 @@ namespace NotebookRCv001.Helpers
                     {
                         TextRange textRange = null;
                         //когда CaretPosition, oldValue и newValue находятся в одной позиции
-                        bool exception = (oldvalue.CompareTo(newvalue) == 0 && behavior.CaretPosition.CompareTo(newvalue) == 0);
+                        bool exception = (oldvalue.CompareTo( newvalue ) == 0 && behavior.CaretPosition.CompareTo( newvalue ) == 0);
                         //длина добавленного текста
-                        int lengthText = new TextRange(oldvalue, newvalue).Text.Trim().Length;
+                        int lengthText = new TextRange( oldvalue, newvalue ).Text.Trim().Length;
                         if (behavior.ServiceKey != Key.None || lengthText > 1)
                         {//задейсвована сервисная клавиша
                             if (behavior.ServiceKey == Key.Back)
@@ -634,7 +636,7 @@ namespace NotebookRCv001.Helpers
                                 //после установки нового значения для CaretPosition
                                 behavior.ServiceKey = Key.None;
                                 //устанавливаем каретку в начало строки
-                                behavior.CaretPosition = newvalue.GetLineStartPosition(0);
+                                behavior.CaretPosition = newvalue.GetLineStartPosition( 0 );
                             }
                             else if (behavior.ServiceKey == Key.Insert || lengthText > 1)
                             {//вставка текста
@@ -650,7 +652,7 @@ namespace NotebookRCv001.Helpers
                         else if (behavior.ServiceKey == Key.None && lengthText == 1)
                         {//ввод текста с клавиатуры
                             behavior.RichTextBox.Focus();
-                            textRange = new TextRange(oldvalue, newvalue);
+                            textRange = new TextRange( oldvalue, newvalue );
                         }
                         else if (exception && behavior.OriginalTextChanged)
                         {//когда CaretPosition, oldValue и newValue находятся в одной позиции
@@ -660,72 +662,72 @@ namespace NotebookRCv001.Helpers
                             }
                             else
                             {//при отсутсвии выделения
-                                var back = newvalue.GetPositionAtOffset(-1);
-                                var forward = newvalue.GetPositionAtOffset(1);
+                                var back = newvalue.GetPositionAtOffset( -1 );
+                                var forward = newvalue.GetPositionAtOffset( 1 );
                                 var CaretPosition = behavior.CaretPosition;
                                 behavior.OriginalTextChanged = false;
                                 if (back != null)
                                 {//позиция сзади существует
                                     behavior.RichTextBox.Focus();
-                                    textRange = new TextRange(back, CaretPosition);
+                                    textRange = new TextRange( back, CaretPosition );
                                 }
                                 else if (forward != null)
                                 {//позиция спереди существует
                                     behavior.RichTextBox.Focus();
-                                    textRange = new TextRange(CaretPosition, forward);
+                                    textRange = new TextRange( CaretPosition, forward );
                                 }
                                 else if (back == null && forward == null)
                                 {//позиции сзади и спереди не существуют
                                     //расчет на то, что CaretPosition не может быть null
                                     //ищем позицию сзади
-                                    back = CaretPosition.GetPositionAtOffset(-1);
+                                    back = CaretPosition.GetPositionAtOffset( -1 );
                                     if (back != null)
-                                        textRange = new TextRange(back, CaretPosition);
+                                        textRange = new TextRange( back, CaretPosition );
                                     else
                                     {   //ищем позицию спереди, если позицию сзади установить не удалось
-                                        forward = CaretPosition.GetPositionAtOffset(1);
+                                        forward = CaretPosition.GetPositionAtOffset( 1 );
                                         if (forward != null)
-                                            textRange = new TextRange(CaretPosition, forward);
+                                            textRange = new TextRange( CaretPosition, forward );
                                         else
                                         {   //крайняя мера
                                             //принудитльно задаем позищию сзади(начало строки) и получаем TextRange
-                                            back = CaretPosition.GetLineStartPosition(0);
+                                            back = CaretPosition.GetLineStartPosition( 0 );
                                             if (back != null)
-                                                textRange = new TextRange(back, CaretPosition);
+                                                textRange = new TextRange( back, CaretPosition );
                                         }
                                     }
                                 }
                             }
                         }
                         if (textRange != null)
-                            behavior.SetFontProperties(textRange);
+                            behavior.SetFontProperties( textRange );
                         else
                         {
-                            textRange = new TextRange(behavior.Document.ContentStart, behavior.Document.ContentEnd);
+                            textRange = new TextRange( behavior.Document.ContentStart, behavior.Document.ContentEnd );
                             if (textRange != null && behavior.first)
-                                behavior.SetFontProperties(textRange);
+                                behavior.SetFontProperties( textRange );
                             behavior.first = false;
                         }
                     }
                     behavior.OriginalTextChanged = false;
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void FontFamilyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FontFamilyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox textBox && !textBox.Selection.IsEmpty)
                 {
-                    textBox.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, textBox.FontFamily);
+                    textBox.Selection.ApplyPropertyValue( TextElement.FontFamilyProperty, textBox.FontFamily );
                     textBox.OriginalTextChanged = false;
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void FontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FontSizeChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -733,67 +735,67 @@ namespace NotebookRCv001.Helpers
                 {
                     if (!textBox.Selection.IsEmpty)
                     {
-                        textBox.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, textBox.FontSize * (96 / 72));
+                        textBox.Selection.ApplyPropertyValue( TextElement.FontSizeProperty, textBox.FontSize * (96 / 72) );
                     }
                     textBox.OriginalTextChanged = false;
-                    textBox.SetFontProperties(new TextRange(textBox.Selection.Start, textBox.Selection.End));
+                    textBox.SetFontProperties( new TextRange( textBox.Selection.Start, textBox.Selection.End ) );
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void FontWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FontWeightChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox textBox && !textBox.Selection.IsEmpty)
                 {
-                    textBox.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, textBox.FontWeight);
+                    textBox.Selection.ApplyPropertyValue( TextElement.FontWeightProperty, textBox.FontWeight );
                     textBox.OriginalTextChanged = false;
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void FontStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FontStyleChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox textBox && !textBox.Selection.IsEmpty)
                 {
-                    textBox.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, textBox.FontStyle);
+                    textBox.Selection.ApplyPropertyValue( TextElement.FontStyleProperty, textBox.FontStyle );
                     textBox.OriginalTextChanged = false;
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void TextDecorationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void TextDecorationChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox textBox && !textBox.Selection.IsEmpty)
                 {
-                    textBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, textBox.TextDecoration);
+                    textBox.Selection.ApplyPropertyValue( Inline.TextDecorationsProperty, textBox.TextDecoration );
                     textBox.OriginalTextChanged = false;
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void LineSpacingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void LineSpacingChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox textbox && e.NewValue is Thickness thickness && !textbox.Selection.IsEmpty)
                 {
-                    textbox.Selection.ApplyPropertyValue(Block.MarginProperty, thickness);
+                    textbox.Selection.ApplyPropertyValue( Block.MarginProperty, thickness );
                     textbox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void MyBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void MyBackgroundChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -803,13 +805,13 @@ namespace NotebookRCv001.Helpers
                     var a1 = textBox.MyBackground.ToString();
                     var a2 = Brushes.Transparent.ToString();
                     Application.Current.MainWindow.Topmost = a1 == a2;
-                    textBox.richTextBoxViewModel.OnPropertyChanged("MyBackground");
+                    textBox.richTextBoxViewModel.OnPropertyChanged( "MyBackground" );
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void MyForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void MyForegroundChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -817,33 +819,33 @@ namespace NotebookRCv001.Helpers
                 {
                     if (!textBox.Selection.IsEmpty)
                     {
-                        textBox.Selection.ApplyPropertyValue(TextElement.ForegroundProperty, textBox.MyForeground);
+                        textBox.Selection.ApplyPropertyValue( TextElement.ForegroundProperty, textBox.MyForeground );
                     }
                     else
                     {
-                        new TextRange(textBox.CaretPosition, textBox.CaretPosition).ApplyPropertyValue(TextElement.ForegroundProperty, textBox.MyForeground);
+                        new TextRange( textBox.CaretPosition, textBox.CaretPosition ).ApplyPropertyValue( TextElement.ForegroundProperty, textBox.MyForeground );
                         textBox.RichTextBox.CaretBrush = textBox.MyForeground;
-                        textBox.richTextBoxViewModel.OnPropertyChanged("MyForeground");
+                        textBox.richTextBoxViewModel.OnPropertyChanged( "MyForeground" );
                     }
                     textBox.OriginalTextChanged = false;
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private static void MyFontBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void MyFontBackgroundChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
                 if (d is BehaviorRichTextBox textBox)
                 {
-                    textBox.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, textBox.MyFontBackground);
+                    textBox.Selection.ApplyPropertyValue( TextElement.BackgroundProperty, textBox.MyFontBackground );
                     textBox.OriginalTextChanged = false;
-                    textBox.richTextBoxViewModel.OnPropertyChanged("MyFontBackground");
+                    textBox.richTextBoxViewModel.OnPropertyChanged( "MyFontBackground" );
                     textBox.RichTextBox.Focus();
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
 
         /// <summary>
@@ -851,7 +853,7 @@ namespace NotebookRCv001.Helpers
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
-        private static void MyHighlightColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void MyHighlightColorChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             try
             {
@@ -865,13 +867,13 @@ namespace NotebookRCv001.Helpers
                         }
                     }
                     Properties.Settings.Default.MyHighlightColor = (System.Drawing.Color)textBox.Converter.
-                        Convert(e.NewValue, typeof(System.Drawing.Color), null, null);
+                        Convert( e.NewValue, typeof( System.Drawing.Color ), null, null );
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
 
-        private void BehaviorRichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void BehaviorRichTextBox_TextChanged( object sender, TextChangedEventArgs e )
         {
             try
             {
@@ -881,9 +883,9 @@ namespace NotebookRCv001.Helpers
                     CaretPosition = textBox.CaretPosition;
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private void BehaviorRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        private void BehaviorRichTextBox_SelectionChanged( object sender, RoutedEventArgs e )
         {
             try
             {
@@ -892,9 +894,9 @@ namespace NotebookRCv001.Helpers
                     CaretPosition = textBox.CaretPosition;
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private void BehaviorRichTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void BehaviorRichTextBox_PreviewKeyDown( object sender, KeyEventArgs e )
         {
             try
             {
@@ -910,14 +912,14 @@ namespace NotebookRCv001.Helpers
                     e.Handled = true;
                     return;
                 }
-                else if (ServiceKeys.Any((x) => x == e.Key))
+                else if (ServiceKeys.Any( ( x ) => x == e.Key ))
                     ServiceKey = e.Key;
                 else
                     ServiceKey = Key.None;
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private void AssociatedObject_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void AssociatedObject_ContextMenuOpening( object sender, ContextMenuEventArgs e )
         {
             try
             {//контекстное меню открыто, определяем над каким элементом
@@ -931,15 +933,15 @@ namespace NotebookRCv001.Helpers
                     SelectedImage = null;
                 }
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
-        private void AssociatedObject_ContextMenuClosing(object sender, ContextMenuEventArgs e)
+        private void AssociatedObject_ContextMenuClosing( object sender, ContextMenuEventArgs e )
         {
             try
             {
 
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
 
         #endregion
@@ -951,17 +953,17 @@ namespace NotebookRCv001.Helpers
             try
             {
                 OnLineSpacingBottomIncrease();
-                LineSpacing = new Thickness(LineSpacing.Left, LineSpacing.Top, LineSpacing.Right, (LineSpacing.Bottom > 1 ? LineSpacing.Bottom - 2 : 0));
+                LineSpacing = new Thickness( LineSpacing.Left, LineSpacing.Top, LineSpacing.Right, (LineSpacing.Bottom > 1 ? LineSpacing.Bottom - 2 : 0) );
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
         internal void OnLineSpacingBottomIncrease()
         {
             try
             {
-                LineSpacing = new Thickness(LineSpacing.Left, LineSpacing.Top, LineSpacing.Right, (LineSpacing.Bottom + 1));
+                LineSpacing = new Thickness( LineSpacing.Left, LineSpacing.Top, LineSpacing.Right, (LineSpacing.Bottom + 1) );
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
         internal void OnNormalText()
         {
@@ -969,56 +971,56 @@ namespace NotebookRCv001.Helpers
             {
                 if (Selection.IsEmpty)
                     return;
-                var textRange = new TextRange(Selection.Start, Selection.End);
+                var textRange = new TextRange( Selection.Start, Selection.End );
                 List<string> list = new();
-                string[] array1 = textRange.Text.Split(new char[] { '\r', '\n' });
+                string[] array1 = textRange.Text.Split( new char[] { '\r', '\n' } );
                 for (int i = 0; i < array1.Length; i++)
                 {
-                    if (string.IsNullOrWhiteSpace(array1[i]))
+                    if (string.IsNullOrWhiteSpace( array1[i] ))
                         continue;
-                    list.Add((string)array1[i].Trim().Clone());
+                    list.Add( (string)array1[i].Trim().Clone() );
                 }
                 string result = "";
                 foreach (string str in list)
                 {
-                    result = string.IsNullOrWhiteSpace(result) ? str + "\r\n" : result + str + "\r\n";
+                    result = string.IsNullOrWhiteSpace( result ) ? str + "\r\n" : result + str + "\r\n";
                 }
-                StringBuilder buffer = new StringBuilder(textRange.Text);
-                buffer.Replace(textRange.Text, result);
+                StringBuilder buffer = new StringBuilder( textRange.Text );
+                buffer.Replace( textRange.Text, result );
                 textRange.Text = buffer.ToString();
-                FontFamily = new FontFamily(Properties.Settings.Default.NormalFontFamily);
-                var array = Properties.Settings.Default.NormalLineSpacing.Split(',');
-                LineSpacing = (Thickness)textRange.GetPropertyValue(Block.MarginProperty);
-                LineSpacing = new Thickness(double.Parse(array[0]), double.Parse(array[1]), double.Parse(array[2]), double.Parse(array[3]));
+                FontFamily = new FontFamily( Properties.Settings.Default.NormalFontFamily );
+                var array = Properties.Settings.Default.NormalLineSpacing.Split( ',' );
+                LineSpacing = (Thickness)textRange.GetPropertyValue( Block.MarginProperty );
+                LineSpacing = new Thickness( double.Parse( array[0] ), double.Parse( array[1] ), double.Parse( array[2] ), double.Parse( array[3] ) );
                 FontSize = Properties.Settings.Default.NormalFontSize;
                 FontStyle = Properties.Settings.Default.NormalFontStyle == "Italic" ? FontStyles.Italic : FontStyles.Normal;
                 FontWeight = Properties.Settings.Default.NormalFontWeight == "Bold" ? FontWeights.Bold : FontWeights.Normal;
                 TextDecoration = Properties.Settings.Default.NormalTextDecoration == "Underline" ? TextDecorations.Underline : null;
-                textRange.ApplyPropertyValue(TextElement.ForegroundProperty, MyForeground);
-                textRange.ApplyPropertyValue(TextElement.BackgroundProperty, converter.Convert(Properties.Settings.Default.NormalFontBackground,
-                    typeof(System.Windows.Media.Brush), null, null));
+                textRange.ApplyPropertyValue( TextElement.ForegroundProperty, MyForeground );
+                textRange.ApplyPropertyValue( TextElement.BackgroundProperty, converter.Convert( Properties.Settings.Default.NormalFontBackground,
+                    typeof( System.Windows.Media.Brush ), null, null ) );
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
         internal void OnDeleteText()
         {
             try
             {
-                TextRange textRange = new TextRange(Selection.Start, Selection.End);
+                TextRange textRange = new TextRange( Selection.Start, Selection.End );
                 textRange.Text = "";
-                TextRange.ApplyPropertyValue(Block.MarginProperty, new Thickness(5, 0, 0, 0));
+                TextRange.ApplyPropertyValue( Block.MarginProperty, new Thickness( 5, 0, 0, 0 ) );
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
         internal void SetFocus()
         {
             AssociatedObject.Focus();
         }
-        internal void AppendText(string text)
+        internal void AppendText( string text )
         {
-            base.AssociatedObject.AppendText(text);
+            base.AssociatedObject.AppendText( text );
         }
-        internal void AppendText(List<string> doc)
+        internal void AppendText( List<string> doc )
         {
             try
             {
@@ -1026,12 +1028,12 @@ namespace NotebookRCv001.Helpers
                 Paragraph paragraph = null;
                 foreach (string str in doc)
                 {
-                    paragraph = new Paragraph(new Run(str));
-                    flowDocument.Blocks.Add(paragraph);
+                    paragraph = new Paragraph( new Run( str ) );
+                    flowDocument.Blocks.Add( paragraph );
                 }
                 Document = flowDocument;
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception( e.Message ); }
         }
         /// <summary>
         /// преобразование в маркированный список
@@ -1042,9 +1044,9 @@ namespace NotebookRCv001.Helpers
             {
                 if (!Selection.IsEmpty)
 
-                    EditingCommands.ToggleBullets.Execute(null, RichTextBox);
+                    EditingCommands.ToggleBullets.Execute( null, RichTextBox );
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// преобразование в нумерованный список
@@ -1054,9 +1056,9 @@ namespace NotebookRCv001.Helpers
             try
             {
                 if (!Selection.IsEmpty)
-                    EditingCommands.ToggleNumbering.Execute(null, RichTextBox);
+                    EditingCommands.ToggleNumbering.Execute( null, RichTextBox );
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
 
         /// <summary>
@@ -1070,11 +1072,11 @@ namespace NotebookRCv001.Helpers
                 bool c = false;
                 if (SelectedImage is Image image)
                 {
-                    Clipboard.SetImage((BitmapSource)image.Source);
+                    Clipboard.SetImage( (BitmapSource)image.Source );
                 }
                 return c;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         /// <summary>
         /// Вырезать выбранное (CurrentElement) изображение в буфер обмена
@@ -1089,21 +1091,21 @@ namespace NotebookRCv001.Helpers
                 {
                     image = im;
                     var source = (BitmapSource)image.Source;
-                    Clipboard.SetImage(source);
+                    Clipboard.SetImage( source );
                 }
                 if (image == null)
                     return false;
-                ApplicationCommands.Copy.Execute(SelectedImage, null);
+                ApplicationCommands.Copy.Execute( SelectedImage, null );
                 var parent = (Paragraph)((InlineUIContainer)image.Parent).Parent;
                 if (parent != null && parent.Parent is Figure figure)
                 {
                     var parentfigure = (Paragraph)figure.Parent;
                     if (parentfigure != null)
-                        parentfigure.Inlines.Remove(figure);
+                        parentfigure.Inlines.Remove( figure );
                 }
                 return true;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         /// <summary>
         /// удаление выбранного изображения (SelectedImage)
@@ -1116,22 +1118,22 @@ namespace NotebookRCv001.Helpers
                 bool c = false;
                 if (SelectedImage is Image image)
                 {
-                    if (Document.Blocks.Where((x) => x.Equals(ParagraphSearchByImage(image))).FirstOrDefault() is Paragraph paragraph)
+                    if (Document.Blocks.Where( ( x ) => x.Equals( ParagraphSearchByImage( image ) ) ).FirstOrDefault() is Paragraph paragraph)
                     {
-                        if (FigureSearchByImage(image) is Figure figure)
-                            c = paragraph.Inlines.Remove(figure);
+                        if (FigureSearchByImage( image ) is Figure figure)
+                            c = paragraph.Inlines.Remove( figure );
                     }
                 }
                 return c;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
 
         /// <summary>
         /// Вставка изображения из буфера обмена
         /// </summary>
         /// <returns></returns>
-        internal bool PasteImageFromClipboard(object obj)
+        internal bool PasteImageFromClipboard( object obj )
         {
             try
             {
@@ -1139,22 +1141,22 @@ namespace NotebookRCv001.Helpers
                 BitmapSource source = Clipboard.GetImage();
                 if (source == null)
                     return false;
-                var image = CreateImageFromBitmapSource(source);
+                var image = CreateImageFromBitmapSource( source );
                 if (image == null)
                     return false;
-                var figure = CreateFigure(image);
-                var paragraph = ParagraphSearchByImage((Image)SelectedImage);
-                var targetfigure = FigureSearchByImage((Image)SelectedImage);
+                var figure = CreateFigure( image );
+                var paragraph = ParagraphSearchByImage( (Image)SelectedImage );
+                var targetfigure = FigureSearchByImage( (Image)SelectedImage );
                 if ((string)obj == "before")
-                    paragraph.Inlines.InsertBefore(targetfigure, figure);
+                    paragraph.Inlines.InsertBefore( targetfigure, figure );
                 else if ((string)obj == "after")
-                    paragraph.Inlines.InsertAfter(targetfigure, figure);
+                    paragraph.Inlines.InsertAfter( targetfigure, figure );
                 else
                     return false;
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
 
         public FlowDocument CloneDocument()
@@ -1165,17 +1167,17 @@ namespace NotebookRCv001.Helpers
                 var document = AssociatedObject.Document;
                 if (document != null)
                 {
-                    TextRange range = new TextRange(document.ContentStart, document.ContentEnd);
+                    TextRange range = new TextRange( document.ContentStart, document.ContentEnd );
                     MemoryStream stream = new MemoryStream();
-                    System.Windows.Markup.XamlWriter.Save(range, stream);
-                    range.Save(stream, DataFormats.XamlPackage);
-                    TextRange range2 = new TextRange(document2.ContentEnd, document2.ContentEnd);
-                    range2.Load(stream, DataFormats.XamlPackage);
+                    System.Windows.Markup.XamlWriter.Save( range, stream );
+                    range.Save( stream, DataFormats.XamlPackage );
+                    TextRange range2 = new TextRange( document2.ContentEnd, document2.ContentEnd );
+                    range2.Load( stream, DataFormats.XamlPackage );
                     stream.Close();
                 }
                 return document2;
             }
-            catch (Exception e) { ErrorWindow(e); return new FlowDocument(); }
+            catch (Exception e) { ErrorWindow( e ); return new FlowDocument(); }
         }
 
         #endregion
@@ -1201,46 +1203,46 @@ namespace NotebookRCv001.Helpers
         /// установка свойств текущего символа
         /// </summary>
         /// <param name="textRange"></param>
-        internal void SetFontProperties(TextRange textRange)
+        internal void SetFontProperties( TextRange textRange )
         {
             try
             {
-                textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, FontFamily);
-                textRange.ApplyPropertyValue(TextElement.FontSizeProperty, FontSize * (96 / 72));
-                textRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeight);
-                textRange.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyle);
-                textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecoration);
-                textRange.ApplyPropertyValue(TextElement.ForegroundProperty, MyForeground);
-                textRange.ApplyPropertyValue(TextElement.BackgroundProperty, MyFontBackground);
-                textRange.ApplyPropertyValue(Block.MarginProperty, LineSpacing);
+                textRange.ApplyPropertyValue( TextElement.FontFamilyProperty, FontFamily );
+                textRange.ApplyPropertyValue( TextElement.FontSizeProperty, (FontSize * (96 / 72)) );
+                textRange.ApplyPropertyValue( TextElement.FontWeightProperty, FontWeight );
+                textRange.ApplyPropertyValue( TextElement.FontStyleProperty, FontStyle );
+                textRange.ApplyPropertyValue( Inline.TextDecorationsProperty, TextDecoration );
+                textRange.ApplyPropertyValue( TextElement.ForegroundProperty, MyForeground );
+                textRange.ApplyPropertyValue( TextElement.BackgroundProperty, MyFontBackground );
+                textRange.ApplyPropertyValue( Block.MarginProperty, LineSpacing );
 
             }
-            catch (Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
 
-        private Image CreateImageFromPath(string path)
+        private Image CreateImageFromPath( string path )
         {
             try
             {
-                if (string.IsNullOrEmpty(path))
+                if (string.IsNullOrEmpty( path ))
                     return null;
                 var select = GetSelectAndPasteWindowViewModel();
                 Image image = null;
-                var bitmap = CreateBitmapImageFromPath(path);
-                if (size.IsEmpty || size == new Size(0, 0))
+                var bitmap = CreateBitmapImageFromPath( path );
+                if (size.IsEmpty || size == new Size( 0, 0 ))
                 {
                     RealWidth = bitmap.PixelWidth;
                     RealHeight = bitmap.PixelHeight;
                     ChangedWidth = bitmap.PixelWidth;
                     ChangedHeight = bitmap.PixelHeight;
-                    select.SizeChanged.Execute("width");
-                    select.SizeChanged.Execute("height");
+                    select.SizeChanged.Execute( "width" );
+                    select.SizeChanged.Execute( "height" );
 
                 }
                 Bitmap = bitmap;
                 image = new();
                 image.Source = bitmap;
-                image.Loaded += (s, e) =>
+                image.Loaded += ( s, e ) =>
                 {
                     if (s is Image im)
                     {
@@ -1252,23 +1254,23 @@ namespace NotebookRCv001.Helpers
                 };
                 return image;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private Image CreateImageFromBitmapSource(BitmapSource source)
+        private Image CreateImageFromBitmapSource( BitmapSource source )
         {
             try
             {
                 Image image = new();
                 image.Source = source;
-                image.Loaded += (s, e) =>
+                image.Loaded += ( s, e ) =>
                 { image.Width = ChangedWidth; image.Height = ChangedHeight; };
                 return image;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private Image CreateImageFromBitmap(Drawing.Bitmap bitmap)
+        private Image CreateImageFromBitmap( Drawing.Bitmap bitmap )
         {
             try
             {
@@ -1276,8 +1278,8 @@ namespace NotebookRCv001.Helpers
                 BitmapImage bitmapImage = null;
                 using (MemoryStream ms = new())
                 {
-                    bitmap.Save(ms, Drawing.Imaging.ImageFormat.Jpeg);
-                    ms.Seek(0, SeekOrigin.Begin);
+                    bitmap.Save( ms, Drawing.Imaging.ImageFormat.Jpeg );
+                    ms.Seek( 0, SeekOrigin.Begin );
                     bitmapImage = new();
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
@@ -1289,7 +1291,7 @@ namespace NotebookRCv001.Helpers
                     }
                     bitmapImage.Rotation = rotation;
                     bitmapImage.EndInit();
-                    if (size.IsEmpty || size == new Size(0, 0))
+                    if (size.IsEmpty || size == new Size( 0, 0 ))
                     {
                         RealWidth = bitmapImage.PixelWidth;
                         RealHeight = bitmapImage.PixelHeight;
@@ -1297,7 +1299,7 @@ namespace NotebookRCv001.Helpers
                         ChangedHeight = bitmapImage.PixelHeight;
                     }
                     image.Source = bitmapImage;
-                    image.Loaded += (s, e) =>
+                    image.Loaded += ( s, e ) =>
                     {
                         if (image.IsLoaded)
                             image.Stretch = stretch;
@@ -1305,10 +1307,10 @@ namespace NotebookRCv001.Helpers
                 }
                 return image;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private Drawing.Bitmap CreateBitmapFromImage(Image image)
+        private Drawing.Bitmap CreateBitmapFromImage( Image image )
         {
             try
             {
@@ -1317,67 +1319,67 @@ namespace NotebookRCv001.Helpers
                 using (MemoryStream ms = new MemoryStream())
                 {
                     JpegBitmapEncoder encoder = new();
-                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)image.Source));
-                    encoder.Save(ms);
-                    using (Drawing.Bitmap bmp = new(ms))
+                    encoder.Frames.Add( BitmapFrame.Create( (BitmapSource)image.Source ) );
+                    encoder.Save( ms );
+                    using (Drawing.Bitmap bmp = new( ms ))
                     {
-                        bitmap = new Drawing.Bitmap(bmp);
+                        bitmap = new Drawing.Bitmap( bmp );
                     }
                 }
                 return bitmap;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private BitmapImage CreateBitmapImageFromImage(Image image)
+        private BitmapImage CreateBitmapImageFromImage( Image image )
         {
             try
             {
-                var bitmap = CreateBitmapFromImage(image);
+                var bitmap = CreateBitmapFromImage( image );
                 BitmapImage bitmapImage = new();
                 var select = GetSelectAndPasteWindowViewModel();
                 using (MemoryStream ms = new())
                 {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    ms.Seek(0, SeekOrigin.Begin);
+                    bitmap.Save( ms, System.Drawing.Imaging.ImageFormat.Jpeg );
+                    ms.Seek( 0, SeekOrigin.Begin );
                     ms.Position = 0;
 
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                     bitmapImage.UriSource = null;
                     bitmapImage.StreamSource = ms;
-                    if (!size.IsEmpty && size != new Size(0, 0))
+                    if (!size.IsEmpty && size != new Size( 0, 0 ))
                     {
                         bitmapImage.DecodePixelWidth = (int)size.Width;
                         bitmapImage.DecodePixelHeight = (int)size.Height;
                     }
                     bitmapImage.Rotation = rotation;
                     bitmapImage.EndInit();
-                    if (size.IsEmpty || size == new Size(0, 0))
+                    if (size.IsEmpty || size == new Size( 0, 0 ))
                     {
                         RealWidth = bitmapImage.PixelWidth;
                         RealHeight = bitmapImage.PixelHeight;
                         ChangedWidth = bitmapImage.PixelWidth;
                         ChangedHeight = bitmapImage.PixelHeight;
-                        select?.SizeChanged.Execute("width");
-                        select?.SizeChanged.Execute("height");
+                        select?.SizeChanged.Execute( "width" );
+                        select?.SizeChanged.Execute( "height" );
                     }
                 }
                 return bitmapImage;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private BitmapImage CreateBitmapImageFromPath(string path)
+        private BitmapImage CreateBitmapImageFromPath( string path )
         {
             try
             {
                 BitmapImage bitmapImage = new();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.BeginInit();
-                bitmapImage.UriSource = new Uri(path);
+                bitmapImage.UriSource = new Uri( path );
                 bitmapImage.Rotation = rotation;
-                if (!size.IsEmpty && size != new Size(0, 0))
+                if (!size.IsEmpty && size != new Size( 0, 0 ))
                 {
                     if (!GetSelectAndPasteWindowViewModel().Proportionally)
                         bitmapImage.DecodePixelWidth = (int)size.Width;
@@ -1386,20 +1388,20 @@ namespace NotebookRCv001.Helpers
                 bitmapImage.EndInit();
                 return bitmapImage;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
-        private Drawing.Bitmap CreateBitmapFromPath(string path)
+        private Drawing.Bitmap CreateBitmapFromPath( string path )
         {
             try
             {
                 Drawing.Bitmap bitmap = null;
-                bitmap = new Drawing.Bitmap(path);
+                bitmap = new Drawing.Bitmap( path );
                 return bitmap;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private Figure CreateFigure(Image image)
+        private Figure CreateFigure( Image image )
         {
             try
             {
@@ -1411,19 +1413,19 @@ namespace NotebookRCv001.Helpers
                 InlineUIContainer container = new();
                 container.Child = image;
                 Paragraph paragraph = new Paragraph();
-                paragraph.Inlines.Add(container);
+                paragraph.Inlines.Add( container );
                 Figure figure = new Figure();
                 figure.VerticalAnchor = FigureVerticalAnchor.PageTop;
                 figure.WrapDirection = wrapDirection;
                 figure.HorizontalAnchor = figureHorizontalAnchor;
-                figure.Blocks.Add(paragraph);
+                figure.Blocks.Add( paragraph );
                 //figure.Blocks.Add(blockUIContainer);
                 return figure;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private Figure FigureSearchByImage(Image image)
+        private Figure FigureSearchByImage( Image image )
         {
             try
             {
@@ -1444,10 +1446,10 @@ namespace NotebookRCv001.Helpers
                 }
                 return figure;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private Paragraph ParagraphSearchByImage(Image image)
+        private Paragraph ParagraphSearchByImage( Image image )
         {
             try
             {
@@ -1471,10 +1473,10 @@ namespace NotebookRCv001.Helpers
                 }
                 return paragraph;
             }
-            catch (Exception e) { ErrorWindow(e); return null; }
+            catch (Exception e) { ErrorWindow( e ); return null; }
         }
 
-        private void AddingFigureToFlowdocument(Figure figure)
+        private void AddingFigureToFlowdocument( Figure figure )
         {
             try
             {
@@ -1486,33 +1488,33 @@ namespace NotebookRCv001.Helpers
                     //else
                     paragraph = new();
                     CurrentFigure = figure;
-                    paragraph.Inlines.Add(figure);
-                    Document.Blocks.Add(paragraph);
+                    paragraph.Inlines.Add( figure );
+                    Document.Blocks.Add( paragraph );
                 }
                 else
                 {
                     if (TargetToInsert is Paragraph par)
                     {
                         paragraph = par;
-                        paragraph.Inlines.Add(figure);
+                        paragraph.Inlines.Add( figure );
                         CurrentFigure = figure;
                     }
                 }
                 //paragraph = WrapImplementation(paragraph, figure);
                 RichTextBox.Focus();
                 CaretPosition = paragraph.ContentEnd;
-                Document.Blocks.Add(new Paragraph());
+                Document.Blocks.Add( new Paragraph() );
                 //if (figure.WrapDirection == WrapDirection.Both)
                 //    paragraph.Inlines.Add(new TextBlock() { Text = " ", TextWrapping = TextWrapping.Wrap });
 
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
 
-        private static void ErrorWindow(Exception e, [CallerMemberName] string name = "")
+        private static void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {
-            Thread thread = new Thread(() => MessageBox.Show(e.Message, $"BehaviorRichTextBox.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
+            Thread thread = new Thread( () => MessageBox.Show( e.Message, $"BehaviorRichTextBox.{name}" ) );
+            thread.SetApartmentState( ApartmentState.STA );
             thread.Start();
         }
 

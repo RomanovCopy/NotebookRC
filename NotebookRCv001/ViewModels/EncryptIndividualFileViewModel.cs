@@ -105,6 +105,9 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.CanExecute_ClickButtonDecrypt );
         RelayCommand clickButtonDecrypt;
 
+        public ICommand ButtonsClearAndCloseLoaded => buttonsClearAndCloseLoaded ??= new RelayCommand(
+            encryptIndividualFileModel.Execute_ButtonsClearAndCloseLoaded, encryptIndividualFileModel.CanExecute_ButtonsClearAndCloseLoaded );
+        RelayCommand buttonsClearAndCloseLoaded;
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( encryptIndividualFileModel.Execute_PageLoaded, encryptIndividualFileModel.CanExecute_PageLoaded );
         RelayCommand pageLoaded;
 

@@ -6,7 +6,8 @@
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
-      mc:Ignorable="d">
+      mc:Ignorable="d"
+      x:Name="encryptpage">
     <Page.Resources>
         <viewmodels:EncryptIndividualFileViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="clearandclose"/>
@@ -62,7 +63,13 @@
             <Menu  Grid.Column="0">
                 <MenuItem Header=""/>
             </Menu>
-            <ContentPresenter Grid.Column="2" Content="{StaticResource clearandclose}"/>
+            <ContentPresenter Grid.Column="2" Content="{StaticResource clearandclose}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding ButtonsClearAndCloseLoaded}" CommandParameter="{Binding ElementName=encryptpage}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ContentPresenter>
         </Grid>
         <Border Grid.Row="1" Style="{StaticResource borders}" Padding="20,0,20,20">
             <DockPanel>

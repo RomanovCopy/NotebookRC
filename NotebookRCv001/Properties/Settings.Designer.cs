@@ -456,7 +456,7 @@ namespace NotebookRCv001.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("AliceBlue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Transparent")]
         public global::System.Drawing.Color MyBackground {
             get {
                 return ((global::System.Drawing.Color)(this["MyBackground"]));

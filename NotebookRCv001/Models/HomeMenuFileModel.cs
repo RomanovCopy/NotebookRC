@@ -21,6 +21,7 @@ using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Helpers;
+using System.Windows.Media;
 //using System.Windows.Shapes;
 
 namespace NotebookRCv001.Models
@@ -203,7 +204,6 @@ namespace NotebookRCv001.Models
                     viewmodel.LastFileName = LastFileName;
                 }
                 TextRange textRange = new( flowDocument?.ContentStart, flowDocument?.ContentEnd );
-                HomeMenuEncryptionModel encryptionModel = HomeMenuEncryptionViewModel.HomeMenuEncryptionModel;
                 string extension = Path.GetExtension( path ).ToLower();
                 string keyCrypt = HomeMenuEncryptionViewModel.KeyCript;
                 byte[] bytes = null;
@@ -220,9 +220,11 @@ namespace NotebookRCv001.Models
                             using (MemoryStream ms = new MemoryStream( bytes ))
                             {
                                 if (extension == ".rtf")
-                                    textRange.Load( fs, DataFormats.Rtf);
+                                    textRange.Load( ms, DataFormats.Rtf );
                                 else
-                                    textRange.Load( ms, DataFormats.XamlPackage);
+                                    textRange.Load( ms, DataFormats.XamlPackage );
+                                var value = textRange.GetPropertyValue( TextElement.BackgroundProperty );
+                                textRange.ApplyPropertyValue( TextElement.BackgroundProperty, richTextBoxViewModel.BehaviorRichTextBox.MyFontBackground );
                             }
                         }
                         else if (extension == ".txt" || extension == ".cs")
@@ -347,8 +349,8 @@ namespace NotebookRCv001.Models
                                 bytes = ms.ToArray();
                                 if (!string.IsNullOrWhiteSpace( keyCrypt ))
                                     bytes = Command_executors.Executors.Encrypt( bytes, keyCrypt );
-                                fs.Write( bytes );
                             }
+                            fs.Write( bytes );
                         }
                         else if (extension == ".txt" || extension == ".cs")
                         {
