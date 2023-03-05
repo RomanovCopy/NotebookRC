@@ -22,7 +22,7 @@
     <Page.DataContext>
         <Binding Source="{StaticResource homeviewmodel}"/>
     </Page.DataContext>
-    <Grid>
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
