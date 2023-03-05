@@ -112,8 +112,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
-                //c = !string.IsNullOrWhiteSpace( KeyCrypt ) && !MainWindowViewModel.FrameList.Any( ( x ) => x is MyControls.EncryptIndividualFile );
+                c = !string.IsNullOrWhiteSpace( KeyCrypt ) && !MainWindowViewModel.FrameList.Any( ( x ) => x is MyControls.EncryptIndividualFile );
                 return c;
             }catch(Exception e) { ErrorWindow( e ); return false; }
         }

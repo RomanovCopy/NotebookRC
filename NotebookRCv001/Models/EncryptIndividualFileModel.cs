@@ -381,6 +381,7 @@ namespace NotebookRCv001.Models
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 progressVM.Target = this;
                 PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
+                ProgressValue = 0;
                 Task.Factory.StartNew( () =>
                 {
                     if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
@@ -388,7 +389,6 @@ namespace NotebookRCv001.Models
                         byte[] bytes = FileEncrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
                         using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
                             fs.Write( bytes, 0, bytes.Length );
-                        ProgressValue = 100;
                     }
                     else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
                     {//щифрование каталога
@@ -407,9 +407,9 @@ namespace NotebookRCv001.Models
                                 ProgressValue = count / (double)files.Length * 100.0;
                                 count++;
                             }
-                            ProgressValue = 100;
                         }
                     }
+                    ProgressValue = 100;
                 } );
                 progress.ShowDialog();
             }
@@ -441,14 +441,15 @@ namespace NotebookRCv001.Models
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 progressVM.Target = this;
                 PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
+                ProgressValue = 0;
                 Task.Factory.StartNew( () =>
                 {
+                    Thread.Sleep( 500 );
                     if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                     {//дешифрование файла
                         byte[] bytes = FileDecrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
                         using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
                             fs.Write( bytes, 0, bytes.Length );
-                        ProgressValue = 100;
                     }
                     else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
                     {//дещифрование каталога
@@ -467,9 +468,9 @@ namespace NotebookRCv001.Models
                                 ProgressValue = count / (double)files.Length * 100.0;
                                 count++;
                             }
-                            ProgressValue = 100;
                         }
                     }
+                    ProgressValue = 100;
                 } );
                 progress.ShowDialog();
             }
@@ -537,7 +538,9 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                //c = true;
+                bool a = !(string.IsNullOrWhiteSpace( PathToOpenFile ) && string.IsNullOrWhiteSpace( PathToSaveFile ));
+                bool b = !(string.IsNullOrWhiteSpace( PathToOpenDirectory ) && string.IsNullOrWhiteSpace( PathToSaveDirectory ));
+                c = a || b;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -546,11 +549,19 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                PathToOpenFile = NameOpenFile = string.Empty;
+                PathToSaveFile = NameSaveFile = string.Empty;
+                PathToOpenDirectory = NameOpenDirectory = string.Empty;
+                PathToSaveDirectory = NameSaveDirectory = string.Empty;
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
-
+        /// <summary>
+        /// шифрование файла
+        /// </summary>
+        /// <param name="path">путь к файлу</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>преобразованный в соответсвии с ключом массив байт</returns>
         private byte[] FileEncrypt( string path, string key )
         {
             byte[] result = new byte[0];
@@ -572,6 +583,12 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); return result; }
         }
+        /// <summary>
+        /// дешифрование файла
+        /// </summary>
+        /// <param name="path">путь к зашифрованному файлу</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>преобразованный в соответсвии с ключом массив байт</returns>
         private byte[] FileDecrypt( string path, string key )
         {
             byte[] result = new byte[0];
@@ -590,7 +607,7 @@ namespace NotebookRCv001.Models
         }
 
         /// <summary>
-        /// расшифровка каталога текстовых файлов старого образца
+        /// расшифровка каталога текстовых файлов старого образца(не используется)
         /// </summary>
         /// <exception cref="Exception"></exception>
         private void ReencryptionOfLineFiles()

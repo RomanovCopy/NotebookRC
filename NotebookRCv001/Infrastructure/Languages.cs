@@ -819,7 +819,7 @@ namespace NotebookRCv001.Infrastructure
                             "Установить ключ шифрования",//01
                             "Удалить ключ шифрования",//02
                             "Рабочая диретория",//03
-                            "Шифрование файла",//04
+                            "Шифрование/Дешифрование",//04
                         }
                     },
                     {
@@ -829,7 +829,7 @@ namespace NotebookRCv001.Infrastructure
                             "Set Encryption Key",//01
                             "Delete Encryption Key",//02
                             "Working Directory",//03
-                            "File encryption",//04
+                            "Encryption/Decryption",//04
                         }
                     }
             };
