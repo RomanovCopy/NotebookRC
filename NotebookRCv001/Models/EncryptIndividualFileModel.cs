@@ -456,7 +456,7 @@ namespace NotebookRCv001.Models
                         if (Directory.Exists( PathToOpenDirectory ))
                         {
                             string[] files = Directory.GetFiles( PathToOpenDirectory );
-                            if (files.Length == 0) return;
+                            if (files.Length == 0) { ProgressValue = 100; return; }
                             double count = 0;
                             foreach (var file in files)
                             {
@@ -474,7 +474,7 @@ namespace NotebookRCv001.Models
                 } );
                 progress.ShowDialog();
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ProgressValue = 100; ErrorWindow( e ); }
         }
 
         /// <summary>
