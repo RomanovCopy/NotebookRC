@@ -14,7 +14,7 @@
         Title="NotebookRS" 
         Name="window"
         MinHeight="250" 
-        MinWidth="500" HorizontalContentAlignment="Stretch">
+        MinWidth="820" HorizontalContentAlignment="Stretch">
     <Window.Resources>
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>

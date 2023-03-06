@@ -76,6 +76,7 @@ namespace NotebookRCv001.Infrastructure
                             "Кодировка:",//00
                             "Шифрование:",//01
                             "Рабочая директория:",//02
+                            "Язык ввода:",//03
                         }
                     },
                     {
@@ -84,6 +85,7 @@ namespace NotebookRCv001.Infrastructure
                              "Encoding:",//00
                              "Encryption:",//01
                              "Working directory:",//02
+                             "Input language:",//03
                         }
                     }
             };
@@ -100,6 +102,7 @@ namespace NotebookRCv001.Infrastructure
                             "Текущая кодировка символов",//00
                             "Статус шифрования",//01
                             "Каталог, в котором будет производиться поиск файлов",//02
+                            "Текущий язык раскладки клавиатуры",//03
                         }
                     },
                     {
@@ -108,6 +111,7 @@ namespace NotebookRCv001.Infrastructure
                              "Current character encoding",//00
                              "Encryption Status",//01
                              "Directory in which files will be searched",//02
+                             "Current Keyboard Layout Language",//03
                         }
                     }
             };

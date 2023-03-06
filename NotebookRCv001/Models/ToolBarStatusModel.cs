@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.ViewModels;
@@ -25,6 +26,9 @@ namespace NotebookRCv001.Models
         internal string EncryptionStatus => homeViewModel?.EncryptionStatus;
         internal string WorkingDirectory => homeViewModel?.WorkingDirectory;
         internal string WorkingDirectoryName => homeViewModel?.WorkingDirectoryName;
+        internal string CurrentInputLanguageName { get => currentInputLanguageName; set => SetProperty( ref currentInputLanguageName, value ); }
+        private string currentInputLanguageName;
+
 
         internal ObservableCollection<string> Headers => language.MainWindowToolBar;
         internal ObservableCollection<string> ToolTips => language.ToolTipsMainWindowToolBar;
@@ -33,6 +37,7 @@ namespace NotebookRCv001.Models
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             mainWindowViewModel.Language.PropertyChanged += ( s, e ) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
+            InputLanguageManager.Current.InputLanguageChanged += ( s, e ) => { CurrentInputLanguageName = e.NewLanguage.Name; };
         }
 
 
@@ -56,7 +61,7 @@ namespace NotebookRCv001.Models
                 {
                     homeViewModel = (HomeViewModel)page.DataContext;
                     homeViewModel.PropertyChanged += ( s, e ) => OnPropertyChanged(e.PropertyName);
-
+                    CurrentInputLanguageName = InputLanguageManager.Current.CurrentInputLanguage.Name;
                 };
 
             }

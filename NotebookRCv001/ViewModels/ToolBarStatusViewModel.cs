@@ -23,7 +23,7 @@ namespace NotebookRCv001.ViewModels
         public string WorkingDirectoryName => toolBarStatusModel.WorkingDirectoryName;
         public ObservableCollection<string> Headers => toolBarStatusModel.Headers;
         public ObservableCollection<string> ToolTips => toolBarStatusModel.ToolTips;
-
+        public string CurrentInputLanguageName => toolBarStatusModel.CurrentInputLanguageName;
 
 
 

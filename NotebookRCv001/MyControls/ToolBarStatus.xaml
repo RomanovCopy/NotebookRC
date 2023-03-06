@@ -43,11 +43,17 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
+            <TextBlock x:Name="inputlanguagenameheader"
+                Text="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" Margin="10,2,10,2"
+                       ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock x:Name="inputlanguagename" 
+                       Text="{Binding CurrentInputLanguageName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,5,2" Width="50"
+                       ToolTip="{Binding CurrentInputLanguageName, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Name="workingdirectoryheader"
                 Text="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" Margin="10,2,10,2"
                        ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Name="workingdirectory" 
-                       Text="{Binding WorkingDirectoryName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,10,2" Width="200"
+                       Text="{Binding WorkingDirectoryName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,10,2" Width="100"
                        ToolTip="{Binding WorkingDirectory, UpdateSourceTrigger=PropertyChanged}"/>
         </ToolBarPanel>
     </Grid>
