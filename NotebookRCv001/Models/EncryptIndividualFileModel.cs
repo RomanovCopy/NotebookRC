@@ -395,17 +395,19 @@ namespace NotebookRCv001.Models
                         if (Directory.Exists( PathToOpenDirectory ))
                         {
                             string[] files = Directory.GetFiles( PathToOpenDirectory );
-                            if (files.Length == 0) return;
-                            double count = 0;
-                            foreach (var file in files)
+                            if (files.Length > 0)
                             {
-                                var name = new FileInfo( file ).Name;
-                                var pathToSave = Path.Combine( PathToSaveDirectory, name );
-                                byte[] bytes = FileEncrypt( file, homeMenuEncryptionViewModel.KeyCript );
-                                using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
-                                    fs.Write( bytes, 0, bytes.Length );
-                                ProgressValue = count / (double)files.Length * 100.0;
-                                count++;
+                                double count = 0;
+                                foreach (var file in files)
+                                {
+                                    var name = new FileInfo( file ).Name;
+                                    var pathToSave = Path.Combine( PathToSaveDirectory, name );
+                                    byte[] bytes = FileEncrypt( file, homeMenuEncryptionViewModel.KeyCript );
+                                    using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
+                                        fs.Write( bytes, 0, bytes.Length );
+                                    ProgressValue = count / (double)files.Length * 100.0;
+                                    count++;
+                                }
                             }
                         }
                     }
@@ -456,17 +458,19 @@ namespace NotebookRCv001.Models
                         if (Directory.Exists( PathToOpenDirectory ))
                         {
                             string[] files = Directory.GetFiles( PathToOpenDirectory );
-                            if (files.Length == 0) { ProgressValue = 100; return; }
-                            double count = 0;
-                            foreach (var file in files)
+                            if (files.Length > 0)
                             {
-                                var name = new FileInfo( file ).Name;
-                                var pathToSave = Path.Combine( PathToSaveDirectory, name );
-                                byte[] bytes = FileDecrypt( file, homeMenuEncryptionViewModel.KeyCript );
-                                using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
-                                    fs.Write( bytes, 0, bytes.Length );
-                                ProgressValue = count / (double)files.Length * 100.0;
-                                count++;
+                                double count = 0;
+                                foreach (var file in files)
+                                {
+                                    var name = new FileInfo( file ).Name;
+                                    var pathToSave = Path.Combine( PathToSaveDirectory, name );
+                                    byte[] bytes = FileDecrypt( file, homeMenuEncryptionViewModel.KeyCript );
+                                    using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
+                                        fs.Write( bytes, 0, bytes.Length );
+                                    ProgressValue = count / (double)files.Length * 100.0;
+                                    count++;
+                                }
                             }
                         }
                     }
