@@ -37,6 +37,7 @@ namespace NotebookRCv001.Models
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             mainWindowViewModel.Language.PropertyChanged += ( s, e ) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
+            //подписываемся на изменение языка раскладки клавиатуры
             InputLanguageManager.Current.InputLanguageChanged += ( s, e ) => { CurrentInputLanguageName = e.NewLanguage.Name; };
         }
 
