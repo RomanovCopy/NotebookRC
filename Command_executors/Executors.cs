@@ -982,6 +982,7 @@ namespace Command_executors
                 bool c = false;
                 byte[] bufer = new byte[1048576];//массив байт пишущийся на диск за один проход( 1 MByte )
                 long SizeUploaded = 0;//загружено байт всего
+                long FileSize = response.ContentLength;
                 int ByteSize = 0;//загружено байт за проход
                 int count = 3;//допустимое колличество попыток загрузки
                 using (Stream streamResponse = response?.GetResponseStream())
@@ -994,17 +995,20 @@ namespace Command_executors
                             {
                                 do
                                 {
-                                    ByteSize = streamResponse.Read( bufer, 0, bufer.Length );
-                                    SaveFileStream.Write( bufer, 0, ByteSize );//пишем на диск
-                                    SizeUploaded += ByteSize;
-                                    uploaded?.Invoke( SizeUploaded );
-                                    count--;
+                                    try
+                                    {
+                                        ByteSize = streamResponse.Read( bufer, 0, bufer.Length );
+                                        SaveFileStream.Write( bufer, 0, ByteSize );//пишем на диск
+                                        SizeUploaded += ByteSize;
+                                        uploaded?.Invoke( SizeUploaded );
+                                        count--;
+                                    }
+                                    catch { }
                                 }
-                                while
-                                (!token.IsCancellationRequested &&
+                                while (!token.IsCancellationRequested &&
                                 ByteSize > 0 ||
-                                (ByteSize == 0 && count >= 0 && (SizeUploaded < response?.ContentLength) ||
-                                response?.ContentLength < 0));
+                                (ByteSize == 0 && count >= 0 && (SizeUploaded < FileSize) ||
+                                FileSize < 0));
                             } );
                         }
                     }
@@ -1451,7 +1455,7 @@ namespace Command_executors
                 }
                 return result;
             }
-            catch 
+            catch
             {
                 return result;
             }

@@ -56,7 +56,6 @@
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
     </Page.DataContext>
-
     <Grid Background="{Binding ElementName=file, Path=Background, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition x:Name="formenu" Height="Auto"/>
@@ -80,7 +79,8 @@
                               Command="{Binding DirectoryForDownloadedFiles, UpdateSourceTrigger=PropertyChanged}"/>
                 </MenuItem>
             </Menu>
-            <TextBox x:Name="url" Grid.Column="1" MaxLines="1">
+            <TextBox x:Name="url" ToolTip="{Binding ToolTips[0], UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Column="1" MaxLines="1">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
                         <i:InvokeCommandAction Command="{Binding TextBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
@@ -104,16 +104,21 @@
                 </TextBox.ContextMenu>
             </TextBox>
             <Button  Content="Paste" Grid.Column="2"  Style="{StaticResource but}" 
-                     Command="{Binding PasteToTextBox, UpdateSourceTrigger=PropertyChanged}"/>
+                     Command="{Binding PasteToTextBox, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="{Binding ToolTips[1], UpdateSourceTrigger=PropertyChanged}"/>
             <Button Content="Clear" Grid.Column="3" Style="{StaticResource but}" 
-                    Command="{Binding ListClear, UpdateSourceTrigger=PropertyChanged}"/>
+                    Command="{Binding ListClear, UpdateSourceTrigger=PropertyChanged}"
+                    ToolTip="{Binding ToolTips[2], UpdateSourceTrigger=PropertyChanged}"/>
             <Button Content="Browse" Grid.Column="4" Style="{StaticResource but}" 
                     Command="{Binding SelectASpecialDirectory, UpdateSourceTrigger=PropertyChanged}" 
-                    CommandParameter="{Binding ElementName=list,Path=SelectedItems, UpdateSourceTrigger=PropertyChanged}"/>
+                    CommandParameter="{Binding ElementName=list,Path=SelectedItems, UpdateSourceTrigger=PropertyChanged}"
+                    ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"/>
             <Button Content="Add" Grid.Column="5" Style="{StaticResource but}"
                     Command="{Binding AddNewDownloadItem, UpdateSourceTrigger=PropertyChanged}"
-                    CommandParameter="{Binding ElementName=url,Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
-            <ContentPresenter Grid.Column="6" Content="{StaticResource buttons}"/>
+                    CommandParameter="{Binding ElementName=url,Path=Text, UpdateSourceTrigger=PropertyChanged}"
+                    ToolTip="{Binding ToolTips[4], UpdateSourceTrigger=PropertyChanged}"/>
+            <ContentPresenter Grid.Column="6" Content="{StaticResource buttons}" 
+                              ToolTip="{Binding ToolTips[5], UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" CornerRadius="0" Background="Gray" Margin="0,1,0,2">
 

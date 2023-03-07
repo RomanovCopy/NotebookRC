@@ -14,8 +14,8 @@ namespace NotebookRCv001.Infrastructure
             get => key;
             set
             {
-                if (LanguagesKey.Any((x) => x == value))
-                    SetProperty(ref key, value);
+                if (LanguagesKey.Any( ( x ) => x == value ))
+                    SetProperty( ref key, value );
             }
         }
         string key;
@@ -23,7 +23,7 @@ namespace NotebookRCv001.Infrastructure
         public ObservableCollection<string> LanguagesKey
         {
             get => languagesKey;
-            set => SetProperty(ref languagesKey, value);
+            set => SetProperty( ref languagesKey, value );
         }
         private ObservableCollection<string> languagesKey;
 
@@ -31,7 +31,7 @@ namespace NotebookRCv001.Infrastructure
         public Languages()
         {
             LanguagesKey = new ObservableCollection<string>() { "ru-RU", "en-US" };
-            if (LanguagesKey.Any((x) => x == Properties.Settings.Default.LanguageKey))
+            if (LanguagesKey.Any( ( x ) => x == Properties.Settings.Default.LanguageKey ))
                 Key = Properties.Settings.Default.LanguageKey;
             else
                 Key = "en-US";
@@ -494,12 +494,22 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-
+                    "Вставь адресс загрузки",//00
+                    "Вставить адресс загрузки из буфера обмена",//01
+                    "Очистить коллекцию загрузок",//02
+                    "Выбор дирректории для загрузки",//03
+                    "Добавить адресс в коллекцию загрузок",//04
+                    "Закрыть загрузчик файлов",//05
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
                 {
-
+                    "Insert download address",//00
+                    "Paste download address from clipboard",//01
+                    "Clear Download Collection",//02
+                    "Choosing the Dirrectory to Download",//03
+                    "Add Address to Download Collection",//04
+                    "Close File Loader",//05
                 }
                 }
             };

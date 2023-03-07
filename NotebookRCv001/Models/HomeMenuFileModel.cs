@@ -22,7 +22,6 @@ using System.Windows.Xps.Packaging;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Helpers;
 using System.Windows.Media;
-//using System.Windows.Shapes;
 
 namespace NotebookRCv001.Models
 {
