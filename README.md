@@ -10,7 +10,7 @@
 
 **15.02.2023** Добавлена возможность загрузки файлов по ссылкам.
 
-**5.03.2023** Добавлена возможность шифрования любого разрешения, к единичных так и в каталогах.
+**5.03.2023** Добавлена возможность шифрования файлов с любым разрешения, как единичных так и в каталогах.
 
 
 
@@ -26,4 +26,4 @@ The project is developing, but to be honest, sometimes there is simply not enoug
 
 **15.02.2023** Added the ability to download files by links.
 
-**5.03.2023** Added the ability to encrypt any resolution, to single and in directories.
+**5.03.2023** Added the ability to encrypt files with any permission, both single and in directories
