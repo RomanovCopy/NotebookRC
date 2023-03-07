@@ -452,6 +452,38 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+        /// <summary>
+        /// обзор файлов с возможностью их расшифровки
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_FileOverview( object obj )
+        {
+            try
+            {
+                bool c = true;
+                foreach(var win in Application.Current.Windows)
+                {
+                    if (win is Views.FileOverview)
+                    {
+                        c = false;
+                        break;
+                    }
+                }
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+
+        }
+        internal void Execute_FileOverview( object obj )
+        {
+            try
+            {
+                new Views.FileOverview().Show();
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
         internal bool CanExecute_SelectingAWorkingDirectory( object obj )
         {

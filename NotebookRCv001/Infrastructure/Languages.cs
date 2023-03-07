@@ -431,6 +431,53 @@ namespace NotebookRCv001.Infrastructure
         #endregion
 
 
+        #region ___________________FileOverview_________________________________
+
+
+        /// <summary>
+        /// заголовки и подсказки для FileOverview
+        /// </summary>
+        public ObservableCollection<string> HeadersFileOverview => DictionaryHeadersFileOverview[Key];
+        private Dictionary<string, ObservableCollection<string>> DictionaryHeadersFileOverview
+        {
+            get => dictionaryHeadersFileOverview ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                {"ru-RU", new ObservableCollection<string>()
+                {
+
+                }
+                },
+                {"en-US", new ObservableCollection<string>()
+                {
+
+
+                }
+                }
+            };
+        }
+        private Dictionary<string, ObservableCollection<string>> dictionaryHeadersFileOverview;
+        public ObservableCollection<string> ToolTipsFileOverview => DictionaryToolTipsFileOverview[Key];
+        Dictionary<string, ObservableCollection<string>> DictionaryToolTipsFileOverview
+        {
+            get => dictionaryToolTipsFileOverview ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                {"ru-RU", new ObservableCollection<string>()
+                {
+
+                }
+                },
+                {"en-US", new ObservableCollection<string>()
+                {
+
+                }
+                }
+            };
+        }
+        Dictionary<string, ObservableCollection<string>> dictionaryToolTipsFileOverview;
+
+        #endregion
+
+
         #region _________________File uploader______________________________
 
 
@@ -700,6 +747,7 @@ namespace NotebookRCv001.Infrastructure
                     "Редактировать файл",//06
                     "Синхронизация",//07
                     "Загрузка файлов",//08
+                    "Обзор файлов"//09
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -713,6 +761,7 @@ namespace NotebookRCv001.Infrastructure
                         "Edit File",//06
                         "Synchronization",//07
                         "Uploading files",//08
+                        "File Overview",//09
                     }
                 }
             };
@@ -734,6 +783,7 @@ namespace NotebookRCv001.Infrastructure
                     "Файл будет открыт в редакторе для внесения изменений",//06"
                     "Синхронизация рабочего каталога со сторонним",//07
                     "Свободно загружай файлы из интернета по ссылкам",//08
+                    "Обзор и просмотр файлов с возможностью дешифровки перед просмотром",//09
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -747,6 +797,7 @@ namespace NotebookRCv001.Infrastructure
                     "The file will be opened in the editor to make changes",//06
                     "Synchronization of the working directory with a third-party",//07
                     "Freely download files from the Internet using links",//08
+                    "Browse and view files that can be decrypted before viewing",//09
                 }
                 }
             };

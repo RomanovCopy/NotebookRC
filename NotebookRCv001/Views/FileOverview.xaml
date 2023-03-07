@@ -3,10 +3,59 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+        xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+        xmlns:controls="clr-namespace:NotebookRCv001.MyControls" 
+        xmlns:customized="clr-namespace:NotebookRCv001.Styles.CustomizedWindow"
         xmlns:local="clr-namespace:NotebookRCv001.Views"
         mc:Ignorable="d"
-        Title="FileOverview" Height="450" Width="800">
-    <Grid>
-        
+        Style="{StaticResource ScriptEditorStyle}"
+        Title="FileOverview" 
+        Name="window"
+        MinHeight="250" 
+        MinWidth="820" HorizontalContentAlignment="Stretch">
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:SizeLocationConverter x:Key="sizeconverter"/>
+            <viewmodels:FileOverviewViewModel x:Key="viewmodel"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </Window.DataContext>
+    <Window.Width>
+        <Binding Path="WindowWidth" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="width" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Width>
+    <Window.Height>
+        <Binding Path="WindowHeight" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="height" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Height>
+    <Window.Top>
+        <Binding Path="WindowTop" Converter="{StaticResource sizeconverter}" ConverterParameter="top" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Top>
+    <Window.Left>
+        <Binding Path="WindowLeft" Converter="{StaticResource sizeconverter}" ConverterParameter="left" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Left>
+    <Window.WindowState>
+        <Binding Path="WindowState" Converter="{StaticResource sizeconverter}" 
+                 ConverterParameter="state" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.WindowState>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
+            
+        </Border>
     </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{ Binding WindowClosing, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </Window>

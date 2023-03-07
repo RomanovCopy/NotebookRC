@@ -59,6 +59,10 @@
                           Header="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{Binding ToolTips[8], UpdateSourceTrigger=PropertyChanged}"
                           Command="{Binding UploadingFiles, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem Name="browsefiles" 
+                          Header="{Binding Headers[9], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[9], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding FileOverview, UpdateSourceTrigger=PropertyChanged}"/>
                 <MenuItem Name="workingdirectory" 
                           Header="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
                           ToolTip="{Binding ToolTips[5], UpdateSourceTrigger=PropertyChanged}" 

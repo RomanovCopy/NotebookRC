@@ -83,6 +83,10 @@ namespace NotebookRCv001.ViewModels
         public ICommand UploadingFiles => uploadingFiles ??= new RelayCommand(HomeMenuFileModel.Execute_UploadingFiles,
             HomeMenuFileModel.CanExecute_UploadingFiles);
         private RelayCommand uploadingFiles;
+
+        public ICommand FileOverview => fileOverview ??= new RelayCommand( HomeMenuFileModel.Execute_FileOverview,
+            HomeMenuFileModel.CanExecute_FileOverview );
+        private RelayCommand fileOverview;
         public ICommand SelectingAWorkingDirectory => selectingAWorkingDirectory ??= new RelayCommand(
             HomeMenuFileModel.Execute_SelectingAWorkingDirectory, HomeMenuFileModel.CanExecute_SelectingAWorkingDirectory);
         private RelayCommand selectingAWorkingDirectory;
