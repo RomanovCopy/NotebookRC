@@ -1025,11 +1025,15 @@ namespace Command_executors
                                 {
                                     do
                                     {
-                                        ByteSize = stream.Read( bufer, 0, bufer.Length );
-                                        fileStream.Write( bufer, 0, ByteSize );//пишем на диск
-                                        SizeUploaded += ByteSize;
-                                        uploaded?.Invoke( SizeUploaded );
-                                        count--;
+                                        try
+                                        {
+                                            ByteSize = stream.Read( bufer, 0, bufer.Length );
+                                            fileStream.Write( bufer, 0, ByteSize );//пишем на диск
+                                            SizeUploaded += ByteSize;
+                                            uploaded?.Invoke( SizeUploaded );
+                                            count--;
+                                        }
+                                        catch { }
                                     }
                                     while
                                     (!token.IsCancellationRequested &&
