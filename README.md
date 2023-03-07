@@ -26,4 +26,4 @@ The project is developing, but to be honest, sometimes there is simply not enoug
 
 **15.02.2023** Added the ability to download files by links.
 
-* * 5.03.2023 * * Added the ability to encrypt any resolution, to single and in directories.
+**5.03.2023** Added the ability to encrypt any resolution, to single and in directories.
