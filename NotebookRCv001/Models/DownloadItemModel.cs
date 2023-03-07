@@ -460,7 +460,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = !File.Exists( FullPath );
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; };

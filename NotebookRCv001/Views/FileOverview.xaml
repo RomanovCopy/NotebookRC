@@ -14,7 +14,7 @@
         Title="FileOverview" 
         Name="window"
         MinHeight="250" 
-        MinWidth="820" HorizontalContentAlignment="Stretch">
+        MinWidth="600" HorizontalContentAlignment="Stretch">
     <Window.Resources>
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
