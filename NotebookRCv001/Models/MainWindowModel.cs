@@ -121,13 +121,13 @@ namespace NotebookRCv001.Models
             Language = new Languages();
             Language.PropertyChanged += ( s, e ) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
             //восстанавливаем размеры и положение окна
-            if (Properties.Settings.Default.FirstStart)
+            if (Properties.Settings.Default.FileOverviewFirstStart)
             {
-                WindowHeight = 30;
-                WindowWidth = 70;
-                WindowLeft = 10;
-                WindowTop = 10;
-                Properties.Settings.Default.FirstStart = false;
+                WindowHeight = 40;
+                WindowWidth = 40;
+                WindowLeft = 40;
+                WindowTop = 40;
+                Properties.Settings.Default.FileOverviewFirstStart = false;
             }
             else
             {

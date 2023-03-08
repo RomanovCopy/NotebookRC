@@ -24,6 +24,16 @@ namespace NotebookRCv001.ViewModels
         public object WindowState { get => fileOverviewModel.WindowState; set => fileOverviewModel.WindowState = value; }
         #endregion
 
+
+        #region ________________ListView Columns____________________________
+
+        /// <summary>
+        /// коллекция размеров колонок по горизонтали(Width)
+        /// </summary>
+        public ObservableCollection<double> ListView_ColumnsWidth => fileOverviewModel.ListView_ColumnsWidth;
+
+        #endregion
+
         public ObservableCollection<string> Headers => fileOverviewModel.Headers;
 
         public ObservableCollection<string> ToolTips => fileOverviewModel.ToolTips;
@@ -36,8 +46,8 @@ namespace NotebookRCv001.ViewModels
             fileOverviewModel.PropertyChanged += ( s, e ) => OnPropertyChanged( e.PropertyName );
         }
 
-
-
+        public ICommand WindowSizeChanged => windowSizeChanged ??= new RelayCommand( fileOverviewModel.Execute_WindowSizeChanged, fileOverviewModel.CanExecute_WindowSizeChanged );
+        private RelayCommand windowSizeChanged;
         public ICommand WindowLoaded => windowLoaded ??= new RelayCommand
             ( fileOverviewModel.Execute_WindowLoaded, fileOverviewModel.CanExecute_WindowLoaded );
         private RelayCommand windowLoaded;

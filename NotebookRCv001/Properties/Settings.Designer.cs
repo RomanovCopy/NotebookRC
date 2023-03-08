@@ -1051,5 +1051,88 @@ namespace NotebookRCv001.Properties {
                 this["EncryptPathtoLastDirectorySave"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection FileOverview_ListViewColumnsWidth {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FileOverview_ListViewColumnsWidth"]));
+            }
+            set {
+                this["FileOverview_ListViewColumnsWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public double FileOverviewWidth {
+            get {
+                return ((double)(this["FileOverviewWidth"]));
+            }
+            set {
+                this["FileOverviewWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public double FileOverviewHeight {
+            get {
+                return ((double)(this["FileOverviewHeight"]));
+            }
+            set {
+                this["FileOverviewHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public double FileOverviewTop {
+            get {
+                return ((double)(this["FileOverviewTop"]));
+            }
+            set {
+                this["FileOverviewTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public double FileOverviewLeft {
+            get {
+                return ((double)(this["FileOverviewLeft"]));
+            }
+            set {
+                this["FileOverviewLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public string FileOverviewState {
+            get {
+                return ((string)(this["FileOverviewState"]));
+            }
+            set {
+                this["FileOverviewState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FileOverviewFirstStart {
+            get {
+                return ((bool)(this["FileOverviewFirstStart"]));
+            }
+            set {
+                this["FileOverviewFirstStart"] = value;
+            }
+        }
     }
 }

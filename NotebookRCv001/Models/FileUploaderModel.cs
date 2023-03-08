@@ -18,6 +18,7 @@ using NotebookRCv001.Helpers;
 using System.IO;
 using System.Windows.Forms;
 using NotebookRCv001.Views;
+using NotebookRCv001.Converters;
 
 namespace NotebookRCv001.Models
 {
@@ -376,6 +377,12 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                if(obj is Page page)
+                {
+                    var convert = (ColumnsWidthConverter)page.FindResource( "columnswidth" );
+                    if (convert != null)
+                        convert.window = System.Windows.Application.Current.MainWindow;
+                }
                 string path = Properties.Settings.Default.DirectoryPathWithDownloadedFiles;
                 if (!string.IsNullOrWhiteSpace( path ) && Directory.Exists( path ))
                 {
@@ -384,6 +391,7 @@ namespace NotebookRCv001.Models
                 }
                 if (!string.IsNullOrWhiteSpace( Properties.Settings.Default.DirectoryPathWithDownloadedFiles ))
                     homeMenuFileViewModel.WorkingDirectory = Properties.Settings.Default.DirectoryPathWithDownloadedFiles;
+                OnPropertyChanged( "ListView_ColumnsWidth" );
             }
             catch (Exception e) { ErrorWindow( e ); }
         }

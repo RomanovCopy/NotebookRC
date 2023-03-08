@@ -19,6 +19,7 @@
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
             <viewmodels:FileOverviewViewModel x:Key="viewmodel"/>
+            <converters:ColumnsWidthConverter x:Key="columnswidth"/>
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -47,15 +48,48 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
-            
+            <GroupBox HorizontalContentAlignment="Stretch">
+                <GroupBox.Header>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox  Grid.Column="0" Width="100"/>
+                            <TextBlock Height="20" Text="Romanov" Grid.Column="1" Width="300" Margin="20,0,20,0"/>
+                        </Grid>
+                </GroupBox.Header>
+                <ListView>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                            </GridViewColumn>
+                            <GridViewColumn Header="Type" Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                            </GridViewColumn>
+                            <GridViewColumn Header="Size" Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                            </GridViewColumn>
+                            <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, ConverterParameter=last, Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}">
+
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
         </Border>
     </Grid>
     <i:Interaction.Triggers>
+        <i:EventTrigger EventName="SizeChanged">
+            <i:InvokeCommandAction Command="{Binding WindowSizeChanged, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{ Binding WindowClosing, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding WindowLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+            <i:InvokeCommandAction Command="{Binding WindowLoaded, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=window, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 </Window>

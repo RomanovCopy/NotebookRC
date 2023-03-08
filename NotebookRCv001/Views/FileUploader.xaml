@@ -306,7 +306,7 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=Page, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="SizeChanged">
             <i:InvokeCommandAction Command="{Binding PageSizeChanged, UpdateSourceTrigger=PropertyChanged}"/>
