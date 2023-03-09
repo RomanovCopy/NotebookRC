@@ -9,6 +9,7 @@ using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.IO;
 
 namespace NotebookRCv001.ViewModels
 {
@@ -37,8 +38,11 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<string> Headers => fileOverviewModel.Headers;
 
         public ObservableCollection<string> ToolTips => fileOverviewModel.ToolTips;
+        public ObservableCollection<object> CurrentDirectory => fileOverviewModel.CurrentDirectory;
 
+        public ObservableCollection<DriveInfo> DriveInfos => fileOverviewModel.DriveInfos;
 
+        public int SelectedIndex { get => fileOverviewModel.SelectedIndex; set => fileOverviewModel.SelectedIndex = value; }
 
         public FileOverviewViewModel()
         {
@@ -46,6 +50,12 @@ namespace NotebookRCv001.ViewModels
             fileOverviewModel.PropertyChanged += ( s, e ) => OnPropertyChanged( e.PropertyName );
         }
 
+        public ICommand ComboBoxLoaded => comboBoxLoaded ??= new RelayCommand( fileOverviewModel.Execute_ComboBoxLoaded,
+            fileOverviewModel.CanExecute_ComboBoxLoaded );
+        private RelayCommand comboBoxLoaded;
+        public ICommand ComboBoxSelectionChanged => comboBoxSelectionChanged ??= new RelayCommand( fileOverviewModel.Execute_ComboBoxSelectionChanged,
+            fileOverviewModel.CanExecute_ComboBoxSelectionChanged );
+        private RelayCommand comboBoxSelectionChanged;
         public ICommand WindowSizeChanged => windowSizeChanged ??= new RelayCommand( fileOverviewModel.Execute_WindowSizeChanged, fileOverviewModel.CanExecute_WindowSizeChanged );
         private RelayCommand windowSizeChanged;
         public ICommand WindowLoaded => windowLoaded ??= new RelayCommand

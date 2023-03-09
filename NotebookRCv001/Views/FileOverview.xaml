@@ -11,7 +11,6 @@
         xmlns:local="clr-namespace:NotebookRCv001.Views"
         mc:Ignorable="d"
         Style="{StaticResource ScriptEditorStyle}"
-        Title="FileOverview" 
         Name="window"
         MinHeight="250" 
         MinWidth="600" HorizontalContentAlignment="Stretch">
@@ -39,6 +38,9 @@
     <Window.Left>
         <Binding Path="WindowLeft" Converter="{StaticResource sizeconverter}" ConverterParameter="left" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.Left>
+    <Window.Title>
+        <Binding Path="Headers[0]" UpdateSourceTrigger="PropertyChanged"/>
+    </Window.Title>
     <Window.WindowState>
         <Binding Path="WindowState" Converter="{StaticResource sizeconverter}" 
                  ConverterParameter="state" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
@@ -50,29 +52,52 @@
         <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
             <GroupBox HorizontalContentAlignment="Stretch">
                 <GroupBox.Header>
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox  Grid.Column="0" Width="100"/>
-                            <TextBlock Height="20" Text="Romanov" Grid.Column="1" Width="300" Margin="20,0,20,0"/>
-                        </Grid>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:InvokeCommandAction Command="{Binding ComboBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=drives, UpdateSourceTrigger=PropertyChanged}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding ComboBoxSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=drives, Path=SelectedItem, 
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                        <TextBlock Height="20" Text="Romanov" Grid.Column="1" Width="300" Margin="20,0,20,0"/>
+                    </Grid>
                 </GroupBox.Header>
-                <ListView>
+                <ListView ItemsSource="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name" Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                             </GridViewColumn>
-                            <GridViewColumn Header="Type" Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                             </GridViewColumn>
-                            <GridViewColumn Header="Size" Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
-                            </GridViewColumn>
-                            <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, ConverterParameter=last, Mode=TwoWay, 
-                                UpdateSourceTrigger=PropertyChanged}">
+                            <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
+                                ConverterParameter=last, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                             </GridViewColumn>
                         </GridView>
@@ -86,7 +111,8 @@
             <i:InvokeCommandAction Command="{Binding WindowSizeChanged, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{ Binding WindowClosing, UpdateSourceTrigger=PropertyChanged}"/>
+            <i:InvokeCommandAction Command="{ Binding WindowClosing, UpdateSourceTrigger=PropertyChanged}" 
+                                   CommandParameter="{Binding ElementName=window}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding WindowLoaded, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=window, UpdateSourceTrigger=PropertyChanged}"/>

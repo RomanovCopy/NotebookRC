@@ -444,13 +444,18 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-
+                    "Обзор файлов",//00
+                    "Имя",//01
+                    "Тип",//02
+                    "Размер",//03
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
                 {
-
-
+                     "Browse Files",//00
+                     "Name",//01
+                     "Type",//02
+                     "Size",//03
                 }
                 }
             };
