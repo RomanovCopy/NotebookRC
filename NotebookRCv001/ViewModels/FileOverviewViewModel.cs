@@ -36,12 +36,9 @@ namespace NotebookRCv001.ViewModels
         #endregion
 
         public ObservableCollection<string> Headers => fileOverviewModel.Headers;
-
         public ObservableCollection<string> ToolTips => fileOverviewModel.ToolTips;
-        public ObservableCollection<object> CurrentDirectory => fileOverviewModel.CurrentDirectory;
-
+        public ObservableCollection<(string, string, double, object)> CurrentDirectory => fileOverviewModel.CurrentDirectory;
         public ObservableCollection<DriveInfo> DriveInfos => fileOverviewModel.DriveInfos;
-
         public int SelectedIndex { get => fileOverviewModel.SelectedIndex; set => fileOverviewModel.SelectedIndex = value; }
 
         public FileOverviewViewModel()

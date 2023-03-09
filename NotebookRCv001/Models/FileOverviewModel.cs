@@ -19,19 +19,47 @@ using System.Printing;
 
 namespace NotebookRCv001.Models
 {
+    internal class DirectoryItem
+    {
+        internal string Name { get; set; }
+        internal string FileExtension { get; set; }
+        internal string Size { get; set; }
+        internal object Tag { get; set; }
+
+        internal DirectoryItem( object info )
+        {
+            Tag = info;
+            if (info is DirectoryInfo dir)
+                GetDirectoryInfo( dir );
+            else if (info is DriveInfo drive)
+                GetDriveInfo( drive );
+            else if (info is FileInfo file)
+                GetFileInfo( file );
+            else
+                return;
+        }
+
+        private void GetDriveInfo( DriveInfo driveInfo )
+        {
+            Name = driveInfo.Name;
+            FileExtension = "Drive";
+            Size = driveInfo.TotalFreeSpace.ToString();
+        }
+        private void GetDirectoryInfo( DirectoryInfo directoryInfo )
+        {
+
+        }
+        private void GetFileInfo(FileInfo fileInfo )
+        {
+
+        }
+    }
+
     internal class FileOverviewModel : ViewModelBase
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private Languages language => mainWindowViewModel.Language;
-
-        public class DirectoryItem
-        {
-            public string Name { get; set; }
-            public string Type { get; set; }
-            public double Size { get; set; }
-            public object Tag { get; set; }
-        }
 
 
         #region ________________Sizes and Position________________________
@@ -71,24 +99,12 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// содержимое текущей директории
         /// </summary>
-        internal ObservableCollection<object> CurrentDirectory 
-        { 
-            get => currentDirectory; 
-            set => SetProperty( ref currentDirectory, value ); 
+        internal ObservableCollection<(string, string, double, object)> CurrentDirectory
+        {
+            get => currentDirectory;
+            set => SetProperty( ref currentDirectory, value );
         }
-        private ObservableCollection<object> currentDirectory;
-        /// <summary>
-        /// все каталоги текущей директории
-        /// </summary>
-        internal ObservableCollection<DirectoryInfo> DirectoriesDirectories { get => directoriesDirectories; 
-            set => SetProperty( ref directoriesDirectories, value ); }
-        private ObservableCollection<DirectoryInfo> directoriesDirectories;
-        /// <summary>
-        /// все файлы текущей директории
-        /// </summary>
-        internal ObservableCollection<FileInfo> DirectoryFiles { get => directoryFiles; set => SetProperty( ref directoryFiles, value ); }
-        private ObservableCollection<FileInfo> directoryFiles;
-
+        private ObservableCollection<(string, string, double, object)> currentDirectory;
         /// <summary>
         /// коллекция доступных для работы дисков
         /// </summary>
@@ -172,7 +188,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = obj != null;
+                c = true;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -183,17 +199,15 @@ namespace NotebookRCv001.Models
             {
                 if (obj is DriveInfo drive)
                 {
-                    DirectoriesDirectories = new();
-                    DirectoryFiles = new();
                     CurrentDirectory = new();
-                    foreach(var dir in drive.RootDirectory.EnumerateDirectories())
+                    foreach (var dir in drive.RootDirectory.EnumerateDirectories())
                     {
-                        var item = new DirectoryItem() { Name = dir.Name, Type = dir.GetType().ToString(), Size = 0, Tag = dir };
+                        var item = (dir.Name, "Directory", 0, dir);
                         CurrentDirectory.Add( item );
                     }
-                    foreach(var file in drive.RootDirectory.EnumerateFiles())
+                    foreach (var file in drive.RootDirectory.EnumerateFiles())
                     {
-                        DirectoryFiles.Add( file );
+
                     }
                 }
             }
@@ -285,7 +299,7 @@ namespace NotebookRCv001.Models
                 }
                 propert.FileOverviewState = WindowState.ToString();
                 propert.FileOverview_ListViewColumnsWidth = new();
-                foreach(var width in ListView_ColumnsWidth)
+                foreach (var width in ListView_ColumnsWidth)
                 {
                     propert.FileOverview_ListViewColumnsWidth.Add( width.ToString() );
                 }

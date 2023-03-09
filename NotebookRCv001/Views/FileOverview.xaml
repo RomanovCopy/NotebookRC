@@ -74,7 +74,9 @@
                         <TextBlock Height="20" Text="Romanov" Grid.Column="1" Width="300" Margin="20,0,20,0"/>
                     </Grid>
                 </GroupBox.Header>
-                <ListView ItemsSource="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}">
+                <ListView ItemsSource="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                          HorizontalAlignment="Stretch" Focusable="True"
+                   VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
@@ -82,19 +84,27 @@
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Item1, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" 
                                             Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, 
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Item2, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
                                             Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, 
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Item3, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
                                 ConverterParameter=last, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
