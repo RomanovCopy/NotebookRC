@@ -76,7 +76,10 @@
                                 Command="{Binding ToParentDirectory, UpdateSourceTrigger=PropertyChanged}">
                             <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True" />
                         </Button>
-                        <TextBlock Height="20" Text="Romanov" Grid.Column="2" Width="300" Margin="20,0,20,0"/>
+                        <Border Grid.Column="2" BorderBrush="White" BorderThickness="1" CornerRadius="10" >
+                            <TextBlock Height="20" Text="{Binding CurrentDirectoryFullName , UpdateSourceTrigger=PropertyChanged}" 
+                                   Width="450" Margin="10,0,10,0" />
+                        </Border>
                     </Grid>
                 </GroupBox.Header>
                 <ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
@@ -93,12 +96,13 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" 
+                            <GridViewColumn Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
                                             Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, 
-                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=FileExtension, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Path=FileExtension, UpdateSourceTrigger=PropertyChanged}" Foreground="White"
+                                                   TextAlignment="Center"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -107,7 +111,8 @@
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Size, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Path=Size, UpdateSourceTrigger=PropertyChanged}" Foreground="White"
+                                                   TextAlignment="Center"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

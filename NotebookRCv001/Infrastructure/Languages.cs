@@ -766,7 +766,7 @@ namespace NotebookRCv001.Infrastructure
                         "Edit File",//06
                         "Synchronization",//07
                         "Uploading files",//08
-                        "File Overview",//09
+                        "Browse Files",//09
                     }
                 }
             };

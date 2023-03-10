@@ -16,6 +16,7 @@ using NotebookRCv001.Converters;
 using System.IO;
 using NotebookRCv001.Helpers;
 using System.Printing;
+using System.Security.AccessControl;
 
 namespace NotebookRCv001.Models
 {
@@ -51,7 +52,7 @@ namespace NotebookRCv001.Models
             FileExtension = "Folder";
             Size = "------";
         }
-        private void GetFileInfo(FileInfo fileInfo )
+        private void GetFileInfo( FileInfo fileInfo )
         {
             Name = Path.GetFileNameWithoutExtension( fileInfo.FullName );
             FileExtension = fileInfo.Extension;
@@ -64,11 +65,17 @@ namespace NotebookRCv001.Models
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private Languages language => mainWindowViewModel.Language;
+
         /// <summary>
         /// открытый в окне каталог(для диска - null)
         /// </summary>
-        private DirectoryInfo currentDirectory { get; set; }
-
+        internal DirectoryInfo CurrentDirectory { get => currentDirectory; set => SetProperty( ref currentDirectory, value ); }
+        private DirectoryInfo currentDirectory;
+        /// <summary>
+        /// полный путь к открытому в окне каталогу
+        /// </summary>
+        internal string CurrentDirectoryFullName { get => currentDirectoryFullName; set => SetProperty( ref currentDirectoryFullName, value ); }
+        private string currentDirectoryFullName;
 
         #region ________________Sizes and Position________________________
 
@@ -181,6 +188,7 @@ namespace NotebookRCv001.Models
                 SelectedIndex = 0;
                 if (CanExecute_ComboBoxSelectionChanged( DriveInfos[SelectedIndex] ))
                     Execute_ComboBoxSelectionChanged( DriveInfos[SelectedIndex] );
+                CurrentDirectoryFullName = DriveInfos[SelectedIndex].Name;
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -205,14 +213,14 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if(obj is DriveInfo driveInfo)
+                if (obj is DriveInfo driveInfo)
                 {
                     CurrentDirectoryList = new();
                     foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
                         CurrentDirectoryList.Add( new DirectoryItem( folder ) );
                     foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
                         CurrentDirectoryList.Add( new DirectoryItem( file ) );
-                    currentDirectory = null;
+                    CurrentDirectory = null;
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -228,21 +236,21 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = currentDirectory?.Parent != null;
+                c = CurrentDirectory?.Parent != null;
                 return c;
             }
-            catch(Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ToParentDirectory( object obj )
         {
             try
             {
-                if (currentDirectory.Parent != null)
+                if (CurrentDirectory.Parent != null)
                 {
-                    CurrentDirectoryList = GetCurrentDirectory( currentDirectory.Parent );
+                    CurrentDirectoryList = GetCurrentDirectoryList( CurrentDirectory.Parent );
                 }
             }
-            catch(Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// изменение выбора в ListView
@@ -258,22 +266,22 @@ namespace NotebookRCv001.Models
                 c = obj != null;
                 return c;
             }
-            catch(Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ListView_SelectionChanged( object obj )
         {
             try
             {
-                if(obj is DirectoryItem dir && dir.Tag is DirectoryInfo dirInfo)
+                if (obj is DirectoryItem dir && dir.Tag is DirectoryInfo dirInfo)
                 {
-                    CurrentDirectoryList = GetCurrentDirectory( dirInfo );
+                    CurrentDirectoryList = GetCurrentDirectoryList( dirInfo );
                 }
-                else if(obj is DirectoryItem file && file.Tag is FileInfo fileInfo)
+                else if (obj is DirectoryItem file && file.Tag is FileInfo fileInfo)
                 {
 
                 }
             }
-            catch(Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// при изменении размеров окна
@@ -410,20 +418,20 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="directoryInfo">каталог</param>
         /// <returns>коллекция папок и файлов</returns>
-        private ObservableCollection<DirectoryItem>GetCurrentDirectory(DirectoryInfo directoryInfo )
+        private ObservableCollection<DirectoryItem> GetCurrentDirectoryList( DirectoryInfo directoryInfo )
         {
             ObservableCollection<DirectoryItem> list = new();
             try
             {
-                var control = directoryInfo.GetAccessControl();
                 foreach (var folder in directoryInfo.GetDirectories())
                     list.Add( new DirectoryItem( folder ) );
                 foreach (var file in directoryInfo.GetFiles())
                     list.Add( new DirectoryItem( file ) );
-                currentDirectory = directoryInfo;
+                CurrentDirectory = directoryInfo;
+                CurrentDirectoryFullName = directoryInfo.FullName;
                 return list;
             }
-            catch(Exception e) { ErrorWindow( e ); return list; }
+            catch (Exception e) { ErrorWindow( e ); return CurrentDirectoryList; }
 
         }
 

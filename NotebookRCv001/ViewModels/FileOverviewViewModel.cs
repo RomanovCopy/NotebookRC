@@ -40,6 +40,9 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<DirectoryItem> CurrentDirectoryList => fileOverviewModel.CurrentDirectoryList;
         public ObservableCollection<DriveInfo> DriveInfos => fileOverviewModel.DriveInfos;
         public int SelectedIndex { get => fileOverviewModel.SelectedIndex; set => fileOverviewModel.SelectedIndex = value; }
+        public DirectoryInfo CurrentDirectory => fileOverviewModel.CurrentDirectory;
+        public string CurrentDirectoryFullName => fileOverviewModel.CurrentDirectoryFullName;
+
 
         public FileOverviewViewModel()
         {
