@@ -131,6 +131,7 @@
     <None Remove="Resources\Images\030_reload_mini.png" />
     <None Remove="Resources\Images\031linespacingdecrease.png" />
     <None Remove="Resources\Images\032linespacingincrease .png" />
+    <None Remove="Resources\Images\033UpFileOverview.png" />
     <None Remove="Resources\start.bmp" />
   </ItemGroup>
 
@@ -206,6 +207,7 @@
     <Resource Include="Resources\Images\030_reload_mini.png" />
     <Resource Include="Resources\Images\031linespacingdecrease.png" />
     <Resource Include="Resources\Images\032linespacingincrease .png" />
+    <Resource Include="Resources\Images\033UpFileOverview.png" />
   </ItemGroup>
 
   <ItemGroup>

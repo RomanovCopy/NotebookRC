@@ -37,7 +37,7 @@ namespace NotebookRCv001.ViewModels
 
         public ObservableCollection<string> Headers => fileOverviewModel.Headers;
         public ObservableCollection<string> ToolTips => fileOverviewModel.ToolTips;
-        public ObservableCollection<(string, string, double, object)> CurrentDirectory => fileOverviewModel.CurrentDirectory;
+        public ObservableCollection<DirectoryItem> CurrentDirectoryList => fileOverviewModel.CurrentDirectoryList;
         public ObservableCollection<DriveInfo> DriveInfos => fileOverviewModel.DriveInfos;
         public int SelectedIndex { get => fileOverviewModel.SelectedIndex; set => fileOverviewModel.SelectedIndex = value; }
 
@@ -53,6 +53,12 @@ namespace NotebookRCv001.ViewModels
         public ICommand ComboBoxSelectionChanged => comboBoxSelectionChanged ??= new RelayCommand( fileOverviewModel.Execute_ComboBoxSelectionChanged,
             fileOverviewModel.CanExecute_ComboBoxSelectionChanged );
         private RelayCommand comboBoxSelectionChanged;
+        public ICommand ToParentDirectory => toParentDirectory ??= new RelayCommand( fileOverviewModel.Execute_ToParentDirectory,
+            fileOverviewModel.CanExecute_ToParentDirectory );
+        private RelayCommand toParentDirectory;
+        public ICommand ListView_SelectionChanged => listView_SelectionChanged ??= new RelayCommand(
+            fileOverviewModel.Execute_ListView_SelectionChanged, fileOverviewModel.CanExecute_ListView_SelectionChanged );
+        private RelayCommand listView_SelectionChanged;
         public ICommand WindowSizeChanged => windowSizeChanged ??= new RelayCommand( fileOverviewModel.Execute_WindowSizeChanged, fileOverviewModel.CanExecute_WindowSizeChanged );
         private RelayCommand windowSizeChanged;
         public ICommand WindowLoaded => windowLoaded ??= new RelayCommand

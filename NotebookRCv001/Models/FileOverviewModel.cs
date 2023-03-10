@@ -19,14 +19,14 @@ using System.Printing;
 
 namespace NotebookRCv001.Models
 {
-    internal class DirectoryItem
+    public class DirectoryItem
     {
-        internal string Name { get; set; }
-        internal string FileExtension { get; set; }
-        internal string Size { get; set; }
-        internal object Tag { get; set; }
+        public string Name { get; set; }
+        public string FileExtension { get; set; }
+        public string Size { get; set; }
+        public object Tag { get; set; }
 
-        internal DirectoryItem( object info )
+        public DirectoryItem( object info )
         {
             Tag = info;
             if (info is DirectoryInfo dir)
@@ -47,11 +47,15 @@ namespace NotebookRCv001.Models
         }
         private void GetDirectoryInfo( DirectoryInfo directoryInfo )
         {
-
+            Name = directoryInfo.Name;
+            FileExtension = "Folder";
+            Size = "------";
         }
         private void GetFileInfo(FileInfo fileInfo )
         {
-
+            Name = Path.GetFileNameWithoutExtension( fileInfo.FullName );
+            FileExtension = fileInfo.Extension;
+            Size = fileInfo.Length.ToString();
         }
     }
 
@@ -99,12 +103,12 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// содержимое текущей директории
         /// </summary>
-        internal ObservableCollection<(string, string, double, object)> CurrentDirectory
+        internal ObservableCollection<DirectoryItem> CurrentDirectoryList
         {
-            get => currentDirectory;
-            set => SetProperty( ref currentDirectory, value );
+            get => currentDirectoryList;
+            set => SetProperty( ref currentDirectoryList, value );
         }
-        private ObservableCollection<(string, string, double, object)> currentDirectory;
+        private ObservableCollection<DirectoryItem> currentDirectoryList;
         /// <summary>
         /// коллекция доступных для работы дисков
         /// </summary>
@@ -197,23 +201,66 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is DriveInfo drive)
+                if(obj is DriveInfo driveInfo)
                 {
-                    CurrentDirectory = new();
-                    foreach (var dir in drive.RootDirectory.EnumerateDirectories())
-                    {
-                        var item = (dir.Name, "Directory", 0, dir);
-                        CurrentDirectory.Add( item );
-                    }
-                    foreach (var file in drive.RootDirectory.EnumerateFiles())
-                    {
-
-                    }
+                    CurrentDirectoryList = new();
+                    foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
+                        CurrentDirectoryList.Add( new DirectoryItem( folder ) );
+                    foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
+                        CurrentDirectoryList.Add( new DirectoryItem( file ) );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+        /// <summary>
+        /// нажатие кнопки перемещения в родительскую директорию (Up)
+        /// </summary>
+        /// <param name="obj">null</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ToParentDirectory( object obj )
+        {
+            try
+            {
+                bool c = false;
+                
+            }
+        }
+        internal void Execute_ToParentDirectory( object obj )
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// изменение выбора в ListView
+        /// </summary>
+        /// <param name="obj">SelectedItem(DirectoryItem)</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ListView_SelectionChanged( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = obj != null;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_ListView_SelectionChanged( object obj )
+        {
+            try
+            {
+                if(obj is DirectoryItem dir && dir.Tag is DirectoryInfo dirInfo)
+                {
+                    CurrentDirectoryList = GetCurrentDirectory( dirInfo );
+                }
+                else if(obj is DirectoryItem file && file.Tag is FileInfo fileInfo)
+                {
 
+                }
+            }
+            catch(Exception e) { ErrorWindow( e ); }
+        }
         /// <summary>
         /// при изменении размеров окна
         /// </summary>
@@ -344,6 +391,26 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); return driveInfos; }
         }
+        /// <summary>
+        /// получение всех папок и файлов из заданного каталога
+        /// </summary>
+        /// <param name="directoryInfo">каталог</param>
+        /// <returns>коллекция папок и файлов</returns>
+        private ObservableCollection<DirectoryItem>GetCurrentDirectory(DirectoryInfo directoryInfo )
+        {
+            ObservableCollection<DirectoryItem> list = new();
+            try
+            {
+                foreach (var folder in directoryInfo.GetDirectories())
+                    list.Add( new DirectoryItem( folder ) );
+                foreach (var file in directoryInfo.GetFiles())
+                    list.Add( new DirectoryItem( file ) );
+                return list;
+            }
+            catch(Exception e) { ErrorWindow( e ); return list; }
+
+        }
+
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {

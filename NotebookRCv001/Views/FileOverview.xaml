@@ -47,13 +47,14 @@
     </Window.WindowState>
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
             <GroupBox HorizontalContentAlignment="Stretch">
                 <GroupBox.Header>
                     <Grid >
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
@@ -71,10 +72,13 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
-                        <TextBlock Height="20" Text="Romanov" Grid.Column="1" Width="300" Margin="20,0,20,0"/>
+                        <Button Grid.Column="1" Width="20" Height="20" Template="{StaticResource FlatButtonControlTemplate}" IsEnabled="True">
+                            <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True"/>
+                        </Button>
+                        <TextBlock Height="20" Text="Romanov" Grid.Column="2" Width="300" Margin="20,0,20,0"/>
                     </Grid>
                 </GroupBox.Header>
-                <ListView ItemsSource="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" 
+                <ListView x:Name="list" ItemsSource="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" 
                           HorizontalAlignment="Stretch" Focusable="True"
                    VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <ListView.View>
@@ -84,7 +88,7 @@
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Item1, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -93,7 +97,7 @@
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Item2, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Path=FileExtension, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -102,16 +106,26 @@
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Item3, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Path=Size, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
                                 ConverterParameter=last, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="" Foreground="White"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding ListView_SelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding ElementName=list, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListView>
             </GroupBox>
         </Border>
