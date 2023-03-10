@@ -64,6 +64,10 @@ namespace NotebookRCv001.Models
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private Languages language => mainWindowViewModel.Language;
+        /// <summary>
+        /// открытый в окне каталог(для диска - null)
+        /// </summary>
+        private DirectoryInfo currentDirectory { get; set; }
 
 
         #region ________________Sizes and Position________________________
@@ -208,6 +212,7 @@ namespace NotebookRCv001.Models
                         CurrentDirectoryList.Add( new DirectoryItem( folder ) );
                     foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
                         CurrentDirectoryList.Add( new DirectoryItem( file ) );
+                    currentDirectory = null;
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -223,12 +228,21 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                
+                c = currentDirectory?.Parent != null;
+                return c;
             }
+            catch(Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ToParentDirectory( object obj )
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (currentDirectory.Parent != null)
+                {
+                    CurrentDirectoryList = GetCurrentDirectory( currentDirectory.Parent );
+                }
+            }
+            catch(Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
         /// изменение выбора в ListView
@@ -401,10 +415,12 @@ namespace NotebookRCv001.Models
             ObservableCollection<DirectoryItem> list = new();
             try
             {
+                var control = directoryInfo.GetAccessControl();
                 foreach (var folder in directoryInfo.GetDirectories())
                     list.Add( new DirectoryItem( folder ) );
                 foreach (var file in directoryInfo.GetFiles())
                     list.Add( new DirectoryItem( file ) );
+                currentDirectory = directoryInfo;
                 return list;
             }
             catch(Exception e) { ErrorWindow( e ); return list; }

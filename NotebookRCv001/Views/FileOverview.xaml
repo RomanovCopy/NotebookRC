@@ -45,12 +45,12 @@
         <Binding Path="WindowState" Converter="{StaticResource sizeconverter}" 
                  ConverterParameter="state" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.WindowState>
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
-            <GroupBox HorizontalContentAlignment="Stretch">
+            <GroupBox HorizontalContentAlignment="Stretch" >
                 <GroupBox.Header>
                     <Grid >
                         <Grid.ColumnDefinitions>
@@ -72,15 +72,16 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
-                        <Button Grid.Column="1" Width="20" Height="20" Template="{StaticResource FlatButtonControlTemplate}" IsEnabled="True">
-                            <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True"/>
+                        <Button Grid.Column="1" Width="24" Height="24" Template="{StaticResource FlatButtonControlTemplate}"
+                                Command="{Binding ToParentDirectory, UpdateSourceTrigger=PropertyChanged}">
+                            <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True" />
                         </Button>
                         <TextBlock Height="20" Text="Romanov" Grid.Column="2" Width="300" Margin="20,0,20,0"/>
                     </Grid>
                 </GroupBox.Header>
-                <ListView x:Name="list" ItemsSource="{Binding CurrentDirectory, UpdateSourceTrigger=PropertyChanged}" 
-                          HorizontalAlignment="Stretch" Focusable="True"
-                   VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                <ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
+                          HorizontalAlignment="Stretch" Focusable="True" VirtualizingPanel.IsVirtualizing="True" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
