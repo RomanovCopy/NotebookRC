@@ -22,10 +22,11 @@ namespace NotebookRCv001.Models
 {
     public class DirectoryItem
     {
-        public string Name { get; set; }
-        public string FileExtension { get; set; }
-        public string Size { get; set; }
-        public object Tag { get; set; }
+        public string Name { get; private set; }
+        public string FileExtension { get; private set; }
+        public string Size { get; private set; }
+        public string Date { get; private set; }
+        public object Tag { get; private set; }
 
         public DirectoryItem( object info )
         {
@@ -45,18 +46,21 @@ namespace NotebookRCv001.Models
             Name = driveInfo.Name;
             FileExtension = "Drive";
             Size = driveInfo.TotalFreeSpace.ToString();
+            Date = "-----";
         }
         private void GetDirectoryInfo( DirectoryInfo directoryInfo )
         {
             Name = directoryInfo.Name;
             FileExtension = "Folder";
             Size = "------";
+            Date = directoryInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss" );
         }
         private void GetFileInfo( FileInfo fileInfo )
         {
             Name = Path.GetFileNameWithoutExtension( fileInfo.FullName );
             FileExtension = fileInfo.Extension;
             Size = fileInfo.Length.ToString();
+            Date = fileInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss" );
         }
     }
 
@@ -157,10 +161,10 @@ namespace NotebookRCv001.Models
             //восстанавливаем состояние окна
             WindowState = Properties.Settings.Default.FileOverviewState;
             //устанавливаем размеры колонок
-            //Properties.Settings.Default.FileUploader_ListViewColumnsWidth = null;
+            Properties.Settings.Default.FileOverview_ListViewColumnsWidth = null;
             if (Properties.Settings.Default.FileOverview_ListViewColumnsWidth == null)
                 Properties.Settings.Default.FileOverview_ListViewColumnsWidth = new System.Collections.Specialized.StringCollection()
-                { "40" ,"20" ,"30" ,"10"  };
+                { "40" ,"20" ,"15", "15" ,"10"  };
             ListView_ColumnsWidth.Clear();
             for (int i = 0; i < Properties.Settings.Default.FileOverview_ListViewColumnsWidth.Count; i++)
                 ListView_ColumnsWidth.Add( double.Parse( Properties.Settings.Default.FileOverview_ListViewColumnsWidth[i] ) );

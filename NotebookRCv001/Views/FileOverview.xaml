@@ -116,7 +116,17 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
+                            <GridViewColumn Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}" Foreground="White"
+                                                   TextAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[4], Converter={StaticResource columnswidth}, 
                                 ConverterParameter=last, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
