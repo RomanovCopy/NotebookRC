@@ -17,6 +17,7 @@ using System.IO;
 using NotebookRCv001.Helpers;
 using System.Printing;
 using System.Security.AccessControl;
+using System.Diagnostics;
 
 namespace NotebookRCv001.Models
 {
@@ -68,6 +69,7 @@ namespace NotebookRCv001.Models
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
+        private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
         private Languages language => mainWindowViewModel.Language;
 
         /// <summary>
@@ -142,6 +144,7 @@ namespace NotebookRCv001.Models
             var home = (Views.Home)mainWindowViewModel.FrameList.Where( ( x ) => x is Views.Home ).FirstOrDefault();
             var menu = (MyControls.MenuHome)home.FindResource( "menuhome" );
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource( "menufile" );
+            homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource( "menuencryption" );
             //восстанавливаем размеры и положение окна
             if (Properties.Settings.Default.FileOverviewFirstStart)
             {
@@ -276,13 +279,19 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is DirectoryItem dir && dir.Tag is DirectoryInfo dirInfo)
+                if (obj is IEnumerable<object> list)
                 {
-                    CurrentDirectoryList = GetCurrentDirectoryList( dirInfo );
-                }
-                else if (obj is DirectoryItem file && file.Tag is FileInfo fileInfo)
-                {
-
+                    if (list.FirstOrDefault() is DirectoryItem directory)
+                    {
+                        if (directory.Tag is DirectoryInfo dirInfo)
+                        {//выбран каталог
+                            CurrentDirectoryList = GetCurrentDirectoryList( dirInfo );
+                        }
+                        else if (directory.Tag is FileInfo fileInfo)
+                        {//выбран файл
+                            OpenAFileInTheDefaultApplication( list, false );
+                        }
+                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -379,7 +388,37 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+        internal Process myProcess => process ??= new Process();
+        private Process process;
 
+        /// <summary>
+        /// дешифровка(если установлен ключ) и открытие файла в дефолтном приложении
+        /// </summary>
+        /// <param name="fileInfo">информация об открываемом файле (FileInfo)</param>
+        /// <param name="newWindow">открыть файл в новом окне( True )</param>
+        private void OpenAFileInTheDefaultApplication( IEnumerable<object> list, bool newWindow )
+        {
+            try
+            {
+                foreach (var item in list)
+                {
+                    Process myProcess = new Process();
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.CreateNoWindow = newWindow;
+                    if (item is DirectoryItem dir && dir.Tag is FileInfo info)
+                    {
+                        string path = info.FullName;
+                        if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                        {
+
+                        }
+                        myProcess.StartInfo.FileName = path;
+                        myProcess.Start();
+                    }
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
         /// <summary>
         /// обновление коллекции доступных дисков

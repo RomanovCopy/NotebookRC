@@ -480,7 +480,9 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                new Views.FileOverview().Show();
+                var overview = new Views.FileOverview();
+                overview.Owner = Application.Current.MainWindow;
+                overview.Show();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }

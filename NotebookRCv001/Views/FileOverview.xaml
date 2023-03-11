@@ -139,7 +139,7 @@
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding ListView_SelectionChanged, UpdateSourceTrigger=PropertyChanged}"
-                                                   CommandParameter="{Binding ElementName=list, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+                                                   CommandParameter="{Binding ElementName=list, Path=SelectedItems, UpdateSourceTrigger=PropertyChanged}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>

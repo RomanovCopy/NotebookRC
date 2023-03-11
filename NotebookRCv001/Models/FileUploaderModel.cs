@@ -19,6 +19,7 @@ using System.IO;
 using System.Windows.Forms;
 using NotebookRCv001.Views;
 using NotebookRCv001.Converters;
+using System.Windows.Controls.Primitives;
 
 namespace NotebookRCv001.Models
 {
@@ -30,7 +31,6 @@ namespace NotebookRCv001.Models
         private BehaviorTextBox behaviorTextBox { get; set; }
         private System.Windows.Controls.ListView listView { get; set; }
         internal ObservableCollection<string> Headers => mainWindowViewModel.Language.HeadersFileUploader;
-
         internal ObservableCollection<string> ToolTips => mainWindowViewModel.Language.ToolTipsFileUploader;
 
         /// <summary>
@@ -90,7 +90,6 @@ namespace NotebookRCv001.Models
         /// </summary>
         public Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action behaviorReady;
-
 
         /// <summary>
         /// выбор директории загрузки для коллекции выбранных загрузок
@@ -219,6 +218,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+
         /// <summary>
         /// очистка TextBox url
         /// </summary>
@@ -362,7 +362,6 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
-
         internal bool CanExecute_PageLoaded( object obj )
         {
             try
@@ -414,7 +413,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
-
 
         internal bool CanExecute_PageClose( object obj )
         {
@@ -531,8 +529,6 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
-
-
         private async void ListDownoadItems_CollectionChanged( object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e )
         {
             try
@@ -563,15 +559,11 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); return null; }
         }
-
-
-
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {
             Thread thread = new( () => System.Windows.MessageBox.Show( e.Message, $"FileUploaderModel.{name}" ) );
             thread.SetApartmentState( ApartmentState.STA );
             thread.Start();
         }
-
     }
 }

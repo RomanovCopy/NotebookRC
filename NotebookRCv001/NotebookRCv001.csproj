@@ -12,7 +12,7 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Resources\Icons\icon1.ico</ApplicationIcon>
-    <SignAssembly>False</SignAssembly>
+    <SignAssembly>True</SignAssembly>
     <IsPublishable>True</IsPublishable>
   </PropertyGroup>
 

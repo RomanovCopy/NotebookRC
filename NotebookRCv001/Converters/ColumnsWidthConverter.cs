@@ -16,8 +16,10 @@ namespace NotebookRCv001.Converters
 {
     public class ColumnsWidthConverter : IValueConverter
     {
+        /// <summary>
+        /// родительское окно
+        /// </summary>
         internal Window window { get; set; }
-
         /// <summary>
         /// сумма размеров всех колонок(служит для вычисления размера последней колонки)
         /// </summary>

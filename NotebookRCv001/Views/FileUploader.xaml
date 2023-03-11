@@ -266,7 +266,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn  Header=" " 
+                        <GridViewColumn x:Name="last"  Header=" " 
                                       Width="{Binding ListView_ColumnsWidth[7], Converter={StaticResource columnswidth}, 
                             ConverterParameter=last,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <GridViewColumn.CellTemplate>
