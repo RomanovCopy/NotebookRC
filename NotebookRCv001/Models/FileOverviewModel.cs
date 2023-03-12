@@ -417,11 +417,6 @@ namespace NotebookRCv001.Models
                         {
                             await fs.WriteAsync( bytes, 0, bytes.Length );
                         }
-                        myProcess.EnableRaisingEvents = true;
-                        myProcess.Exited += ( s, e ) =>
-                        {
-
-                        };
                     }
                     myProcess.StartInfo.UseShellExecute = true;
                     myProcess.StartInfo.CreateNoWindow = newWindow;
