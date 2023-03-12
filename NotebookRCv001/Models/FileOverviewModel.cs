@@ -275,7 +275,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
         }
-        internal void Execute_ListView_SelectionChanged( object obj )
+        internal async void Execute_ListView_SelectionChanged( object obj )
         {
             try
             {
@@ -289,7 +289,7 @@ namespace NotebookRCv001.Models
                         }
                         else if (directory.Tag is FileInfo fileInfo)
                         {//выбран файл
-                            OpenAFileInTheDefaultApplication( list, false );
+                            await Task.Factory.StartNew(()=> OpenAFileInTheDefaultApplication( fileInfo, false ));
                         }
                     }
                 }
@@ -396,29 +396,42 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="fileInfo">информация об открываемом файле (FileInfo)</param>
         /// <param name="newWindow">открыть файл в новом окне( True )</param>
-        private void OpenAFileInTheDefaultApplication( IEnumerable<object> list, bool newWindow )
+        private async Task OpenAFileInTheDefaultApplication( FileInfo fileInfo, bool newWindow )
         {
             try
             {
-                foreach (var item in list)
+                string path = fileInfo.FullName;
+                string ext = fileInfo.Extension;
+                using (var myProcess = new Process())
                 {
-                    Process myProcess = new Process();
-                    myProcess.StartInfo.UseShellExecute = true;
-                    myProcess.StartInfo.CreateNoWindow = newWindow;
-                    if (item is DirectoryItem dir && dir.Tag is FileInfo info)
+                    if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
                     {
-                        string path = info.FullName;
-                        if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                        byte[] bytes = new byte[fileInfo.Length];
+                        using (var fs = new FileStream( path, FileMode.OpenOrCreate ))
+                        {
+                            await fs.ReadAsync( bytes, 0, bytes.Length );
+                            bytes = Command_executors.Executors.Decrypt( bytes, homeMenuEncryptionViewModel.KeyCript );
+                        }
+                        path = $"{Environment.CurrentDirectory}/temp/temp{ext}";
+                        using (var fs = new FileStream( path, FileMode.Create ))
+                        {
+                            await fs.WriteAsync( bytes, 0, bytes.Length );
+                        }
+                        myProcess.EnableRaisingEvents = true;
+                        myProcess.Exited += ( s, e ) =>
                         {
 
-                        }
-                        myProcess.StartInfo.FileName = path;
-                        myProcess.Start();
+                        };
                     }
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.CreateNoWindow = newWindow;
+                    myProcess.StartInfo.FileName = path;
+                    myProcess.Start();
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+
 
         /// <summary>
         /// обновление коллекции доступных дисков
