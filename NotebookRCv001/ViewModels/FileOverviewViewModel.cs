@@ -59,9 +59,12 @@ namespace NotebookRCv001.ViewModels
         public ICommand ToParentDirectory => toParentDirectory ??= new RelayCommand( fileOverviewModel.Execute_ToParentDirectory,
             fileOverviewModel.CanExecute_ToParentDirectory );
         private RelayCommand toParentDirectory;
-        public ICommand ListView_SelectionChanged => listView_SelectionChanged ??= new RelayCommand(
-            fileOverviewModel.Execute_ListView_SelectionChanged, fileOverviewModel.CanExecute_ListView_SelectionChanged );
-        private RelayCommand listView_SelectionChanged;
+        public ICommand ListViewNameMouseLeftButtonDown => listViewNameMouseLeftButtonDown ??= new RelayCommand(
+            fileOverviewModel.Execute_ListViewNameMouseLeftButtonDown, fileOverviewModel.CanExecute_ListViewNameMouseLeftButtonDown );
+        private RelayCommand listViewNameMouseLeftButtonDown;
+        public ICommand ListViewNameContextMenuOpen => listViewNameContextMenuOpen ??= new RelayCommand(
+            fileOverviewModel.Execute_ListViewNameContextMenuOpen, fileOverviewModel.CanExecute_ListViewNameContextMenuOpen );
+        private RelayCommand listViewNameContextMenuOpen;
         public ICommand WindowSizeChanged => windowSizeChanged ??= new RelayCommand( fileOverviewModel.Execute_WindowSizeChanged, fileOverviewModel.CanExecute_WindowSizeChanged );
         private RelayCommand windowSizeChanged;
         public ICommand WindowLoaded => windowLoaded ??= new RelayCommand

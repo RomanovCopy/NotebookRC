@@ -87,16 +87,35 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                            <GridViewColumn x:Name="name" Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
                                             Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, 
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                                        <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
+                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="{Binding Source={StaticResource viewmodel}, Path=Headers[5], 
+                                                        UpdateSourceTrigger=PropertyChanged}" 
+                                                              Command="{Binding Source={StaticResource viewmodel}, 
+                                                        Path=ListViewNameContextMenuOpen, UpdateSourceTrigger=PropertyChanged}" 
+                                                              CommandParameter="{Binding RelativeSource= {RelativeSource AncestorType={x:Type Window},
+                                                        Mode=FindAncestor}}"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window},
+                                                        Mode=FindAncestor}, Path=DataContext.ListViewNameMouseLeftButtonDown, 
+                                                        UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=tbname, Path=Tag}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                            <GridViewColumn x:Name="extension" Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
                                             Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, 
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                                 <GridViewColumn.CellTemplate>
@@ -106,7 +125,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                            <GridViewColumn x:Name="size" Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
                                             Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, 
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
@@ -116,7 +135,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                            <GridViewColumn x:Name="date" Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
                                             Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
@@ -126,7 +145,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="" Width="{Binding ListView_ColumnsWidth[4], Converter={StaticResource columnswidth}, 
+                            <GridViewColumn x:Name="last" Header="" Width="{Binding ListView_ColumnsWidth[4], Converter={StaticResource columnswidth}, 
                                 ConverterParameter=last, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -136,12 +155,6 @@
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding ListView_SelectionChanged, UpdateSourceTrigger=PropertyChanged}"
-                                                   CommandParameter="{Binding ElementName=list, Path=SelectedItems, UpdateSourceTrigger=PropertyChanged}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                 </ListView>
             </GroupBox>
         </Border>

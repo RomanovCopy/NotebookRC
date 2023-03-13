@@ -260,42 +260,53 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
         /// <summary>
-        /// изменение выбора в ListView
+        /// выбор элемента
         /// </summary>
-        /// <param name="obj">SelectedItem(DirectoryItem)</param>
+        /// <param name="obj">DirectoryInfo/FileInfo</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_ListView_SelectionChanged( object obj )
+        internal bool CanExecute_ListViewNameMouseLeftButtonDown( object obj )
         {
             try
             {
                 bool c = false;
-                c = obj != null;
+                c = obj is DirectoryInfo;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
         }
-        internal async void Execute_ListView_SelectionChanged( object obj )
+        internal void Execute_ListViewNameMouseLeftButtonDown( object obj )
         {
             try
             {
-                if (obj is IEnumerable<object> list)
-                {
-                    if (list.FirstOrDefault() is DirectoryItem directory)
-                    {
-                        if (directory.Tag is DirectoryInfo dirInfo)
-                        {//выбран каталог
-                            CurrentDirectoryList = GetCurrentDirectoryList( dirInfo );
-                        }
-                        else if (directory.Tag is FileInfo fileInfo)
-                        {//выбран файл
-                            await Task.Factory.StartNew(()=> OpenAFileInTheDefaultApplication( fileInfo, false ));
-                        }
-                    }
-                }
+                OpenFileDirectory( obj );
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+        /// <summary>
+        /// контекстное меню Open
+        /// </summary>
+        /// <param name="obj">DirectoryInfo/FileInfo</param>
+        /// <returns></returns>
+        internal bool CanExecute_ListViewNameContextMenuOpen( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = obj is FileInfo;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_ListViewNameContextMenuOpen( object obj )
+        {
+            try
+            {
+                OpenFileDirectory( obj );
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
         /// <summary>
         /// при изменении размеров окна
         /// </summary>
@@ -388,9 +399,28 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
-        internal Process myProcess => process ??= new Process();
-        private Process process;
 
+
+
+        /// <summary>
+        /// открытие файла/директории
+        /// </summary>
+        /// <param name="obj"></param>
+        private async void OpenFileDirectory(object obj )
+        {
+            try
+            {
+                if (obj is DirectoryInfo dirInfo)
+                {//выбран каталог
+                    await Task.Factory.StartNew(()=> CurrentDirectoryList = GetCurrentDirectoryList( dirInfo ));
+                }
+                else if (obj is FileInfo fileInfo)
+                {//выбран файл
+                    await Task.Factory.StartNew( () => OpenAFileInTheDefaultApplication( fileInfo, false ) );
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
         /// <summary>
         /// дешифровка(если установлен ключ) и открытие файла в дефолтном приложении
         /// </summary>
@@ -426,8 +456,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
-
-
         /// <summary>
         /// обновление коллекции доступных дисков
         /// </summary>
