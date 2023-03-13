@@ -99,7 +99,6 @@ namespace NotebookRCv001.Models
 
         #endregion
 
-
         #region ________________Columns____________________________
 
         /// <summary>
@@ -302,7 +301,10 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                OpenFileDirectory( obj );
+                if (obj is FileInfo fileInfo && homeMenuFileViewModel.SupportedFileExtensions.Any( ( x ) => x == fileInfo.Extension ))
+                    homeMenuFileViewModel.OpenFile.Execute( fileInfo.FullName );
+                else
+                    OpenFileDirectory( obj );
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -373,7 +375,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = obj != null;
+                c = DeletingTemporaryFiles();
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -514,6 +516,26 @@ namespace NotebookRCv001.Models
 
         }
 
+        /// <summary>
+        /// очистка временных файлов
+        /// </summary>
+        /// <returns></returns>
+        private bool DeletingTemporaryFiles()
+        {
+            try
+            {
+                string path = $"{Environment.CurrentDirectory}/temp";
+                if(Directory.Exists(path))
+                {
+                    while( Directory.GetFiles( path ).Length > 0)
+                    {
+                        File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
+                    }
+                }
+                return Directory.GetFiles( path ).Length == 0;
+            }
+            catch { return false; }
+        }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {

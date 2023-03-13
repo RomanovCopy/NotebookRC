@@ -24,7 +24,10 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public ObservableCollection<string> ToolTips => HomeMenuFileModel.ToolTips;
 
-
+        /// <summary>
+        /// поддерживаемые расширения файлов
+        /// </summary>
+        public string[] SupportedFileExtensions => HomeMenuFileModel.SupportedFileExtensions;
         /// <summary>
         /// путь к текущему рабочему каталогу сохранения файла
         /// </summary>

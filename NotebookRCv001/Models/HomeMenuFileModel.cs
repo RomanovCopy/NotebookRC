@@ -32,8 +32,11 @@ namespace NotebookRCv001.Models
         private RichTextBoxViewModel richTextBoxViewModel { get; set; }
         private HomeMenuEncryptionViewModel HomeMenuEncryptionViewModel { get; set; }
         private BehaviorRichTextBox behaviorRichTextBox { get; set; }
-
-
+        /// <summary>
+        /// поддерживаемые расширения файлов
+        /// </summary>
+        internal string[] SupportedFileExtensions => supportedFileExtensions ??= new[] { ".xps", ".txt", ".cs", ".rtf", ".xaml" };
+        private string[] supportedFileExtensions;
         internal ObservableCollection<string> Headers => mainWindowViewModel.Language.HomeMenuFile;
         internal ObservableCollection<string> ToolTips => mainWindowViewModel.Language.ToolTipsHomeMenuFile;
 
