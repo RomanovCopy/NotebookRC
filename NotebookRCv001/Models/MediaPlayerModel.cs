@@ -11,6 +11,8 @@ using NotebookRCv001.ViewModels;
 using System.Windows;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using NotebookRCv001.MyControls;
+using System.Windows.Controls;
 
 namespace NotebookRCv001.Models
 {
@@ -18,8 +20,8 @@ namespace NotebookRCv001.Models
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private Languages language => mainWindowViewModel.Language;
-        private object page { get; set; }
-
+        private Page page { get; set; }
+        private MediaElement player { get; set; }
         public ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         public ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
@@ -27,16 +29,99 @@ namespace NotebookRCv001.Models
         public Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action behaviorReady;
 
+        internal Uri Content { get => content; set => SetProperty( ref content, value ); }
+        private Uri content;
+
 
         internal MediaPlayerModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             language.PropertyChanged += ( s, e ) => OnPropertyChanged( new string[] { "Headers", "ToolTips" } );
+            
+        }
 
+        internal bool CanExecute_Play( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_Play( object obj )
+        {
+            try
+            {
+                Content = new Uri( @"i:\Учебник\GeekBrains\002Введение в программирование\003\002Вебинар.mp4" );
+                if (obj is MediaElement player)
+                    player.Play();
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+        internal bool CanExecute_Pause( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_Pause( object obj )
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+        internal bool CanExecute_Stop( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_Stop( object obj )
+        {
+            try
+            {
+                if (obj is MediaElement player)
+                    player.Stop();
+            }
+            catch (Exception e) { ErrorWindow( e ); }
         }
 
 
 
+        internal bool CanExecute_MediaPlayerLoaded( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_MediaPlayerLoaded( object obj )
+        {
+            try
+            {
+                if(obj is MediaElement player)
+                {
+                    this.player = player;
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
         internal bool CanExecute_PageLoaded( object obj )
         {
@@ -51,7 +136,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                page = obj;
+                if (obj is Page p)
+                    page = p;
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -99,7 +185,6 @@ namespace NotebookRCv001.Models
             thread.SetApartmentState( ApartmentState.STA );
             thread.Start();
         }
-
 
     }
 }

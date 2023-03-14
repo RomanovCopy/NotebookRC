@@ -15,6 +15,32 @@
     <Page.Resources>
         <viewmodels:MediaPlayerViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="closeandclear"/>
+        <Style TargetType="Button" x:Key="buttons">
+            <Setter Property="Opacity" Value="0.1"/>
+            <Setter Property="Margin" Value="10,0,0,10"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <ContentControl x:Name="content"  Content="{Binding Path=Content, 
+                                    Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.6"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
@@ -24,6 +50,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -34,9 +61,35 @@
             <ContentPresenter Grid.Column="2" Content="{Binding Source={StaticResource closeandclear}}"/>
         </Grid>
         <Grid Grid.Row="1">
-            
-            
-            
+            <MediaElement Name="mplayer" LoadedBehavior="Manual" Stretch="None" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+                          MinHeight="{Binding ElementName=page, Path=Height, UpdateSourceTrigger=PropertyChanged}"
+                          MinWidth="{Binding ElementName=page, Path=Width, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding MediaPlayerLoaded}" CommandParameter="{Binding ElementName=mplayer}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MediaElement>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <Button Style="{StaticResource buttons}" Command="{Binding Play, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource startimage}"/>
+                </Button>
+                <Button Style="{StaticResource buttons}" Command="{Binding Pause, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource pauseimage}"/>
+                </Button>
+                <Button Style="{StaticResource buttons}" Command="{Binding Stop, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource stopimage}"/>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
     <i:Interaction.Triggers>

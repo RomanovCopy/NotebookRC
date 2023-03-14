@@ -21,7 +21,7 @@ namespace NotebookRCv001.ViewModels
 
         public Action BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
 
-
+        public Uri Content { get => mediaPlayerModel.Content; set => mediaPlayerModel.Content = value; }
 
         public MediaPlayerViewModel()
         {
@@ -29,8 +29,16 @@ namespace NotebookRCv001.ViewModels
             mediaPlayerModel.PropertyChanged += ( s, e ) => OnPropertyChanged( e.PropertyName );
 
         }
+        public ICommand Play => play ??= new RelayCommand( mediaPlayerModel.Execute_Play, mediaPlayerModel.CanExecute_Play );
+        private RelayCommand play;
+        public ICommand Pause => pause ??= new RelayCommand( mediaPlayerModel.Execute_Pause, mediaPlayerModel.CanExecute_Pause );
+        private RelayCommand pause;
+        public ICommand Stop => stop ??= new RelayCommand( mediaPlayerModel.Execute_Stop, mediaPlayerModel.CanExecute_Stop );
+        private RelayCommand stop;
 
-
+        public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
+            mediaPlayerModel.CanExecute_MediaPlayerLoaded );
+        private RelayCommand mediaPlayerLoaded;
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( mediaPlayerModel.Execute_PageLoaded, mediaPlayerModel.CanExecute_PageLoaded );
         private RelayCommand pageLoaded;
         public ICommand PageClear => pageClear ??= new RelayCommand( mediaPlayerModel.Execute_PageClear, mediaPlayerModel.CanExecute_PageClear );
