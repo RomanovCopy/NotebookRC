@@ -39,6 +39,10 @@ namespace NotebookRCv001.ViewModels
             homeMenuContentModel.CanExecute_OpenDocumentTree);
         RelayCommand openDocumentTree;
 
+        public ICommand MediaPlayer => mediaPlayer ??= new RelayCommand( homeMenuContentModel.Execute_MediaPlayer,
+            homeMenuContentModel.CanExecute_MediaPlayer );
+        RelayCommand mediaPlayer;
+
         public ICommand PageLoaded => throw new NotImplementedException();
 
         public ICommand PageClose => throw new NotImplementedException();

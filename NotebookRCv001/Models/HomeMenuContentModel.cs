@@ -189,6 +189,35 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+        /// <summary>
+        /// открытие медиа плеера
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_MediaPlayer( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = !mainWindowViewModel.FrameList.Any( ( x ) => x is MyControls.MediaPlayer );
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_MediaPlayer( object obj )
+        {
+            try
+            {
+                var player = new MyControls.MediaPlayer();
+                if (mainWindowViewModel.FrameListAddPage.CanExecute( player ))
+                    mainWindowViewModel.FrameListAddPage.Execute( player );
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+
+
 
         private void ErrorWindow(Exception e, [CallerMemberName] string name = "")
         {

@@ -1,0 +1,47 @@
+﻿<Page x:Class="NotebookRCv001.MyControls.MediaPlayer"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+      xmlns:converters="clr-namespace:NotebookRCv001.Converters"
+      xmlns:customized="clr-namespace:NotebookRCv001.Styles.CustomizedWindow"
+      xmlns:local="clr-namespace:NotebookRCv001.MyControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MediaPlayer"
+      x:Name="page">
+    <Page.Resources>
+        <viewmodels:MediaPlayerViewModel x:Key="viewmodel"/>
+        <local:ButtonsClearAndClose x:Key="closeandclear"/>
+    </Page.Resources>
+    <Page.DataContext>
+        <Binding Source="{StaticResource viewmodel}"/>
+    </Page.DataContext>
+
+    <Grid Background="Gray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ContentPresenter Grid.Column="2" Content="{Binding Source={StaticResource closeandclear}}"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            
+            
+            
+        </Grid>
+    </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding PageLoaded}" CommandParameter="{Binding ElementName=page}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Page>
