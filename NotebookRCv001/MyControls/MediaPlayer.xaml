@@ -61,9 +61,8 @@
             <ContentPresenter Grid.Column="2" Content="{Binding Source={StaticResource closeandclear}}"/>
         </Grid>
         <Grid Grid.Row="1">
-            <MediaElement Name="mplayer" LoadedBehavior="Manual" Stretch="None" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
-                          MinHeight="{Binding ElementName=page, Path=Height, UpdateSourceTrigger=PropertyChanged}"
-                          MinWidth="{Binding ElementName=page, Path=Width, UpdateSourceTrigger=PropertyChanged}">
+            <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+                          Stretch="Uniform" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
                         <i:InvokeCommandAction Command="{Binding MediaPlayerLoaded}" CommandParameter="{Binding ElementName=mplayer}"/>

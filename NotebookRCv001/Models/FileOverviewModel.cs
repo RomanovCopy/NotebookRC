@@ -398,6 +398,7 @@ namespace NotebookRCv001.Models
                 {
                     propert.FileOverview_ListViewColumnsWidth.Add( width.ToString() );
                 }
+                Application.Current.MainWindow.Focus();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -418,7 +419,11 @@ namespace NotebookRCv001.Models
                 }
                 else if (obj is FileInfo fileInfo)
                 {//выбран файл
-                    await Task.Factory.StartNew( () => OpenAFileInTheDefaultApplication( fileInfo, false ) );
+                    var player = new MyControls.MediaPlayer();
+                    mainWindowViewModel.FrameListAddPage.Execute( player );
+                    var playerVM = (MediaPlayerViewModel)player.DataContext;
+                    playerVM.Content = new Uri( fileInfo.FullName );
+                    //await Task.Factory.StartNew( () => OpenAFileInTheDefaultApplication( fileInfo, false ) );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }

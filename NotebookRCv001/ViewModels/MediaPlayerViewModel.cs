@@ -36,6 +36,12 @@ namespace NotebookRCv001.ViewModels
         public ICommand Stop => stop ??= new RelayCommand( mediaPlayerModel.Execute_Stop, mediaPlayerModel.CanExecute_Stop );
         private RelayCommand stop;
 
+        /// <summary>
+        /// установка источника контента
+        /// </summary>
+        public ICommand SetContent => setContent ??= new RelayCommand( mediaPlayerModel.Execute_SetContent, mediaPlayerModel.CanExecute_SetContent );
+        private RelayCommand setContent;
+
         public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
             mediaPlayerModel.CanExecute_MediaPlayerLoaded );
         private RelayCommand mediaPlayerLoaded;

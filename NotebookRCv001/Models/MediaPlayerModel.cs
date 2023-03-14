@@ -37,7 +37,6 @@ namespace NotebookRCv001.Models
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             language.PropertyChanged += ( s, e ) => OnPropertyChanged( new string[] { "Headers", "ToolTips" } );
-            
         }
 
         internal bool CanExecute_Play( object obj )
@@ -54,7 +53,6 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                Content = new Uri( @"i:\Учебник\GeekBrains\002Введение в программирование\003\002Вебинар.mp4" );
                 if (obj is MediaElement player)
                     player.Play();
             }
@@ -75,6 +73,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                if (obj is MediaElement player)
+                    player.Pause();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -99,7 +99,27 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
+        internal bool CanExecute_SetContent( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = obj != null;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_SetContent( object obj )
+        {
+            try
+            {
+                if(obj is string str && !string.IsNullOrWhiteSpace( str ))
+                {
 
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
         internal bool CanExecute_MediaPlayerLoaded( object obj )
         {

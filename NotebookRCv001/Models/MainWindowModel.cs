@@ -260,6 +260,7 @@ namespace NotebookRCv001.Models
                         FrameList.Remove(page);
                     }
                 }
+                Application.Current.MainWindow.Focus();
             }
             catch (Exception e)
             {
