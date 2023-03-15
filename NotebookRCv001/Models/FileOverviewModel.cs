@@ -221,6 +221,7 @@ namespace NotebookRCv001.Models
             {
                 if (obj is DriveInfo driveInfo)
                 {
+                    CurrentDirectoryFullName = driveInfo.Name;
                     CurrentDirectoryList = new();
                     foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
                         CurrentDirectoryList.Add( new DirectoryItem( folder ) );
@@ -295,7 +296,7 @@ namespace NotebookRCv001.Models
                 c = obj is FileInfo;
                 return c;
             }
-            catch(Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
         internal void Execute_ListViewNameContextMenuOpen( object obj )
         {
@@ -409,18 +410,22 @@ namespace NotebookRCv001.Models
         /// открытие файла/директории
         /// </summary>
         /// <param name="obj"></param>
-        private async void OpenFileDirectory(object obj )
+        private async void OpenFileDirectory( object obj )
         {
             try
             {
                 if (obj is DirectoryInfo dirInfo)
                 {//выбран каталог
-                    await Task.Factory.StartNew(()=> CurrentDirectoryList = GetCurrentDirectoryList( dirInfo ));
+                    await Task.Factory.StartNew( () => CurrentDirectoryList = GetCurrentDirectoryList( dirInfo ) );
                 }
                 else if (obj is FileInfo fileInfo)
                 {//выбран файл
-                    var player = new MyControls.MediaPlayer();
-                    mainWindowViewModel.FrameListAddPage.Execute( player );
+                    var player = mainWindowViewModel.FrameList.Where( ( x ) => x is MyControls.MediaPlayer ).FirstOrDefault();
+                    if (player == null)
+                    {
+                        player = new MyControls.MediaPlayer();
+                        mainWindowViewModel.FrameListAddPage.Execute( player );
+                    }
                     var playerVM = (MediaPlayerViewModel)player.DataContext;
                     if (playerVM.SetContent.CanExecute( fileInfo.FullName ))
                         playerVM.SetContent.Execute( fileInfo.FullName );
@@ -531,9 +536,9 @@ namespace NotebookRCv001.Models
             try
             {
                 string path = $"{Environment.CurrentDirectory}/temp";
-                if(Directory.Exists(path))
+                if (Directory.Exists( path ))
                 {
-                    while( Directory.GetFiles( path ).Length > 0)
+                    while (Directory.GetFiles( path ).Length > 0)
                     {
                         File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
                     }
