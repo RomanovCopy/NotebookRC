@@ -41,6 +41,30 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="videoext" TargetType="StackPanel" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
+                    Mode=FindAncestor},Path=DataContext.ThisVideo}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="audioext" TargetType="StackPanel" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
+                    Mode=FindAncestor},Path=DataContext.ThisAudio}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="imageext" TargetType="StackPanel" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
+                    Mode=FindAncestor},Path=DataContext.ThisImage}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
@@ -67,6 +91,10 @@
                     <i:EventTrigger EventName="Loaded">
                         <i:InvokeCommandAction Command="{Binding MediaPlayerLoaded}" CommandParameter="{Binding ElementName=mplayer}"/>
                     </i:EventTrigger>
+                    <i:EventTrigger EventName="MediaOpened">
+                        <i:InvokeCommandAction Command="{Binding MediaOpened, UpdateSourceTrigger=PropertyChanged}" 
+                                               CommandParameter="{Binding ElementName=mplayer, Path=Source}"/>
+                    </i:EventTrigger>
                 </i:Interaction.Triggers>
             </MediaElement>
         </Grid>
@@ -75,7 +103,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Style="{StaticResource videoext}">
                 <Button Style="{StaticResource buttons}" Command="{Binding Play, UpdateSourceTrigger=PropertyChanged}" 
                         CommandParameter="{Binding ElementName=mplayer}">
                     <Image Source="{StaticResource startimage}"/>
@@ -87,6 +115,30 @@
                 <Button Style="{StaticResource buttons}" Command="{Binding Stop, UpdateSourceTrigger=PropertyChanged}" 
                         CommandParameter="{Binding ElementName=mplayer}">
                     <Image Source="{StaticResource stopimage}"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Style="{StaticResource audioext}">
+                <Button Style="{StaticResource buttons}" Command="{Binding Play, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource startimage}"/>
+                </Button>
+                <Button Style="{StaticResource buttons}" Command="{Binding Pause, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource pauseimage}"/>
+                </Button>
+                <Button Style="{StaticResource buttons}" Command="{Binding Stop, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource stopimage}"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Style="{StaticResource imageext}">
+                <Button Style="{StaticResource buttons}" Command="{Binding Play, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource backimage}"/>
+                </Button>
+                <Button Style="{StaticResource buttons}" Command="{Binding Pause, UpdateSourceTrigger=PropertyChanged}" 
+                        CommandParameter="{Binding ElementName=mplayer}">
+                    <Image Source="{StaticResource forwardimage}"/>
                 </Button>
             </StackPanel>
         </Grid>

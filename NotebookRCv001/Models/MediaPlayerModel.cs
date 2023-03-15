@@ -13,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using NotebookRCv001.MyControls;
 using System.Windows.Controls;
+using System.IO;
 
 namespace NotebookRCv001.Models
 {
@@ -22,21 +23,34 @@ namespace NotebookRCv001.Models
         private Languages language => mainWindowViewModel.Language;
         private Page page { get; set; }
         private MediaElement player { get; set; }
-        public ObservableCollection<string> Headers => language.HeadersMediaPlayer;
+        internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
-        public ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
+        internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
 
         public Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action behaviorReady;
 
-        internal Uri Content { get => content; set => SetProperty( ref content, value ); }
+        internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
         private Uri content;
 
+        internal bool ThisVideo => VideoFileExtensions.Any( ( x ) => x == Path.GetExtension( Content.AbsolutePath ).ToLower() );
+        internal bool ThisAudio => AudioFileExtensions.Any( ( x ) => x == Path.GetExtension( Content.AbsolutePath ).ToLower() );
+        internal bool ThisImage => ImageFileExtensions.Any( ( x ) => x == Path.GetExtension( Content.AbsolutePath ).ToLower() );
+
+        internal string[] VideoFileExtensions => videoFileExtensions ??= new string[] { ".mp4", ".mpg", ".avi" };
+        private string[] videoFileExtensions;
+
+        internal string[] ImageFileExtensions => imageFileExtensions ??= new string[] { ".jpg", ".jpeg", ".png" };
+        private string[] imageFileExtensions;
+
+        internal string[] AudioFileExtensions => audioFileExtensions ??= new string[] { ".mp3", ".flac" };
+        private string[] audioFileExtensions;
 
         internal MediaPlayerModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             language.PropertyChanged += ( s, e ) => OnPropertyChanged( new string[] { "Headers", "ToolTips" } );
+            Content = new Uri( @"D://" );
         }
 
         internal bool CanExecute_Play( object obj )
@@ -113,10 +127,34 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if(obj is string str && !string.IsNullOrWhiteSpace( str ))
+                if(obj is string str && !string.IsNullOrWhiteSpace( str ) && File.Exists(str))
                 {
-
+                    Content = new Uri( str );
                 }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+        /// <summary>
+        /// завершение загрузки мультимедиа
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal bool CanExecute_MediaOpened( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = obj != null;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_MediaOpened( object obj )
+        {
+            try
+            {
+
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -138,6 +176,8 @@ namespace NotebookRCv001.Models
                 if(obj is MediaElement player)
                 {
                     this.player = player;
+                    if (!string.IsNullOrWhiteSpace( Content.AbsolutePath ))
+                        player.Play();
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -157,7 +197,9 @@ namespace NotebookRCv001.Models
             try
             {
                 if (obj is Page p)
+                {
                     page = p;
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }

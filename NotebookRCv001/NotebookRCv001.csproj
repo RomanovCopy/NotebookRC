@@ -74,6 +74,7 @@
     <Compile Remove="Models\ContextMenuImageModel.cs" />
     <Compile Remove="MyControls\ContextMenuHome.xaml.cs" />
     <Compile Remove="MyControls\ContextMenuImage.xaml.cs" />
+    <Compile Remove="MyControls\MediaElementExample.xaml.cs" />
     <Compile Remove="MyControls\SfRichTextBox.xaml.cs" />
     <Compile Remove="Resources\en-US.Designer.cs" />
     <Compile Remove="Resources\Image.Designer.cs" />
@@ -138,6 +139,7 @@
   <ItemGroup>
     <Page Remove="MyControls\ContextMenuHome.xaml" />
     <Page Remove="MyControls\ContextMenuImage.xaml" />
+    <Page Remove="MyControls\MediaElementExample.xaml" />
     <Page Remove="MyControls\SfRichTextBox.xaml" />
     <Page Remove="Views\FlowDocRead.xaml" />
     <Page Remove="Views\FlowDocumentEditor.xaml" />

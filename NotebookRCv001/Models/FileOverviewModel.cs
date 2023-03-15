@@ -422,7 +422,8 @@ namespace NotebookRCv001.Models
                     var player = new MyControls.MediaPlayer();
                     mainWindowViewModel.FrameListAddPage.Execute( player );
                     var playerVM = (MediaPlayerViewModel)player.DataContext;
-                    playerVM.Content = new Uri( fileInfo.FullName );
+                    if (playerVM.SetContent.CanExecute( fileInfo.FullName ))
+                        playerVM.SetContent.Execute( fileInfo.FullName );
                     //await Task.Factory.StartNew( () => OpenAFileInTheDefaultApplication( fileInfo, false ) );
                 }
             }

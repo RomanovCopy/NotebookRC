@@ -21,7 +21,11 @@ namespace NotebookRCv001.ViewModels
 
         public Action BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
 
-        public Uri Content { get => mediaPlayerModel.Content; set => mediaPlayerModel.Content = value; }
+        public Uri Content => mediaPlayerModel.Content;
+
+        public bool ThisVideo => mediaPlayerModel.ThisVideo;
+        public bool ThisAudio => mediaPlayerModel.ThisAudio;
+        public bool ThisImage => mediaPlayerModel.ThisImage;
 
         public MediaPlayerViewModel()
         {
@@ -36,12 +40,17 @@ namespace NotebookRCv001.ViewModels
         public ICommand Stop => stop ??= new RelayCommand( mediaPlayerModel.Execute_Stop, mediaPlayerModel.CanExecute_Stop );
         private RelayCommand stop;
 
+
+
+
         /// <summary>
         /// установка источника контента
         /// </summary>
         public ICommand SetContent => setContent ??= new RelayCommand( mediaPlayerModel.Execute_SetContent, mediaPlayerModel.CanExecute_SetContent );
         private RelayCommand setContent;
 
+        public ICommand MediaOpened => mediaOpened ??= new RelayCommand( mediaPlayerModel.Execute_MediaOpened, mediaPlayerModel.CanExecute_MediaOpened );
+        private RelayCommand mediaOpened;
         public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
             mediaPlayerModel.CanExecute_MediaPlayerLoaded );
         private RelayCommand mediaPlayerLoaded;
