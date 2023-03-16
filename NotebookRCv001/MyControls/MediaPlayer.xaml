@@ -107,7 +107,7 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <Image Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.RowSpan="2">
+            <Image x:Name="image" Source="{Binding Bitmap, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.RowSpan="2">
                 <Image.Style>
                     <Style TargetType="Image">
                         <Style.Triggers>

@@ -14,6 +14,7 @@ using System.Threading;
 using NotebookRCv001.MyControls;
 using System.Windows.Controls;
 using System.IO;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace NotebookRCv001.Models
@@ -35,7 +36,7 @@ namespace NotebookRCv001.Models
         internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
         private Uri content;
 
-        internal BitmapImage Bitmap { get => bitmap; private set => SetProperty( ref bitmap, value ); }
+        internal BitmapImage Bitmap { get => bitmap; set => SetProperty( ref bitmap, value ); }
         private BitmapImage bitmap;
 
         internal bool ThisVideo { get => thisVideo; private set => SetProperty( ref thisVideo, value ); }
@@ -156,13 +157,16 @@ namespace NotebookRCv001.Models
             try
             {
                 PlayIndex = PlayIndex - 1;
-                if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                if (ThisImage)
                 {
-                    Content = new Uri( PlayList[PlayIndex] );
-                }
-                else
-                {
-                    Content = new Uri( await Decrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript ) );
+                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                    {
+                        Bitmap = new BitmapImage( new Uri( PlayList[PlayIndex] ) );
+                    }
+                    else
+                    {
+                        Bitmap = await ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
+                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -189,13 +193,16 @@ namespace NotebookRCv001.Models
             try
             {
                 PlayIndex = PlayIndex + 1;
-                if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                if (ThisImage)
                 {
-                    Content = new Uri( PlayList[PlayIndex] );
-                }
-                else
-                {
-                    Content = new Uri( await Decrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript ) );
+                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                    {
+                        Bitmap = new BitmapImage( new Uri( PlayList[PlayIndex] ) );
+                    }
+                    else
+                    {
+                        Bitmap = await ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
+                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -222,39 +229,21 @@ namespace NotebookRCv001.Models
             {
                 string path = (string)obj;
                 SetContentType( path );
-                if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                if (ThisImage)
                 {
-                    Content = new Uri( path );
+                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                        Bitmap = new BitmapImage( new Uri( path ) );
+                    else
+                        Bitmap = await ImageDecrypt( path, homeMenuEncryptionViewModel.KeyCript );
                 }
-                else
+                else if (ThisAudio)
                 {
-                    var p = await Decrypt( path, homeMenuEncryptionViewModel.KeyCript );
-                    Content = new Uri( p );
+
                 }
-            }
-            catch (Exception e) { ErrorWindow( e ); }
-        }
+                else if (ThisVideo)
+                {
 
-        /// <summary>
-        /// завершение загрузки мультимедиа
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal bool CanExecute_MediaOpened( object obj )
-        {
-            try
-            {
-                bool c = false;
-                c = true;
-                return c;
-            }
-            catch (Exception e) { ErrorWindow( e ); return false; }
-        }
-        internal void Execute_MediaOpened( object obj )
-        {
-            try
-            {
-
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -340,21 +329,11 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
-        private async Task<string> Decrypt( string path, string key )
+        private async Task<BitmapImage> ImageDecrypt( string path, string key )
         {
+            BitmapImage bitmapImage = new();
             try
             {
-                string ext = Path.GetExtension( path );
-                string newDir = Path.Combine( Directory.GetCurrentDirectory(), "temp" );
-                if (!Directory.Exists( newDir ))
-                    Directory.CreateDirectory( newDir );
-                string newPath = Path.Combine( newDir, $"temp{ext}" );
-                int i = 0;
-                do
-                {
-                    newPath = Path.Combine( newDir, $"temp{i}{ext}" );
-                    i++;
-                } while (File.Exists( newPath ));
                 byte[] bytes = null;
                 using (var fs = new FileStream( path, FileMode.Open ))
                 {
@@ -362,14 +341,19 @@ namespace NotebookRCv001.Models
                     await fs.ReadAsync( bytes, 0, (int)fs.Length );
                 }
                 bytes = Command_executors.Executors.Decrypt( bytes, key );
-                using (var fs = new FileStream( newPath, FileMode.OpenOrCreate))
+                using (var stream = new MemoryStream( bytes ))
                 {
-                    await fs.WriteAsync( bytes, 0, bytes.Length );
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = stream;
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze();
                 }
-                return newPath;
+                return bitmapImage;
             }
-            catch (Exception e) { ErrorWindow( e ); return ""; }
+            catch (Exception e) { ErrorWindow( e ); return bitmapImage; }
         }
+
         /// <summary>
         /// переключение типа контента
         /// </summary>
@@ -411,27 +395,6 @@ namespace NotebookRCv001.Models
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
-        }
-
-        /// <summary>
-        /// очистка временных файлов
-        /// </summary>
-        /// <returns></returns>
-        private bool DeletingTemporaryFiles()
-        {
-            try
-            {
-                string path = $"{Environment.CurrentDirectory}/temp";
-                if (Directory.Exists( path ))
-                {
-                    while (Directory.GetFiles( path ).Length > 0)
-                    {
-                        File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
-                    }
-                }
-                return Directory.GetFiles( path ).Length == 0;
-            }
-            catch { return false; }
         }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )

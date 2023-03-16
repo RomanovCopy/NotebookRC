@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Models;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace NotebookRCv001.ViewModels
 {
@@ -22,7 +24,7 @@ namespace NotebookRCv001.ViewModels
         public Action BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
 
         public Uri Content => mediaPlayerModel.Content;
-
+        public BitmapImage Bitmap  => mediaPlayerModel.Bitmap;
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;
         public bool ThisImage => mediaPlayerModel.ThisImage;
@@ -50,9 +52,6 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public ICommand SetContent => setContent ??= new RelayCommand( mediaPlayerModel.Execute_SetContent, mediaPlayerModel.CanExecute_SetContent );
         private RelayCommand setContent;
-
-        public ICommand MediaOpened => mediaOpened ??= new RelayCommand( mediaPlayerModel.Execute_MediaOpened, mediaPlayerModel.CanExecute_MediaOpened );
-        private RelayCommand mediaOpened;
         public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
             mediaPlayerModel.CanExecute_MediaPlayerLoaded );
         private RelayCommand mediaPlayerLoaded;
