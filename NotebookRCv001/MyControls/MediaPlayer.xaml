@@ -85,7 +85,7 @@
             <ContentPresenter Grid.Column="2" Content="{Binding Source={StaticResource closeandclear}}"/>
         </Grid>
         <Grid Grid.Row="1" Grid.RowSpan="2">
-            <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+            <MediaElement Name="mplayer" LoadedBehavior="Play" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
                           Stretch="Uniform" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">

@@ -278,8 +278,6 @@ namespace NotebookRCv001.Models
                 if (obj is MediaElement player)
                 {
                     this.player = player;
-                    if (Content!=null && !string.IsNullOrWhiteSpace( Content.AbsolutePath ))
-                        player.Play();
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -344,26 +342,29 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
-        private async Task<string> Decrypt(string path, string key )
+        private async Task<string> Decrypt( string path, string key )
         {
             try
             {
                 string ext = Path.GetExtension( path );
-                string newPath = Path.Combine( $"{ Directory.GetCurrentDirectory()}\\temp\\temp{ext}" );
+                string newDir = Path.Combine( Directory.GetCurrentDirectory(), "temp" );
+                if (!Directory.Exists( newDir ))
+                    Directory.CreateDirectory( newDir );
+                string newPath = Path.Combine( newDir, $"temp{ext}" );
                 byte[] bytes = null;
-                using(var fs=new FileStream(path, FileMode.Open ))
+                using (var fs = new FileStream( path, FileMode.Open ))
                 {
                     bytes = new byte[fs.Length];
                     await fs.ReadAsync( bytes, 0, bytes.Length );
                 }
                 bytes = Command_executors.Executors.Decrypt( bytes, key );
-                using(var fs=new FileStream(newPath, FileMode.Create ))
+                using (var fs = new FileStream( newPath, FileMode.Create ))
                 {
                     await fs.WriteAsync( bytes, 0, bytes.Length );
                 }
                 return newPath;
             }
-            catch(Exception e) { ErrorWindow( e ); return ""; }
+            catch (Exception e) { ErrorWindow( e ); return ""; }
         }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
