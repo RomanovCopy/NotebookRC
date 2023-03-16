@@ -366,7 +366,44 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
+        internal bool CanExecute_MainWindowClosed( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_MainWindowClosed( object obj )
+        {
+            try
+            {
+                DeletingTemporaryFiles();
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
+        /// <summary>
+        /// очистка временных файлов
+        /// </summary>
+        /// <returns></returns>
+        private bool DeletingTemporaryFiles()
+        {
+            try
+            {
+                string path = $"{Environment.CurrentDirectory}/temp";
+                if (Directory.Exists( path ))
+                {
+                    while (Directory.GetFiles( path ).Length > 0)
+                    {
+                        File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
+                    }
+                }
+                return Directory.GetFiles( path ).Length == 0;
+            }
+            catch { return false; }
+        }
 
         /// <summary>
         /// Открытие окна выбора.
@@ -408,5 +445,6 @@ namespace NotebookRCv001.Models
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
         }
+
     }
 }

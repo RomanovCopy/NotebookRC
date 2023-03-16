@@ -14,6 +14,7 @@ using System.Threading;
 using NotebookRCv001.MyControls;
 using System.Windows.Controls;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace NotebookRCv001.Models
 {
@@ -34,9 +35,15 @@ namespace NotebookRCv001.Models
         internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
         private Uri content;
 
-        internal bool ThisVideo => Content != null ? VideoFileExtensions.Any( ( x ) => x == Path.GetExtension( Content?.AbsolutePath ).ToLower() ) : false;
-        internal bool ThisAudio => Content != null ? AudioFileExtensions.Any( ( x ) => x == Path.GetExtension( Content?.AbsolutePath ).ToLower() ) : false;
-        internal bool ThisImage => Content != null ? ImageFileExtensions.Any( ( x ) => x == Path.GetExtension( Content?.AbsolutePath ).ToLower() ) : false;
+        internal BitmapImage Bitmap { get => bitmap; private set => SetProperty( ref bitmap, value ); }
+        private BitmapImage bitmap;
+
+        internal bool ThisVideo { get => thisVideo; private set => SetProperty( ref thisVideo, value ); }
+        private bool thisVideo;
+        internal bool ThisAudio { get => thisAudio; private set => SetProperty( ref thisAudio, value ); }
+        private bool thisAudio;
+        internal bool ThisImage { get => thisImage; private set => SetProperty( ref thisImage, value ); }
+        private bool thisImage;
 
         internal string[] VideoFileExtensions => videoFileExtensions ??= new string[] { ".mp4", ".mpg", ".avi" };
         private string[] videoFileExtensions;
@@ -46,6 +53,7 @@ namespace NotebookRCv001.Models
 
         internal string[] AudioFileExtensions => audioFileExtensions ??= new string[] { ".mp3", ".flac" };
         private string[] audioFileExtensions;
+
         /// <summary>
         /// список воспроизведения(пути к файлам) PlayList
         /// </summary>
@@ -143,18 +151,18 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
         }
-        internal void Execute_Back( object obj )
+        internal async void Execute_Back( object obj )
         {
             try
             {
+                PlayIndex = PlayIndex - 1;
                 if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
                 {
-                    PlayIndex = PlayIndex - 1;
                     Content = new Uri( PlayList[PlayIndex] );
                 }
                 else
                 {
-
+                    Content = new Uri( await Decrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript ) );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -176,18 +184,18 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
         }
-        internal void Execute_Forward( object obj )
+        internal async void Execute_Forward( object obj )
         {
             try
             {
+                PlayIndex = PlayIndex + 1;
                 if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
                 {
-                    PlayIndex = PlayIndex + 1;
                     Content = new Uri( PlayList[PlayIndex] );
                 }
                 else
                 {
-
+                    Content = new Uri( await Decrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript ) );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -213,6 +221,7 @@ namespace NotebookRCv001.Models
             try
             {
                 string path = (string)obj;
+                SetContentType( path );
                 if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
                 {
                     Content = new Uri( path );
@@ -221,17 +230,6 @@ namespace NotebookRCv001.Models
                 {
                     var p = await Decrypt( path, homeMenuEncryptionViewModel.KeyCript );
                     Content = new Uri( p );
-                }
-                var dirpath = Path.GetDirectoryName( path );
-                PlayList = new();
-                if (ThisImage)
-                {
-                    foreach (var file in Directory.GetFiles( dirpath ))
-                    {
-                        if (ImageFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
-                            PlayList.Add( file );
-                    }
-                    PlayIndex = PlayList.IndexOf( path );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -247,7 +245,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = obj != null;
+                c = true;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -351,20 +349,89 @@ namespace NotebookRCv001.Models
                 if (!Directory.Exists( newDir ))
                     Directory.CreateDirectory( newDir );
                 string newPath = Path.Combine( newDir, $"temp{ext}" );
+                int i = 0;
+                do
+                {
+                    newPath = Path.Combine( newDir, $"temp{i}{ext}" );
+                    i++;
+                } while (File.Exists( newPath ));
                 byte[] bytes = null;
                 using (var fs = new FileStream( path, FileMode.Open ))
                 {
                     bytes = new byte[fs.Length];
-                    await fs.ReadAsync( bytes, 0, bytes.Length );
+                    await fs.ReadAsync( bytes, 0, (int)fs.Length );
                 }
                 bytes = Command_executors.Executors.Decrypt( bytes, key );
-                using (var fs = new FileStream( newPath, FileMode.Create ))
+                using (var fs = new FileStream( newPath, FileMode.OpenOrCreate))
                 {
                     await fs.WriteAsync( bytes, 0, bytes.Length );
                 }
                 return newPath;
             }
             catch (Exception e) { ErrorWindow( e ); return ""; }
+        }
+        /// <summary>
+        /// переключение типа контента
+        /// </summary>
+        /// <param name="path"></param>
+        private void SetContentType( string path )
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace( path ) && File.Exists( path ))
+                {
+                    //включаем нужную панель
+                    var ext = Path.GetExtension( path ).ToLower();
+                    ThisAudio = AudioFileExtensions.Any( ( x ) => x == ext );
+                    ThisImage = ImageFileExtensions.Any( ( x ) => x == ext );
+                    ThisVideo = VideoFileExtensions.Any( ( x ) => x == ext );
+                    //родительская папка
+                    var dirpath = Path.GetDirectoryName( path );
+                    //создаем и заполняем коллекцию файлов для плей листа
+                    PlayList = new();
+                    foreach (var file in Directory.GetFiles( dirpath ))
+                    {
+                        if (ThisImage)
+                        {
+                            if (ImageFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
+                                PlayList.Add( file );
+                        }
+                        else if (ThisAudio)
+                        {
+                            if (AudioFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
+                                PlayList.Add( file );
+                        }
+                        else if (ThisVideo)
+                        {
+                            if (VideoFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
+                                PlayList.Add( file );
+                        }
+                    }
+                    PlayIndex = PlayList.IndexOf( path );
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+        /// <summary>
+        /// очистка временных файлов
+        /// </summary>
+        /// <returns></returns>
+        private bool DeletingTemporaryFiles()
+        {
+            try
+            {
+                string path = $"{Environment.CurrentDirectory}/temp";
+                if (Directory.Exists( path ))
+                {
+                    while (Directory.GetFiles( path ).Length > 0)
+                    {
+                        File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
+                    }
+                }
+                return Directory.GetFiles( path ).Length == 0;
+            }
+            catch { return false; }
         }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )

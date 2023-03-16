@@ -65,6 +65,9 @@
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{ Binding MainWindowClosing, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{ Binding MainWindowClosed, UpdateSourceTrigger=PropertyChanged}"/>
+        </i:EventTrigger>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding MainWindowLoaded, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>

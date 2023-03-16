@@ -376,7 +376,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = DeletingTemporaryFiles();
+                c = true;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -527,26 +527,6 @@ namespace NotebookRCv001.Models
 
         }
 
-        /// <summary>
-        /// очистка временных файлов
-        /// </summary>
-        /// <returns></returns>
-        private bool DeletingTemporaryFiles()
-        {
-            try
-            {
-                string path = $"{Environment.CurrentDirectory}/temp";
-                if (Directory.Exists( path ))
-                {
-                    while (Directory.GetFiles( path ).Length > 0)
-                    {
-                        File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
-                    }
-                }
-                return Directory.GetFiles( path ).Length == 0;
-            }
-            catch { return false; }
-        }
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {

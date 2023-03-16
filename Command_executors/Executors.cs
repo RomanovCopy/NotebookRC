@@ -1410,7 +1410,10 @@ namespace Command_executors
                 {
                     SymmetricAlgorithm Sa = Rijndael.Create();
                     using (var encryptor = Sa.CreateEncryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                    {
                         result = PerformCryptography( encryptor, data, key );
+                    }
+                    Sa.Dispose();
                 }
                 return result;
             }
@@ -1434,7 +1437,10 @@ namespace Command_executors
                 {
                     SymmetricAlgorithm Sa = Rijndael.Create();
                     using (var decryptor = Sa.CreateDecryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                    {
                         result = PerformCryptography( decryptor, data, key );
+                    }
+                    Sa.Dispose();
                 }
                 return result;
             }
