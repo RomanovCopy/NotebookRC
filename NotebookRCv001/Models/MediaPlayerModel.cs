@@ -19,7 +19,7 @@ using System.Windows.Media.Imaging;
 
 namespace NotebookRCv001.Models
 {
-    internal class MediaPlayerModel : ViewModelBase
+    internal class MediaPlayerModel : ViewModelBase, IDisplayProgressTarget
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
@@ -66,6 +66,13 @@ namespace NotebookRCv001.Models
         /// </summary>
         internal int PlayIndex { get => playIndex; set => SetProperty( ref playIndex, value ); }
         private int playIndex;
+
+        /// <summary>
+        /// прогресс выполнения 
+        /// </summary>
+        public double ProgressValue { get => progressValue; set => SetProperty( ref progressValue, value ); }
+        private double progressValue;
+
 
         internal MediaPlayerModel()
         {
@@ -229,12 +236,13 @@ namespace NotebookRCv001.Models
             {
                 string path = (string)obj;
                 SetContentType( path );
+                string key = homeMenuEncryptionViewModel.KeyCript;
                 if (ThisImage)
                 {
-                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                    if (string.IsNullOrWhiteSpace( key ))
                         Bitmap = new BitmapImage( new Uri( path ) );
                     else
-                        Bitmap = await ImageDecrypt( path, homeMenuEncryptionViewModel.KeyCript );
+                        Bitmap = await ImageDecrypt( path, key );
                 }
                 else if (ThisAudio)
                 {
@@ -242,7 +250,14 @@ namespace NotebookRCv001.Models
                 }
                 else if (ThisVideo)
                 {
-
+                    if (string.IsNullOrWhiteSpace( key ))
+                    {
+                        Content = new Uri( path );
+                    }
+                    else
+                    {
+                        Content = await VideoDecrypt( path, key );
+                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -352,6 +367,67 @@ namespace NotebookRCv001.Models
                 return bitmapImage;
             }
             catch (Exception e) { ErrorWindow( e ); return bitmapImage; }
+        }
+
+        private async Task<Uri>VideoDecrypt(string path, string key )
+        {
+            Uri uri = new Uri( path );
+            FileStream fs = null;
+            FileStream stream = null;
+            try
+            {
+                string ext = Path.GetExtension( path );
+                string newDir = Path.Combine( Directory.GetCurrentDirectory(), "temp" );
+                if (!Directory.Exists( newDir ))
+                    Directory.CreateDirectory( newDir );
+                string newPath = Path.Combine( newDir , $"temp{ext}" );
+                uri = new Uri( newPath );
+                byte[] buffer = new byte[1048576];//массив размером 1 МБ для временного хранения считаных байт
+                long allRead = 0;//общий размер считанных байт
+                int currentRead = 0;//считано за текущий проход
+                var progress = new Views.DisplayProgress();
+                var progressVM = (DisplayProgressViewModel)progress.DataContext;
+                PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
+                progressVM.Target = this;
+                progress.Title = "Decryption";
+                progress.Show();
+                progress.Focus();
+                stream = File.OpenRead( path );
+                using( fs=new FileStream(newPath, FileMode.Create ))
+                {
+                    do
+                    {
+                        stream.Seek( allRead, SeekOrigin.Begin );
+                        currentRead = await stream.ReadAsync( buffer, 0, buffer.Length );
+                        var array = Command_executors.Executors.Decrypt( buffer, key );
+                        fs.Seek( new FileInfo(newPath).Length, SeekOrigin.Begin );
+                        await fs.WriteAsync( array, 0, array.Length );
+                        allRead += currentRead;
+                        ProgressValue = (double)allRead / (double)new FileInfo( path ).Length * 100.0;
+                    }
+                    while (currentRead > 0);
+                    stream.Close();
+                    stream.Dispose();
+                }
+                fs.Close();
+                fs.Dispose();
+                return uri;
+            }
+            catch(Exception e) 
+            {
+                if (stream != null)
+                {
+                stream.Close();
+                stream.Dispose();
+                }
+                if (fs != null)
+                {
+                    fs.Close();
+                    fs.Dispose();
+                }
+                ErrorWindow( e ); 
+                return uri; 
+            }
         }
 
         /// <summary>

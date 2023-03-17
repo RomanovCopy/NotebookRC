@@ -11,6 +11,7 @@ using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Models;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace NotebookRCv001.ViewModels
 {

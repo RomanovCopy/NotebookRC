@@ -89,8 +89,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <MediaElement Name="mplayer" LoadedBehavior="Play" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
-                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="2">
+            <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="2" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
                         <i:InvokeCommandAction Command="{Binding MediaPlayerLoaded}" CommandParameter="{Binding ElementName=mplayer}"/>
