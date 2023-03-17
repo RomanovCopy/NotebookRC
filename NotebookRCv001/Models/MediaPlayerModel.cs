@@ -251,13 +251,9 @@ namespace NotebookRCv001.Models
                 else if (ThisVideo)
                 {
                     if (string.IsNullOrWhiteSpace( key ))
-                    {
                         Content = new Uri( path );
-                    }
                     else
-                    {
                         Content = await VideoDecrypt( path, key );
-                    }
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -381,16 +377,8 @@ namespace NotebookRCv001.Models
                     Directory.CreateDirectory( newDir );
                 string newPath = Path.Combine( newDir , $"temp{ext}" );
                 uri = new Uri( newPath );
-                //var progress = new Views.DisplayProgress();
-                //var progressVM = (DisplayProgressViewModel)progress.DataContext;
-                //PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
-                //progressVM.Target = this;
-                //progress.Title = "Decryption";
-                //progress.Show();
-                //progress.Focus();
                 stream = File.OpenRead( path );
-
-
+                await Task.Factory.StartNew(()=> Command_executors.Executors.DecryptFromStream( stream, newPath, key ));
                 return uri;
             }
             catch(Exception e) 

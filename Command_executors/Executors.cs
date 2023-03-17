@@ -1473,6 +1473,63 @@ namespace Command_executors
 
 
 
+        /// <summary>
+        /// шифрует записанный на диск файл и пишет его по новому адресу
+        /// </summary>
+        /// <param name="fileStream">читает незашифрованный файл с диска</param>
+        /// <param name="path">путь сохранения зафрованного файла</param>
+        /// <param name="key">ключ шифрования</param>
+        public static void EncryptFromStream( FileStream fileStream, string path, string key )
+        {
+            try
+            {
+                SymmetricAlgorithm Sa = Rijndael.Create();
+                using (var fs = new FileStream( path, FileMode.Create ))
+                {
+                    using (var encryptor = Sa.CreateEncryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                    {
+                        using (var cryptoStream = new CryptoStream( fs, encryptor, CryptoStreamMode.Write ))
+                        {
+                            fileStream.CopyTo( cryptoStream );
+                            cryptoStream.FlushFinalBlock();
+                        }
+                    }
+                }
+                fileStream.Dispose();
+                Sa.Dispose();
+            }
+            catch { }
+        }
+
+
+        /// <summary>
+        /// дешифрует записанный на диск файл и пишет его по новому адресу
+        /// </summary>
+        /// <param name="fileStream">читает зашифрованный файл с диска</param>
+        /// <param name="path">путь сохранения дешифрованного файла</param>
+        /// <param name="key">ключ шифрования</param>
+        public static void DecryptFromStream( FileStream fileStream, string path, string key )
+        {
+            try
+            {
+                SymmetricAlgorithm Sa = Rijndael.Create();
+                using (var fs = new FileStream( path, FileMode.Create ))
+                {
+                    using (var decryptor = Sa.CreateDecryptor( (new PasswordDeriveBytes( key, null )).GetBytes( 16 ), new byte[16] ))
+                    {
+                        using (var cryptoStream = new CryptoStream( fs, decryptor, CryptoStreamMode.Write ))
+                        {
+                            fileStream.CopyTo( cryptoStream );
+                            cryptoStream.FlushFinalBlock();
+                        }
+                    }
+                }
+                fileStream.Dispose();
+                Sa.Dispose();
+            }
+            catch { }
+        }
+
 
         /// <summary>
         /// преобразование строки в коллекцию строк в соответствии с управляющими символами в её составе
