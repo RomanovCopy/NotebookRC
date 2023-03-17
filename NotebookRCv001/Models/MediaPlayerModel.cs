@@ -372,7 +372,6 @@ namespace NotebookRCv001.Models
         private async Task<Uri>VideoDecrypt(string path, string key )
         {
             Uri uri = new Uri( path );
-            FileStream fs = null;
             FileStream stream = null;
             try
             {
@@ -382,35 +381,16 @@ namespace NotebookRCv001.Models
                     Directory.CreateDirectory( newDir );
                 string newPath = Path.Combine( newDir , $"temp{ext}" );
                 uri = new Uri( newPath );
-                byte[] buffer = new byte[1048576];//массив размером 1 МБ для временного хранения считаных байт
-                long allRead = 0;//общий размер считанных байт
-                int currentRead = 0;//считано за текущий проход
-                var progress = new Views.DisplayProgress();
-                var progressVM = (DisplayProgressViewModel)progress.DataContext;
-                PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
-                progressVM.Target = this;
-                progress.Title = "Decryption";
-                progress.Show();
-                progress.Focus();
+                //var progress = new Views.DisplayProgress();
+                //var progressVM = (DisplayProgressViewModel)progress.DataContext;
+                //PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
+                //progressVM.Target = this;
+                //progress.Title = "Decryption";
+                //progress.Show();
+                //progress.Focus();
                 stream = File.OpenRead( path );
-                using( fs=new FileStream(newPath, FileMode.Create ))
-                {
-                    do
-                    {
-                        stream.Seek( allRead, SeekOrigin.Begin );
-                        currentRead = await stream.ReadAsync( buffer, 0, buffer.Length );
-                        var array = Command_executors.Executors.Decrypt( buffer, key );
-                        fs.Seek( new FileInfo(newPath).Length, SeekOrigin.Begin );
-                        await fs.WriteAsync( array, 0, array.Length );
-                        allRead += currentRead;
-                        ProgressValue = (double)allRead / (double)new FileInfo( path ).Length * 100.0;
-                    }
-                    while (currentRead > 0);
-                    stream.Close();
-                    stream.Dispose();
-                }
-                fs.Close();
-                fs.Dispose();
+
+
                 return uri;
             }
             catch(Exception e) 
@@ -419,11 +399,6 @@ namespace NotebookRCv001.Models
                 {
                 stream.Close();
                 stream.Dispose();
-                }
-                if (fs != null)
-                {
-                    fs.Close();
-                    fs.Dispose();
                 }
                 ErrorWindow( e ); 
                 return uri; 
