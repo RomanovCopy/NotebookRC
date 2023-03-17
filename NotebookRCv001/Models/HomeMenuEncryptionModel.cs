@@ -94,8 +94,8 @@ namespace NotebookRCv001.Models
             try
             {
                 Views.InputWindow inputWindow = new Views.InputWindow();
+                inputWindow.Owner = Application.Current.MainWindow;
                 inputWindow.Closing += ( s, e ) => InputWindow_Closing(s, e);
-                inputWindow.Focus();
                 inputWindow.ShowDialog();
                 EncryptionStatus = string.IsNullOrWhiteSpace(KeyCrypt) ? "Off" : "On";
             }
