@@ -15,6 +15,7 @@ using System.Runtime.CompilerServices;
 using Forms = System.Windows.Forms;
 using System.Windows.Forms;
 using System.Security.Cryptography;
+using System.Windows.Media.Imaging;
 
 namespace Command_executors
 {

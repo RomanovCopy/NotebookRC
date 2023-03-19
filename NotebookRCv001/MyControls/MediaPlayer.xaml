@@ -7,6 +7,7 @@
       xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
       xmlns:converters="clr-namespace:NotebookRCv001.Converters"
       xmlns:customized="clr-namespace:NotebookRCv001.Styles.CustomizedWindow"
+      xmlns:helpers="clr-namespace:NotebookRCv001.Helpers"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -69,7 +70,6 @@
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
     </Page.DataContext>
-
     <Grid Background="Gray">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -88,12 +88,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
-                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="2" >
+            <MediaElement Name="mplayer" LoadedBehavior="Manual" 
+                          Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="3" >
+                <i:Interaction.Behaviors>
+                    <helpers:BehaviorMediaElement x:Name="mediabehavior"/>
+                </i:Interaction.Behaviors>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
-                        <i:InvokeCommandAction Command="{Binding MediaPlayerLoaded}" CommandParameter="{Binding ElementName=mplayer}"/>
+                        <i:InvokeCommandAction Command="{Binding MediaPlayerLoaded}" CommandParameter="{Binding ElementName=mediabehavior}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <MediaElement.Style>
@@ -107,7 +112,7 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <Image x:Name="image" Source="{Binding Bitmap, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.RowSpan="2">
+            <Image x:Name="image" Source="{Binding Bitmap, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.RowSpan="3">
                 <Image.Style>
                     <Style TargetType="Image">
                         <Style.Triggers>
@@ -119,7 +124,21 @@
                     </Style>
                 </Image.Style>
             </Image>
-            <Grid Grid.Row="1">
+            <Slider Name="timelineSlider" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch"
+                    Minimum="{Binding SearchSliderMinimum, UpdateSourceTrigger=PropertyChanged}" 
+                    Maximum="{Binding SearchSliderMaximum, UpdateSourceTrigger=PropertyChanged}"
+                    Value="{Binding SearchSliderValue, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Behaviors>
+                    <helpers:BehaviorSlider x:Name="sliderbehavior"/>
+                </i:Interaction.Behaviors>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding SliderLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                               CommandParameter="{Binding ElementName=sliderbehavior}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Slider>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -168,7 +187,8 @@
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding PageLoaded}" CommandParameter="{Binding ElementName=page}"/>
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}" 
+                                   CommandParameter="{Binding ElementName=page}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 </Page>

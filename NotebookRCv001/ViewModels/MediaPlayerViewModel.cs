@@ -30,6 +30,17 @@ namespace NotebookRCv001.ViewModels
         public bool ThisAudio => mediaPlayerModel.ThisAudio;
         public bool ThisImage => mediaPlayerModel.ThisImage;
 
+
+        /// <summary>
+        /// минимальное значение слайдера поиска 
+        /// </summary>
+        public double SearchSliderMinimum { get => mediaPlayerModel.SearchSliderMinimum; set => mediaPlayerModel.SearchSliderMinimum = value; }
+        /// <summary>
+        /// максимальное значение слайдера поиска
+        /// </summary>
+        public double SearchSliderMaximum { get => mediaPlayerModel.SearchSliderMaximum; set => mediaPlayerModel.SearchSliderMaximum = value; }
+        public double SearchSliderValue { get => mediaPlayerModel.SearchSliderValue ; set => mediaPlayerModel.SearchSliderValue= value; }
+
         public MediaPlayerViewModel()
         {
             mediaPlayerModel = new MediaPlayerModel();
@@ -48,6 +59,8 @@ namespace NotebookRCv001.ViewModels
         public ICommand Forward => forward ??= new RelayCommand( mediaPlayerModel.Execute_Forward, mediaPlayerModel.CanExecute_Forward );
         private RelayCommand forward;
 
+        public ICommand SliderLoaded => sliderLoaded ??= new RelayCommand( mediaPlayerModel.Execute_SliderLoaded, mediaPlayerModel.CanExecute_SliderLoaded );
+        private RelayCommand sliderLoaded;
         /// <summary>
         /// установка источника контента
         /// </summary>

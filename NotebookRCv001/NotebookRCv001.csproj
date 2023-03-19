@@ -67,6 +67,7 @@
     <Compile Remove="docxaml.cs" />
     <Compile Remove="Executors.cs" />
     <Compile Remove="Helpers\TextBoxHeleper.cs" />
+    <Compile Remove="Helpers\WordHelper.cs" />
     <Compile Remove="Helpers\WordHelper2.cs" />
     <Compile Remove="Infrastructure\Encodings.cs" />
     <Compile Remove="Infrastructure\RTB_DependencyPropertiesi.cs" />

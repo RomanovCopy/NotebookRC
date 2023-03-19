@@ -16,6 +16,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using NotebookRCv001.Helpers;
 
 namespace NotebookRCv001.Models
 {
@@ -25,7 +26,8 @@ namespace NotebookRCv001.Models
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
         private Languages language => mainWindowViewModel.Language;
         private Page page { get; set; }
-        private MediaElement player { get; set; }
+        private BehaviorMediaElement behaviorMediaElement { get; set; }
+        private BehaviorSlider behaviorSlider { get; set; }
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
@@ -73,6 +75,21 @@ namespace NotebookRCv001.Models
         public double ProgressValue { get => progressValue; set => SetProperty( ref progressValue, value ); }
         private double progressValue;
 
+        /// <summary>
+        /// минимальное значение слайдера поиска 
+        /// </summary>
+        internal double SearchSliderMinimum { get => searchSliderMinimum; set => SetProperty( ref searchSliderMinimum, value ); }
+        private double searchSliderMinimum;
+        /// <summary>
+        /// максимальное значение слайдера поиска
+        /// </summary>
+        internal double SearchSliderMaximum { get => searchSliderMaximum; set => SetProperty( ref searchSliderMaximum, value ); }
+        private double searchSliderMaximum;
+
+        internal double SearchSliderValue { get => searchSliderValue; set => SetProperty( ref searchSliderValue, value ); }
+        private double searchSliderValue;
+
+
 
         internal MediaPlayerModel()
         {
@@ -97,8 +114,20 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                //SearchSliderMinimum = 0;
+                //SearchSliderMaximum = behaviorMediaElement.MediaElement.NaturalDuration.TimeSpan.Seconds;
+                //Task.Factory.StartNew( () =>
+                //{
+                //    for (int i = 0; i < SearchSliderMaximum; i++)
+                //    {
+                //        Thread.Sleep( 500 );
+                //        SearchSliderValue = i;
+                //    }
+                //} );
                 if (obj is MediaElement player)
+                {
                     player.Play();
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -273,9 +302,35 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is MediaElement player)
+                if (obj is BehaviorMediaElement player)
                 {
-                    this.player = player;
+                    behaviorMediaElement = player;
+                    if (BehaviorReady != null)
+                        BehaviorReady.Invoke();
+                }
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+        internal bool CanExecute_SliderLoaded( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_SliderLoaded( object obj )
+        {
+            try
+            {
+                if (obj is BehaviorSlider slider)
+                {
+                    behaviorSlider = slider;
+                    if (BehaviorReady != null)
+                        BehaviorReady.Invoke();
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -365,7 +420,7 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); return bitmapImage; }
         }
 
-        private async Task<Uri>VideoDecrypt(string path, string key )
+        private async Task<Uri> VideoDecrypt( string path, string key )
         {
             Uri uri = new Uri( path );
             FileStream stream = null;
@@ -375,21 +430,21 @@ namespace NotebookRCv001.Models
                 string newDir = Path.Combine( Directory.GetCurrentDirectory(), "temp" );
                 if (!Directory.Exists( newDir ))
                     Directory.CreateDirectory( newDir );
-                string newPath = Path.Combine( newDir , $"temp{ext}" );
+                string newPath = Path.Combine( newDir, $"temp{ext}" );
                 uri = new Uri( newPath );
                 stream = File.OpenRead( path );
-                await Task.Factory.StartNew(()=> Command_executors.Executors.DecryptFromStream( stream, newPath, key ));
+                await Task.Factory.StartNew( () => Command_executors.Executors.DecryptFromStream( stream, newPath, key ) );
                 return uri;
             }
-            catch(Exception e) 
+            catch (Exception e)
             {
                 if (stream != null)
                 {
-                stream.Close();
-                stream.Dispose();
+                    stream.Close();
+                    stream.Dispose();
                 }
-                ErrorWindow( e ); 
-                return uri; 
+                ErrorWindow( e );
+                return uri;
             }
         }
 
