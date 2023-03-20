@@ -20,10 +20,25 @@ namespace NotebookRCv001.MyControls
     /// </summary>
     public partial class MediaPlayer : Page
     {
+
         public MediaPlayer()
         {
             InitializeComponent();
         }
 
+        private void DragStarted( object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e )
+        {
+            if (DataContext is ViewModels.MediaPlayerViewModel vm)
+                vm.UserIsDraggingSlider = true;
+        }
+
+        private void DragCompleted( object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e )
+        {
+            if (DataContext is ViewModels.MediaPlayerViewModel vm)
+            {
+                mplayer.Position = TimeSpan.FromSeconds( timelineSlider.Value );
+                vm.UserIsDraggingSlider = false;
+            }
+        }
     }
 }

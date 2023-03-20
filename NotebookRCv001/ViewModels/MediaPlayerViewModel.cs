@@ -22,9 +22,12 @@ namespace NotebookRCv001.ViewModels
 
         public ObservableCollection<string> ToolTips => mediaPlayerModel.ToolTips;
 
+        public bool UserIsDraggingSlider { get => mediaPlayerModel.UserIsDraggingSlider; set => mediaPlayerModel.UserIsDraggingSlider = value; }
+
+        public TimeSpan Position { get => mediaPlayerModel.Position; set => mediaPlayerModel.Position = value; }
+        public double Value { get => mediaPlayerModel.Value; set => mediaPlayerModel.Value = value; }
         public Action<object> BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
 
-        //public Uri Content => mediaPlayerModel.Content;
         public string Content => mediaPlayerModel.Content;
 
 

@@ -91,7 +91,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
-                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="3" >
+                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="3"  >
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorMediaElement x:Name="mediabehavior"/>
                 </i:Interaction.Behaviors>
@@ -124,15 +124,14 @@
                 </Image.Style>
             </Image>
             <Slider Name="timelineSlider" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch"
-                    Minimum="0" Maximum="{Binding ElementName=mplayer, Path=NaturalDuration.TimeSpan.TotalSeconds, UpdateSourceTrigger=PropertyChanged}"
-                    Value="{Binding ElementName=mplayer, Path=Position.TotalSeconds, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                    Thumb.DragStarted="DragStarted"  Thumb.DragCompleted="DragCompleted">
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorSlider x:Name="sliderbehavior"/>
                 </i:Interaction.Behaviors>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
                         <i:InvokeCommandAction Command="{Binding SliderLoaded, UpdateSourceTrigger=PropertyChanged}"
-                                               CommandParameter="{Binding ElementName=sliderbehavior}"/>
+                                               CommandParameter="{Binding ElementName=sliderbehavior, UpdateSourceTrigger=PropertyChanged}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Slider>

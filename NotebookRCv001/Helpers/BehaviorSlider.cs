@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 using Microsoft.Xaml.Behaviors;
 
@@ -24,18 +25,18 @@ namespace NotebookRCv001.Helpers
 
         #region ***************** Public properties ***********************
 
-        public Slider GetSlider => AssociatedObject; 
+        public static readonly EventHandler DragStartedEvent;
 
+        public Slider Slider => AssociatedObject;
         public double Minimum { get => AssociatedObject.Minimum; set => AssociatedObject.Value = value; }
         public double Maximum { get => AssociatedObject.Maximum; set => AssociatedObject.Maximum = value; }
+        public double Value { get => AssociatedObject.Value; set => AssociatedObject.Value = value; }
 
 
         #endregion
 
         #region ********************** Dependency properties ************************ 
 
-        internal double Value { get => (double)GetValue( ValueProperty ); set => SetValue( ValueProperty, value ); }
-        public static readonly DependencyProperty ValueProperty;
 
         #endregion
 
@@ -46,8 +47,7 @@ namespace NotebookRCv001.Helpers
 
         static BehaviorSlider()
         {
-            ValueProperty = DependencyProperty.Register( "Value", typeof( double ), typeof( BehaviorSlider ),
-                new PropertyMetadata( new PropertyChangedCallback( ValueChanged ) ) );
+
         }
 
 
@@ -58,6 +58,7 @@ namespace NotebookRCv001.Helpers
 
         protected override void OnAttached()
         {
+
         }
 
         protected override void OnDetaching()
@@ -71,19 +72,21 @@ namespace NotebookRCv001.Helpers
 
         #region ***************** Events ***********************************
 
+        public event RoutedEventHandler DragStarted
+        {
+            add
+            {
+            }
+            remove
+            {
+
+            }
+        }
 
         #endregion
 
         #region ************************** Event handlers ***************************
 
-        private static void ValueChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
-        {
-            try
-            {
-
-            }
-            catch { }
-        }
 
         #endregion
 

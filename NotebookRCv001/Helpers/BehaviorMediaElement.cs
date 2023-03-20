@@ -65,7 +65,6 @@ namespace NotebookRCv001.Helpers
         internal TimeSpan Position { get => (TimeSpan)GetValue( PositionProperty ); set => SetValue( PositionProperty, value ); }
         public static readonly DependencyProperty PositionProperty;
 
-
         #endregion
 
         #region ****************** Constructors ***************************
