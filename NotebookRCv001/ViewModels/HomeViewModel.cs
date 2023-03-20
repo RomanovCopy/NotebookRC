@@ -45,7 +45,7 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<string> Images => throw new NotImplementedException();
 
 
-        public Action BehaviorReady { get => homeModel.BehaviorReady; set => homeModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => homeModel.BehaviorReady; set => homeModel.BehaviorReady = value; }
 
         public HomeViewModel()
         {

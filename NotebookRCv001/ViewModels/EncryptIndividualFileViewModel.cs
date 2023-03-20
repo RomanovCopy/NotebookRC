@@ -20,7 +20,7 @@ namespace NotebookRCv001.ViewModels
         private readonly EncryptIndividualFileModel encryptIndividualFileModel;
         public ObservableCollection<string> Headers => encryptIndividualFileModel.Headers;
         public ObservableCollection<string> ToolTips => encryptIndividualFileModel.ToolTips;
-        public Action BehaviorReady { get => encryptIndividualFileModel.BehaviorReady; set => encryptIndividualFileModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => encryptIndividualFileModel.BehaviorReady; set => encryptIndividualFileModel.BehaviorReady = value; }
 
         /// <summary>
         /// путь к открываемому файлу

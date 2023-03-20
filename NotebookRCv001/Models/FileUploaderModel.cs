@@ -88,8 +88,8 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// обработка события готовности BehaviorRichTextBox
         /// </summary>
-        public Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
-        private Action behaviorReady;
+        public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
+        private Action<object> behaviorReady;
 
         /// <summary>
         /// выбор директории загрузки для коллекции выбранных загрузок

@@ -30,8 +30,8 @@ namespace NotebookRCv001.Models
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsEncryptIndividualFile;
 
-        internal Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
-        Action behaviorReady;
+        internal Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
+        Action<object> behaviorReady;
 
 
         /// <summary>

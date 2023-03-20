@@ -22,24 +22,17 @@ namespace NotebookRCv001.ViewModels
 
         public ObservableCollection<string> ToolTips => mediaPlayerModel.ToolTips;
 
-        public Action BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
 
-        public Uri Content => mediaPlayerModel.Content;
+        //public Uri Content => mediaPlayerModel.Content;
+        public string Content => mediaPlayerModel.Content;
+
+
         public BitmapImage Bitmap  => mediaPlayerModel.Bitmap;
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;
         public bool ThisImage => mediaPlayerModel.ThisImage;
 
-
-        /// <summary>
-        /// минимальное значение слайдера поиска 
-        /// </summary>
-        public double SearchSliderMinimum { get => mediaPlayerModel.SearchSliderMinimum; set => mediaPlayerModel.SearchSliderMinimum = value; }
-        /// <summary>
-        /// максимальное значение слайдера поиска
-        /// </summary>
-        public double SearchSliderMaximum { get => mediaPlayerModel.SearchSliderMaximum; set => mediaPlayerModel.SearchSliderMaximum = value; }
-        public double SearchSliderValue { get => mediaPlayerModel.SearchSliderValue ; set => mediaPlayerModel.SearchSliderValue= value; }
 
         public MediaPlayerViewModel()
         {

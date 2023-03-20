@@ -29,6 +29,36 @@ namespace NotebookRCv001.Helpers
 
         #endregion
 
+        #region *************** public methods ********************
+
+        public void Play()
+        {
+            try
+            {
+                AssociatedObject.Play();
+            }
+            catch { }
+        }
+
+        public void Pause()
+        {
+            try
+            {
+                AssociatedObject.Pause();
+            }
+            catch { }
+        }
+
+        public void Stop()
+        {
+            try
+            {
+                AssociatedObject.Stop();
+            }
+            catch { }
+        }
+
+        #endregion
 
         #region ******************* Dependency properties ***************
 

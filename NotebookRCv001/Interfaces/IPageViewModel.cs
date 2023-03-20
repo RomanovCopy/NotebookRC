@@ -22,7 +22,7 @@ namespace NotebookRCv001.Interfaces
         /// <summary>
         /// делегат выполняющийся при готовности Behavior
         /// </summary>
-        public Action BehaviorReady { get; set; }
+        public Action<object> BehaviorReady { get; set; }
         /// <summary>
         /// команда обработки события окончания загрузки страницы
         /// </summary>

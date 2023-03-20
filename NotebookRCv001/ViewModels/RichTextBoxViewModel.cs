@@ -154,7 +154,7 @@ namespace NotebookRCv001.ViewModels
 
         public ObservableCollection<string> Images => throw new NotImplementedException();
 
-        public Action BehaviorReady { get => richTextBoxModel.BehaviorReady; set => richTextBoxModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => richTextBoxModel.BehaviorReady; set => richTextBoxModel.BehaviorReady = value; }
 
         public RichTextBoxViewModel ( )
         {

@@ -220,7 +220,7 @@ namespace NotebookRCv001.Models
                         {
                             mainWindowViewModel.CurrentPage = page;
                         }
-                        ((ViewModels.FlowDocumentReaderViewModel)page.DataContext).BehaviorReady = new Action(() =>
+                        ((ViewModels.FlowDocumentReaderViewModel)page.DataContext).BehaviorReady = new Action<object>((e) =>
                         {
                             var home = mainWindowViewModel.FrameList.Where((x) => x is Views.Home).LastOrDefault();
                             var menuhome = (MyControls.MenuHome)home.FindResource("menuhome");
@@ -266,7 +266,7 @@ namespace NotebookRCv001.Models
                         {
                             mainWindowViewModel.CurrentPage = page;
                         }
-                        ((ViewModels.HomeViewModel)page.DataContext).BehaviorReady = new Action(() =>
+                        ((ViewModels.HomeViewModel)page.DataContext).BehaviorReady = new Action<object>((e) =>
                         {
                             var home = mainWindowViewModel.FrameList.Where((x) => x is Views.Home).LastOrDefault();
                             var menuhome = (MyControls.MenuHome)home.FindResource("menuhome");

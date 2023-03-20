@@ -28,15 +28,18 @@ namespace NotebookRCv001.Models
         private Page page { get; set; }
         private BehaviorMediaElement behaviorMediaElement { get; set; }
         private BehaviorSlider behaviorSlider { get; set; }
+
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
 
-        public Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
-        private Action behaviorReady;
+        public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
+        private Action<object> behaviorReady;
 
-        internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
-        private Uri content;
+        //internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
+        //private Uri content;
+        internal string Content { get => content; set => SetProperty( ref content, value ); }
+        private string content;
 
         internal BitmapImage Bitmap { get => bitmap; set => SetProperty( ref bitmap, value ); }
         private BitmapImage bitmap;
@@ -75,22 +78,6 @@ namespace NotebookRCv001.Models
         public double ProgressValue { get => progressValue; set => SetProperty( ref progressValue, value ); }
         private double progressValue;
 
-        /// <summary>
-        /// минимальное значение слайдера поиска 
-        /// </summary>
-        internal double SearchSliderMinimum { get => searchSliderMinimum; set => SetProperty( ref searchSliderMinimum, value ); }
-        private double searchSliderMinimum;
-        /// <summary>
-        /// максимальное значение слайдера поиска
-        /// </summary>
-        internal double SearchSliderMaximum { get => searchSliderMaximum; set => SetProperty( ref searchSliderMaximum, value ); }
-        private double searchSliderMaximum;
-
-        internal double SearchSliderValue { get => searchSliderValue; set => SetProperty( ref searchSliderValue, value ); }
-        private double searchSliderValue;
-
-
-
         internal MediaPlayerModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
@@ -98,6 +85,7 @@ namespace NotebookRCv001.Models
             var home = mainWindowViewModel.FrameList.Where( ( x ) => x is Views.Home ).FirstOrDefault();
             var menu = (MyControls.MenuHome)home.FindResource( "menuhome" );
             homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource( "menuencryption" );
+            BehaviorReady += ( x ) => { InitializePlayerAndSlider( x ); };
         }
 
         internal bool CanExecute_Play( object obj )
@@ -105,7 +93,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = behaviorMediaElement != null && behaviorSlider != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -114,20 +102,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                //SearchSliderMinimum = 0;
-                //SearchSliderMaximum = behaviorMediaElement.MediaElement.NaturalDuration.TimeSpan.Seconds;
-                //Task.Factory.StartNew( () =>
-                //{
-                //    for (int i = 0; i < SearchSliderMaximum; i++)
-                //    {
-                //        Thread.Sleep( 500 );
-                //        SearchSliderValue = i;
-                //    }
-                //} );
-                if (obj is MediaElement player)
-                {
-                    player.Play();
-                }
+                behaviorMediaElement.Play();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -137,7 +112,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = behaviorMediaElement != null && behaviorSlider != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -146,8 +121,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is MediaElement player)
-                    player.Pause();
+                behaviorMediaElement.Pause();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -157,7 +131,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = behaviorMediaElement != null && behaviorSlider != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
@@ -166,8 +140,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is MediaElement player)
-                    player.Stop();
+                behaviorMediaElement.Stop();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -280,7 +253,7 @@ namespace NotebookRCv001.Models
                 else if (ThisVideo)
                 {
                     if (string.IsNullOrWhiteSpace( key ))
-                        Content = new Uri( path );
+                        Content = path;
                     else
                         Content = await VideoDecrypt( path, key );
                 }
@@ -302,12 +275,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is BehaviorMediaElement player)
-                {
-                    behaviorMediaElement = player;
                     if (BehaviorReady != null)
-                        BehaviorReady.Invoke();
-                }
+                        BehaviorReady.Invoke(obj);
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -326,12 +295,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is BehaviorSlider slider)
-                {
-                    behaviorSlider = slider;
                     if (BehaviorReady != null)
-                        BehaviorReady.Invoke();
-                }
+                        BehaviorReady.Invoke(obj);
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -395,6 +360,38 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
+        private void SetCurrentPositionForSlider(TimeSpan time )
+        {
+            try
+            {
+                //behaviorSlider.Minimum = 0;
+                //behaviorSlider.Maximum = behaviorMediaElement.MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
+                //behaviorSlider.Value = behaviorSlider.Minimum + time.TotalSeconds;
+            }
+            catch(Exception e) { ErrorWindow( e ); }
+        }
+
+        private void InitializePlayerAndSlider(object obj )
+        {
+            try
+            {
+                if(obj is BehaviorMediaElement mediaElement)
+                {
+                    behaviorMediaElement = mediaElement;
+                    behaviorMediaElement.BuferingEnded += ( s, e ) =>
+                    {
+
+                    };
+                    OnPropertyChanged( "Content" );
+                }
+                else if(obj is BehaviorSlider slider)
+                {
+                    behaviorSlider = slider;
+                }
+            }
+            catch(Exception e) { ErrorWindow( e ); }
+        }
+
         private async Task<BitmapImage> ImageDecrypt( string path, string key )
         {
             BitmapImage bitmapImage = new();
@@ -420,7 +417,7 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); return bitmapImage; }
         }
 
-        private async Task<Uri> VideoDecrypt( string path, string key )
+        private async Task<string> VideoDecrypt( string path, string key )
         {
             Uri uri = new Uri( path );
             FileStream stream = null;
@@ -434,7 +431,7 @@ namespace NotebookRCv001.Models
                 uri = new Uri( newPath );
                 stream = File.OpenRead( path );
                 await Task.Factory.StartNew( () => Command_executors.Executors.DecryptFromStream( stream, newPath, key ) );
-                return uri;
+                return newPath;
             }
             catch (Exception e)
             {
@@ -444,7 +441,7 @@ namespace NotebookRCv001.Models
                     stream.Dispose();
                 }
                 ErrorWindow( e );
-                return uri;
+                return path;
             }
         }
 

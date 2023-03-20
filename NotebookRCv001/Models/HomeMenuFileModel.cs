@@ -109,7 +109,7 @@ namespace NotebookRCv001.Models
                     var homemenu = (MyControls.MenuHome)home.FindResource( "menuhome" );
                     HomeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)homemenu.FindResource( "menuencryption" );
                     var homeViewModel = (HomeViewModel)home.DataContext;
-                    richTextBoxViewModel.BehaviorReady = () => { behaviorRichTextBox = richTextBoxViewModel.BehaviorRichTextBox; };
+                    richTextBoxViewModel.BehaviorReady = (x) => { behaviorRichTextBox = richTextBoxViewModel.BehaviorRichTextBox; };
                 }
             };
             PathToLastFile = null;
@@ -273,7 +273,7 @@ namespace NotebookRCv001.Models
                                 {
                                     mainWindowViewModel.FrameListAddPage.Execute( page );
                                     var viewmodel = (FixedDocumentReaderViewModel)page.DataContext;
-                                    viewmodel.BehaviorReady = () =>
+                                    viewmodel.BehaviorReady = (x) =>
                                     {
                                         viewmodel.Document = new XpsDocument( path, FileAccess.Read );
                                     };

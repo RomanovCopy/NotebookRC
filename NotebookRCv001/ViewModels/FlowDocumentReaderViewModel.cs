@@ -30,7 +30,7 @@ namespace NotebookRCv001.ViewModels
 
         public FlowDocument CloneDocument => flowDocumentReaderModel.GetCloneDocument();
 
-        public Action BehaviorReady { get => flowDocumentReaderModel.BehaviorReady; set => flowDocumentReaderModel.BehaviorReady=value; }
+        public Action<object> BehaviorReady { get => flowDocumentReaderModel.BehaviorReady; set => flowDocumentReaderModel.BehaviorReady=value; }
 
         public string PathToLastFile { get => flowDocumentReaderModel.PathToLastFile; set => flowDocumentReaderModel.PathToLastFile = value; }
         public string LastFileName { get => flowDocumentReaderModel.LastFileName; set => flowDocumentReaderModel.LastFileName = value; }
