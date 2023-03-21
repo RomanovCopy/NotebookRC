@@ -25,7 +25,6 @@ namespace NotebookRCv001.Helpers
 
         #region ***************** Public properties ***********************
 
-        public static readonly EventHandler DragStartedEvent;
 
         public Slider Slider => AssociatedObject;
         public double Minimum { get => AssociatedObject.Minimum; set => AssociatedObject.Value = value; }
@@ -47,13 +46,12 @@ namespace NotebookRCv001.Helpers
 
         static BehaviorSlider()
         {
-
         }
 
 
         public BehaviorSlider()
         {
-
+            
         }
 
         protected override void OnAttached()
@@ -72,16 +70,6 @@ namespace NotebookRCv001.Helpers
 
         #region ***************** Events ***********************************
 
-        public event RoutedEventHandler DragStarted
-        {
-            add
-            {
-            }
-            remove
-            {
-
-            }
-        }
 
         #endregion
 

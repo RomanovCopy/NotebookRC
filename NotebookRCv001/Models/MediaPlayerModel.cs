@@ -297,6 +297,45 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); }
         }
 
+        internal bool CanExecute_ThumbDragStarted( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = behaviorMediaElement != null && behaviorSlider != null;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_ThumbDragStarted( object obj )
+        {
+            try
+            {
+                UserIsDraggingSlider = true;
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
+        internal bool CanExecute_ThumbDragCompleted( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = UserIsDraggingSlider;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_ThumbDragCompleted( object obj )
+        {
+            try
+            {
+                behaviorMediaElement.Position = TimeSpan.FromSeconds( behaviorSlider.Value );
+                UserIsDraggingSlider = false;
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
+
         internal bool CanExecute_SliderLoaded( object obj )
         {
             try
@@ -380,9 +419,6 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                //behaviorSlider.Minimum = 0;
-                //behaviorSlider.Maximum = behaviorMediaElement.MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
-                //behaviorSlider.Value = behaviorSlider.Minimum + time.TotalSeconds;
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -413,19 +449,22 @@ namespace NotebookRCv001.Models
 
         private void TimerTick( object sender, EventArgs e )
         {
-            if (play && behaviorMediaElement.MediaElement.NaturalDuration.HasTimeSpan && !UserIsDraggingSlider)
+            try
             {
-                behaviorSlider.Minimum = 0;
-                behaviorSlider.Maximum = behaviorMediaElement.MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
-                behaviorSlider.Value = behaviorMediaElement.MediaElement.Position.TotalSeconds;
-                if (behaviorSlider.Value >= behaviorSlider.Maximum)
+                if (play && behaviorMediaElement.MediaElement.NaturalDuration.HasTimeSpan && !UserIsDraggingSlider)
                 {
-                    Execute_Stop( null );
-                    behaviorSlider.Value = 0;
-                    behaviorMediaElement.Position = new TimeSpan( 0, 0, 0 );
+                    behaviorSlider.Minimum = 0;
+                    behaviorSlider.Maximum = behaviorMediaElement.MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
+                    behaviorSlider.Value = behaviorMediaElement.MediaElement.Position.TotalSeconds;
+                    if (behaviorSlider.Value >= behaviorSlider.Maximum)
+                    {
+                        Execute_Stop( null );
+                        behaviorSlider.Value = 0;
+                        behaviorMediaElement.Position = TimeSpan.FromSeconds( 0 );
+                    }
                 }
             }
-
+            catch (Exception ex) { ErrorWindow( ex ); }
         }
 
         private async Task<BitmapImage> ImageDecrypt( string path, string key )

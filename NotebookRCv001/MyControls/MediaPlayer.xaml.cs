@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -26,13 +27,13 @@ namespace NotebookRCv001.MyControls
             InitializeComponent();
         }
 
-        private void DragStarted( object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e )
+        private void timelineSlider_DragStarted( object sender, DragStartedEventArgs e )
         {
             if (DataContext is ViewModels.MediaPlayerViewModel vm)
                 vm.UserIsDraggingSlider = true;
         }
 
-        private void DragCompleted( object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e )
+        private void timelineSlider_DragCompleted( object sender, DragCompletedEventArgs e )
         {
             if (DataContext is ViewModels.MediaPlayerViewModel vm)
             {

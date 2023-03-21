@@ -65,6 +65,12 @@ namespace NotebookRCv001.ViewModels
         public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
             mediaPlayerModel.CanExecute_MediaPlayerLoaded );
         private RelayCommand mediaPlayerLoaded;
+        public ICommand ThumbDragStarted => thumbDragStarted ??= new RelayCommand( mediaPlayerModel.Execute_ThumbDragStarted,
+            mediaPlayerModel.CanExecute_ThumbDragStarted );
+        private RelayCommand thumbDragStarted;
+        public ICommand ThumbDragCompleted => thumbDragCompleted ??= new RelayCommand( mediaPlayerModel.Execute_ThumbDragCompleted,
+            mediaPlayerModel.CanExecute_ThumbDragCompleted );
+        private RelayCommand thumbDragCompleted;
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( mediaPlayerModel.Execute_PageLoaded, mediaPlayerModel.CanExecute_PageLoaded );
         private RelayCommand pageLoaded;
         public ICommand PageClear => pageClear ??= new RelayCommand( mediaPlayerModel.Execute_PageClear, mediaPlayerModel.CanExecute_PageClear );
