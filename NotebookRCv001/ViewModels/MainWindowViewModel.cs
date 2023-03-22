@@ -102,7 +102,9 @@ namespace NotebookRCv001.ViewModels
              mainWindowModel.CanExecute_MainWindowClosing);
         RelayCommand mainWindowClosing;
 
-
+        public ICommand MainWindowClosed => mainWindowClosed ??= new RelayCommand( mainWindowModel.Execute_MainWindowClosed,
+             mainWindowModel.CanExecute_MainWindowClosed );
+        RelayCommand mainWindowClosed;
 
 
 

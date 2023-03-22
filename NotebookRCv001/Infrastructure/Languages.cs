@@ -431,6 +431,51 @@ namespace NotebookRCv001.Infrastructure
         #endregion
 
 
+        #region _________________ MediaPlayer _____________________________
+
+        /// <summary>
+        /// заголовки и подсказки для MediaPlayer
+        /// </summary>
+        public ObservableCollection<string> HeadersMediaPlayer => DictionaryHeadersMediaPlayer[Key];
+        private Dictionary<string, ObservableCollection<string>> DictionaryHeadersMediaPlayer
+        {
+            get => dictionaryHeadersMediaPlayer ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                {"ru-RU", new ObservableCollection<string>()
+                {
+
+                }
+                },
+                {"en-US", new ObservableCollection<string>()
+                {
+
+                }
+                }
+            };
+        }
+        private Dictionary<string, ObservableCollection<string>> dictionaryHeadersMediaPlayer;
+        public ObservableCollection<string> ToolTipsMediaPlayer => DictionaryToolTipsMediaPlayer[Key];
+        Dictionary<string, ObservableCollection<string>> DictionaryToolTipsMediaPlayer
+        {
+            get => dictionaryToolTipsMediaPlayer ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                {"ru-RU", new ObservableCollection<string>()
+                {
+
+                }
+                },
+                {"en-US", new ObservableCollection<string>()
+                {
+
+                }
+                }
+            };
+        }
+        Dictionary<string, ObservableCollection<string>> dictionaryToolTipsMediaPlayer;
+
+        #endregion
+
+
         #region ___________________FileOverview_________________________________
 
 
@@ -444,13 +489,22 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-
+                    "Обзор файлов",//00
+                    "Имя",//01
+                    "Тип",//02
+                    "Размер",//03
+                    "Дата",//04
+                    "Открыть",//05
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
                 {
-
-
+                     "Browse Files",//00
+                     "Name",//01
+                     "Type",//02
+                     "Size",//03
+                     "Date",//04
+                     "Open",//05
                 }
                 }
             };
@@ -761,7 +815,7 @@ namespace NotebookRCv001.Infrastructure
                         "Edit File",//06
                         "Synchronization",//07
                         "Uploading files",//08
-                        "File Overview",//09
+                        "Browse Files",//09
                     }
                 }
             };
@@ -945,6 +999,7 @@ namespace NotebookRCv001.Infrastructure
                             "Читать документ",//03
                             "Редактировать документ",//04
                             "Добавить текст",//05
+                            "Медиа плеер",//06
                         }
                     },
                     {
@@ -956,6 +1011,7 @@ namespace NotebookRCv001.Infrastructure
                             "Read document",//03
                             "Edit document",//04
                             "Add text",//05
+                            "Media player",//06
                         }
                     }
             };
@@ -975,6 +1031,7 @@ namespace NotebookRCv001.Infrastructure
                             "Включить режим чтения(редактирование не возможно)",//03
                             "Включить режим редактирования",//04
                             "Вставить текст в выбранный параграф",//05
+                            "Открыть медиа плеер для воспроизведения контента",//06
                         }
                     },
                     {
@@ -986,6 +1043,7 @@ namespace NotebookRCv001.Infrastructure
                              "Enable reading mode (editing is not possible)",//03
                              "Enable edit mode",//04
                              "Insert text in the selected paragraph",//05
+                             "Open media player to play content",//06
                         }
                     }
             };

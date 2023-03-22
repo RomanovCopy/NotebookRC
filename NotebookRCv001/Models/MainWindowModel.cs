@@ -121,13 +121,13 @@ namespace NotebookRCv001.Models
             Language = new Languages();
             Language.PropertyChanged += ( s, e ) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
             //восстанавливаем размеры и положение окна
-            if (Properties.Settings.Default.FirstStart)
+            if (Properties.Settings.Default.FileOverviewFirstStart)
             {
-                WindowHeight = 30;
-                WindowWidth = 70;
-                WindowLeft = 10;
-                WindowTop = 10;
-                Properties.Settings.Default.FirstStart = false;
+                WindowHeight = 40;
+                WindowWidth = 40;
+                WindowLeft = 40;
+                WindowTop = 40;
+                Properties.Settings.Default.FileOverviewFirstStart = false;
             }
             else
             {
@@ -260,6 +260,7 @@ namespace NotebookRCv001.Models
                         FrameList.Remove(page);
                     }
                 }
+                Application.Current.MainWindow.Focus();
             }
             catch (Exception e)
             {
@@ -365,7 +366,44 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
+        internal bool CanExecute_MainWindowClosed( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_MainWindowClosed( object obj )
+        {
+            try
+            {
+                DeletingTemporaryFiles();
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
+        /// <summary>
+        /// очистка временных файлов
+        /// </summary>
+        /// <returns></returns>
+        private bool DeletingTemporaryFiles()
+        {
+            try
+            {
+                string path = $"{Environment.CurrentDirectory}/temp";
+                if (Directory.Exists( path ))
+                {
+                    while (Directory.GetFiles( path ).Length > 0)
+                    {
+                        File.Delete( Directory.GetFiles( path ).FirstOrDefault() );
+                    }
+                }
+                return Directory.GetFiles( path ).Length == 0;
+            }
+            catch { return false; }
+        }
 
         /// <summary>
         /// Открытие окна выбора.
@@ -407,5 +445,6 @@ namespace NotebookRCv001.Models
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
         }
+
     }
 }

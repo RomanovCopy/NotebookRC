@@ -266,7 +266,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn  Header=" " 
+                        <GridViewColumn x:Name="last"  Header=" " 
                                       Width="{Binding ListView_ColumnsWidth[7], Converter={StaticResource columnswidth}, 
                             ConverterParameter=last,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <GridViewColumn.CellTemplate>
@@ -306,7 +306,7 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=Page, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="SizeChanged">
             <i:InvokeCommandAction Command="{Binding PageSizeChanged, UpdateSourceTrigger=PropertyChanged}"/>

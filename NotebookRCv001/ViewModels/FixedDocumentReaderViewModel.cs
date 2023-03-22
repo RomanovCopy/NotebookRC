@@ -24,7 +24,7 @@ namespace NotebookRCv001.ViewModels
 
         public ObservableCollection<string> ToolTips => fixedDocumentReaderModel.ToolTips;
 
-        public Action BehaviorReady { get => fixedDocumentReaderModel.BehaviorReady; set => fixedDocumentReaderModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => fixedDocumentReaderModel.BehaviorReady; set => fixedDocumentReaderModel.BehaviorReady = value; }
 
         public XpsDocument Document { get => fixedDocumentReaderModel.Document; set => fixedDocumentReaderModel.Document = value; }
 

@@ -215,8 +215,8 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// делегат выполняемый после определения BehaviorFlowDocumentReader
         /// </summary>
-        internal Action BehaviorReady { get => behaviorReady; set => SetProperty(ref behaviorReady, value); }
-        private Action behaviorReady;
+        internal Action<object> BehaviorReady { get => behaviorReady; set => SetProperty(ref behaviorReady, value); }
+        private Action<object> behaviorReady;
 
         public RichTextBoxModel()
         {
@@ -434,7 +434,7 @@ namespace NotebookRCv001.Models
                     textBox.SetFocus();
                     if (BehaviorReady != null)
                     {
-                        BehaviorReady.Invoke();
+                        BehaviorReady.Invoke(obj);
                         BehaviorReady = null;
                     }
                 }

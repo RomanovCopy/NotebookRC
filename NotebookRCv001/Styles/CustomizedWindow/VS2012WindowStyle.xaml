@@ -53,8 +53,8 @@
     <BitmapImage x:Key="reloadminiimage" UriSource="\Resources\Images\030_reload_mini.png"/>
     <BitmapImage x:Key="linespacingdecrease" UriSource="\Resources\Images\031linespacingdecrease.png"/>
     <BitmapImage x:Key="linespacingincrease" UriSource="\Resources\Images\032linespacingincrease .png"/>
-    
-    
+    <BitmapImage x:Key="fileOverviewUp" UriSource="\Resources\Images\033UpFileOverview.png"/>
+
     <!--#endregion-->
 
 

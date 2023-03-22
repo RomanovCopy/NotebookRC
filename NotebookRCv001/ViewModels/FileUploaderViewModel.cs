@@ -48,7 +48,7 @@ namespace NotebookRCv001.ViewModels
         }
 
 
-        public Action BehaviorReady { get => fileUploaderModel.BehaviorReady; set => fileUploaderModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => fileUploaderModel.BehaviorReady; set => fileUploaderModel.BehaviorReady = value; }
 
         /// <summary>
         /// выбор всего содержимого TextBox url

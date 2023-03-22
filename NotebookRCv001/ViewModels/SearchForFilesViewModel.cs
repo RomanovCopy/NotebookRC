@@ -45,7 +45,7 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<double> ColumnsWidth 
         { get => SearchForFilesModel.ColumnsWidth; set => SearchForFilesModel.ColumnsWidth = value; }
 
-        public Action BehaviorReady { get => searchForFilesModel.BehaviorReady; set => searchForFilesModel.BehaviorReady = value; }
+        public Action<object> BehaviorReady { get => searchForFilesModel.BehaviorReady; set => searchForFilesModel.BehaviorReady = value; }
 
         public ObservableCollection<string> Icons => throw new NotImplementedException();
 

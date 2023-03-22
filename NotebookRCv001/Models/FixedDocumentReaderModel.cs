@@ -26,8 +26,8 @@ namespace NotebookRCv001.Models
         private Languages language => mainWindowViewModel.Language;
         internal ObservableCollection<string> Headers => language.FixedDocumentHeaders;
         internal ObservableCollection<string> ToolTips => language.ToolTipsFixedDocument;
-        internal Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
-        private Action behaviorReady;
+        internal Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
+        private Action<object> behaviorReady;
 
         internal XpsDocument Document { get => behaviorFixedDocument.Document; set => behaviorFixedDocument.Document = value; }
         internal string PathToLastFile { get => pathToLastFile; set => SetProperty(ref pathToLastFile, value); }
@@ -85,7 +85,7 @@ namespace NotebookRCv001.Models
                 {
                     behaviorFixedDocument = behavior;
                     if (BehaviorReady != null)
-                        BehaviorReady.Invoke();
+                        BehaviorReady.Invoke(behavior);
                 }
             }
             catch (Exception e) { ErrorWindow(e); }

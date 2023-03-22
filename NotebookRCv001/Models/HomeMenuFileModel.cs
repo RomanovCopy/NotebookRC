@@ -32,8 +32,11 @@ namespace NotebookRCv001.Models
         private RichTextBoxViewModel richTextBoxViewModel { get; set; }
         private HomeMenuEncryptionViewModel HomeMenuEncryptionViewModel { get; set; }
         private BehaviorRichTextBox behaviorRichTextBox { get; set; }
-
-
+        /// <summary>
+        /// поддерживаемые расширения файлов
+        /// </summary>
+        internal string[] SupportedFileExtensions => supportedFileExtensions ??= new[] { ".xps", ".txt", ".cs", ".rtf", ".xaml" };
+        private string[] supportedFileExtensions;
         internal ObservableCollection<string> Headers => mainWindowViewModel.Language.HomeMenuFile;
         internal ObservableCollection<string> ToolTips => mainWindowViewModel.Language.ToolTipsHomeMenuFile;
 
@@ -106,7 +109,7 @@ namespace NotebookRCv001.Models
                     var homemenu = (MyControls.MenuHome)home.FindResource( "menuhome" );
                     HomeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)homemenu.FindResource( "menuencryption" );
                     var homeViewModel = (HomeViewModel)home.DataContext;
-                    richTextBoxViewModel.BehaviorReady = () => { behaviorRichTextBox = richTextBoxViewModel.BehaviorRichTextBox; };
+                    richTextBoxViewModel.BehaviorReady = (x) => { behaviorRichTextBox = richTextBoxViewModel.BehaviorRichTextBox; };
                 }
             };
             PathToLastFile = null;
@@ -270,7 +273,7 @@ namespace NotebookRCv001.Models
                                 {
                                     mainWindowViewModel.FrameListAddPage.Execute( page );
                                     var viewmodel = (FixedDocumentReaderViewModel)page.DataContext;
-                                    viewmodel.BehaviorReady = () =>
+                                    viewmodel.BehaviorReady = (x) =>
                                     {
                                         viewmodel.Document = new XpsDocument( path, FileAccess.Read );
                                     };
@@ -480,7 +483,9 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                new Views.FileOverview().Show();
+                var overview = new Views.FileOverview();
+                overview.Owner = Application.Current.MainWindow;
+                overview.Show();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }

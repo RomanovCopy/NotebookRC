@@ -202,6 +202,10 @@
                           Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{Binding ToolTips[3], UpdateSourceTrigger=PropertyChanged}"
                           Command="{Binding Reading, UpdateSourceTrigger=PropertyChanged}"/>
+                <MenuItem x:Name="mediaplayer" 
+                          Header="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding ToolTips[6], UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding MediaPlayer, UpdateSourceTrigger=PropertyChanged}"/>
             </MenuItem>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">

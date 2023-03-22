@@ -12,7 +12,7 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Resources\Icons\icon1.ico</ApplicationIcon>
-    <SignAssembly>False</SignAssembly>
+    <SignAssembly>True</SignAssembly>
     <IsPublishable>True</IsPublishable>
   </PropertyGroup>
 
@@ -67,6 +67,7 @@
     <Compile Remove="docxaml.cs" />
     <Compile Remove="Executors.cs" />
     <Compile Remove="Helpers\TextBoxHeleper.cs" />
+    <Compile Remove="Helpers\WordHelper.cs" />
     <Compile Remove="Helpers\WordHelper2.cs" />
     <Compile Remove="Infrastructure\Encodings.cs" />
     <Compile Remove="Infrastructure\RTB_DependencyPropertiesi.cs" />
@@ -74,6 +75,7 @@
     <Compile Remove="Models\ContextMenuImageModel.cs" />
     <Compile Remove="MyControls\ContextMenuHome.xaml.cs" />
     <Compile Remove="MyControls\ContextMenuImage.xaml.cs" />
+    <Compile Remove="MyControls\MediaElementExample.xaml.cs" />
     <Compile Remove="MyControls\SfRichTextBox.xaml.cs" />
     <Compile Remove="Resources\en-US.Designer.cs" />
     <Compile Remove="Resources\Image.Designer.cs" />
@@ -131,12 +133,14 @@
     <None Remove="Resources\Images\030_reload_mini.png" />
     <None Remove="Resources\Images\031linespacingdecrease.png" />
     <None Remove="Resources\Images\032linespacingincrease .png" />
+    <None Remove="Resources\Images\033UpFileOverview.png" />
     <None Remove="Resources\start.bmp" />
   </ItemGroup>
 
   <ItemGroup>
     <Page Remove="MyControls\ContextMenuHome.xaml" />
     <Page Remove="MyControls\ContextMenuImage.xaml" />
+    <Page Remove="MyControls\MediaElementExample.xaml" />
     <Page Remove="MyControls\SfRichTextBox.xaml" />
     <Page Remove="Views\FlowDocRead.xaml" />
     <Page Remove="Views\FlowDocumentEditor.xaml" />
@@ -206,6 +210,7 @@
     <Resource Include="Resources\Images\030_reload_mini.png" />
     <Resource Include="Resources\Images\031linespacingdecrease.png" />
     <Resource Include="Resources\Images\032linespacingincrease .png" />
+    <Resource Include="Resources\Images\033UpFileOverview.png" />
   </ItemGroup>
 
   <ItemGroup>

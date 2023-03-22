@@ -30,8 +30,8 @@ namespace NotebookRCv001.Models
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsEncryptIndividualFile;
 
-        internal Action BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
-        Action behaviorReady;
+        internal Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
+        Action<object> behaviorReady;
 
 
         /// <summary>
@@ -379,6 +379,7 @@ namespace NotebookRCv001.Models
             {
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
+                var key = homeMenuEncryptionViewModel.KeyCript;
                 progressVM.Target = this;
                 PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
                 ProgressValue = 0;
@@ -386,9 +387,8 @@ namespace NotebookRCv001.Models
                 {
                     if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                     {//шифрование файла
-                        byte[] bytes = FileEncrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
-                        using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
-                            fs.Write( bytes, 0, bytes.Length );
+                        ProgressValue = 50;
+                        Command_executors.Executors.EncryptFromStream( File.OpenRead( PathToOpenFile ), PathToSaveFile, key );
                     }
                     else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
                     {//щифрование каталога
@@ -402,9 +402,7 @@ namespace NotebookRCv001.Models
                                 {
                                     var name = new FileInfo( file ).Name;
                                     var pathToSave = Path.Combine( PathToSaveDirectory, name );
-                                    byte[] bytes = FileEncrypt( file, homeMenuEncryptionViewModel.KeyCript );
-                                    using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
-                                        fs.Write( bytes, 0, bytes.Length );
+                                    Command_executors.Executors.EncryptFromStream( File.OpenRead( file ), pathToSave, key );
                                     ProgressValue = count / (double)files.Length * 100.0;
                                     count++;
                                 }
@@ -441,6 +439,7 @@ namespace NotebookRCv001.Models
             {
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
+                var key = homeMenuEncryptionViewModel.KeyCript;
                 progressVM.Target = this;
                 PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
                 ProgressValue = 0;
@@ -449,9 +448,8 @@ namespace NotebookRCv001.Models
                     Thread.Sleep( 500 );
                     if (!string.IsNullOrWhiteSpace( PathToOpenFile ) && !string.IsNullOrWhiteSpace( PathToSaveFile ))
                     {//дешифрование файла
-                        byte[] bytes = FileDecrypt( PathToOpenFile, homeMenuEncryptionViewModel.KeyCript );
-                        using (FileStream fs = new FileStream( PathToSaveFile, FileMode.Create ))
-                            fs.Write( bytes, 0, bytes.Length );
+                        ProgressValue = 50;
+                        Command_executors.Executors.DecryptFromStream( File.OpenRead( PathToOpenFile ), PathToSaveFile, key );
                     }
                     else if (!string.IsNullOrWhiteSpace( PathToOpenDirectory ) && !string.IsNullOrWhiteSpace( PathToSaveDirectory ))
                     {//дещифрование каталога
@@ -465,9 +463,7 @@ namespace NotebookRCv001.Models
                                 {
                                     var name = new FileInfo( file ).Name;
                                     var pathToSave = Path.Combine( PathToSaveDirectory, name );
-                                    byte[] bytes = FileDecrypt( file, homeMenuEncryptionViewModel.KeyCript );
-                                    using (FileStream fs = new FileStream( pathToSave, FileMode.Create ))
-                                        fs.Write( bytes, 0, bytes.Length );
+                                    Command_executors.Executors.DecryptFromStream( File.OpenRead( file ), pathToSave, key );
                                     ProgressValue = count / (double)files.Length * 100.0;
                                     count++;
                                 }
