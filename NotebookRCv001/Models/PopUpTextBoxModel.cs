@@ -64,7 +64,6 @@ namespace NotebookRCv001.Models
             WindowHeight = Properties.Settings.Default.PopUpTextBoxHeight;
             WindowLeft = Properties.Settings.Default.PopUpTextBoxLeft;
             WindowTop = Properties.Settings.Default.PopUpTextBoxTop;
-            validInputCharacters = new[] { Key.Back, Key.LeftShift, Key.RightShift, Key.LeftCtrl, Key.RightCtrl };
         }
 
 
@@ -96,10 +95,10 @@ namespace NotebookRCv001.Models
                             if (window is Window win)
                                 win.Close();
                         }
-                        bool c = validInputCharacters.Any((x) => e.Key == x);
-                        if (char.IsControl((char)e.Key) && !c)
-                        if (char.IsControl((char)e.Key) && e.Key != System.Windows.Input.Key.Back)
-                            e.Handled = true;
+                        //bool c = validInputCharacters.Any((x) => e.Key == x);
+                        //if (char.IsControl((char)e.Key) && !c)
+                        //if (char.IsControl((char)e.Key) && e.Key != System.Windows.Input.Key.Back)
+                        //    e.Handled = true;
                     };
                 }
             }
