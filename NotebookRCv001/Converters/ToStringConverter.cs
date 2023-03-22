@@ -45,13 +45,14 @@ namespace NotebookRCv001.Converters
                         }
                     case "Sec_Time":
                         {
-                            long time = (long)value;
+                            double time = (double)value;
+                            //long time = (long)value;
                             if (time < 60)
-                                result = $"{time} s";
+                                result = $"{time.ToString("##")} S";
                             else if (time >= 60 && time < 3600)
-                                result = $"{time / 60} m";
+                                result = $"{(time / 60).ToString("##")} M {(time%60).ToString("##")} S";
                             else
-                                result = $"{time / 3600} h";
+                                result = $"{(time / 3600).ToString("##")} H {(time%3600).ToString("##")} M";
                             break;
                         }
                     case "Status_Downloads":
