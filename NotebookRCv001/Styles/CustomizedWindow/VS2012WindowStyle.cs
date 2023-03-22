@@ -20,6 +20,7 @@ using NotebookRCv001.Helpers;
 using System.Windows.Controls;
 using NotebookRCv001.Interfaces;
 using System.Drawing;
+using System.Windows.Controls.Primitives;
 
 namespace NotebookRCv001.Styles.CustomizedWindow
 {
@@ -30,6 +31,7 @@ namespace NotebookRCv001.Styles.CustomizedWindow
         MainWindowViewModel mainWindowViewModel;
 
         BehaviorComboBox BehaviorComboBox { get; set; }
+
 
         public ObservableCollection<string> ToolTips => MainWindowViewModel.Language.ToolTipsMainWindow;
 
@@ -307,10 +309,17 @@ namespace NotebookRCv001.Styles.CustomizedWindow
 
 
 
+        public ICommand DragStarted => dragStarted ??= new RelayCommand( ( obj ) => 
+        {
+            var a = false;
+        } );
+        private RelayCommand dragStarted;
 
-
-
-
+        public ICommand DragCompleted => dragCompleted ??= new RelayCommand( ( obj ) =>
+        {
+            var a = false;
+        } );
+        private RelayCommand dragCompleted;
 
 
 

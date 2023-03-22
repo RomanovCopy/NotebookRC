@@ -123,7 +123,7 @@
                     </Style>
                 </Image.Style>
             </Image>
-            <Slider Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1">
+            <Slider Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorSlider x:Name="sliderbehavior"/>
                 </i:Interaction.Behaviors>

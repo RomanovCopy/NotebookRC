@@ -1641,7 +1641,18 @@
                     <RepeatButton Style="{StaticResource SliderRepeatButton1}"  Command="Slider.DecreaseLarge" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Style="{StaticResource SliderThumb}" Margin="0,-20,0,0" />
+                    <Thumb Style="{StaticResource SliderThumb}" Margin="0,-20,0,0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DragStarted">
+                                <i:InvokeCommandAction Command="{Binding Source={StaticResource navigateservice}, 
+                                    Path=DragStarted, UpdateSourceTrigger=PropertyChanged}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="DragCompleted">
+                                <i:InvokeCommandAction Command="{Binding Source={StaticResource navigateservice}, 
+                                    Path=DragCompleted, UpdateSourceTrigger=PropertyChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Thumb>
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Style="{StaticResource SliderRepeatButton}" Command="Slider.IncreaseLarge" />
