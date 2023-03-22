@@ -95,10 +95,6 @@ namespace NotebookRCv001.Models
                             if (window is Window win)
                                 win.Close();
                         }
-                        //bool c = validInputCharacters.Any((x) => e.Key == x);
-                        //if (char.IsControl((char)e.Key) && !c)
-                        //if (char.IsControl((char)e.Key) && e.Key != System.Windows.Input.Key.Back)
-                        //    e.Handled = true;
                     };
                 }
             }
