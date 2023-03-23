@@ -1685,6 +1685,10 @@
                 <Setter Property="MinWidth" Value="104" />
                 <Setter Property="Template" Value="{StaticResource Slider}" />
             </Trigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
+                Mode=FindAncestor}, Path=DataContext.ThisImage}" Value="True">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 
