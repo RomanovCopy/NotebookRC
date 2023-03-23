@@ -1614,8 +1614,8 @@
                 <ControlTemplate TargetType="Thumb">
                     <StackPanel Orientation="Vertical">
                         <Path Data="M 0 0 L 8 0 L 4 6 Z"  Stroke="YellowGreen" Margin="-2,0,0,0" StrokeThickness="2" Fill="YellowGreen"></Path>
-                        <Line X1="0" Y1="0" X2="0" Y2="7" Stroke="Gray" StrokeThickness="1" Margin="2,0,0,0" StrokeDashArray="1.5,1.5"></Line>
-                        <TextBlock Foreground="Black" Margin="-2,30,0,0"  
+                        <Line X1="0" Y1="0" X2="0" Y2="5" Stroke="Gray" StrokeThickness="1" Margin="2,0,0,0" StrokeDashArray="1.5,1.5"></Line>
+                        <TextBlock Foreground="White" Margin="-20,30,0,0"  
                                    Text="{Binding Converter={StaticResource tostring},ConverterParameter=Sec_Time, 
                             RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}, Path=Value}"/>
                     </StackPanel>
