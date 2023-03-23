@@ -26,20 +26,5 @@ namespace NotebookRCv001.MyControls
         {
             InitializeComponent();
         }
-
-        //private void timelineSlider_DragStarted( object sender, DragStartedEventArgs e )
-        //{
-        //    if (DataContext is ViewModels.MediaPlayerViewModel vm)
-        //        vm.UserIsDraggingSlider = true;
-        //}
-
-        //private void timelineSlider_DragCompleted( object sender, DragCompletedEventArgs e )
-        //{
-        //    if (DataContext is ViewModels.MediaPlayerViewModel vm)
-        //    {
-        //        mplayer.Position = TimeSpan.FromSeconds( timelineSlider.Value );
-        //        vm.UserIsDraggingSlider = false;
-        //    }
-        //}
     }
 }

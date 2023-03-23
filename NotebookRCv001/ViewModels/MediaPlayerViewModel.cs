@@ -12,10 +12,11 @@ using NotebookRCv001.Models;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.IO;
+using NotebookRCv001.Helpers;
 
 namespace NotebookRCv001.ViewModels
 {
-    public class MediaPlayerViewModel:ViewModelBase, IPageViewModel
+    public class MediaPlayerViewModel:ViewModelBase, IPageViewModel, ILastFileName
     {
         private MediaPlayerModel mediaPlayerModel { get; set; }
         public ObservableCollection<string> Headers => mediaPlayerModel.Headers;
@@ -23,8 +24,21 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<string> ToolTips => mediaPlayerModel.ToolTips;
 
         public bool UserIsDraggingSlider { get => mediaPlayerModel.UserIsDraggingSlider; set => mediaPlayerModel.UserIsDraggingSlider = value; }
-
+        /// <summary>
+        /// позиция воспроизведения плеера
+        /// </summary>
         public TimeSpan Position { get => mediaPlayerModel.Position; set => mediaPlayerModel.Position = value; }
+        /// <summary>
+        /// максимальное значение слайдера
+        /// </summary>
+        public double Maximum { get => mediaPlayerModel.Maximum; set => mediaPlayerModel.Maximum = value; }
+        /// <summary>
+        /// минимальное значение слайдера
+        /// </summary>
+        public double Minimum { get => mediaPlayerModel.Minimum; set => mediaPlayerModel.Minimum = value; }
+        /// <summary>
+        /// текущее положение ползунка слайдера
+        /// </summary>
         public double Value { get => mediaPlayerModel.Value; set => mediaPlayerModel.Value = value; }
         public Action<object> BehaviorReady { get => mediaPlayerModel.BehaviorReady; set => mediaPlayerModel.BehaviorReady = value; }
 
@@ -35,6 +49,12 @@ namespace NotebookRCv001.ViewModels
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;
         public bool ThisImage => mediaPlayerModel.ThisImage;
+
+
+
+        public string PathToLastFile { get => mediaPlayerModel.PathToLastFile; set => mediaPlayerModel.PathToLastFile=value; }
+        public string LastFileName { get => mediaPlayerModel.LastFileName; set => mediaPlayerModel.LastFileName = value; }
+
 
 
         public MediaPlayerViewModel()

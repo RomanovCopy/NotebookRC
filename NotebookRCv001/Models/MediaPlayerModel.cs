@@ -29,19 +29,29 @@ namespace NotebookRCv001.Models
         private Page page { get; set; }
         private BehaviorMediaElement behaviorMediaElement { get; set; }
         private BehaviorSlider behaviorSlider { get; set; }
-
+        private bool play { get; set; }
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
 
         internal bool UserIsDraggingSlider { get => userIsDraggingSlider; set => SetProperty( ref userIsDraggingSlider, value ); }
         private bool userIsDraggingSlider;
-
-        internal TimeSpan Position { get => position; set => SetProperty( ref position, value ); }
-        private TimeSpan position;
-
-        internal double Value { get => value; set => SetProperty( ref value, value ); }
-        private double value;
+        /// <summary>
+        /// текущая позиция воспроизведения плеера
+        /// </summary>
+        internal TimeSpan Position { get => behaviorMediaElement.Position; set => behaviorMediaElement.Position = value; }
+        /// <summary>
+        /// максимальное значение слайдера
+        /// </summary>
+        internal double Maximum { get => behaviorSlider.Maximum; set => behaviorSlider.Maximum = value; }
+        /// <summary>
+        /// минимальное значение слайдера
+        /// </summary>
+        internal double Minimum { get => behaviorSlider.Minimum; set => behaviorSlider.Minimum = value; }
+        /// <summary>
+        /// текущее положение ползунка слейдера
+        /// </summary>
+        internal double Value { get => behaviorSlider.Value; set => behaviorSlider.Value = value; }
 
         public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action<object> behaviorReady;
@@ -88,7 +98,13 @@ namespace NotebookRCv001.Models
         public double ProgressValue { get => progressValue; set => SetProperty( ref progressValue, value ); }
         private double progressValue;
 
-        private bool play { get; set; }
+
+        internal string PathToLastFile { get => pathToLastFile; set => SetProperty(ref pathToLastFile, value); }
+        private string pathToLastFile;
+        internal string LastFileName { get => lastFileName; set => SetProperty( ref lastFileName, value ); }
+        private string lastFileName;
+
+
 
         internal MediaPlayerModel()
         {

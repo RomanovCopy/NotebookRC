@@ -25,6 +25,7 @@ namespace NotebookRCv001.Helpers
         #region **************** Public properties ************************
 
         public MediaElement MediaElement => AssociatedObject;
+        public TimeSpan Position { get => AssociatedObject.Position; set => AssociatedObject.Position = value; }
 
 
         #endregion
@@ -62,8 +63,6 @@ namespace NotebookRCv001.Helpers
 
         #region ******************* Dependency properties ***************
 
-        internal TimeSpan Position { get => (TimeSpan)GetValue( PositionProperty ); set => SetValue( PositionProperty, value ); }
-        public static readonly DependencyProperty PositionProperty;
 
         #endregion
 
@@ -75,8 +74,6 @@ namespace NotebookRCv001.Helpers
 
         static BehaviorMediaElement()
         {
-            PositionProperty = DependencyProperty.Register( "Position", typeof( TimeSpan ),
-                typeof( BehaviorMediaElement ), new PropertyMetadata( new PropertyChangedCallback( PositionChanged ) ) );
         }
 
         protected override void OnAttached()
@@ -124,14 +121,6 @@ namespace NotebookRCv001.Helpers
 
         #region *************** Event handlers *********************
 
-
-        private static void PositionChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
-        {
-            if(d is BehaviorMediaElement behavior)
-            {
-                behavior.MediaElement.Position = (TimeSpan)e.NewValue;
-            }
-        }
 
 
         private void AssociatedObject_MediaFailed( object sender, ExceptionRoutedEventArgs e )

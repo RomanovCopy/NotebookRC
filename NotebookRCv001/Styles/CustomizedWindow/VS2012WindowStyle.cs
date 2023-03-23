@@ -31,6 +31,7 @@ namespace NotebookRCv001.Styles.CustomizedWindow
         MainWindowViewModel mainWindowViewModel;
 
         BehaviorComboBox BehaviorComboBox { get; set; }
+        MediaPlayerViewModel mediaPlayerViewModel { get; set; }
 
 
         public ObservableCollection<string> ToolTips => MainWindowViewModel.Language.ToolTipsMainWindow;
@@ -83,11 +84,14 @@ namespace NotebookRCv001.Styles.CustomizedWindow
                                 {
                                     LastFileName = lastname.LastFileName;
                                     PathToLastFile = lastname.PathToLastFile;
+                                    if (p is MyControls.MediaPlayer player && player.DataContext is MediaPlayerViewModel playerVM)
+                                        mediaPlayerViewModel = playerVM;
                                 };
                                 p.Unloaded += (s, e) =>
                                 {
                                     LastFileName = "";
                                     PathToLastFile = "";
+                                    mediaPlayerViewModel = null;
                                 };
                             }
                             else
@@ -311,13 +315,18 @@ namespace NotebookRCv001.Styles.CustomizedWindow
 
         public ICommand DragStarted => dragStarted ??= new RelayCommand( ( obj ) => 
         {
-            var a = false;
+            if (mediaPlayerViewModel != null)
+                mediaPlayerViewModel.UserIsDraggingSlider = true;
         } );
         private RelayCommand dragStarted;
 
         public ICommand DragCompleted => dragCompleted ??= new RelayCommand( ( obj ) =>
         {
-            var a = false;
+            if(mediaPlayerViewModel!=null)
+            {
+                mediaPlayerViewModel.Position = TimeSpan.FromSeconds( mediaPlayerViewModel.Value );
+                mediaPlayerViewModel.UserIsDraggingSlider = false;
+            }
         } );
         private RelayCommand dragCompleted;
 
