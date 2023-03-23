@@ -15,6 +15,7 @@
       x:Name="page">
     <Page.Resources>
         <viewmodels:MediaPlayerViewModel x:Key="viewmodel"/>
+        <converters:ToStringConverter x:Key="tostring"/>
         <local:ButtonsClearAndClose x:Key="closeandclear"/>
         <Style TargetType="Button" x:Key="buttons">
             <Setter Property="Opacity" Value="0.1"/>
@@ -123,7 +124,7 @@
                     </Style>
                 </Image.Style>
             </Image>
-            <Slider Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
+            <Slider x:Name="mpslider" Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorSlider x:Name="sliderbehavior"/>
                 </i:Interaction.Behaviors>
@@ -134,18 +135,6 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Slider>
-                <!--<Slider Name="timelineSlider" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" 
-                    Thumb.DragStarted="timelineSlider_DragStarted" Thumb.DragCompleted="timelineSlider_DragCompleted" >
-                <i:Interaction.Behaviors>
-                    <helpers:BehaviorSlider x:Name="sliderbehavior"/>
-                </i:Interaction.Behaviors>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:InvokeCommandAction Command="{Binding SliderLoaded, UpdateSourceTrigger=PropertyChanged}"
-                                               CommandParameter="{Binding ElementName=sliderbehavior, UpdateSourceTrigger=PropertyChanged}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Slider>-->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -162,6 +151,12 @@
                     <Button Style="{StaticResource buttons}" Command="{Binding Stop, UpdateSourceTrigger=PropertyChanged}">
                         <Image Source="{StaticResource stopimage}"/>
                     </Button>
+                    <TextBlock Margin="30,5,0,0" Foreground="White">
+                        <Run Text="{Binding ElementName=mpslider, Path=Value, Converter={StaticResource tostring}, 
+                            ConverterParameter=Sec_Time, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Run Text="{Binding StringFormat= / {0}, ElementName=mpslider, Path=Maximum, Converter={StaticResource tostring}, 
+                            ConverterParameter=Sec_Time, UpdateSourceTrigger=PropertyChanged}"/>
+                    </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Style="{StaticResource audioext}">
                     <Button Style="{StaticResource buttons}" Command="{Binding Play, UpdateSourceTrigger=PropertyChanged}">

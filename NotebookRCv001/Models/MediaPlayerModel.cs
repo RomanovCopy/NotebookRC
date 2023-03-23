@@ -51,7 +51,7 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// текущее положение ползунка слейдера
         /// </summary>
-        internal double Value { get => behaviorSlider.Value; set => behaviorSlider.Value = value; }
+        internal double Value { get => behaviorSlider==null?0:behaviorSlider.Value; set => behaviorSlider.Value = value; }
 
         public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action<object> behaviorReady;
@@ -288,6 +288,10 @@ namespace NotebookRCv001.Models
                         Content = path;
                     else
                         Content = await VideoDecrypt( path, key );
+                    if( CanExecute_Play(obj) )
+                        Execute_Play( null );
+                    else
+                        BehaviorReady += ( obj ) => { Execute_Play( obj ); };
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
