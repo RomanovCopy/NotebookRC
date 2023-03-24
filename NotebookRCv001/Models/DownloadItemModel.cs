@@ -257,7 +257,8 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = Status == "Download" && webResponse != null;
+                if (webResponse != null)
+                    c = Status == "Download" && webResponse.GetResponseStream().CanSeek;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; };
@@ -285,23 +286,22 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = Status == Statuses.Error || Status == Statuses.Loaded;
+                c = !string.IsNullOrWhiteSpace( url ) && !string.IsNullOrWhiteSpace( FullPath );
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; };
         }
-        internal void Execute_Reload( object obj )
+        internal async void Execute_Reload( object obj )
         {
             try
             {
-                webResponse?.Dispose();
-                webResponse = null;
+                StreamDispose();
                 Command_executors.Executors.Delete( FullPath );
                 ReceivedBytes = 0;
                 PercentComplete = 0;
                 if (CanExecute_Preparation( null ))
                 {
-                    Execute_Preparation( null );
+                    await Task.Factory.StartNew(()=> Execute_Preparation( null ));
                 }
                 else
                 {
@@ -310,7 +310,7 @@ namespace NotebookRCv001.Models
                 }
                 if (CanExecute_Start( null ))
                 {
-                    Execute_Start( null );
+                    await Task.Factory.StartNew(()=> Execute_Start( null ));
                 }
                 else
                 {
@@ -496,7 +496,7 @@ namespace NotebookRCv001.Models
                         SuggestedFileName = viewmodel.Text;
                     }
                 };
-                win.ShowDialog();
+                win.Show();
             }
             catch (Exception e) { ErrorWindow( e ); };
         }
@@ -515,7 +515,13 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                webResponse?.Dispose();
+                if (cancel != null && !cancel.IsCancellationRequested)
+                {
+                    cancel.Token.Register( () => StreamDispose() );
+                    cancel.Cancel();
+                }
+                else
+                    StreamDispose();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -636,12 +642,14 @@ namespace NotebookRCv001.Models
                 {
                     webResponse.Close();
                     webResponse.Dispose();
+                    webResponse = null;
                 }
                 var stream = Command_executors.Executors.FileStream;
                 if (stream != null)
                 {
                     stream.Close();
                     stream.Dispose();
+                    stream = null;
                 }
                 return true;
             }

@@ -980,7 +980,6 @@ namespace Command_executors
         {
             try
             {
-                bool c = false;
                 byte[] bufer = new byte[5242880];//массив байт пишущийся на диск за один проход( 5 MByte )
                 long SizeUploaded = 0;//загружено байт всего
                 long FileSize = response.ContentLength;
@@ -1050,15 +1049,12 @@ namespace Command_executors
                                 } );
                             }
                         }
-                        response?.Close();
-                        response?.Dispose();
                     }
                 }
-                c = true;
-                return c;
+                return true;
             }
             catch (Exception e)
-            { MessageBox.Show( e.Message ); response?.Close(); response?.Dispose(); return false; }
+            { MessageBox.Show( e.Message ); return false; }
         }
 
 

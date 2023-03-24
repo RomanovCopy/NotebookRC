@@ -115,6 +115,11 @@ namespace NotebookRCv001.Models
             try
             {
                 window = obj;
+                if(obj is Window win)
+                {
+                    win.Owner = System.Windows.Application.Current.MainWindow;
+                    win.Focus();
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }

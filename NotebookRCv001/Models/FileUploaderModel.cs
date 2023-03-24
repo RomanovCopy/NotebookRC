@@ -132,7 +132,7 @@ namespace NotebookRCv001.Models
                             }
                         }
                     };
-                    dialog.ShowDialog();
+                    dialog.Show();
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -166,7 +166,7 @@ namespace NotebookRCv001.Models
                     }
                     homeMenuFileViewModel.WorkingDirectory = ContentDisposition;
                 };
-                dialog.ShowDialog();
+                dialog.Show();
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -376,7 +376,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if(obj is Page page)
+                if (obj is Page page)
                 {
                     var convert = (ColumnsWidthConverter)page.FindResource( "columnswidth" );
                     if (convert != null)
@@ -455,7 +455,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = ListDownoadItems?.Count > 0 ;
+                c = ListDownoadItems?.Count > 0;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; }
