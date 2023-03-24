@@ -257,7 +257,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = Status == "Download";
+                c = Status == "Download" && webResponse != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; };
@@ -331,7 +331,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = Status == Statuses.Pause;
+                c = webResponse != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; };
@@ -351,10 +351,25 @@ namespace NotebookRCv001.Models
                 {
                     if (winVM.Result == "leftbutton")
                     {//удаление вместе с файлом
+                        if (cancel != null && !cancel.IsCancellationRequested)
+                        {
+                            cancel.Token.Register( () => StreamDispose() );
+                            cancel.Cancel();
+                            cancel.Dispose();
+                        }
+                        else
+                            StreamDispose();
                         Execute_Remove( FullPath );
                     }
                     else if (winVM.Result == "centerbutton")
                     {//удаление только загрузки
+                        if (cancel != null && !cancel.IsCancellationRequested)
+                        {
+                            cancel.Token.Register( () => StreamDispose() );
+                            cancel.Cancel();
+                        }
+                        else
+                            StreamDispose();
                         Execute_Remove( null );
                     }
                     else
@@ -608,6 +623,29 @@ namespace NotebookRCv001.Models
                 Status = Statuses.Error;
                 return false;
             }
+        }
+        /// <summary>
+        /// закрытие потоков
+        /// </summary>
+        /// <returns></returns>
+        private bool StreamDispose()
+        {
+            try
+            {
+                if (webResponse != null)
+                {
+                    webResponse.Close();
+                    webResponse.Dispose();
+                }
+                var stream = Command_executors.Executors.FileStream;
+                if (stream != null)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
+                return true;
+            }
+            catch (Exception e) { ErrorWindow( e ); return false; }
         }
 
         /// <summary>

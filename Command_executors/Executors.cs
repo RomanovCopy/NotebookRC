@@ -54,7 +54,7 @@ namespace Command_executors
         } : forMenuCommand;
         static ObservableCollection<string> forMenuCommand;
 
-
+        public static FileStream FileStream { get; private set; }
         /// <summary>
         /// команда имеет один параметр
         /// </summary>
@@ -981,7 +981,7 @@ namespace Command_executors
             try
             {
                 bool c = false;
-                byte[] bufer = new byte[1048576];//массив байт пишущийся на диск за один проход( 1 MByte )
+                byte[] bufer = new byte[5242880];//массив байт пишущийся на диск за один проход( 5 MByte )
                 long SizeUploaded = 0;//загружено байт всего
                 long FileSize = response.ContentLength;
                 int ByteSize = 0;//загружено байт за проход
@@ -990,7 +990,7 @@ namespace Command_executors
                 {
                     if (!File.Exists( path ))
                     {//файл на диске еще не создан
-                        using (FileStream SaveFileStream = new FileStream( path, FileMode.Append, FileAccess.Write ))
+                        using (FileStream = new FileStream( path, FileMode.Append, FileAccess.Write ))
                         {
                             await Task.Factory.StartNew( () =>
                             {
@@ -999,12 +999,11 @@ namespace Command_executors
                                     try
                                     {
                                         ByteSize = streamResponse.Read( bufer, 0, bufer.Length );
-                                        SaveFileStream.Write( bufer, 0, ByteSize );//пишем на диск
+                                        FileStream.Write( bufer, 0, ByteSize );//пишем на диск
                                         SizeUploaded += ByteSize;
                                         uploaded?.Invoke( SizeUploaded );
-                                        count--;
                                     }
-                                    catch { }
+                                    catch { count--;}
                                 }
                                 while (!token.IsCancellationRequested &&
                                 ByteSize > 0 ||
@@ -1019,9 +1018,17 @@ namespace Command_executors
                         response = await Request( response.ResponseUri.AbsoluteUri, 50000, SizeUploaded );
                         using (Stream stream = response.GetResponseStream())
                         {
-                            using (FileStream fileStream = File.OpenWrite( path ))
+                            if (stream.CanSeek)
+                                stream.Seek( SizeUploaded, SeekOrigin.Begin );
+                            else
                             {
-                                fileStream.Seek( SizeUploaded, SeekOrigin.Begin );
+                                SizeUploaded = 0;
+                                File.Delete( path );
+                                return await DownloadAsinc( uploaded, response, token, path );
+                            }
+                            using (FileStream = File.OpenWrite( path ))
+                            {
+                                FileStream.Seek( SizeUploaded, SeekOrigin.Begin );
                                 await Task.Factory.StartNew( () =>
                                 {
                                     do
@@ -1029,12 +1036,11 @@ namespace Command_executors
                                         try
                                         {
                                             ByteSize = stream.Read( bufer, 0, bufer.Length );
-                                            fileStream.Write( bufer, 0, ByteSize );//пишем на диск
+                                            FileStream.Write( bufer, 0, ByteSize );//пишем на диск
                                             SizeUploaded += ByteSize;
                                             uploaded?.Invoke( SizeUploaded );
-                                            count--;
                                         }
-                                        catch { }
+                                        catch { count--; }
                                     }
                                     while
                                     (!token.IsCancellationRequested &&
@@ -1044,14 +1050,15 @@ namespace Command_executors
                                 } );
                             }
                         }
+                        response?.Close();
+                        response?.Dispose();
                     }
                 }
-                DownloadCanceled?.Invoke();
                 c = true;
                 return c;
             }
             catch (Exception e)
-            { MessageBox.Show( e.Message ); response?.Dispose(); return false; }
+            { MessageBox.Show( e.Message ); response?.Close(); response?.Dispose(); return false; }
         }
 
 
