@@ -15,7 +15,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <viewmodels:FolderBrowserDialogViewModel x:Key="viewmodel"/>
-            <converters:ColumnsWidthConverter x:Key="size"/>
+            <converters:SizeLocationConverter x:Key="size"/>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource VS2012WindowStyleTitleBarButton}">
                 <Setter Property="Focusable" Value="True" />
                 <Setter Property="Template">

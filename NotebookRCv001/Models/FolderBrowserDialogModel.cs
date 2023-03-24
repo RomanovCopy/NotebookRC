@@ -315,6 +315,7 @@ namespace NotebookRCv001.Models
                 Settings.Default.FolderBrowserDialogWidth = WindowWidth;
                 Settings.Default.FolderBrowserDialogTop = WindowTop;
                 Settings.Default.FolderBrowserDialogLeft = WindowLeft;
+                Settings.Default.Save();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
