@@ -694,12 +694,6 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); return ((int)0, (long)0); }
         }
 
-        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
-        {
-            Thread thread = new( () => MessageBox.Show( e.Message, $"DownloadItemModel.{name}" ) );
-            thread.SetApartmentState( ApartmentState.STA );
-            thread.Start();
-        }
 
     }
 }

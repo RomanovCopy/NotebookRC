@@ -61,9 +61,9 @@ namespace NotebookRCv001.Converters
 
         private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"TextPointerToIntConverter.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            var mytype = GetType().ToString().Split( '.' ).LastOrDefault();
+            System.Windows.Application.Current.Dispatcher.Invoke( (Action)(() =>
+            { System.Windows.MessageBox.Show( e.Message, $"{mytype}.{name}" ); }) );
         }
 
     }

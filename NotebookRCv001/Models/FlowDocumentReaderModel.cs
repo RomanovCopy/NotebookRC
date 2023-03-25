@@ -220,13 +220,6 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); return new FlowDocument(); }
         }
 
-        private void ErrorWindow(Exception e, [CallerMemberName] string name = "")
-        {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"FlowDocumentReaderModel.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-        }
-
 
     }
 }

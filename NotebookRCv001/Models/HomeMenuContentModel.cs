@@ -219,15 +219,6 @@ namespace NotebookRCv001.Models
 
 
 
-        private void ErrorWindow(Exception e, [CallerMemberName] string name = "")
-        {
-            MyMessages myMessages = new MyMessages();
-            var viewmodel = (ViewModels.MyMessagesViewModel)myMessages.DataContext;
-            var mytype = GetType().ToString().Split('.').LastOrDefault();
-            viewmodel.SetTitle.Execute($"{mainWindowViewModel.Language.MyMessagesHeaders[0]}! ({mytype}.{name})");
-            viewmodel.SetMessage.Execute(e.Message);
-            myMessages.Show();
-        }
 
     }
 }

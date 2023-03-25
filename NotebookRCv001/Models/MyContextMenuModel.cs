@@ -458,13 +458,5 @@ namespace NotebookRCv001.Models
         }
 
 
-
-        private void ErrorWindow(Exception e, [CallerMemberName] string name = "")
-        {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"MyContextMenuModel.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-        }
-
     }
 }

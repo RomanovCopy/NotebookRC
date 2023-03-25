@@ -84,7 +84,7 @@
                 </GroupBox.Header>
                 <ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
                           HorizontalAlignment="Stretch" Focusable="True" VirtualizingPanel.IsVirtualizing="True" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden" Style="{x:Null}" Background="Black">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="name" Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
@@ -93,7 +93,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
-                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}">
+                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" TextAlignment="Left">
                                             <TextBlock.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Header="{Binding Source={StaticResource viewmodel}, Path=Headers[5], 
@@ -153,6 +153,18 @@
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="Black"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="Gray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
             </GroupBox>
         </Border>

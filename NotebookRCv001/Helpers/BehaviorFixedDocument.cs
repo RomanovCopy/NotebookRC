@@ -154,11 +154,10 @@ namespace NotebookRCv001.Helpers
 
 
 
-        private static void ErrorWindow(Exception e, [CallerMemberName] string name = "")
+        private static void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {
-            Thread thread = new Thread(() => MessageBox.Show(e.Message, $"BehaviorFlowDocumentReader.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            System.Windows.Application.Current.Dispatcher.Invoke( (Action)(() =>
+            { System.Windows.MessageBox.Show( e.Message, $"BehaviorFixedDocument.{name}" ); }) );
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -86,7 +87,12 @@ namespace NotebookRCv001.Helpers
 
         #region *********************** Private Methods *****************************
 
-
+        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
+        {
+            var mytype = GetType().ToString().Split( '.' ).LastOrDefault();
+            System.Windows.Application.Current.Dispatcher.Invoke( (Action)(() =>
+            { System.Windows.MessageBox.Show( e.Message, $"{mytype}.{name}" ); }) );
+        }
 
         #endregion
 

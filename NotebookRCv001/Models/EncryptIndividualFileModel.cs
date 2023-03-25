@@ -635,13 +635,6 @@ namespace NotebookRCv001.Models
             }
         }
 
-        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
-        {
-            Thread thread = new( () => System.Windows.MessageBox.Show( e.Message, $"EncryptIndividualFileModel.{name}" ) );
-            thread.SetApartmentState( ApartmentState.STA );
-            thread.Start();
-        }
-
 
     }
 }

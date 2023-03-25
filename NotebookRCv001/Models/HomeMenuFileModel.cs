@@ -714,15 +714,6 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow( e ); return false; }
         }
 
-        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
-        {
-            Views.MyMessages myMessages = new MyMessages();
-            var viewmodel = (ViewModels.MyMessagesViewModel)myMessages.DataContext;
-            var mytype = GetType().ToString().Split( '.' ).LastOrDefault();
-            viewmodel.SetTitle.Execute( $"{mainWindowViewModel.Language.MyMessagesHeaders[0]}! ({mytype}.{name})" );
-            viewmodel.SetMessage.Execute( e.Message );
-            myMessages.ShowDialog();
-        }
 
     }
 }

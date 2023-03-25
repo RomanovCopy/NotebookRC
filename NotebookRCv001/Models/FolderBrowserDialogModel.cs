@@ -377,12 +377,6 @@ namespace NotebookRCv001.Models
             catch (Exception ex) { ErrorWindow(ex); }
         }
 
-        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
-        {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"FolderBrowserDialogModel.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-        }
 
     }
 }

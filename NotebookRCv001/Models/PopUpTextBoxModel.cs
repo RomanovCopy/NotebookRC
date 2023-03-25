@@ -146,12 +146,6 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
-        private void ErrorWindow(Exception e, [CallerMemberName] string name = "")
-        {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"PopUpTextBoxModel.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-        }
 
     }
 }

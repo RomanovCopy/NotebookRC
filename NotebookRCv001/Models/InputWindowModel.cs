@@ -198,12 +198,5 @@ namespace NotebookRCv001.Models
         }
 
 
-
-        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
-        {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"InputWindowModel.{name}"));
-            thread.SetApartmentState(System.Threading.ApartmentState.STA);
-            thread.Start();
-        }
     }
 }

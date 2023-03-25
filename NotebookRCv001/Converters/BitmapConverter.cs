@@ -71,11 +71,11 @@ namespace NotebookRCv001.Converters
             catch (Exception e) { ErrorWindow(e); return null; }
         }
 
-        private void ErrorWindow(Exception e, [CallerMemberName] string name = "")
+        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"BitmapConverter.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            var mytype = GetType().ToString().Split( '.' ).LastOrDefault();
+            System.Windows.Application.Current.Dispatcher.Invoke( (Action)(() =>
+            { System.Windows.MessageBox.Show( e.Message, $"{mytype}.{name}" ); }) );
         }
 
     }

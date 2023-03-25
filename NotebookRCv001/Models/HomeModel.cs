@@ -213,18 +213,5 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
-
-
-        /// <summary>
-        /// сообщение об ошибке
-        /// </summary>
-        /// <param name="e"></param>
-        /// <param name="name"></param>
-        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
-        {
-            Thread thread = new(() => MessageBox.Show(e.Message, $"HomeModel.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-        }
     }
 }

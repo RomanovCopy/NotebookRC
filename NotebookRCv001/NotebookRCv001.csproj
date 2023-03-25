@@ -64,6 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Converters\Cryptographer.cs" />
     <Compile Remove="Converters\ToStringMultiConverter.cs" />
     <Compile Remove="docxaml.cs" />
     <Compile Remove="Executors.cs" />

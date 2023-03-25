@@ -51,5 +51,12 @@ namespace NotebookRCv001.Infrastructure
             foreach (string name in names)
                 OnPropertyChanged(name);
         }
+
+        public void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
+        {
+            var mytype = GetType().ToString().Split( '.' ).LastOrDefault();
+            System.Windows.Application.Current.Dispatcher.Invoke( (Action)(() =>
+            { System.Windows.MessageBox.Show( e.Message, $"{mytype}.{name}" ); }) );
+        }
     }
 }

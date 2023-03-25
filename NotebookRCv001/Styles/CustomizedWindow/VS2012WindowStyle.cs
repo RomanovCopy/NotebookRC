@@ -443,13 +443,6 @@ namespace NotebookRCv001.Styles.CustomizedWindow
         #endregion
 
 
-        public void ErrorWindow(Exception e, [CallerMemberName] string name = "")
-        {
-            Thread thread = new Thread(() => System.Windows.MessageBox.Show(e.Message, $"NavigateService.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-        }
-
     }
 
     internal static class LocalExtensions
@@ -611,11 +604,11 @@ namespace NotebookRCv001.Styles.CustomizedWindow
 
         #endregion
 
-        public void ErrorWindow(Exception e, [CallerMemberName] string name = "")
+        private void ErrorWindow( Exception e, [CallerMemberName] string name = "" )
         {
-            Thread thread = new Thread(() => System.Windows.MessageBox.Show(e.Message, $"VS2012WindowStyle.{name}"));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            var mytype = GetType().ToString().Split( '.' ).LastOrDefault();
+            System.Windows.Application.Current.Dispatcher.Invoke( (Action)(() =>
+            { System.Windows.MessageBox.Show( e.Message, $"{mytype}.{name}" ); }) );
         }
 
     }
