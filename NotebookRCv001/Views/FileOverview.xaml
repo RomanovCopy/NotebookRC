@@ -92,24 +92,45 @@
                                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
-                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" TextAlignment="Left">
-                                            <TextBlock.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="{Binding Source={StaticResource viewmodel}, Path=Headers[5], 
+                                        <Grid >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Stretch="None" SnapsToDevicePixels="True" Margin="0,0,10,0" Grid.Column="0">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding FileExtension, UpdateSourceTrigger=PropertyChanged}" Value="Folder" >
+                                                                <Setter Property="Source" Value="{ StaticResource catalogV001 }" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True" >
+                                                                <Setter Property="Source" Value="{ StaticResource fileV001 }" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                            <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Grid.Column="1"
+                                                       Margin="0,5,0,0"
+                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" >
+                                                <TextBlock.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="{Binding Source={StaticResource viewmodel}, Path=Headers[5], 
                                                         UpdateSourceTrigger=PropertyChanged}" 
                                                               Command="{Binding Source={StaticResource viewmodel}, 
                                                         Path=ListViewNameContextMenuOpen, UpdateSourceTrigger=PropertyChanged}" 
                                                               CommandParameter="{Binding Path=Tag, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </ContextMenu>
-                                            </TextBlock.ContextMenu>
+                                                    </ContextMenu>
+                                                </TextBlock.ContextMenu>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                                     <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, Path=ListViewNameMouseLeftButtonDown}"
                                                                            CommandParameter="{Binding Path=Tag, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                        </TextBlock>
+                                            </TextBlock>
+                                        </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -155,12 +176,14 @@
                     </ListView.View>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="Black"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="Gray"/>
+                                    <Setter Property="Background" Value="Black"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>

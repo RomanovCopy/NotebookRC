@@ -17,13 +17,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Optimize>False</Optimize>
+    <Optimize>True</Optimize>
     <DebugType>full</DebugType>
     <WarningLevel>5</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Optimize>False</Optimize>
+    <Optimize>True</Optimize>
     <DebugType>full</DebugType>
     <WarningLevel>5</WarningLevel>
   </PropertyGroup>
@@ -31,13 +31,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>full</DebugType>
     <WarningLevel>5</WarningLevel>
-    <Optimize>False</Optimize>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>full</DebugType>
     <WarningLevel>5</WarningLevel>
-    <Optimize>False</Optimize>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -136,6 +136,8 @@
     <None Remove="Resources\Images\031linespacingdecrease.png" />
     <None Remove="Resources\Images\032linespacingincrease .png" />
     <None Remove="Resources\Images\033UpFileOverview.png" />
+    <None Remove="Resources\Images\034CatalogV001.png" />
+    <None Remove="Resources\Images\035FileV001.png" />
     <None Remove="Resources\start.bmp" />
   </ItemGroup>
 
@@ -213,6 +215,8 @@
     <Resource Include="Resources\Images\031linespacingdecrease.png" />
     <Resource Include="Resources\Images\032linespacingincrease .png" />
     <Resource Include="Resources\Images\033UpFileOverview.png" />
+    <Resource Include="Resources\Images\034CatalogV001.png" />
+    <Resource Include="Resources\Images\035FileV001.png" />
   </ItemGroup>
 
   <ItemGroup>

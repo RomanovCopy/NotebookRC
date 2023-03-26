@@ -1002,7 +1002,7 @@ namespace Command_executors
                                         SizeUploaded += ByteSize;
                                         uploaded?.Invoke( SizeUploaded );
                                     }
-                                    catch { count--;}
+                                    catch { count--; }
                                 }
                                 while (!token.IsCancellationRequested &&
                                 ByteSize > 0 ||
@@ -1532,6 +1532,39 @@ namespace Command_executors
                 Sa.Dispose();
             }
             catch { }
+        }
+
+        /// <summary>
+        /// дешифровка изображения
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static async Task<BitmapImage> ImageDecrypt( string path, string key, int decodePixelHeight = 0 )
+        {
+            BitmapImage bitmapImage = new BitmapImage();
+            try
+            {
+                byte[] bytes = null;
+                using (var fs = new FileStream( path, FileMode.Open ))
+                {
+                    bytes = new byte[fs.Length];
+                    await fs.ReadAsync( bytes, 0, (int)fs.Length );
+                }
+                bytes = Command_executors.Executors.Decrypt( bytes, key );
+                using (var stream = new MemoryStream( bytes ))
+                {
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = stream;
+                    if ( decodePixelHeight > 0)
+                        bitmapImage.DecodePixelHeight = decodePixelHeight;
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze();
+                }
+                return bitmapImage;
+            }
+            catch { return bitmapImage; }
         }
 
 

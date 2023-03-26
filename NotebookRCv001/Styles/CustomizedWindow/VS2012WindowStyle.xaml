@@ -54,7 +54,8 @@
     <BitmapImage x:Key="linespacingdecrease" UriSource="\Resources\Images\031linespacingdecrease.png"/>
     <BitmapImage x:Key="linespacingincrease" UriSource="\Resources\Images\032linespacingincrease .png"/>
     <BitmapImage x:Key="fileOverviewUp" UriSource="\Resources\Images\033UpFileOverview.png"/>
-
+    <BitmapImage x:Key="catalogV001" UriSource="\Resources\Images\034CatalogV001.png"/>
+    <BitmapImage x:Key="fileV001" UriSource="\Resources\Images\035FileV001.png"/>
     <!--#endregion-->
 
 

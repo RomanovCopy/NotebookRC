@@ -18,26 +18,42 @@ using NotebookRCv001.Helpers;
 using System.Printing;
 using System.Security.AccessControl;
 using System.Diagnostics;
+using System.Resources;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace NotebookRCv001.Models
 {
-    public class DirectoryItem
+    public class DirectoryItem : ViewModelBase
     {
+        internal FileOverviewModel fileOverviewModel { get; set; }
         public string Name { get; private set; }
+        public bool IsFile { get => isFile; set => SetProperty( ref isFile, value ); }
+        private bool isFile;
         public string FileExtension { get; private set; }
         public string Size { get; private set; }
         public string Date { get; private set; }
+        public BitmapImage Icon { get; private set; }
         public object Tag { get; private set; }
 
         public DirectoryItem( object info )
         {
             Tag = info;
             if (info is DirectoryInfo dir)
+            {
                 GetDirectoryInfo( dir );
+                IsFile = false;
+            }
             else if (info is DriveInfo drive)
+            {
                 GetDriveInfo( drive );
+                IsFile = false;
+            }
             else if (info is FileInfo file)
+            {
                 GetFileInfo( file );
+                IsFile = true;
+            }
             else
                 return;
         }
@@ -49,12 +65,13 @@ namespace NotebookRCv001.Models
             Size = driveInfo.TotalFreeSpace.ToString();
             Date = "-----";
         }
-        private void GetDirectoryInfo( DirectoryInfo directoryInfo )
+        private async void GetDirectoryInfo( DirectoryInfo directoryInfo )
         {
             Name = directoryInfo.Name;
             FileExtension = "Folder";
             Size = "------";
             Date = directoryInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss" );
+            Icon = await fileOverviewModel.RetrievingAnImageFromADirectory( directoryInfo, "001.jpg" );
         }
         private void GetFileInfo( FileInfo fileInfo )
         {
@@ -163,7 +180,7 @@ namespace NotebookRCv001.Models
             //восстанавливаем состояние окна
             WindowState = Properties.Settings.Default.FileOverviewState;
             //устанавливаем размеры колонок
-            Properties.Settings.Default.FileOverview_ListViewColumnsWidth = null;
+            //Properties.Settings.Default.FileOverview_ListViewColumnsWidth = null;
             if (Properties.Settings.Default.FileOverview_ListViewColumnsWidth == null)
                 Properties.Settings.Default.FileOverview_ListViewColumnsWidth = new System.Collections.Specialized.StringCollection()
                 { "40" ,"20" ,"15", "15" ,"10"  };
@@ -228,6 +245,7 @@ namespace NotebookRCv001.Models
                     foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
                         CurrentDirectoryList.Add( new DirectoryItem( file ) );
                     CurrentDirectory = null;
+                    OnPropertyChanged( "CurrentDirectoryList" );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -516,17 +534,46 @@ namespace NotebookRCv001.Models
             try
             {
                 foreach (var folder in directoryInfo.GetDirectories())
-                    list.Add( new DirectoryItem( folder ) );
+                    list.Add( new DirectoryItem( folder ) { fileOverviewModel = this } );
                 foreach (var file in directoryInfo.GetFiles())
-                    list.Add( new DirectoryItem( file ) );
+                    list.Add( new DirectoryItem( file ) { fileOverviewModel = this } );
                 CurrentDirectory = directoryInfo;
                 CurrentDirectoryFullName = directoryInfo.FullName;
                 return list;
             }
             catch (Exception e) { ErrorWindow( e ); return CurrentDirectoryList; }
-
         }
 
+        internal async Task<BitmapImage> RetrievingAnImageFromADirectory( DirectoryInfo dir, string imageName )
+        {
+            BitmapImage bitmap = null;
+            try
+            {
+                string path = Path.Combine( dir.FullName, imageName );
+                if (File.Exists( path ))
+                {
+                    if (dir.GetFiles().Any( ( x ) => x.Name == imageName ))
+                    {
+                        using (FileStream fs = new( path, FileMode.Open ))
+                        {
+                            if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                                bitmap = await Command_executors.Executors.ImageDecrypt( path, homeMenuEncryptionViewModel.KeyCript, 24 );
+                            else
+                            {
+                                bitmap = new BitmapImage( new Uri( path ) );
+                                bitmap.BeginInit();
+                                bitmap.DecodePixelHeight = 24;
+                                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                bitmap.EndInit();
+                                bitmap.Freeze();
+                            }
+                        }
+                    }
+                }
+                return bitmap;
+            }
+            catch (Exception e) { ErrorWindow( e ); return bitmap; }
+        }
 
     }
 }

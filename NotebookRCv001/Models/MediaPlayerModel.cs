@@ -206,7 +206,7 @@ namespace NotebookRCv001.Models
                     }
                     else
                     {
-                        Bitmap = await ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
                     }
                 }
             }
@@ -242,7 +242,7 @@ namespace NotebookRCv001.Models
                     }
                     else
                     {
-                        Bitmap = await ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
                     }
                 }
             }
@@ -276,7 +276,7 @@ namespace NotebookRCv001.Models
                     if (string.IsNullOrWhiteSpace( key ))
                         Bitmap = new BitmapImage( new Uri( path ) );
                     else
-                        Bitmap = await ImageDecrypt( path, key );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt( path, key );
                 }
                 else if (ThisAudio)
                 {
@@ -485,31 +485,6 @@ namespace NotebookRCv001.Models
                 }
             }
             catch (Exception ex) { ErrorWindow( ex ); }
-        }
-
-        private async Task<BitmapImage> ImageDecrypt( string path, string key )
-        {
-            BitmapImage bitmapImage = new();
-            try
-            {
-                byte[] bytes = null;
-                using (var fs = new FileStream( path, FileMode.Open ))
-                {
-                    bytes = new byte[fs.Length];
-                    await fs.ReadAsync( bytes, 0, (int)fs.Length );
-                }
-                bytes = Command_executors.Executors.Decrypt( bytes, key );
-                using (var stream = new MemoryStream( bytes ))
-                {
-                    bitmapImage.BeginInit();
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.StreamSource = stream;
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze();
-                }
-                return bitmapImage;
-            }
-            catch (Exception e) { ErrorWindow( e ); return bitmapImage; }
         }
 
         private async Task<string> VideoDecrypt( string path, string key )
