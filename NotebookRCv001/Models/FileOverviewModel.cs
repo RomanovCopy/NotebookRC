@@ -26,59 +26,101 @@ namespace NotebookRCv001.Models
 {
     public class DirectoryItem : ViewModelBase
     {
-        internal FileOverviewModel fileOverviewModel { get; set; }
+        private string keyCrypt;
         public string Name { get; private set; }
-        public bool IsFile { get => isFile; set => SetProperty( ref isFile, value ); }
+        public bool IsFile { get => isFile; set => SetProperty(ref isFile, value); }
         private bool isFile;
         public string FileExtension { get; private set; }
         public string Size { get; private set; }
         public string Date { get; private set; }
-        public BitmapImage Icon { get; private set; }
+        public BitmapImage Icon { get => icon; set => SetProperty(ref icon, value); }
+        private BitmapImage icon;
         public object Tag { get; private set; }
 
-        public DirectoryItem( object info )
+
+        public DirectoryItem(object info, string keyCrypt)
         {
             Tag = info;
+            this.keyCrypt = keyCrypt;
             if (info is DirectoryInfo dir)
             {
-                GetDirectoryInfo( dir );
+                GetDirectoryInfo(dir);
                 IsFile = false;
             }
             else if (info is DriveInfo drive)
             {
-                GetDriveInfo( drive );
+                GetDriveInfo(drive);
                 IsFile = false;
             }
             else if (info is FileInfo file)
             {
-                GetFileInfo( file );
+                GetFileInfo(file);
                 IsFile = true;
             }
             else
                 return;
         }
 
-        private void GetDriveInfo( DriveInfo driveInfo )
+        private void GetDriveInfo(DriveInfo driveInfo)
         {
             Name = driveInfo.Name;
             FileExtension = "Drive";
             Size = driveInfo.TotalFreeSpace.ToString();
             Date = "-----";
         }
-        private async void GetDirectoryInfo( DirectoryInfo directoryInfo )
+        private async void GetDirectoryInfo(DirectoryInfo directoryInfo)
         {
             Name = directoryInfo.Name;
             FileExtension = "Folder";
             Size = "------";
-            Date = directoryInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss" );
-            Icon = await fileOverviewModel.RetrievingAnImageFromADirectory( directoryInfo, "001.jpg" );
+            Date = directoryInfo.LastWriteTime.ToString("MM/dd/yy H:mm:ss");
+            Icon = await RetrievingAnImageFromADirectory(directoryInfo, "001.jpg");
         }
-        private void GetFileInfo( FileInfo fileInfo )
+        private void GetFileInfo(FileInfo fileInfo)
         {
-            Name = Path.GetFileNameWithoutExtension( fileInfo.FullName );
+            Name = Path.GetFileNameWithoutExtension(fileInfo.FullName);
             FileExtension = fileInfo.Extension;
             Size = fileInfo.Length.ToString();
-            Date = fileInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss" );
+            Date = fileInfo.LastWriteTime.ToString("MM/dd/yy H:mm:ss");
+        }
+
+        private async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
+        {
+            BitmapImage bitmap = null;
+            try
+            {
+                string path = Path.Combine(dir.FullName, imageName);
+                if (File.Exists(path) && Path.GetExtension(path) == ".jpg")
+                {
+                    if (dir.GetFiles().Any((x) => x.Name == imageName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(keyCrypt))
+                            bitmap = await Command_executors.Executors.ImageDecrypt(path, keyCrypt, 24);
+                        else
+                        {
+                            using (FileStream fs = new(path, FileMode.Open))
+                            {
+                                await Task.Factory.StartNew(() =>
+                                {
+                                    bitmap = new BitmapImage();
+                                    bitmap.BeginInit();
+                                    bitmap.StreamSource = fs;
+                                    bitmap.DecodePixelHeight = 24;
+                                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                    bitmap.EndInit();
+                                    bitmap.Freeze();
+                                });
+                            }
+                        }
+                    }
+                }
+                if (bitmap != null)
+                {
+                    bool c = true;
+                }    
+                return bitmap;
+            }
+            catch (Exception e) { ErrorWindow(e); return bitmap; }
         }
     }
 
@@ -92,25 +134,25 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// открытый в окне каталог(для диска - null)
         /// </summary>
-        internal DirectoryInfo CurrentDirectory { get => currentDirectory; set => SetProperty( ref currentDirectory, value ); }
+        internal DirectoryInfo CurrentDirectory { get => currentDirectory; set => SetProperty(ref currentDirectory, value); }
         private DirectoryInfo currentDirectory;
         /// <summary>
         /// полный путь к открытому в окне каталогу
         /// </summary>
-        internal string CurrentDirectoryFullName { get => currentDirectoryFullName; set => SetProperty( ref currentDirectoryFullName, value ); }
+        internal string CurrentDirectoryFullName { get => currentDirectoryFullName; set => SetProperty(ref currentDirectoryFullName, value); }
         private string currentDirectoryFullName;
 
         #region ________________Sizes and Position________________________
 
-        internal double WindowWidth { get => windowWidth; set => SetProperty( ref windowWidth, value ); }
+        internal double WindowWidth { get => windowWidth; set => SetProperty(ref windowWidth, value); }
         private double windowWidth;
-        internal double WindowHeight { get => windowHeight; set => SetProperty( ref windowHeight, value ); }
+        internal double WindowHeight { get => windowHeight; set => SetProperty(ref windowHeight, value); }
         private double windowHeight;
-        internal double WindowTop { get => windowTop; set => SetProperty( ref windowTop, value ); }
+        internal double WindowTop { get => windowTop; set => SetProperty(ref windowTop, value); }
         private double windowTop;
-        internal double WindowLeft { get => windowLeft; set => SetProperty( ref windowLeft, value ); }
+        internal double WindowLeft { get => windowLeft; set => SetProperty(ref windowLeft, value); }
         private double windowLeft;
-        internal object WindowState { get => windowState; set => SetProperty( ref windowState, value ); }
+        internal object WindowState { get => windowState; set => SetProperty(ref windowState, value); }
         private object windowState;
 
 
@@ -124,7 +166,7 @@ namespace NotebookRCv001.Models
         internal ObservableCollection<double> ListView_ColumnsWidth
         {
             get => listView_ColumnsWidth ??= new ObservableCollection<double>();
-            set => SetProperty( ref listView_ColumnsWidth, value );
+            set => SetProperty(ref listView_ColumnsWidth, value);
         }
         ObservableCollection<double> listView_ColumnsWidth;
 
@@ -139,28 +181,28 @@ namespace NotebookRCv001.Models
         internal ObservableCollection<DirectoryItem> CurrentDirectoryList
         {
             get => currentDirectoryList;
-            set => SetProperty( ref currentDirectoryList, value );
+            set => SetProperty(ref currentDirectoryList, value);
         }
         private ObservableCollection<DirectoryItem> currentDirectoryList;
         /// <summary>
         /// коллекция доступных для работы дисков
         /// </summary>
-        internal ObservableCollection<DriveInfo> DriveInfos { get => driveInfos; private set => SetProperty( ref driveInfos, value ); }
+        internal ObservableCollection<DriveInfo> DriveInfos { get => driveInfos; private set => SetProperty(ref driveInfos, value); }
         private ObservableCollection<DriveInfo> driveInfos;
         /// <summary>
         /// индекс выбранного диска в коллекции DriverInfos
         /// </summary>
-        internal int SelectedIndex { get => selectedIndex; set => SetProperty( ref selectedIndex, value ); }
+        internal int SelectedIndex { get => selectedIndex; set => SetProperty(ref selectedIndex, value); }
         private int selectedIndex;
 
         internal FileOverviewModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
-            language.PropertyChanged += ( s, e ) => OnPropertyChanged( new string[] { "Headers", "ToolTips" } );
-            var home = (Views.Home)mainWindowViewModel.FrameList.Where( ( x ) => x is Views.Home ).FirstOrDefault();
-            var menu = (MyControls.MenuHome)home.FindResource( "menuhome" );
-            homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource( "menufile" );
-            homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource( "menuencryption" );
+            language.PropertyChanged += (s, e) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
+            var home = (Views.Home)mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
+            var menu = (MyControls.MenuHome)home.FindResource("menuhome");
+            homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
+            homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
             //восстанавливаем размеры и положение окна
             if (Properties.Settings.Default.FileOverviewFirstStart)
             {
@@ -186,7 +228,7 @@ namespace NotebookRCv001.Models
                 { "40" ,"20" ,"15", "15" ,"10"  };
             ListView_ColumnsWidth.Clear();
             for (int i = 0; i < Properties.Settings.Default.FileOverview_ListViewColumnsWidth.Count; i++)
-                ListView_ColumnsWidth.Add( double.Parse( Properties.Settings.Default.FileOverview_ListViewColumnsWidth[i] ) );
+                ListView_ColumnsWidth.Add(double.Parse(Properties.Settings.Default.FileOverview_ListViewColumnsWidth[i]));
         }
 
         /// <summary>
@@ -194,7 +236,7 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool CanExecute_ComboBoxLoaded( object obj )
+        internal bool CanExecute_ComboBoxLoaded(object obj)
         {
             try
             {
@@ -202,18 +244,18 @@ namespace NotebookRCv001.Models
                 c = obj != null;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ComboBoxLoaded( object obj )
+        internal void Execute_ComboBoxLoaded(object obj)
         {
             try
             {
                 SelectedIndex = 0;
-                if (CanExecute_ComboBoxSelectionChanged( DriveInfos[SelectedIndex] ))
-                    Execute_ComboBoxSelectionChanged( DriveInfos[SelectedIndex] );
+                if (CanExecute_ComboBoxSelectionChanged(DriveInfos[SelectedIndex]))
+                    Execute_ComboBoxSelectionChanged(DriveInfos[SelectedIndex]);
                 CurrentDirectoryFullName = DriveInfos[SelectedIndex].Name;
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -222,7 +264,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj">выбор: ComboBoxItem</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_ComboBoxSelectionChanged( object obj )
+        internal bool CanExecute_ComboBoxSelectionChanged(object obj)
         {
             try
             {
@@ -230,9 +272,9 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ComboBoxSelectionChanged( object obj )
+        internal void Execute_ComboBoxSelectionChanged(object obj)
         {
             try
             {
@@ -241,14 +283,13 @@ namespace NotebookRCv001.Models
                     CurrentDirectoryFullName = driveInfo.Name;
                     CurrentDirectoryList = new();
                     foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
-                        CurrentDirectoryList.Add( new DirectoryItem( folder ) );
+                        CurrentDirectoryList.Add(new DirectoryItem(folder, homeMenuEncryptionViewModel.KeyCript));
                     foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
-                        CurrentDirectoryList.Add( new DirectoryItem( file ) );
+                        CurrentDirectoryList.Add(new DirectoryItem(file, homeMenuEncryptionViewModel.KeyCript));
                     CurrentDirectory = null;
-                    OnPropertyChanged( "CurrentDirectoryList" );
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// нажатие кнопки перемещения в родительскую директорию (Up)
@@ -256,7 +297,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj">null</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_ToParentDirectory( object obj )
+        internal bool CanExecute_ToParentDirectory(object obj)
         {
             try
             {
@@ -264,18 +305,18 @@ namespace NotebookRCv001.Models
                 c = CurrentDirectory?.Parent != null;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ToParentDirectory( object obj )
+        internal void Execute_ToParentDirectory(object obj)
         {
             try
             {
                 if (CurrentDirectory.Parent != null)
                 {
-                    CurrentDirectoryList = GetCurrentDirectoryList( CurrentDirectory.Parent );
+                    CurrentDirectoryList = GetCurrentDirectoryList(CurrentDirectory.Parent);
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// выбор элемента
@@ -283,7 +324,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj">DirectoryInfo/FileInfo</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_ListViewNameMouseLeftButtonDown( object obj )
+        internal bool CanExecute_ListViewNameMouseLeftButtonDown(object obj)
         {
             try
             {
@@ -291,22 +332,22 @@ namespace NotebookRCv001.Models
                 c = obj is DirectoryInfo;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ListViewNameMouseLeftButtonDown( object obj )
+        internal void Execute_ListViewNameMouseLeftButtonDown(object obj)
         {
             try
             {
-                OpenFileDirectory( obj );
+                OpenFileDirectory(obj);
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// контекстное меню Open
         /// </summary>
         /// <param name="obj">DirectoryInfo/FileInfo</param>
         /// <returns></returns>
-        internal bool CanExecute_ListViewNameContextMenuOpen( object obj )
+        internal bool CanExecute_ListViewNameContextMenuOpen(object obj)
         {
             try
             {
@@ -314,18 +355,18 @@ namespace NotebookRCv001.Models
                 c = obj is FileInfo;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ListViewNameContextMenuOpen( object obj )
+        internal void Execute_ListViewNameContextMenuOpen(object obj)
         {
             try
             {
-                if (obj is FileInfo fileInfo && homeMenuFileViewModel.SupportedFileExtensions.Any( ( x ) => x == fileInfo.Extension ))
-                    homeMenuFileViewModel.OpenFile.Execute( fileInfo.FullName );
+                if (obj is FileInfo fileInfo && homeMenuFileViewModel.SupportedFileExtensions.Any((x) => x == fileInfo.Extension))
+                    homeMenuFileViewModel.OpenFile.Execute(fileInfo.FullName);
                 else
-                    OpenFileDirectory( obj );
+                    OpenFileDirectory(obj);
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -333,7 +374,7 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool CanExecute_WindowSizeChanged( object obj )
+        internal bool CanExecute_WindowSizeChanged(object obj)
         {
             try
             {
@@ -341,15 +382,15 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_WindowSizeChanged( object obj )
+        internal void Execute_WindowSizeChanged(object obj)
         {
             try
             {
-                OnPropertyChanged( "ListView_ColumnsWidth" );
+                OnPropertyChanged("ListView_ColumnsWidth");
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -358,7 +399,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_WindowLoaded( object obj )
+        internal bool CanExecute_WindowLoaded(object obj)
         {
             try
             {
@@ -366,21 +407,21 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_WindowLoaded( object obj )
+        internal void Execute_WindowLoaded(object obj)
         {
             try
             {
                 if (obj is Window window)
                 {
-                    var convert = (ColumnsWidthConverter)window.FindResource( "columnswidth" );
+                    var convert = (ColumnsWidthConverter)window.FindResource("columnswidth");
                     convert.window = window;
                 }
-                OnPropertyChanged( "ListView_ColumnsWidth" );
+                OnPropertyChanged("ListView_ColumnsWidth");
                 UpdateDrives();
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -389,7 +430,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_WindowClosing( object obj )
+        internal bool CanExecute_WindowClosing(object obj)
         {
             try
             {
@@ -397,9 +438,9 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_WindowClosing( object obj )
+        internal void Execute_WindowClosing(object obj)
         {
             try
             {
@@ -415,11 +456,11 @@ namespace NotebookRCv001.Models
                 propert.FileOverview_ListViewColumnsWidth = new();
                 foreach (var width in ListView_ColumnsWidth)
                 {
-                    propert.FileOverview_ListViewColumnsWidth.Add( width.ToString() );
+                    propert.FileOverview_ListViewColumnsWidth.Add(width.ToString());
                 }
                 Application.Current.MainWindow.Focus();
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
 
@@ -428,36 +469,36 @@ namespace NotebookRCv001.Models
         /// открытие файла/директории
         /// </summary>
         /// <param name="obj"></param>
-        private async void OpenFileDirectory( object obj )
+        private async void OpenFileDirectory(object obj)
         {
             try
             {
                 if (obj is DirectoryInfo dirInfo)
                 {//выбран каталог
-                    await Task.Factory.StartNew( () => CurrentDirectoryList = GetCurrentDirectoryList( dirInfo ) );
+                    await Task.Factory.StartNew(() => CurrentDirectoryList = GetCurrentDirectoryList(dirInfo));
                 }
                 else if (obj is FileInfo fileInfo)
                 {//выбран файл
-                    var player = mainWindowViewModel.FrameList.Where( ( x ) => x is MyControls.MediaPlayer ).FirstOrDefault();
+                    var player = mainWindowViewModel.FrameList.Where((x) => x is MyControls.MediaPlayer).FirstOrDefault();
                     if (player == null)
                     {
                         player = new MyControls.MediaPlayer();
-                        mainWindowViewModel.FrameListAddPage.Execute( player );
+                        mainWindowViewModel.FrameListAddPage.Execute(player);
                     }
                     var playerVM = (MediaPlayerViewModel)player.DataContext;
-                    if (playerVM.SetContent.CanExecute( fileInfo.FullName ))
-                        playerVM.SetContent.Execute( fileInfo.FullName );
+                    if (playerVM.SetContent.CanExecute(fileInfo.FullName))
+                        playerVM.SetContent.Execute(fileInfo.FullName);
                     //await Task.Factory.StartNew( () => OpenAFileInTheDefaultApplication( fileInfo, false ) );
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// дешифровка(если установлен ключ) и открытие файла в дефолтном приложении
         /// </summary>
         /// <param name="fileInfo">информация об открываемом файле (FileInfo)</param>
         /// <param name="newWindow">открыть файл в новом окне( True )</param>
-        private async Task OpenAFileInTheDefaultApplication( FileInfo fileInfo, bool newWindow )
+        private async Task OpenAFileInTheDefaultApplication(FileInfo fileInfo, bool newWindow)
         {
             try
             {
@@ -465,18 +506,18 @@ namespace NotebookRCv001.Models
                 string ext = fileInfo.Extension;
                 using (var myProcess = new Process())
                 {
-                    if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                    if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.KeyCript))
                     {
                         byte[] bytes = new byte[fileInfo.Length];
-                        using (var fs = new FileStream( path, FileMode.OpenOrCreate ))
+                        using (var fs = new FileStream(path, FileMode.OpenOrCreate))
                         {
-                            await fs.ReadAsync( bytes, 0, bytes.Length );
-                            bytes = Command_executors.Executors.Decrypt( bytes, homeMenuEncryptionViewModel.KeyCript );
+                            await fs.ReadAsync(bytes, 0, bytes.Length);
+                            bytes = Command_executors.Executors.Decrypt(bytes, homeMenuEncryptionViewModel.KeyCript);
                         }
                         path = $"{Environment.CurrentDirectory}/temp/temp{ext}";
-                        using (var fs = new FileStream( path, FileMode.Create ))
+                        using (var fs = new FileStream(path, FileMode.Create))
                         {
-                            await fs.WriteAsync( bytes, 0, bytes.Length );
+                            await fs.WriteAsync(bytes, 0, bytes.Length);
                         }
                     }
                     myProcess.StartInfo.UseShellExecute = true;
@@ -485,7 +526,7 @@ namespace NotebookRCv001.Models
                     myProcess.Start();
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// обновление коллекции доступных дисков
@@ -496,9 +537,9 @@ namespace NotebookRCv001.Models
             {
                 DriveInfos = new ObservableCollection<DriveInfo>();
                 foreach (var info in GetDraveInfos())
-                    DriveInfos.Add( info );
+                    DriveInfos.Add(info);
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// получение информации о всех дисках готовых к работе
@@ -521,46 +562,46 @@ namespace NotebookRCv001.Models
                 }
                 return driveInfos;
             }
-            catch (Exception e) { ErrorWindow( e ); return driveInfos; }
+            catch (Exception e) { ErrorWindow(e); return driveInfos; }
         }
         /// <summary>
         /// получение всех папок и файлов из заданного каталога
         /// </summary>
         /// <param name="directoryInfo">каталог</param>
         /// <returns>коллекция папок и файлов</returns>
-        private ObservableCollection<DirectoryItem> GetCurrentDirectoryList( DirectoryInfo directoryInfo )
+        private ObservableCollection<DirectoryItem> GetCurrentDirectoryList(DirectoryInfo directoryInfo)
         {
             ObservableCollection<DirectoryItem> list = new();
             try
             {
                 foreach (var folder in directoryInfo.GetDirectories())
-                    list.Add( new DirectoryItem( folder ) { fileOverviewModel = this } );
+                    list.Add(new DirectoryItem(folder, homeMenuEncryptionViewModel.KeyCript));
                 foreach (var file in directoryInfo.GetFiles())
-                    list.Add( new DirectoryItem( file ) { fileOverviewModel = this } );
+                    list.Add(new DirectoryItem(file, homeMenuEncryptionViewModel.KeyCript));
                 CurrentDirectory = directoryInfo;
                 CurrentDirectoryFullName = directoryInfo.FullName;
                 return list;
             }
-            catch (Exception e) { ErrorWindow( e ); return CurrentDirectoryList; }
+            catch (Exception e) { ErrorWindow(e); return CurrentDirectoryList; }
         }
 
-        internal async Task<BitmapImage> RetrievingAnImageFromADirectory( DirectoryInfo dir, string imageName )
+        internal async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
         {
             BitmapImage bitmap = null;
             try
             {
-                string path = Path.Combine( dir.FullName, imageName );
-                if (File.Exists( path ))
+                string path = Path.Combine(dir.FullName, imageName);
+                if (File.Exists(path))
                 {
-                    if (dir.GetFiles().Any( ( x ) => x.Name == imageName ))
+                    if (dir.GetFiles().Any((x) => x.Name == imageName))
                     {
-                        using (FileStream fs = new( path, FileMode.Open ))
+                        using (FileStream fs = new(path, FileMode.Open))
                         {
-                            if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
-                                bitmap = await Command_executors.Executors.ImageDecrypt( path, homeMenuEncryptionViewModel.KeyCript, 24 );
+                            if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.KeyCript))
+                                bitmap = await Command_executors.Executors.ImageDecrypt(path, homeMenuEncryptionViewModel.KeyCript, 24);
                             else
                             {
-                                bitmap = new BitmapImage( new Uri( path ) );
+                                bitmap = new BitmapImage(new Uri(path));
                                 bitmap.BeginInit();
                                 bitmap.DecodePixelHeight = 24;
                                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
@@ -572,7 +613,7 @@ namespace NotebookRCv001.Models
                 }
                 return bitmap;
             }
-            catch (Exception e) { ErrorWindow( e ); return bitmap; }
+            catch (Exception e) { ErrorWindow(e); return bitmap; }
         }
 
     }

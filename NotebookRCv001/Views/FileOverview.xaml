@@ -102,7 +102,7 @@
                                                     <Style TargetType="Image">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding FileExtension, UpdateSourceTrigger=PropertyChanged}" Value="Folder" >
-                                                                <Setter Property="Source" Value="{ StaticResource catalogV001 }" />
+                                                                <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" />
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True" >
                                                                 <Setter Property="Source" Value="{ StaticResource fileV001 }" />
