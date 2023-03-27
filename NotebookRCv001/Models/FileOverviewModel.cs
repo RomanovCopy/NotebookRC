@@ -28,13 +28,41 @@ namespace NotebookRCv001.Models
     {
         private string keyCrypt;
         public string Name { get; private set; }
+        /// <summary>
+        /// флаг: отображать обложку
+        /// </summary>
+        public bool IsCover { get => isCover; set => SetProperty(ref isCover, value); }
+        private bool isCover;
+        /// <summary>
+        /// отображать значок файла
+        /// </summary>
         public bool IsFile { get => isFile; set => SetProperty(ref isFile, value); }
         private bool isFile;
+        /// <summary>
+        /// отображать значок папки
+        /// </summary>
+        public bool IsFolder { get => IsFolder; set => SetProperty(ref isFolder, value); }
+        private bool isFolder;
+        /// <summary>
+        /// расширение файла
+        /// </summary>
         public string FileExtension { get; private set; }
+        /// <summary>
+        /// размер файла
+        /// </summary>
         public string Size { get; private set; }
+        /// <summary>
+        /// дата и время последнего изменения
+        /// </summary>
         public string Date { get; private set; }
+        /// <summary>
+        /// обложка
+        /// </summary>
         public BitmapImage Icon { get => icon; set => SetProperty(ref icon, value); }
         private BitmapImage icon;
+        /// <summary>
+        /// информация о диске/каталоге/файле
+        /// </summary>
         public object Tag { get; private set; }
 
 
@@ -173,7 +201,6 @@ namespace NotebookRCv001.Models
         #endregion
 
         internal ObservableCollection<string> Headers => language.HeadersFileOverview;
-
         internal ObservableCollection<string> ToolTips => language.ToolTipsFileOverview;
         /// <summary>
         /// содержимое текущей директории
