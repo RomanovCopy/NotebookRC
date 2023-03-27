@@ -200,13 +200,13 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.EncryptionKey ))
                     {
                         Bitmap = new BitmapImage( new Uri( PlayList[PlayIndex] ) );
                     }
                     else
                     {
-                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey );
                     }
                 }
             }
@@ -236,13 +236,13 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.KeyCript ))
+                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.EncryptionKey ))
                     {
                         Bitmap = new BitmapImage( new Uri( PlayList[PlayIndex] ) );
                     }
                     else
                     {
-                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.KeyCript );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey );
                     }
                 }
             }
@@ -270,7 +270,7 @@ namespace NotebookRCv001.Models
             {
                 string path = (string)obj;
                 SetContentType( path );
-                string key = homeMenuEncryptionViewModel.KeyCript;
+                string key = homeMenuEncryptionViewModel.EncryptionKey;
                 if (ThisImage)
                 {
                     if (string.IsNullOrWhiteSpace( key ))

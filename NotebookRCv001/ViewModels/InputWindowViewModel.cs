@@ -42,7 +42,7 @@ namespace NotebookRCv001.ViewModels
         public Languages Language => inputWindowModel.Language;
         public ObservableCollection<string> Headers => inputWindowModel.Headers;
         public ObservableCollection<string> ToolTips => inputWindowModel.ToolTips;
-        public string KeyCrypt => inputWindowModel.KeyCrypt;
+        public string EncryptionKey => inputWindowModel.EncryptionKey;
 
         public InputWindowViewModel()
         {

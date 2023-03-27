@@ -17,7 +17,7 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<string> Headers => HomeMenuEncryptionModel.Headers;
         public ObservableCollection<string> ToolTips => HomeMenuEncryptionModel.ToolTips;
 
-        public string KeyCript { get => HomeMenuEncryptionModel.KeyCrypt; }
+        public string EncryptionKey { get => HomeMenuEncryptionModel.EncryptionKey; }
 
         public string EncryptionStatus { get => HomeMenuEncryptionModel.EncryptionStatus; }
 

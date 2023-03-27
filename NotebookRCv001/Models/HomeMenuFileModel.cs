@@ -207,7 +207,7 @@ namespace NotebookRCv001.Models
                 }
                 TextRange textRange = new( flowDocument?.ContentStart, flowDocument?.ContentEnd );
                 string extension = Path.GetExtension( path ).ToLower();
-                string keyCrypt = HomeMenuEncryptionViewModel.KeyCript;
+                string keyCrypt = HomeMenuEncryptionViewModel.EncryptionKey;
                 byte[] bytes = null;
                 using (FileStream fs = new FileStream( path, FileMode.Open ))
                 {
@@ -336,7 +336,7 @@ namespace NotebookRCv001.Models
                 Encoding encoding = menuVM.HomeEncoding;
                 TextRange textRange = richTextBoxViewModel.BehaviorRichTextBox.TextRange;
                 HomeMenuEncryptionModel encryptionModel = HomeMenuEncryptionViewModel.HomeMenuEncryptionModel;
-                string keyCrypt = HomeMenuEncryptionViewModel.KeyCript;
+                string keyCrypt = HomeMenuEncryptionViewModel.EncryptionKey;
                 string extension = Path.GetExtension( path ).ToLower();
                 byte[] bytes = null;
                 using (FileStream fs = new FileStream( path, FileMode.Create ))

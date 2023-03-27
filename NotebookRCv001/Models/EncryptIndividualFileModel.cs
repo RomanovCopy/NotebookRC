@@ -379,7 +379,7 @@ namespace NotebookRCv001.Models
             {
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
-                var key = homeMenuEncryptionViewModel.KeyCript;
+                var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
                 ProgressValue = 0;
@@ -439,7 +439,7 @@ namespace NotebookRCv001.Models
             {
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
-                var key = homeMenuEncryptionViewModel.KeyCript;
+                var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += ( s, e ) => progressVM.OnPropertyChanged( e.PropertyName );
                 ProgressValue = 0;
@@ -623,7 +623,7 @@ namespace NotebookRCv001.Models
                 {
                     try
                     {
-                        text = decrypter.Decryption( reader.ReadToEnd(), homeMenuEncryptionViewModel.KeyCript );
+                        text = decrypter.Decryption( reader.ReadToEnd(), homeMenuEncryptionViewModel.EncryptionKey );
                     }
                     catch { throw new Exception( mainWindowViewModel.Language.MessagesMyMessages[1] ); }
                 }

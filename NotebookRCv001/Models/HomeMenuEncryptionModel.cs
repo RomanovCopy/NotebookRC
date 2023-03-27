@@ -30,12 +30,12 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// ключ шифрования
         /// </summary>
-        internal string KeyCrypt
+        internal string EncryptionKey
         {
-            get => keyCrypt;
-            private set => SetProperty(ref keyCrypt, value);
+            get => encryptionKey;
+            private set => SetProperty(ref encryptionKey, value);
         }
-        private string keyCrypt;
+        private string encryptionKey;
 
 
         internal string EncryptionStatus { get => encryptionStatus; private set => SetProperty(ref encryptionStatus, value); }
@@ -45,7 +45,7 @@ namespace NotebookRCv001.Models
         {
             MainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             MainWindowViewModel.Language.PropertyChanged += ( s, e ) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
-            EncryptionStatus = string.IsNullOrWhiteSpace(KeyCrypt) ? "Off" : "On";
+            EncryptionStatus = string.IsNullOrWhiteSpace(EncryptionKey) ? "Off" : "On";
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(KeyCrypt);
+                c = !string.IsNullOrWhiteSpace(EncryptionKey);
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -68,7 +68,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                KeyCrypt = null;
+                EncryptionKey = null;
                 EncryptionStatus = "Off";
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -84,7 +84,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = string.IsNullOrWhiteSpace(KeyCrypt);
+                c = string.IsNullOrWhiteSpace(EncryptionKey);
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -97,7 +97,7 @@ namespace NotebookRCv001.Models
                 inputWindow.Owner = Application.Current.MainWindow;
                 inputWindow.Closing += ( s, e ) => InputWindow_Closing(s, e);
                 inputWindow.ShowDialog();
-                EncryptionStatus = string.IsNullOrWhiteSpace(KeyCrypt) ? "Off" : "On";
+                EncryptionStatus = string.IsNullOrWhiteSpace(EncryptionKey) ? "Off" : "On";
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -113,7 +113,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace( KeyCrypt ) && !MainWindowViewModel.FrameList.Any( ( x ) => x is MyControls.EncryptIndividualFile );
+                c = !string.IsNullOrWhiteSpace( EncryptionKey ) && !MainWindowViewModel.FrameList.Any( ( x ) => x is MyControls.EncryptIndividualFile );
                 return c;
             }catch(Exception e) { ErrorWindow( e ); return false; }
         }
@@ -134,7 +134,7 @@ namespace NotebookRCv001.Models
             {
                 if (s is Views.InputWindow window && window.DataContext is InputWindowViewModel viewmodel)
                 {
-                    KeyCrypt = viewmodel.KeyCrypt;
+                    EncryptionKey = viewmodel.EncryptionKey;
                 }
             }
             catch (Exception ex) { ErrorWindow(ex); }

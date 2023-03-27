@@ -22,7 +22,7 @@ namespace NotebookRCv001.Models
 
         internal Languages Language => mainWindowViewModel.Language;
 
-        internal string KeyCrypt
+        internal string EncryptionKey
         {
             get => keyCrypt;
             set => SetProperty(ref keyCrypt, value);
@@ -140,7 +140,7 @@ namespace NotebookRCv001.Models
                         if (e.Key == Key.Enter && PasswordBoxTwo.Password == PasswordBoxOne.Password)
                         {
                             PasswordBoxTwo.IsEnabled = false;
-                            KeyCrypt = PasswordBoxTwo.Password;
+                            EncryptionKey = PasswordBoxTwo.Password;
                             e.Handled = true;
                             if (window is Window win)
                                 win.Close();

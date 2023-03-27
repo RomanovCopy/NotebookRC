@@ -26,15 +26,16 @@ namespace NotebookRCv001.Models
 {
     public class DirectoryItem : ViewModelBase
     {
-        /// <summary>
-        /// ключ шифрования
-        /// </summary>
         private string keyCrypt;
-
+        public string Name { get; private set; }
         /// <summary>
-        /// имя файла/папки/диска
+        /// ключ шифрования если нуждаеется в дешифровке
         /// </summary>
-        public string Name { get=>name; private set=>SetProperty(ref name, value); }
+        private string encryptionKey;
+        /// <summary>
+        /// имя файла/каталога/диска
+        /// </summary>
+        public string Name { get=>name; set=>SetProperty(ref name, value);}
         private string name;
         /// <summary>
         /// флаг: отображать обложку
@@ -42,7 +43,7 @@ namespace NotebookRCv001.Models
         public bool IsCover { get => isCover; private set => SetProperty(ref isCover, value); }
         private bool isCover;
         /// <summary>
-        /// текущий объект является локальным диском
+        /// объект является файлом
         /// </summary>
         public bool IsDrive { get => isDrive; set=>SetProperty(ref isDrive, value); }
         private bool isDrive;
@@ -52,10 +53,15 @@ namespace NotebookRCv001.Models
         public bool IsFile { get => isFile; private set => SetProperty(ref isFile, value); }
         private bool isFile;
         /// <summary>
-        /// текущий объект является папкой
+        /// объект является папкой
         /// </summary>
-        public bool IsFolder { get => isFolder; private set => SetProperty(ref isFolder, value); }
+        public bool IsFolder { get => isFolder; set => SetProperty(ref isFolder, value); }
         private bool isFolder;
+        /// <summary>
+        /// объект является локольным диском
+        /// </summary>
+        public bool IsDrive { get => isDrive; set => SetProperty(ref isDrive, value); }
+        private bool isDrive;
         /// <summary>
         /// расширение файла
         /// </summary>
@@ -64,12 +70,12 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// размер файла
         /// </summary>
-        public string Size { get=>size; private set=>SetProperty(ref size, value); }
+        public string Size { get => size; private set => SetProperty(ref size, value); }
         private string size;
         /// <summary>
         /// дата и время последнего изменения
         /// </summary>
-        public string Date { get => date; private set => SetProperty( ref date, value ); }
+        public string Date { get => date; private set => SetProperty(ref date, value); }
         private string date;
         /// <summary>
         /// обложка
@@ -79,27 +85,26 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// информация о диске/каталоге/файле
         /// </summary>
-        public object Tag { get => tag; private set => SetProperty( ref tag, value ); }
+        public object Tag { get => tag; private set => SetProperty(ref tag, value); }
         private object tag;
 
 
-        public DirectoryItem(object info, string keyCrypt)
+        public DirectoryItem(object info, string encryptionKey)
         {
             Tag = info;
-            this.keyCrypt = keyCrypt;
-            IsFile=false; 
-            IsFolder=false;
-            IsDrive=false;
-            IsCover=false;
+            this.encryptionKey = encryptionKey;
+            IsFile = false;
+            IsFolder = false;
+            IsDrive = false;
             if (info is DirectoryInfo dir)
             {
+                IsFolder = true;
                 GetDirectoryInfo(dir);
-                IsFolder=true;
             }
             else if (info is DriveInfo drive)
             {
+                IsDrive = true;
                 GetDriveInfo(drive);
-                IsDrive=true;
             }
             else if (info is FileInfo file)
             {
@@ -109,7 +114,10 @@ namespace NotebookRCv001.Models
             else
                 return;
         }
-
+        /// <summary>
+        /// извлечение информации о диске
+        /// </summary>
+        /// <param name="driveInfo"></param>
         private void GetDriveInfo(DriveInfo driveInfo)
         {
             Name = driveInfo.Name;
@@ -117,14 +125,22 @@ namespace NotebookRCv001.Models
             Size = driveInfo.TotalFreeSpace.ToString();
             Date = "-----";
         }
+        /// <summary>
+        /// извлечение информации о каталоге
+        /// </summary>
+        /// <param name="directoryInfo"></param>
         private async void GetDirectoryInfo(DirectoryInfo directoryInfo)
         {
             Name = directoryInfo.Name;
             FileExtension = "Folder";
             Size = "------";
-            Date = directoryInfo.LastWriteTime.ToString("MM/dd/yy H:mm:ss");
-            Icon = await RetrievingAnImageFromADirectory(directoryInfo, "001.jpg");
+            Date = directoryInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss");
+            Icon = await RetrievingAnImageFromADirectory(directoryInfo,  "001.jpg");
         }
+        /// <summary>
+        /// извлечение информации о файле
+        /// </summary>
+        /// <param name="fileInfo"></param>
         private void GetFileInfo(FileInfo fileInfo)
         {
             Name = Path.GetFileNameWithoutExtension(fileInfo.FullName);
@@ -132,19 +148,26 @@ namespace NotebookRCv001.Models
             Size = fileInfo.Length.ToString();
             Date = fileInfo.LastWriteTime.ToString("MM/dd/yy H:mm:ss");
         }
-
+        /// <summary>
+        /// извлечение изображения с заданным именем из заданного каталога
+        /// </summary>
+        /// <param name="dir">каталог в котором находится изображение</param>
+        /// <param name="imageName">имя изображения вместе с расширением(.jpg)</param>
+        /// <returns></returns>
         private async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
         {
             BitmapImage bitmap = null;
             try
             {
                 string path = Path.Combine(dir.FullName, imageName);
+                IsCover = false;
                 if (File.Exists(path) && Path.GetExtension(path) == ".jpg")
                 {
                     if (dir.GetFiles().Any((x) => x.Name == imageName))
                     {
-                        if (!string.IsNullOrWhiteSpace(keyCrypt))
-                            bitmap = await Command_executors.Executors.ImageDecrypt(path, keyCrypt, 24);
+                        IsCover = true;
+                        if (!string.IsNullOrWhiteSpace(encryptionKey))
+                            bitmap = await Command_executors.Executors.ImageDecrypt(path, encryptionKey, 24);
                         else
                         {
                             using (FileStream fs = new(path, FileMode.Open))
@@ -154,7 +177,7 @@ namespace NotebookRCv001.Models
                                     bitmap = new BitmapImage();
                                     bitmap.BeginInit();
                                     bitmap.StreamSource = fs;
-                                    bitmap.DecodePixelHeight = 24;
+                                    bitmap.DecodePixelHeight = 32;
                                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                                     bitmap.EndInit();
                                     bitmap.Freeze();
@@ -175,6 +198,7 @@ namespace NotebookRCv001.Models
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
         private Languages language => mainWindowViewModel.Language;
+        private string encryptionKey { get; set; }
 
         /// <summary>
         /// открытый в окне каталог(для диска - null)
@@ -247,6 +271,7 @@ namespace NotebookRCv001.Models
             var menu = (MyControls.MenuHome)home.FindResource("menuhome");
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
+            encryptionKey = homeMenuEncryptionViewModel.EncryptionKey;
             //восстанавливаем размеры и положение окна
             if (Properties.Settings.Default.FileOverviewFirstStart)
             {
@@ -327,9 +352,9 @@ namespace NotebookRCv001.Models
                     CurrentDirectoryFullName = driveInfo.Name;
                     CurrentDirectoryList = new();
                     foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
-                        CurrentDirectoryList.Add(new DirectoryItem(folder, homeMenuEncryptionViewModel.KeyCript));
+                        CurrentDirectoryList.Add(new DirectoryItem(folder, encryptionKey));
                     foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
-                        CurrentDirectoryList.Add(new DirectoryItem(file, homeMenuEncryptionViewModel.KeyCript));
+                        CurrentDirectoryList.Add(new DirectoryItem(file, encryptionKey));
                     CurrentDirectory = null;
                 }
             }
@@ -550,13 +575,13 @@ namespace NotebookRCv001.Models
                 string ext = fileInfo.Extension;
                 using (var myProcess = new Process())
                 {
-                    if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.KeyCript))
+                    if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
                     {
                         byte[] bytes = new byte[fileInfo.Length];
                         using (var fs = new FileStream(path, FileMode.OpenOrCreate))
                         {
                             await fs.ReadAsync(bytes, 0, bytes.Length);
-                            bytes = Command_executors.Executors.Decrypt(bytes, homeMenuEncryptionViewModel.KeyCript);
+                            bytes = Command_executors.Executors.Decrypt(bytes, homeMenuEncryptionViewModel.EncryptionKey);
                         }
                         path = $"{Environment.CurrentDirectory}/temp/temp{ext}";
                         using (var fs = new FileStream(path, FileMode.Create))
@@ -619,9 +644,9 @@ namespace NotebookRCv001.Models
             try
             {
                 foreach (var folder in directoryInfo.GetDirectories())
-                    list.Add(new DirectoryItem(folder, homeMenuEncryptionViewModel.KeyCript));
+                    list.Add(new DirectoryItem(folder, homeMenuEncryptionViewModel.EncryptionKey));
                 foreach (var file in directoryInfo.GetFiles())
-                    list.Add(new DirectoryItem(file, homeMenuEncryptionViewModel.KeyCript));
+                    list.Add(new DirectoryItem(file, homeMenuEncryptionViewModel.EncryptionKey));
                 CurrentDirectory = directoryInfo;
                 CurrentDirectoryFullName = directoryInfo.FullName;
                 return list;
@@ -641,8 +666,8 @@ namespace NotebookRCv001.Models
                     {
                         using (FileStream fs = new(path, FileMode.Open))
                         {
-                            if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.KeyCript))
-                                bitmap = await Command_executors.Executors.ImageDecrypt(path, homeMenuEncryptionViewModel.KeyCript, 24);
+                            if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
+                                bitmap = await Command_executors.Executors.ImageDecrypt(path, homeMenuEncryptionViewModel.EncryptionKey, 24);
                             else
                             {
                                 bitmap = new BitmapImage(new Uri(path));
