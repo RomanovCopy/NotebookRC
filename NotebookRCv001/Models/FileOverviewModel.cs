@@ -26,59 +26,80 @@ namespace NotebookRCv001.Models
 {
     public class DirectoryItem : ViewModelBase
     {
+        /// <summary>
+        /// ключ шифрования
+        /// </summary>
         private string keyCrypt;
-        public string Name { get; private set; }
+
+        /// <summary>
+        /// имя файла/папки/диска
+        /// </summary>
+        public string Name { get=>name; private set=>SetProperty(ref name, value); }
+        private string name;
         /// <summary>
         /// флаг: отображать обложку
         /// </summary>
-        public bool IsCover { get => isCover; set => SetProperty(ref isCover, value); }
+        public bool IsCover { get => isCover; private set => SetProperty(ref isCover, value); }
         private bool isCover;
         /// <summary>
-        /// отображать значок файла
+        /// текущий объект является локальным диском
         /// </summary>
-        public bool IsFile { get => isFile; set => SetProperty(ref isFile, value); }
+        public bool IsDrive { get => isDrive; set=>SetProperty(ref isDrive, value); }
+        private bool isDrive;
+        /// <summary>
+        /// текущий объект является файлом
+        /// </summary>
+        public bool IsFile { get => isFile; private set => SetProperty(ref isFile, value); }
         private bool isFile;
         /// <summary>
-        /// отображать значок папки
+        /// текущий объект является папкой
         /// </summary>
-        public bool IsFolder { get => IsFolder; set => SetProperty(ref isFolder, value); }
+        public bool IsFolder { get => isFolder; private set => SetProperty(ref isFolder, value); }
         private bool isFolder;
         /// <summary>
         /// расширение файла
         /// </summary>
-        public string FileExtension { get; private set; }
+        public string FileExtension { get=>fileExtension; private set=>SetProperty(ref fileExtension, value); }
+        private string fileExtension;
         /// <summary>
         /// размер файла
         /// </summary>
-        public string Size { get; private set; }
+        public string Size { get=>size; private set=>SetProperty(ref size, value); }
+        private string size;
         /// <summary>
         /// дата и время последнего изменения
         /// </summary>
-        public string Date { get; private set; }
+        public string Date { get => date; private set => SetProperty( ref date, value ); }
+        private string date;
         /// <summary>
         /// обложка
         /// </summary>
-        public BitmapImage Icon { get => icon; set => SetProperty(ref icon, value); }
+        public BitmapImage Icon { get => icon; private set => SetProperty(ref icon, value); }
         private BitmapImage icon;
         /// <summary>
         /// информация о диске/каталоге/файле
         /// </summary>
-        public object Tag { get; private set; }
+        public object Tag { get => tag; private set => SetProperty( ref tag, value ); }
+        private object tag;
 
 
         public DirectoryItem(object info, string keyCrypt)
         {
             Tag = info;
             this.keyCrypt = keyCrypt;
+            IsFile=false; 
+            IsFolder=false;
+            IsDrive=false;
+            IsCover=false;
             if (info is DirectoryInfo dir)
             {
                 GetDirectoryInfo(dir);
-                IsFile = false;
+                IsFolder=true;
             }
             else if (info is DriveInfo drive)
             {
                 GetDriveInfo(drive);
-                IsFile = false;
+                IsDrive=true;
             }
             else if (info is FileInfo file)
             {
@@ -142,10 +163,6 @@ namespace NotebookRCv001.Models
                         }
                     }
                 }
-                if (bitmap != null)
-                {
-                    bool c = true;
-                }    
                 return bitmap;
             }
             catch (Exception e) { ErrorWindow(e); return bitmap; }

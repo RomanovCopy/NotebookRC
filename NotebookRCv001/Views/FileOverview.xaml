@@ -101,12 +101,42 @@
                                                 <Image.Style>
                                                     <Style TargetType="Image">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding FileExtension, UpdateSourceTrigger=PropertyChanged}" Value="Folder" >
-                                                                <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True" >
-                                                                <Setter Property="Source" Value="{ StaticResource fileV001 }" />
-                                                            </DataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{StaticResource catalogV001}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{StaticResource fileV001}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </Image.Style>
