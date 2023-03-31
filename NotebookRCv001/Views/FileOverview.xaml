@@ -97,7 +97,6 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Border x:Name="border" Grid.Column="0" BorderBrush="Green" BorderThickness="1" CornerRadius="3">
                                                 <Image Stretch="None" SnapsToDevicePixels="True" Margin="0,0,10,0" >
                                                     <Image.Style>
                                                         <Style TargetType="Image">
@@ -124,14 +123,32 @@
                                                                         <Setter Property="Source" Value="{StaticResource catalogV001}"/>
                                                                     </MultiDataTrigger.Setters>
                                                                 </MultiDataTrigger>
-                                                                <DataTrigger Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True" >
-                                                                    <Setter Property="Source" Value="{ StaticResource fileV001 }" />
-                                                                </DataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <MultiDataTrigger.Setters>
+                                                                        <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    </MultiDataTrigger.Setters>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="False"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <MultiDataTrigger.Setters>
+                                                                        <Setter Property="Source" Value="{StaticResource fileV001}"/>
+                                                                    </MultiDataTrigger.Setters>
+                                                                </MultiDataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </Image.Style>
                                                 </Image>
-                                            </Border>
                                             <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
                                                        Grid.Column="1"
                                                        Margin="0,5,0,0"

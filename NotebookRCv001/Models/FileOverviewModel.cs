@@ -26,8 +26,6 @@ namespace NotebookRCv001.Models
 {
     public class DirectoryItem : ViewModelBase
     {
-        private string keyCrypt;
-        public string Name { get; private set; }
         /// <summary>
         /// ключ шифрования если нуждаеется в дешифровке
         /// </summary>
@@ -57,11 +55,6 @@ namespace NotebookRCv001.Models
         /// </summary>
         public bool IsFolder { get => isFolder; set => SetProperty(ref isFolder, value); }
         private bool isFolder;
-        /// <summary>
-        /// объект является локольным диском
-        /// </summary>
-        public bool IsDrive { get => isDrive; set => SetProperty(ref isDrive, value); }
-        private bool isDrive;
         /// <summary>
         /// расширение файла
         /// </summary>
@@ -135,7 +128,7 @@ namespace NotebookRCv001.Models
             FileExtension = "Folder";
             Size = "------";
             Date = directoryInfo.LastWriteTime.ToString( "MM/dd/yy H:mm:ss");
-            Icon = await RetrievingAnImageFromADirectory(directoryInfo,  "001.jpg");
+            Icon = await Task.Factory.StartNew(()=> RetrievingAnImageFromADirectory(directoryInfo, "001.jpg")).Result;
         }
         /// <summary>
         /// извлечение информации о файле
@@ -160,12 +153,10 @@ namespace NotebookRCv001.Models
             try
             {
                 string path = Path.Combine(dir.FullName, imageName);
-                IsCover = false;
                 if (File.Exists(path) && Path.GetExtension(path) == ".jpg")
                 {
                     if (dir.GetFiles().Any((x) => x.Name == imageName))
                     {
-                        IsCover = true;
                         if (!string.IsNullOrWhiteSpace(encryptionKey))
                             bitmap = await Command_executors.Executors.ImageDecrypt(path, encryptionKey, 24);
                         else
@@ -198,7 +189,6 @@ namespace NotebookRCv001.Models
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
         private Languages language => mainWindowViewModel.Language;
-        private string encryptionKey { get; set; }
 
         /// <summary>
         /// открытый в окне каталог(для диска - null)
@@ -271,7 +261,6 @@ namespace NotebookRCv001.Models
             var menu = (MyControls.MenuHome)home.FindResource("menuhome");
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
-            encryptionKey = homeMenuEncryptionViewModel.EncryptionKey;
             //восстанавливаем размеры и положение окна
             if (Properties.Settings.Default.FileOverviewFirstStart)
             {
@@ -349,6 +338,7 @@ namespace NotebookRCv001.Models
             {
                 if (obj is DriveInfo driveInfo)
                 {
+                    string encryptionKey = homeMenuEncryptionViewModel.EncryptionKey;
                     CurrentDirectoryFullName = driveInfo.Name;
                     CurrentDirectoryList = new();
                     foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
@@ -643,10 +633,11 @@ namespace NotebookRCv001.Models
             ObservableCollection<DirectoryItem> list = new();
             try
             {
+                string key = homeMenuEncryptionViewModel.EncryptionKey;
                 foreach (var folder in directoryInfo.GetDirectories())
-                    list.Add(new DirectoryItem(folder, homeMenuEncryptionViewModel.EncryptionKey));
+                    list.Add(new DirectoryItem(folder, key));
                 foreach (var file in directoryInfo.GetFiles())
-                    list.Add(new DirectoryItem(file, homeMenuEncryptionViewModel.EncryptionKey));
+                    list.Add(new DirectoryItem(file, key));
                 CurrentDirectory = directoryInfo;
                 CurrentDirectoryFullName = directoryInfo.FullName;
                 return list;

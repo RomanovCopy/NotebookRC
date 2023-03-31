@@ -1551,7 +1551,7 @@ namespace Command_executors
                     bytes = new byte[fs.Length];
                     await fs.ReadAsync( bytes, 0, (int)fs.Length );
                 }
-                bytes = Command_executors.Executors.Decrypt( bytes, key );
+                bytes = Decrypt( bytes, key );
                 using (var stream = new MemoryStream( bytes ))
                 {
                     bitmapImage.BeginInit();
