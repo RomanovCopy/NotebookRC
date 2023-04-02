@@ -13,7 +13,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Runtime.CompilerServices;
 using Forms = System.Windows.Forms;
-using System.Windows.Forms;
+using windows = System.Windows;
 using System.Security.Cryptography;
 using System.Windows.Media.Imaging;
 
@@ -1054,7 +1054,7 @@ namespace Command_executors
                 return true;
             }
             catch (Exception e)
-            { MessageBox.Show( e.Message ); return false; }
+            { Forms.MessageBox.Show( e.Message ); return false; }
         }
 
 
@@ -1549,14 +1549,16 @@ namespace Command_executors
                 using (var fs = new FileStream( path, FileMode.Open ))
                 {
                     bytes = new byte[fs.Length];
-                    await fs.ReadAsync( bytes, 0, (int)fs.Length );
+                    fs.Read( bytes, 0, (int)fs.Length );
                 }
                 bytes = Decrypt( bytes, key );
                 using (var stream = new MemoryStream( bytes ))
                 {
+                    
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                     bitmapImage.StreamSource = stream;
+                    //bitmapImage.UriSource= new Uri( path );
                     if ( decodePixelHeight > 0)
                         bitmapImage.DecodePixelHeight = decodePixelHeight;
                     bitmapImage.EndInit();

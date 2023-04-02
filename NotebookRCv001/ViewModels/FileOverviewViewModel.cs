@@ -40,6 +40,8 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<DirectoryItem> CurrentDirectoryList => fileOverviewModel.CurrentDirectoryList;
         public ObservableCollection<DriveInfo> DriveInfos => fileOverviewModel.DriveInfos;
         public int SelectedIndex { get => fileOverviewModel.SelectedIndex; set => fileOverviewModel.SelectedIndex = value; }
+
+        public bool CoverEnabled { get => fileOverviewModel.CoverEnabled; set => fileOverviewModel.CoverEnabled = value; }
         public DirectoryInfo CurrentDirectory => fileOverviewModel.CurrentDirectory;
         public string CurrentDirectoryFullName => fileOverviewModel.CurrentDirectoryFullName;
 
@@ -50,6 +52,9 @@ namespace NotebookRCv001.ViewModels
             fileOverviewModel.PropertyChanged += ( s, e ) => OnPropertyChanged( e.PropertyName );
         }
 
+        public ICommand CheckedIsCover => checkedIsCover ??= new RelayCommand( fileOverviewModel.Execute_CheckedIsCover, 
+            fileOverviewModel.CanExecute_CheckedIsCover );
+        private RelayCommand checkedIsCover;
         public ICommand ComboBoxLoaded => comboBoxLoaded ??= new RelayCommand( fileOverviewModel.Execute_ComboBoxLoaded,
             fileOverviewModel.CanExecute_ComboBoxLoaded );
         private RelayCommand comboBoxLoaded;

@@ -495,6 +495,8 @@ namespace NotebookRCv001.Infrastructure
                     "Размер",//03
                     "Дата",//04
                     "Открыть",//05
+                    "Папка",//06
+                    "Обложки",//07
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -505,6 +507,8 @@ namespace NotebookRCv001.Infrastructure
                      "Size",//03
                      "Date",//04
                      "Open",//05
+                     "Folder",//06
+                     "Covers",//07
                 }
                 }
             };
