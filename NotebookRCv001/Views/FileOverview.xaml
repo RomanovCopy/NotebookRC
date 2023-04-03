@@ -84,9 +84,12 @@
                         <Border Grid.Column="3" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
                                 Margin="10,0,0,0">
                             <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Margin="10,4,10,0"
-                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged}">
+                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
                                         <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>

@@ -357,7 +357,7 @@ namespace NotebookRCv001.Models
                     var type = block.GetType();
                     var borderthickness = type?.GetProperty("BorderThickness");
                     var borderbrush = type?.GetProperty("BorderBrush");
-                    if (borderthickness != null && borderbrush != null && block.BorderBrush == (Brush)behaviorRichTextBox.Converter.Convert(Properties.Settings.Default.MyHighlightColor, typeof(Brush), null, null));
+                    if (borderthickness != null && borderbrush != null && block.BorderBrush == (Brush)behaviorRichTextBox.Converter.Convert(Properties.Settings.Default.MyHighlightColor, typeof(Brush), null, null))
                     {
                         borderthickness.SetValue(block, new Thickness(0));
                         borderbrush.SetValue(block, null);

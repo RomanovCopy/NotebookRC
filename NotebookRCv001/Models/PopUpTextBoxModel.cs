@@ -22,10 +22,6 @@ namespace NotebookRCv001.Models
         private readonly MainWindowViewModel mainWindowViewModel;
         private object window { get; set; }
         private Languages language => mainWindowViewModel.Language;
-        /// <summary>
-        /// допустиаые символы при вводе в TextBox
-        /// </summary>
-        private readonly Key[] validInputCharacters;
         internal string Text { get => text; set => SetProperty(ref text, value); }
         private string text;
         internal double WindowWidth { get => windowWidth; set => SetProperty(ref windowWidth, value); }

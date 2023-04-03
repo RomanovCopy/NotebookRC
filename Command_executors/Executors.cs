@@ -930,7 +930,6 @@ namespace Command_executors
         {
             try
             {
-                byte[] file = null;//массив байт загружаемого файла
                 byte[] bufer = new byte[10240];//массив байт пишущийся на диск за один проход
                 string Extension = null;
                 long Size = 0;//размер файла в байтах
@@ -1329,7 +1328,7 @@ namespace Command_executors
                 str = await client.GetStringAsync( url );
                 return str;
             }
-            catch (HttpRequestException e)
+            catch 
             {
                 return "";
             }
@@ -1343,23 +1342,12 @@ namespace Command_executors
         {
             try
             {
-                bool c = false;
                 string html = null;
                 var dom = CQ.CreateFromUrl( url );
                 html = ((CQ)dom).Render();
-                //     ChromiumWebBrowser browser = new ChromiumWebBrowser(url);
-                //     browser.FrameLoadEnd += async (s, e) =>
-                //{
-                //    if (e.Frame.IsMain)
-                //    {
-                //        html = await browser.GetSourceAsync();
-                //        c = true;
-                //    }
-                //};
-                //     while (!c) { Thread.Sleep(250); };
                 return html;
             }
-            catch (Exception e)
+            catch 
             {
                 return null;
             }
@@ -1421,7 +1409,7 @@ namespace Command_executors
                 }
                 return result;
             }
-            catch (Exception e)
+            catch 
             {
                 return result;
             }
@@ -1558,7 +1546,6 @@ namespace Command_executors
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                     bitmapImage.StreamSource = stream;
-                    //bitmapImage.UriSource= new Uri( path );
                     if ( decodePixelHeight > 0)
                         bitmapImage.DecodePixelHeight = decodePixelHeight;
                     bitmapImage.EndInit();
@@ -1566,7 +1553,7 @@ namespace Command_executors
                 }
                 return bitmapImage;
             }
-            catch { return bitmapImage; }
+            catch { return null; }
         }
 
 

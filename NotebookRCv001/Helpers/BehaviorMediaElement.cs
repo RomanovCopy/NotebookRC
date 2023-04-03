@@ -18,7 +18,6 @@ namespace NotebookRCv001.Helpers
 
         #region **************** Private properties *************************
 
-        private readonly MainWindowViewModel mainWindowViewModel;
 
         #endregion
 
