@@ -1134,5 +1134,17 @@ namespace NotebookRCv001.Properties {
                 this["FileOverviewFirstStart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        public int FileOverviewIconSize {
+            get {
+                return ((int)(this["FileOverviewIconSize"]));
+            }
+            set {
+                this["FileOverviewIconSize"] = value;
+            }
+        }
     }
 }

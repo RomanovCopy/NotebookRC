@@ -45,6 +45,14 @@ namespace NotebookRCv001.ViewModels
         public DirectoryInfo CurrentDirectory => fileOverviewModel.CurrentDirectory;
         public string CurrentDirectoryFullName => fileOverviewModel.CurrentDirectoryFullName;
 
+        /// <summary>
+        /// Размер иконки обложки(высота)
+        /// </summary>
+        public ObservableCollection<int> IconSizes { get => fileOverviewModel.IconSizes ; set => fileOverviewModel.IconSizes=value; }
+        /// <summary>
+        /// индекс выбранного размера иконки
+        /// </summary>
+        public int IconSizesIndex { get => fileOverviewModel.IconSizesIndex; set => fileOverviewModel.IconSizesIndex=value; }
 
         public FileOverviewViewModel()
         {
@@ -61,6 +69,12 @@ namespace NotebookRCv001.ViewModels
         public ICommand ComboBoxSelectionChanged => comboBoxSelectionChanged ??= new RelayCommand( fileOverviewModel.Execute_ComboBoxSelectionChanged,
             fileOverviewModel.CanExecute_ComboBoxSelectionChanged );
         private RelayCommand comboBoxSelectionChanged;
+        public ICommand IconSizesLoaded => iconSizesLoaded ??= new RelayCommand( fileOverviewModel.Execute_IconSizesLoaded,
+            fileOverviewModel.CanExecute_IconSizesLoaded );
+        private RelayCommand iconSizesLoaded;
+        public ICommand IconSizesSelectionChanged => iconSizesSelectionChanged ??= new RelayCommand( fileOverviewModel.Execute_IconSizesSelectionChanged,
+            fileOverviewModel.CanExecute_IconSizesSelectionChanged );
+        private RelayCommand iconSizesSelectionChanged;
         public ICommand ToParentDirectory => toParentDirectory ??= new RelayCommand( fileOverviewModel.Execute_ToParentDirectory,
             fileOverviewModel.CanExecute_ToParentDirectory );
         private RelayCommand toParentDirectory;

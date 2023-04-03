@@ -83,17 +83,33 @@
                         </Border>
                         <Border Grid.Column="3" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
                                 Margin="10,0,0,0">
-                            <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Margin="10,4,10,0"
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Margin="10,4,10,0"
                                           IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Checked">
-                                        <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="Unchecked">
-                                        <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </CheckBox>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Checked">
+                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="Unchecked">
+                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
+                                <ComboBox x:Name="iconsizes"  Grid.Column="0" ItemsSource="{Binding IconSizes, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedIndex="{Binding IconSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Loaded">
+                                            <i:InvokeCommandAction Command="{Binding IconSizesLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=iconsizes, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding IconSizesSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=iconsizes, Path=SelectedItem, 
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
                         </Border>
                     </Grid>
                 </GroupBox.Header>
@@ -112,58 +128,58 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                                <Image Stretch="None" SnapsToDevicePixels="True" Margin="0,0,10,0" >
-                                                    <Image.Style>
-                                                        <Style TargetType="Image">
-                                                            <Style.Triggers>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
+                                            <Image Stretch="None" SnapsToDevicePixels="True" Margin="0,0,10,0" >
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Style.Triggers>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="True"/>
-                                                                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="True"/>
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <MultiDataTrigger.Setters>
-                                                                        <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    </MultiDataTrigger.Setters>
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="True"/>
-                                                                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="False"/>
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <MultiDataTrigger.Setters>
-                                                                        <Setter Property="Source" Value="{StaticResource catalogV001}"/>
-                                                                    </MultiDataTrigger.Setters>
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{StaticResource catalogV001}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="True"/>
-                                                                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="True"/>
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <MultiDataTrigger.Setters>
-                                                                        <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    </MultiDataTrigger.Setters>
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="True"/>
-                                                                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                    <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
                                                                                Value="False"/>
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <MultiDataTrigger.Setters>
-                                                                        <Setter Property="Source" Value="{StaticResource fileV001}"/>
-                                                                    </MultiDataTrigger.Setters>
-                                                                </MultiDataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Image.Style>
-                                                </Image>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <MultiDataTrigger.Setters>
+                                                                    <Setter Property="Source" Value="{StaticResource fileV001}"/>
+                                                                </MultiDataTrigger.Setters>
+                                                            </MultiDataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
                                             <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
                                                        Grid.Column="1"
                                                        Margin="0,5,0,0"
