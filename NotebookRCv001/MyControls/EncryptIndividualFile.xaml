@@ -211,6 +211,34 @@
                 </Grid>
             </DockPanel>
         </Border>
-        <Border Grid.Row="4" Style="{StaticResource borders}" />
+        <Border Grid.Row="4" Style="{StaticResource borders}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox x:Name="subfolders" Grid.Column="1" Content="Применить к подпапкам." Command="{Binding SubfoldersCheckBox, 
+                        UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=subfolders, Path=IsChecked, 
+                        UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox">
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.3"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

@@ -110,6 +110,10 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.CanExecute_ClickButtonDecrypt );
         RelayCommand clickButtonDecrypt;
 
+        public ICommand SubfoldersCheckBox => subfoldersCheckBox ??= new RelayCommand(encryptIndividualFileModel.Execute_SubfoldersCheckBox,
+            encryptIndividualFileModel.CanExecute_SubfoldersCheckBox);
+        private RelayCommand subfoldersCheckBox;
+
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand( encryptIndividualFileModel.Execute_PageLoaded, encryptIndividualFileModel.CanExecute_PageLoaded );
         RelayCommand pageLoaded;
 
