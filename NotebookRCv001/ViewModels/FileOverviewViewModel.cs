@@ -88,6 +88,8 @@ namespace NotebookRCv001.ViewModels
         public ICommand ListViewNameContextMenuOpen => listViewNameContextMenuOpen ??= new RelayCommand(
             fileOverviewModel.Execute_ListViewNameContextMenuOpen, fileOverviewModel.CanExecute_ListViewNameContextMenuOpen );
         private RelayCommand listViewNameContextMenuOpen;
+        public ICommand ListViewLoaded => listViewLoaded ??= new RelayCommand( fileOverviewModel.Execute_ListViewLoaded, fileOverviewModel.CanExecute_ListViewLoaded );
+        private RelayCommand listViewLoaded;
         public ICommand WindowSizeChanged => windowSizeChanged ??= new RelayCommand( fileOverviewModel.Execute_WindowSizeChanged, fileOverviewModel.CanExecute_WindowSizeChanged );
         private RelayCommand windowSizeChanged;
         public ICommand WindowLoaded => windowLoaded ??= new RelayCommand

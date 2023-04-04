@@ -543,6 +543,29 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
+        /// <summary>
+        /// окончание загрузки ListView
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ListViewLoaded( object obj )
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow( e ); return false; }
+        }
+        internal void Execute_ListViewLoaded( object obj )
+        {
+            try
+            {
+            }
+            catch (Exception e) { ErrorWindow( e ); }
+        }
 
         /// <summary>
         /// при изменении размеров окна

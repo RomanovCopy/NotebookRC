@@ -391,12 +391,14 @@ namespace NotebookRCv001.Models
             try
             {
                 isCompleted = false;
+                DirectoryInfo info = new DirectoryInfo( PathToOpenDirectory );
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
+                int total = TotalNumberOfFilesInTheDirectory( info  );
                 Task.Factory.StartNew(() =>
                 {
                     if (!string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace(PathToSaveFile))
@@ -408,7 +410,7 @@ namespace NotebookRCv001.Models
                     {//щифрование каталога
                         if (Directory.Exists(PathToOpenDirectory))
                         {
-                            FolderEncrypt(new DirectoryInfo(PathToOpenDirectory), PathToSaveDirectory, key);
+                            FolderEncrypt( info, PathToSaveDirectory, key, total );
                         }
                     }
                     ProgressValue = 100;
@@ -441,12 +443,14 @@ namespace NotebookRCv001.Models
             try
             {
                 isCompleted = false;
+                DirectoryInfo info = new DirectoryInfo( PathToOpenDirectory );
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
+                int total = TotalNumberOfFilesInTheDirectory( info );
                 Task.Factory.StartNew(() =>
                 {
                     Thread.Sleep(500);
@@ -459,7 +463,7 @@ namespace NotebookRCv001.Models
                     {//дещифрование каталога
                         if (Directory.Exists(PathToOpenDirectory))
                         {
-                            FolderDecrypt(new DirectoryInfo(PathToOpenDirectory), PathToSaveDirectory, key);
+                            FolderDecrypt(info, PathToSaveDirectory, key, total );
                         }
                     }
                     ProgressValue = 100;
@@ -631,17 +635,21 @@ namespace NotebookRCv001.Models
         /// шифрование каталога
         /// </summary>
         /// <returns></returns>
-        private bool FolderEncrypt(DirectoryInfo info, string pathToSave, string key)
+        private int FolderEncrypt(DirectoryInfo info, string pathToSave, string key, int total)
         {
             try
             {
-                bool c = false;
+                int count = 0;
                 foreach (var finfo in info.GetFiles())
                 {
                     if (finfo != null)
                     {//шифрование файла
-                        ProgressValue = 50;
                         Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
+                        count++;
+                        if (info.GetDirectories().Length == 0)
+                        {
+                            ProgressValue = (double)count / (double)total * 100.0;
+                        }
                     }
                 }
                 if (applyToSubfolders)
@@ -650,27 +658,34 @@ namespace NotebookRCv001.Models
                     {
                         string newPath = Path.Combine(pathToSave, dinfo.Name);
                         Directory.CreateDirectory(newPath);
-                        FolderEncrypt(dinfo, newPath, key);
+                        count+=FolderEncrypt(dinfo, newPath, key, total);
+                        ProgressValue = (double)count / (double)total * 100;
                     }
                 }
-                return c;
+                return count;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow(e); return -1; }
         }
         /// <summary>
         /// дешифрование каталога
         /// </summary>
         /// <returns></returns>
-        private bool FolderDecrypt(DirectoryInfo info, string pathToSave, string key)
+        private int FolderDecrypt(DirectoryInfo info, string pathToSave, string key, int total)
         {
             try
             {
+                int count = 0;
                 foreach (var finfo in info.GetFiles())
                 {
                     if (finfo != null)
                     {//дешифрование файла
-                        ProgressValue = 50;
                         Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
+                        count++;
+                        if(info.GetDirectories().Length == 0)
+                        {
+                            ProgressValue = (double)count / (double)total * 100.0;
+                        }
+
                     }
                 }
                 if (applyToSubfolders)
@@ -679,24 +694,28 @@ namespace NotebookRCv001.Models
                     {
                         string newPath = Path.Combine(pathToSave, dinfo.Name);
                         Directory.CreateDirectory(newPath);
-                        FolderDecrypt(dinfo, newPath, key);
+                        count += FolderDecrypt( dinfo, newPath, key, total );
+                        ProgressValue = (double)count / (double)total * 100;
                     }
                 }
-                return true;
+                return count;
             }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow(e); return -1; }
         }
         /// <summary>
         /// подсчет общего колличества файлов в данной директории
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private int TotalNumberOfFilesInTheDirectory(string path)
+        private int TotalNumberOfFilesInTheDirectory(DirectoryInfo info)
         {
             try
             {
                 int count = 0;
-
+                foreach(var finfo in info.GetFiles())
+                    count++;
+                foreach(var dinfo in info.GetDirectories())
+                    count+=TotalNumberOfFilesInTheDirectory( dinfo );
                 return count;
             }
             catch(Exception e) { ErrorWindow(e); return -1; }
