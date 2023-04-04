@@ -268,6 +268,11 @@ namespace NotebookRCv001.Models
         /// </summary>
         internal int IconSizesIndex { get => iconSizesIndex; set => SetProperty( ref iconSizesIndex, value ); }
         private int iconSizesIndex;
+        /// <summary>
+        /// текущая высота иконок задается для выравнивания
+        /// </summary>
+        internal int ImageHeight { get => imageHeight; set=>SetProperty(ref imageHeight, value); }
+        private int imageHeight;
 
 
         internal FileOverviewModel()
@@ -328,11 +333,11 @@ namespace NotebookRCv001.Models
             {
                 if (CoverEnabled)
                 {
-                    await Task.Factory.StartNew( () => AddingIcons() );
+                    await Task.Factory.StartNew( () => AddingIcons(ImageHeight) );
                 }
                 else
                 {
-                    await Task.Factory.StartNew( () => AddingIcons() );
+                    await Task.Factory.StartNew( () => AddingIcons(ImageHeight) );
                 }
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -396,7 +401,7 @@ namespace NotebookRCv001.Models
                         foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
                             CurrentDirectoryList.Add( new DirectoryItem( file, encryptionKey ) );
                         if (CoverEnabled)
-                            AddingIcons();
+                            AddingIcons(ImageHeight);
                         CurrentDirectory = null;
                     } );
                 }
@@ -423,7 +428,8 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                ImageHeight = Properties.Settings.Default.FileOverviewIconSize;
+                IconSizesIndex = IconSizes.IndexOf(ImageHeight);
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -447,7 +453,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                if(obj is int height)
+                {
+                    ImageHeight = height;
+                    Task.Factory.StartNew(() => { AddingIcons(height); });
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -477,7 +487,7 @@ namespace NotebookRCv001.Models
                     {
                         CurrentDirectoryList = GetCurrentDirectoryList( CurrentDirectory.Parent );
                         if (CoverEnabled)
-                            AddingIcons();
+                            AddingIcons(ImageHeight);
                     } );
                 }
             }
@@ -623,6 +633,7 @@ namespace NotebookRCv001.Models
                 {
                     propert.FileOverview_ListViewColumnsWidth.Add( width.ToString() );
                 }
+                propert.FileOverviewIconSize = IconSizes[IconSizesIndex];
                 Application.Current.MainWindow.Focus();
             }
             catch (Exception e) { ErrorWindow( e ); }
@@ -643,7 +654,7 @@ namespace NotebookRCv001.Models
                     await Task.Factory.StartNew( () => CurrentDirectoryList = GetCurrentDirectoryList( dirInfo ) );
                     if (CoverEnabled)
                     {
-                        await Task.Factory.StartNew( AddingIcons );
+                        await Task.Factory.StartNew(() => { AddingIcons(ImageHeight); });
                     }
                 }
                 else if (obj is FileInfo fileInfo)
@@ -756,7 +767,7 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// добавление Icons
         /// </summary>
-        private void AddingIcons()
+        private void AddingIcons( int height )
         {
             try
             {
@@ -782,7 +793,7 @@ namespace NotebookRCv001.Models
                             {
                                 if (!string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.EncryptionKey ))
                                 {
-                                    bitmap = Command_executors.Executors.ImageDecrypt( path, homeMenuEncryptionViewModel.EncryptionKey, 32 ).Result;
+                                    bitmap = Command_executors.Executors.ImageDecrypt( path, homeMenuEncryptionViewModel.EncryptionKey, height ).Result;
                                     if (bitmap == null)
                                         item.IsCover = false;
                                     else
@@ -806,7 +817,7 @@ namespace NotebookRCv001.Models
                             {
                                 if (homeMenuEncryptionViewModel.EncryptionKey != null)
                                 {
-                                    bitmap = Command_executors.Executors.ImageDecrypt( path, homeMenuEncryptionViewModel.EncryptionKey, 32 ).Result;
+                                    bitmap = Command_executors.Executors.ImageDecrypt( path, homeMenuEncryptionViewModel.EncryptionKey, height).Result;
                                     item.Icon = bitmap;
                                     continue;
                                 }
@@ -831,7 +842,7 @@ namespace NotebookRCv001.Models
                             bitmap.BeginInit();
                             bitmap.CacheOption = BitmapCacheOption.OnLoad;
                             bitmap.BaseUri = bitmap.UriSource = new Uri( path );
-                            bitmap.DecodePixelHeight = 32;
+                            bitmap.DecodePixelHeight = height;
                             bitmap.EndInit();
                             bitmap.Freeze();
                             item.Icon = bitmap;

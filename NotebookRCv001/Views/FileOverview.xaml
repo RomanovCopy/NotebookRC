@@ -82,10 +82,18 @@
                                    Width="450" Margin="10,0,10,0" />
                         </Border>
                         <Border Grid.Column="3" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
-                                Margin="10,0,0,0">
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Margin="10,4,10,0"
-                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
+                                Margin="10,0,0,0" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
+                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                          VerticalContentAlignment="Center" Margin="10,0,0,0">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Checked">
                                             <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
@@ -95,8 +103,9 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </CheckBox>
-                                <ComboBox x:Name="iconsizes"  Grid.Column="0" ItemsSource="{Binding IconSizes, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedIndex="{Binding IconSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                <ComboBox x:Name="iconsizes"  Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" 
+                                          ItemsSource="{Binding IconSizes, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
+                                          SelectedIndex="{Binding IconSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
                                             <i:InvokeCommandAction Command="{Binding IconSizesLoaded, UpdateSourceTrigger=PropertyChanged}"
@@ -109,7 +118,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </ComboBox>
-                            </StackPanel>
+                            </Grid>
                         </Border>
                     </Grid>
                 </GroupBox.Header>
@@ -128,7 +137,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Image Stretch="None" SnapsToDevicePixels="True" Margin="0,0,10,0" >
+                                            <Image Stretch="UniformToFill" SnapsToDevicePixels="False" Margin="0,0,10,0" >
                                                 <Image.Style>
                                                     <Style TargetType="Image">
                                                         <Style.Triggers>
@@ -141,6 +150,9 @@
                                                                 </MultiDataTrigger.Conditions>
                                                                 <MultiDataTrigger.Setters>
                                                                     <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
+                                                                        UpdateSourceTrigger=PropertyChanged}"/>
                                                                 </MultiDataTrigger.Setters>
                                                             </MultiDataTrigger>
                                                             <MultiDataTrigger>
@@ -163,6 +175,9 @@
                                                                 </MultiDataTrigger.Conditions>
                                                                 <MultiDataTrigger.Setters>
                                                                     <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
+                                                                        UpdateSourceTrigger=PropertyChanged}"/>
                                                                 </MultiDataTrigger.Setters>
                                                             </MultiDataTrigger>
                                                             <MultiDataTrigger>

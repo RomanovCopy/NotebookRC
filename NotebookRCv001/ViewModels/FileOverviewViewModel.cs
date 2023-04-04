@@ -53,6 +53,10 @@ namespace NotebookRCv001.ViewModels
         /// индекс выбранного размера иконки
         /// </summary>
         public int IconSizesIndex { get => fileOverviewModel.IconSizesIndex; set => fileOverviewModel.IconSizesIndex=value; }
+        /// <summary>
+        /// текущая высота иконок, задается для выравнивания
+        /// </summary>
+        public int ImageHeight { get => fileOverviewModel.ImageHeight; set => fileOverviewModel.ImageHeight = value; }
 
         public FileOverviewViewModel()
         {
