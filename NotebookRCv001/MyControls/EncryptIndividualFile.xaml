@@ -13,6 +13,7 @@
         <local:ButtonsClearAndClose x:Key="clearandclose"/>
         <Style x:Key="buttons" TargetType="Button">
             <Setter Property="Height" Value="25"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -195,13 +196,16 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20*"/>
                             <ColumnDefinition Width="20*"/>
                             <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="encrypt" Grid.Column="1" Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttons}" 
+                                Command="{Binding ClickButtonEncrypt, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button x:Name="cancel" Grid.Column="2" Content="{Binding Headers[13], UpdateSourceTrigger=PropertyChanged}" 
                                 Style="{StaticResource buttons}" 
                                 Command="{Binding ClickButtonEncrypt, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button x:Name="decrypt" Grid.Column="3" Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
