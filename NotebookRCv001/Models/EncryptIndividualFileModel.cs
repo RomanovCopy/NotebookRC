@@ -168,7 +168,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = string.IsNullOrWhiteSpace(PathToOpenDirectory) && string.IsNullOrWhiteSpace(PathToSaveDirectory);
+                c = string.IsNullOrWhiteSpace(PathToOpenDirectory) && string.IsNullOrWhiteSpace(PathToSaveDirectory) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -190,6 +190,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// очистка пути к открываемому файлу
         /// </summary>
@@ -201,7 +202,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(PathToOpenFile);
+                c = !string.IsNullOrWhiteSpace(PathToOpenFile) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -214,6 +215,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// выбор пути к сохраняемому файлу
         /// </summary>
@@ -225,7 +227,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(PathToOpenFile) && File.Exists(PathToOpenFile);
+                c = !string.IsNullOrWhiteSpace(PathToOpenFile) && File.Exists(PathToOpenFile) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -247,6 +249,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// очистка пути к сохраняемому файлу
         /// </summary>
@@ -258,7 +261,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(PathToSaveFile);
+                c = !string.IsNullOrWhiteSpace(PathToSaveFile) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -271,6 +274,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// выбор пути к открываемой директории
         /// </summary>
@@ -282,7 +286,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = string.IsNullOrWhiteSpace(PathToOpenFile) && string.IsNullOrWhiteSpace(PathToSaveFile);
+                c = string.IsNullOrWhiteSpace(PathToOpenFile) && string.IsNullOrWhiteSpace(PathToSaveFile) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -304,6 +308,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// очистка пути к открываемой директории
         /// </summary>
@@ -315,7 +320,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(PathToOpenDirectory);
+                c = !string.IsNullOrWhiteSpace(PathToOpenDirectory) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -328,6 +333,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// выбор пути к сохраняемой директории
         /// </summary>
@@ -339,7 +345,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(PathToOpenDirectory) && Directory.Exists(PathToOpenDirectory);
+                c = !string.IsNullOrWhiteSpace(PathToOpenDirectory) && Directory.Exists(PathToOpenDirectory) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -361,6 +367,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// очистка пути к сохраняемой директории
         /// </summary>
@@ -372,7 +379,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = !string.IsNullOrWhiteSpace(PathToSaveDirectory);
+                c = !string.IsNullOrWhiteSpace(PathToSaveDirectory) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -385,6 +392,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// шифрование и сохранение выбранного файла/каталога
         /// </summary>
@@ -408,14 +416,12 @@ namespace NotebookRCv001.Models
             try
             {
                 isCompleted = false;
-                DirectoryInfo info = new DirectoryInfo(PathToOpenDirectory);
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
-                int total = TotalNumberOfFilesInTheDirectory(info);
                 cancellationTokenSource = new CancellationTokenSource();
                 var token = cancellationTokenSource.Token;
                 token.Register(() => { CleanupWhenCancelingAnOperation(); });
@@ -431,6 +437,8 @@ namespace NotebookRCv001.Models
                     }
                     else if (!string.IsNullOrWhiteSpace(PathToOpenDirectory) && !string.IsNullOrWhiteSpace(PathToSaveDirectory))
                     {//щифрование каталога
+                        DirectoryInfo info = new DirectoryInfo(PathToOpenDirectory);
+                        int total = TotalNumberOfFilesInTheDirectory(info);
                         if (Directory.Exists(PathToOpenDirectory))
                         {
                             if (!applyToSubfolders)
@@ -455,9 +463,8 @@ namespace NotebookRCv001.Models
                 });
                 progress.Show();
             }
-            catch (Exception e) { ErrorWindow(e); }
+            catch (Exception e) { ErrorWindow(e); isCompleted = true; }
         }
-
 
         /// <summary>
         /// отмена шифрования/дешифрования
@@ -473,7 +480,7 @@ namespace NotebookRCv001.Models
                 c = !isCompleted && cancellationTokenSource != null;
                 return c;
             }
-            catch(Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_ClickButtonCancel(object obj)
         {
@@ -483,6 +490,7 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// деифрование и сохранение выбранного файла/каталога
         /// </summary>
@@ -506,20 +514,18 @@ namespace NotebookRCv001.Models
             try
             {
                 isCompleted = false;
-                DirectoryInfo info = new DirectoryInfo(PathToOpenDirectory);
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
-                int total = TotalNumberOfFilesInTheDirectory(info);
                 cancellationTokenSource = new CancellationTokenSource();
                 var token = cancellationTokenSource.Token;
                 token.Register(() => { CleanupWhenCancelingAnOperation(); });
                 AddedFiles = new ObservableCollection<string>();
                 AddedFolders = new ObservableCollection<string>();
-                Task.Factory.StartNew(( ) =>
+                Task.Factory.StartNew(() =>
                 {
                     Thread.Sleep(500);
                     if (!string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace(PathToSaveFile))
@@ -529,9 +535,11 @@ namespace NotebookRCv001.Models
                     }
                     else if (!string.IsNullOrWhiteSpace(PathToOpenDirectory) && !string.IsNullOrWhiteSpace(PathToSaveDirectory))
                     {//дещифрование каталога
+                        DirectoryInfo info = new DirectoryInfo(PathToOpenDirectory);
+                        int total = TotalNumberOfFilesInTheDirectory(info);
                         if (Directory.Exists(PathToOpenDirectory))
                         {
-                            if(!applyToSubfolders )
+                            if (!applyToSubfolders)
                             {//дешифрование без подкаталогов и applyToSubfolders == False
                                 DecryptWithoutSubfolders(info, PathToSaveDirectory, key, token);
                             }
@@ -553,8 +561,9 @@ namespace NotebookRCv001.Models
                 });
                 progress.Show();
             }
-            catch (Exception e) { ProgressValue = 100; ErrorWindow(e); }
+            catch (Exception e) { ProgressValue = 100; ErrorWindow(e); isCompleted = true; }
         }
+
         /// <summary>
         /// применить ко всем подпапкам
         /// </summary>
@@ -620,7 +629,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = obj != null;
+                c = obj != null && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -648,7 +657,7 @@ namespace NotebookRCv001.Models
                 bool c = false;
                 bool a = !(string.IsNullOrWhiteSpace(PathToOpenFile) && string.IsNullOrWhiteSpace(PathToSaveFile));
                 bool b = !(string.IsNullOrWhiteSpace(PathToOpenDirectory) && string.IsNullOrWhiteSpace(PathToSaveDirectory));
-                c = a || b;
+                c = (a || b) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -663,6 +672,239 @@ namespace NotebookRCv001.Models
                 PathToSaveDirectory = NameSaveDirectory = string.Empty;
             }
             catch (Exception e) { ErrorWindow(e); }
+        }
+
+
+        /// <summary>
+        /// шифрование каталога без подкаталогов
+        /// </summary>
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>колличество зашифрованных файлов</returns>
+        private int EncryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key, CancellationToken token)
+        {
+            try
+            {
+                double total = (double)info.GetFiles().Length;
+                double count = 0;
+                foreach (var finfo in info.GetFiles())
+                {
+                    var path = Path.Combine(pathToSave, finfo.Name);
+                    Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), path, key);
+                    count++;
+                    ProgressValue = count / total * 100.0;
+                    AddedFiles.Add(path);
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                return (int)count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// шифрование каталога с подкаталогами
+        /// </summary>
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <param name="total">общее колличество файлов во всех каталогах</param>
+        /// <returns>колличество зашифрованных файлов</returns>
+        private int EncryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total, CancellationToken token)
+        {
+            try
+            {
+                int count = 0;
+                foreach (var finfo in info.GetFiles())
+                {//шифрование файлов в каталоге
+                    if (finfo != null)
+                    {
+                        var path = Path.Combine(pathToSave, finfo.Name);
+                        Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), path, key);
+                        count++;
+                        AddedFiles.Add(path);
+                    }
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                foreach (var dinfo in info.GetDirectories())
+                {//переход к следующему подкаталогу
+                    string newPath = Path.Combine(pathToSave, dinfo.Name);
+                    Directory.CreateDirectory(newPath);
+                    count += EncryptionWithSubfolders(dinfo, newPath, key, total, token);
+                    ProgressValue = (double)count / (double)total * 100;
+                    AddedFolders.Add(newPath);
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                return count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// дешифрование каталога без подкаталогов
+        /// </summary>
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>колличество дешифрованных файлов</returns>
+        private int DecryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key, CancellationToken token)
+        {
+            try
+            {
+                double total = (double)info.GetFiles().Length;
+                double count = 0;
+                foreach (var finfo in info.GetFiles())
+                {
+                    var path = Path.Combine(pathToSave, finfo.Name);
+                    Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), path, key);
+                    count++;
+                    ProgressValue = count / total * 100.0;
+                    AddedFiles.Add(path);
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                return (int)count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// дешифрование каталога с подкаталогами
+        /// </summary>
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <param name="total">общее колличество файлов во всех каталогах</param>
+        /// <returns>колличество дешифрованных файлов</returns>
+        private int DecryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total, CancellationToken token)
+        {
+            try
+            {
+                int count = 0;
+                foreach (var finfo in info.GetFiles())
+                {//дешифрование католога
+                    var path = Path.Combine(pathToSave, finfo.Name);
+                    Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), path, key);
+                    count++;
+                    AddedFiles.Add(path);
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                foreach (var dinfo in info.GetDirectories())
+                {//переход к очередному подкаталогу
+                    string newPath = Path.Combine(pathToSave, dinfo.Name);
+                    Directory.CreateDirectory(newPath);
+                    count += DecryptionWithSubfolders(dinfo, newPath, key, total, token);
+                    ProgressValue = (double)count / (double)total * 100;
+                    AddedFolders.Add(newPath);
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                return count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// подсчет общего колличества файлов в данной директории
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private int TotalNumberOfFilesInTheDirectory(DirectoryInfo info)
+        {
+            try
+            {
+                int count = 0;
+                foreach (var finfo in info.GetFiles())
+                    count++;
+                foreach (var dinfo in info.GetDirectories())
+                    count += TotalNumberOfFilesInTheDirectory(dinfo);
+                return count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// очистка при отмене операции
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void CleanupWhenCancelingAnOperation()
+        {
+            try
+            {
+                while (AddedFiles.Count > 0)
+                {
+                    var path = AddedFiles.FirstOrDefault();
+                    var finfo = new FileInfo(path);
+                    if (finfo.Exists)
+                        finfo.Delete();
+                    AddedFiles.Remove(path);
+                }
+                while (AddedFolders.Count > 0)
+                {
+                    var path = AddedFolders.FirstOrDefault();
+                    var dinfo = new DirectoryInfo(path);
+                    if (dinfo.Exists)
+                        dinfo.Delete();
+                    AddedFolders.Remove(path);
+                }
+                Closure();
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// завершение работы, приведение в исходное положение
+        /// </summary>
+        private void Closure()
+        {
+            try
+            {
+                ProgressValue = 100;
+                AddedFiles = null;
+                AddedFolders = null;
+                cancellationTokenSource?.Dispose();
+                isCompleted = true;
+                PathToOpenFile = string.Empty;
+                PathToSaveFile = string.Empty;
+                PathToOpenDirectory = string.Empty;
+                PathToSaveDirectory = string.Empty;
+                NameOpenDirectory = string.Empty;
+                NameSaveDirectory = string.Empty;
+                NameOpenFile = string.Empty;
+                NameSaveFile = string.Empty;
+                applyToSubfolders = false;
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+
+
+        #region ************* NON ***********************
+
+        /// <summary>
+        /// расшифровка каталога текстовых файлов старого образца(не используется)
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private void ReencryptionOfLineFiles()
+        {
+            var decrypter = homeMenuEncryptionViewModel.HomeMenuEncryptionModel;
+            string[] files = Directory.GetFiles(PathToOpenDirectory);
+            foreach (var file in files)
+            {
+                var name = new FileInfo(file).Name;
+                var pathToSave = System.IO.Path.Combine(PathToSaveDirectory, name);
+                string text = null;
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    try
+                    {
+                        text = decrypter.Decryption(reader.ReadToEnd(), homeMenuEncryptionViewModel.EncryptionKey);
+                    }
+                    catch { throw new Exception(mainWindowViewModel.Language.MessagesMyMessages[1]); }
+                }
+                using (StreamWriter writer = new StreamWriter(pathToSave))
+                {
+                    if (!string.IsNullOrEmpty(text))
+                        writer.Write(text);
+                }
+            }
         }
         /// <summary>
         /// шифрование файла
@@ -715,228 +957,8 @@ namespace NotebookRCv001.Models
         }
 
 
-        /// <summary>
-        /// шифрование каталога без подкаталогов
-        /// </summary>
-        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
-        /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
-        /// <param name="key">ключ шифрования</param>
-        /// <returns>колличество зашифрованных файлов</returns>
-        private int EncryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key, CancellationToken token)
-        {
-            try
-            {
-                double total = (double)info.GetFiles().Length;
-                double count = 0;
-                foreach (var finfo in info.GetFiles())
-                {
-                    Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
-                    count++;
-                    ProgressValue = count / total * 100.0;
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-                return (int)count;
-            }
-            catch (Exception e) { ErrorWindow(e); return -1; }
-        }
-        /// <summary>
-        /// шифрование каталога с подкаталогами
-        /// </summary>
-        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
-        /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
-        /// <param name="key">ключ шифрования</param>
-        /// <param name="total">общее колличество файлов во всех каталогах</param>
-        /// <returns>колличество зашифрованных файлов</returns>
-        private int EncryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total, CancellationToken token)
-        {
-            try
-            {
-                int count = 0;
-                foreach (var finfo in info.GetFiles())
-                {//шифрование файлов в каталоге
-                    if (finfo != null)
-                    {
-                        Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
-                        count++;
-                    }
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-                foreach (var dinfo in info.GetDirectories())
-                {//переход к следующему подкаталогу
-                    string newPath = Path.Combine(pathToSave, dinfo.Name);
-                    Directory.CreateDirectory(newPath);
-                    count += EncryptionWithSubfolders(dinfo, newPath, key, total, token);
-                    ProgressValue = (double)count / (double)total * 100;
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-                return count;
-            }
-            catch (Exception e) { ErrorWindow(e); return -1; }
-        }
+        #endregion
 
-        /// <summary>
-        /// дешифрование каталога без подкаталогов
-        /// </summary>
-        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
-        /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
-        /// <param name="key">ключ шифрования</param>
-        /// <returns>колличество дешифрованных файлов</returns>
-        private int DecryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key, CancellationToken token)
-        {
-            try
-            {
-                double total = (double)info.GetFiles().Length;
-                double count = 0;
-                foreach (var finfo in info.GetFiles())
-                {
-                    Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
-                    count++;
-                    ProgressValue = count / total * 100.0;
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-                return (int)count;
-            }
-            catch (Exception e) { ErrorWindow(e); return -1; }
-        }
-        /// <summary>
-        /// дешифрование каталога с подкаталогами
-        /// </summary>
-        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
-        /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
-        /// <param name="key">ключ шифрования</param>
-        /// <param name="total">общее колличество файлов во всех каталогах</param>
-        /// <returns>колличество дешифрованных файлов</returns>
-        private int DecryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total, CancellationToken token)
-        {
-            try
-            {
-                int count = 0;
-                foreach (var finfo in info.GetFiles())
-                {//дешифрование католога
-                    if (finfo != null)
-                    {
-                        Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
-                        count++;
-                        AddedFiles.Add(pathToSave);
-                    }
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-                foreach (var dinfo in info.GetDirectories())
-                {//переход к очередному подкаталогу
-                    string newPath = Path.Combine(pathToSave, dinfo.Name);
-                    Directory.CreateDirectory(newPath);
-                    AddedFolders.Add(newPath);
-                    count += DecryptionWithSubfolders(dinfo, newPath, key, total, token);
-                    ProgressValue = (double)count / (double)total * 100;
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-                return count;
-            }
-            catch (Exception e) { ErrorWindow(e); return -1; }
-        }
-
-        /// <summary>
-        /// подсчет общего колличества файлов в данной директории
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private int TotalNumberOfFilesInTheDirectory(DirectoryInfo info)
-        {
-            try
-            {
-                int count = 0;
-                foreach (var finfo in info.GetFiles())
-                    count++;
-                foreach (var dinfo in info.GetDirectories())
-                    count += TotalNumberOfFilesInTheDirectory(dinfo);
-                return count;
-            }
-            catch (Exception e) { ErrorWindow(e); return -1; }
-        }
-
-        /// <summary>
-        /// очистка при отмене операции
-        /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        private void CleanupWhenCancelingAnOperation()
-        {
-            try
-            {
-                while (AddedFiles.Count > 0)
-                {
-                    var path = AddedFiles.FirstOrDefault();
-                    var finfo = new FileInfo(path);
-                    if ( finfo.Exists)
-                        finfo.Delete();
-                    AddedFiles.Remove(path);
-                }
-                while (AddedFolders.Count > 0)
-                {
-                    var path = AddedFolders.FirstOrDefault();
-                    var dinfo = new DirectoryInfo(path);
-                    if ( dinfo.Exists)
-                        dinfo.Delete();
-                    AddedFolders.Remove(path);
-                }
-                Closure();
-            }
-            catch(Exception e) { ErrorWindow(e); }
-        }
-
-        /// <summary>
-        /// завершение работы, приведение в исходное положение
-        /// </summary>
-        private void Closure()
-        {
-            try
-            {
-                ProgressValue = 100;
-                AddedFiles = null;
-                AddedFolders = null;
-                cancellationTokenSource?.Dispose();
-                isCompleted = true;
-                PathToOpenFile = string.Empty;
-                PathToSaveFile = string.Empty;
-                PathToOpenDirectory = string.Empty;
-                PathToSaveDirectory = string.Empty;
-            }
-            catch (Exception e) { ErrorWindow(e); }
-        }
-
-        /// <summary>
-        /// расшифровка каталога текстовых файлов старого образца(не используется)
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        private void ReencryptionOfLineFiles()
-        {
-            var decrypter = homeMenuEncryptionViewModel.HomeMenuEncryptionModel;
-            string[] files = Directory.GetFiles(PathToOpenDirectory);
-            foreach (var file in files)
-            {
-                var name = new FileInfo(file).Name;
-                var pathToSave = System.IO.Path.Combine(PathToSaveDirectory, name);
-                string text = null;
-                using (StreamReader reader = new StreamReader(file))
-                {
-                    try
-                    {
-                        text = decrypter.Decryption(reader.ReadToEnd(), homeMenuEncryptionViewModel.EncryptionKey);
-                    }
-                    catch { throw new Exception(mainWindowViewModel.Language.MessagesMyMessages[1]); }
-                }
-                using (StreamWriter writer = new StreamWriter(pathToSave))
-                {
-                    if (!string.IsNullOrEmpty(text))
-                        writer.Write(text);
-                }
-            }
-        }
 
     }
 }

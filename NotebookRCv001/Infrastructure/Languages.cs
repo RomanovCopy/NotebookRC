@@ -743,6 +743,7 @@ namespace NotebookRCv001.Infrastructure
                     "Выбрать каталог для шифрования/дешифрования",//11
                     "Выбрать директорию для сохраненмя зашифрованного/дешифрованного каталога",//12
                     "Отмена",//13
+                    "Применить к подпапкам",//14
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -761,6 +762,7 @@ namespace NotebookRCv001.Infrastructure
                     "Select directory for encryption/decryption",//11
                     "Select a directory to save the encrypted/decrypted directory",//12
                     "Cancel",//13
+                    "Apply to subfolders",//14
                 }
                 }
             };
