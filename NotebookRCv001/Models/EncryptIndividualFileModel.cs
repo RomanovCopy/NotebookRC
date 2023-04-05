@@ -391,16 +391,17 @@ namespace NotebookRCv001.Models
             try
             {
                 isCompleted = false;
-                DirectoryInfo info = new DirectoryInfo( PathToOpenDirectory );
+                DirectoryInfo info = new DirectoryInfo(PathToOpenDirectory);
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
-                int total = TotalNumberOfFilesInTheDirectory( info  );
+                int total = TotalNumberOfFilesInTheDirectory(info);
                 Task.Factory.StartNew(() =>
                 {
+                    Thread.Sleep(500);
                     if (!string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace(PathToSaveFile))
                     {//шифрование файла
                         ProgressValue = 50;
@@ -410,7 +411,21 @@ namespace NotebookRCv001.Models
                     {//щифрование каталога
                         if (Directory.Exists(PathToOpenDirectory))
                         {
-                            FolderEncrypt( info, PathToSaveDirectory, key, total );
+                            if (!applyToSubfolders)
+                            {//шифрование без подкаталогов и applyToSubfolders == False
+                                EncryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                            }
+                            else
+                            {
+                                if (info.GetFiles().Length == total)
+                                {//шифрование когда все файлы находятся в данном каталоге и applyToSubfolders == True
+                                    EncryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                                }
+                                else
+                                {//шифрование когда файлы находятся в разных подкаталогах и applyToSubfolders == True
+                                    EncryptionWithSubfolders(info, PathToSaveDirectory, key, total);
+                                }
+                            }
                         }
                     }
                     ProgressValue = 100;
@@ -443,14 +458,14 @@ namespace NotebookRCv001.Models
             try
             {
                 isCompleted = false;
-                DirectoryInfo info = new DirectoryInfo( PathToOpenDirectory );
+                DirectoryInfo info = new DirectoryInfo(PathToOpenDirectory);
                 var progress = new Views.DisplayProgress();
                 var progressVM = (ViewModels.DisplayProgressViewModel)progress.DataContext;
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
                 progressVM.Target = this;
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
-                int total = TotalNumberOfFilesInTheDirectory( info );
+                int total = TotalNumberOfFilesInTheDirectory(info);
                 Task.Factory.StartNew(() =>
                 {
                     Thread.Sleep(500);
@@ -463,7 +478,21 @@ namespace NotebookRCv001.Models
                     {//дещифрование каталога
                         if (Directory.Exists(PathToOpenDirectory))
                         {
-                            FolderDecrypt(info, PathToSaveDirectory, key, total );
+                            if(!applyToSubfolders )
+                            {//дешифрование без подкаталогов и applyToSubfolders == False
+                                DecryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                            }
+                            else
+                            {
+                                if (info.GetFiles().Length == total)
+                                {//дешифрование когда все файлы находятся в данном каталоге и applyToSubfolders == True
+                                    DecryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                                }
+                                else
+                                {//дешифрование когда файлы находятся в разных подкаталогах и applyToSubfolders == True
+                                    DecryptionWithSubfolders(info, PathToSaveDirectory, key, total);
+                                }
+                            }
                         }
                     }
                     ProgressValue = 100;
@@ -631,77 +660,120 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); return result; }
         }
+
+
         /// <summary>
-        /// шифрование каталога
+        /// шифрование каталога без подкаталогов
         /// </summary>
-        /// <returns></returns>
-        private int FolderEncrypt(DirectoryInfo info, string pathToSave, string key, int total)
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>колличество зашифрованных файлов</returns>
+        private int EncryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key)
+        {
+            try
+            {
+                double total = (double)info.GetFiles().Length;
+                double count = 0;
+                foreach (var finfo in info.GetFiles())
+                {
+                    Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
+                    count++;
+                    ProgressValue = count / total * 100.0;
+                }
+                return (int)count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// шифрование каталога с подкаталогами
+        /// </summary>
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <param name="total">общее колличество файлов во всех каталогах</param>
+        /// <returns>колличество зашифрованных файлов</returns>
+        private int EncryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total)
         {
             try
             {
                 int count = 0;
                 foreach (var finfo in info.GetFiles())
-                {
+                {//шифрование файлов в каталоге
                     if (finfo != null)
-                    {//шифрование файла
+                    {
                         Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
                         count++;
-                        if (info.GetDirectories().Length == 0)
-                        {
-                            ProgressValue = (double)count / (double)total * 100.0;
-                        }
                     }
                 }
-                if (applyToSubfolders)
-                {
-                    foreach (var dinfo in info.GetDirectories())
-                    {
-                        string newPath = Path.Combine(pathToSave, dinfo.Name);
-                        Directory.CreateDirectory(newPath);
-                        count+=FolderEncrypt(dinfo, newPath, key, total);
-                        ProgressValue = (double)count / (double)total * 100;
-                    }
+                foreach (var dinfo in info.GetDirectories())
+                {//переход к следующему подкаталогу
+                    string newPath = Path.Combine(pathToSave, dinfo.Name);
+                    Directory.CreateDirectory(newPath);
+                    count += EncryptionWithSubfolders(dinfo, newPath, key, total);
+                    ProgressValue = (double)count / (double)total * 100;
                 }
                 return count;
             }
             catch (Exception e) { ErrorWindow(e); return -1; }
         }
+
         /// <summary>
-        /// дешифрование каталога
+        /// дешифрование каталога без подкаталогов
         /// </summary>
-        /// <returns></returns>
-        private int FolderDecrypt(DirectoryInfo info, string pathToSave, string key, int total)
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <returns>колличество дешифрованных файлов</returns>
+        private int DecryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key)
+        {
+            try
+            {
+                double total = (double)info.GetFiles().Length;
+                double count = 0;
+                foreach (var finfo in info.GetFiles())
+                {
+                    Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
+                    count++;
+                    ProgressValue = count / total * 100.0;
+                }
+                return (int)count;
+            }
+            catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+        /// <summary>
+        /// дешифрование каталога с подкаталогами
+        /// </summary>
+        /// <param name="info">информация о каталоге(DirectoryInfo)</param>
+        /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
+        /// <param name="key">ключ шифрования</param>
+        /// <param name="total">общее колличество файлов во всех каталогах</param>
+        /// <returns>колличество дешифрованных файлов</returns>
+        private int DecryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total)
         {
             try
             {
                 int count = 0;
                 foreach (var finfo in info.GetFiles())
-                {
+                {//дешифрование католога
                     if (finfo != null)
-                    {//дешифрование файла
+                    {
                         Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
                         count++;
-                        if(info.GetDirectories().Length == 0)
-                        {
-                            ProgressValue = (double)count / (double)total * 100.0;
-                        }
-
                     }
                 }
-                if (applyToSubfolders)
-                {
-                    foreach (var dinfo in info.GetDirectories())
-                    {
-                        string newPath = Path.Combine(pathToSave, dinfo.Name);
-                        Directory.CreateDirectory(newPath);
-                        count += FolderDecrypt( dinfo, newPath, key, total );
-                        ProgressValue = (double)count / (double)total * 100;
-                    }
+                foreach (var dinfo in info.GetDirectories())
+                {//переход к очередному подкаталогу
+                    string newPath = Path.Combine(pathToSave, dinfo.Name);
+                    Directory.CreateDirectory(newPath);
+                    count += DecryptionWithSubfolders(dinfo, newPath, key, total);
+                    ProgressValue = (double)count / (double)total * 100;
                 }
                 return count;
             }
             catch (Exception e) { ErrorWindow(e); return -1; }
         }
+
         /// <summary>
         /// подсчет общего колличества файлов в данной директории
         /// </summary>
@@ -712,13 +784,13 @@ namespace NotebookRCv001.Models
             try
             {
                 int count = 0;
-                foreach(var finfo in info.GetFiles())
+                foreach (var finfo in info.GetFiles())
                     count++;
-                foreach(var dinfo in info.GetDirectories())
-                    count+=TotalNumberOfFilesInTheDirectory( dinfo );
+                foreach (var dinfo in info.GetDirectories())
+                    count += TotalNumberOfFilesInTheDirectory(dinfo);
                 return count;
             }
-            catch(Exception e) { ErrorWindow(e); return -1; }
+            catch (Exception e) { ErrorWindow(e); return -1; }
         }
 
         /// <summary>
