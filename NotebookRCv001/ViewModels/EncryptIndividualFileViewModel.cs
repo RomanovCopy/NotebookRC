@@ -106,6 +106,10 @@ namespace NotebookRCv001.ViewModels
             encryptIndividualFileModel.CanExecute_ClickButtonEncrypt );
         RelayCommand clickButtonEncrypt;
 
+        public ICommand ClickButtonCancel => clickButtonCancel ??= new RelayCommand(encryptIndividualFileModel.Execute_ClickButtonCancel,
+            encryptIndividualFileModel.CanExecute_ClickButtonCancel);
+        private RelayCommand clickButtonCancel;
+
         public ICommand ClickButtonDecrypt => clickButtonDecrypt ??= new RelayCommand( encryptIndividualFileModel.Execute_ClickButtonDecrypt,
             encryptIndividualFileModel.CanExecute_ClickButtonDecrypt );
         RelayCommand clickButtonDecrypt;

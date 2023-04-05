@@ -35,9 +35,26 @@ namespace NotebookRCv001.Models
         /// шифрование/дешифрование не ведется
         /// </summary>
         private bool isCompleted { get; set; }
+        /// <summary>
+        /// отмена шифрования/дешифрвания
+        /// </summary>
+        private CancellationTokenSource cancellationTokenSource { get; set; }
+        /// <summary>
+        /// коллекция путей к добавленным файлам
+        /// </summary>
+        internal ObservableCollection<string> AddedFiles { get => addedFiles; set => SetProperty(ref addedFiles, value); }
+        private ObservableCollection<string> addedFiles;
+        /// <summary>
+        /// коллекция путей к добавленным папкам
+        /// </summary>
+        internal ObservableCollection<string> AddedFolders { get => addedFolders; set => SetProperty(ref addedFolders, value); }
+        private ObservableCollection<string> addedFolders;
+
         internal ObservableCollection<string> Headers => language.EncryptIndividualFile;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsEncryptIndividualFile;
+
+
 
         internal Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         Action<object> behaviorReady;
@@ -381,7 +398,7 @@ namespace NotebookRCv001.Models
                 bool c = false;
                 bool a = !string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace(PathToSaveFile);
                 bool b = !string.IsNullOrWhiteSpace(PathToOpenDirectory) && !string.IsNullOrWhiteSpace(PathToSaveDirectory);
-                c = a || b;
+                c = (a || b) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -399,6 +416,11 @@ namespace NotebookRCv001.Models
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
                 int total = TotalNumberOfFilesInTheDirectory(info);
+                cancellationTokenSource = new CancellationTokenSource();
+                var token = cancellationTokenSource.Token;
+                token.Register(() => { CleanupWhenCancelingAnOperation(); });
+                AddedFolders = new ObservableCollection<string>();
+                AddedFiles = new ObservableCollection<string>();
                 Task.Factory.StartNew(() =>
                 {
                     Thread.Sleep(500);
@@ -413,25 +435,51 @@ namespace NotebookRCv001.Models
                         {
                             if (!applyToSubfolders)
                             {//шифрование без подкаталогов и applyToSubfolders == False
-                                EncryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                                EncryptWithoutSubfolders(info, PathToSaveDirectory, key, token);
                             }
                             else
                             {
                                 if (info.GetFiles().Length == total)
                                 {//шифрование когда все файлы находятся в данном каталоге и applyToSubfolders == True
-                                    EncryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                                    EncryptWithoutSubfolders(info, PathToSaveDirectory, key, token);
                                 }
                                 else
                                 {//шифрование когда файлы находятся в разных подкаталогах и applyToSubfolders == True
-                                    EncryptionWithSubfolders(info, PathToSaveDirectory, key, total);
+                                    EncryptionWithSubfolders(info, PathToSaveDirectory, key, total, token);
                                 }
                             }
                         }
                     }
-                    ProgressValue = 100;
-                    isCompleted = true;
+                    if (!token.IsCancellationRequested)
+                        Closure();
                 });
-                progress.ShowDialog();
+                progress.Show();
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+
+
+        /// <summary>
+        /// отмена шифрования/дешифрования
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ClickButtonCancel(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = !isCompleted && cancellationTokenSource != null;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_ClickButtonCancel(object obj)
+        {
+            try
+            {
+                cancellationTokenSource.Cancel();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -448,7 +496,7 @@ namespace NotebookRCv001.Models
                 bool c = false;
                 bool a = !string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace(PathToSaveFile);
                 bool b = !string.IsNullOrWhiteSpace(PathToOpenDirectory) && !string.IsNullOrWhiteSpace(PathToSaveDirectory);
-                c = a || b;
+                c = (a || b) && isCompleted;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -466,7 +514,12 @@ namespace NotebookRCv001.Models
                 PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                 ProgressValue = 0;
                 int total = TotalNumberOfFilesInTheDirectory(info);
-                Task.Factory.StartNew(() =>
+                cancellationTokenSource = new CancellationTokenSource();
+                var token = cancellationTokenSource.Token;
+                token.Register(() => { CleanupWhenCancelingAnOperation(); });
+                AddedFiles = new ObservableCollection<string>();
+                AddedFolders = new ObservableCollection<string>();
+                Task.Factory.StartNew(( ) =>
                 {
                     Thread.Sleep(500);
                     if (!string.IsNullOrWhiteSpace(PathToOpenFile) && !string.IsNullOrWhiteSpace(PathToSaveFile))
@@ -480,25 +533,25 @@ namespace NotebookRCv001.Models
                         {
                             if(!applyToSubfolders )
                             {//дешифрование без подкаталогов и applyToSubfolders == False
-                                DecryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                                DecryptWithoutSubfolders(info, PathToSaveDirectory, key, token);
                             }
                             else
                             {
                                 if (info.GetFiles().Length == total)
                                 {//дешифрование когда все файлы находятся в данном каталоге и applyToSubfolders == True
-                                    DecryptWithoutSubfolders(info, PathToSaveDirectory, key);
+                                    DecryptWithoutSubfolders(info, PathToSaveDirectory, key, token);
                                 }
                                 else
                                 {//дешифрование когда файлы находятся в разных подкаталогах и applyToSubfolders == True
-                                    DecryptionWithSubfolders(info, PathToSaveDirectory, key, total);
+                                    DecryptionWithSubfolders(info, PathToSaveDirectory, key, total, token);
                                 }
                             }
                         }
                     }
-                    ProgressValue = 100;
-                    isCompleted = true;
+                    if (!token.IsCancellationRequested)
+                        Closure();
                 });
-                progress.ShowDialog();
+                progress.Show();
             }
             catch (Exception e) { ProgressValue = 100; ErrorWindow(e); }
         }
@@ -669,7 +722,7 @@ namespace NotebookRCv001.Models
         /// <param name="pathToSave">путь к катлогу для сохранения зашифрованных файлов</param>
         /// <param name="key">ключ шифрования</param>
         /// <returns>колличество зашифрованных файлов</returns>
-        private int EncryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key)
+        private int EncryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key, CancellationToken token)
         {
             try
             {
@@ -680,6 +733,8 @@ namespace NotebookRCv001.Models
                     Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
                     count++;
                     ProgressValue = count / total * 100.0;
+                    if (token.IsCancellationRequested)
+                        break;
                 }
                 return (int)count;
             }
@@ -693,7 +748,7 @@ namespace NotebookRCv001.Models
         /// <param name="key">ключ шифрования</param>
         /// <param name="total">общее колличество файлов во всех каталогах</param>
         /// <returns>колличество зашифрованных файлов</returns>
-        private int EncryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total)
+        private int EncryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total, CancellationToken token)
         {
             try
             {
@@ -705,13 +760,17 @@ namespace NotebookRCv001.Models
                         Command_executors.Executors.EncryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
                         count++;
                     }
+                    if (token.IsCancellationRequested)
+                        break;
                 }
                 foreach (var dinfo in info.GetDirectories())
                 {//переход к следующему подкаталогу
                     string newPath = Path.Combine(pathToSave, dinfo.Name);
                     Directory.CreateDirectory(newPath);
-                    count += EncryptionWithSubfolders(dinfo, newPath, key, total);
+                    count += EncryptionWithSubfolders(dinfo, newPath, key, total, token);
                     ProgressValue = (double)count / (double)total * 100;
+                    if (token.IsCancellationRequested)
+                        break;
                 }
                 return count;
             }
@@ -725,7 +784,7 @@ namespace NotebookRCv001.Models
         /// <param name="pathToSave">путь к катлогу для сохранения дешифрованных файлов</param>
         /// <param name="key">ключ шифрования</param>
         /// <returns>колличество дешифрованных файлов</returns>
-        private int DecryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key)
+        private int DecryptWithoutSubfolders(DirectoryInfo info, string pathToSave, string key, CancellationToken token)
         {
             try
             {
@@ -736,6 +795,8 @@ namespace NotebookRCv001.Models
                     Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
                     count++;
                     ProgressValue = count / total * 100.0;
+                    if (token.IsCancellationRequested)
+                        break;
                 }
                 return (int)count;
             }
@@ -749,7 +810,7 @@ namespace NotebookRCv001.Models
         /// <param name="key">ключ шифрования</param>
         /// <param name="total">общее колличество файлов во всех каталогах</param>
         /// <returns>колличество дешифрованных файлов</returns>
-        private int DecryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total)
+        private int DecryptionWithSubfolders(DirectoryInfo info, string pathToSave, string key, int total, CancellationToken token)
         {
             try
             {
@@ -760,14 +821,20 @@ namespace NotebookRCv001.Models
                     {
                         Command_executors.Executors.DecryptFromStream(File.OpenRead(finfo.FullName), Path.Combine(pathToSave, finfo.Name), key);
                         count++;
+                        AddedFiles.Add(pathToSave);
                     }
+                    if (token.IsCancellationRequested)
+                        break;
                 }
                 foreach (var dinfo in info.GetDirectories())
                 {//переход к очередному подкаталогу
                     string newPath = Path.Combine(pathToSave, dinfo.Name);
                     Directory.CreateDirectory(newPath);
-                    count += DecryptionWithSubfolders(dinfo, newPath, key, total);
+                    AddedFolders.Add(newPath);
+                    count += DecryptionWithSubfolders(dinfo, newPath, key, total, token);
                     ProgressValue = (double)count / (double)total * 100;
+                    if (token.IsCancellationRequested)
+                        break;
                 }
                 return count;
             }
@@ -791,6 +858,55 @@ namespace NotebookRCv001.Models
                 return count;
             }
             catch (Exception e) { ErrorWindow(e); return -1; }
+        }
+
+        /// <summary>
+        /// очистка при отмене операции
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void CleanupWhenCancelingAnOperation()
+        {
+            try
+            {
+                while (AddedFiles.Count > 0)
+                {
+                    var path = AddedFiles.FirstOrDefault();
+                    var finfo = new FileInfo(path);
+                    if ( finfo.Exists)
+                        finfo.Delete();
+                    AddedFiles.Remove(path);
+                }
+                while (AddedFolders.Count > 0)
+                {
+                    var path = AddedFolders.FirstOrDefault();
+                    var dinfo = new DirectoryInfo(path);
+                    if ( dinfo.Exists)
+                        dinfo.Delete();
+                    AddedFolders.Remove(path);
+                }
+                Closure();
+            }
+            catch(Exception e) { ErrorWindow(e); }
+        }
+
+        /// <summary>
+        /// завершение работы, приведение в исходное положение
+        /// </summary>
+        private void Closure()
+        {
+            try
+            {
+                ProgressValue = 100;
+                AddedFiles = null;
+                AddedFolders = null;
+                cancellationTokenSource?.Dispose();
+                isCompleted = true;
+                PathToOpenFile = string.Empty;
+                PathToSaveFile = string.Empty;
+                PathToOpenDirectory = string.Empty;
+                PathToSaveDirectory = string.Empty;
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
