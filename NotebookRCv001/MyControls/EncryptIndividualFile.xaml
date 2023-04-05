@@ -13,6 +13,7 @@
         <local:ButtonsClearAndClose x:Key="clearandclose"/>
         <Style x:Key="buttons" TargetType="Button">
             <Setter Property="Height" Value="25"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -186,30 +187,31 @@
             </DockPanel>
         </Border>
         <Border Grid.Row="3" Style="{StaticResource borders}">
-            <DockPanel>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="20*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="encrypt" Grid.Column="1" Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="encrypt" Grid.Column="1" Content="{Binding Headers[5], UpdateSourceTrigger=PropertyChanged}" 
                                 Style="{StaticResource buttons}" 
                                 Command="{Binding ClickButtonEncrypt, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button x:Name="decrypt" Grid.Column="3" Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
+                    <Button x:Name="cancel" Grid.Column="2" Content="{Binding Headers[13], UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource buttons}" 
+                                Command="{Binding ClickButtonCancel, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button x:Name="decrypt" Grid.Column="3" Content="{Binding Headers[6], UpdateSourceTrigger=PropertyChanged}" 
                                 Style="{StaticResource buttons}"
                                 Command="{Binding ClickButtonDecrypt, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
                 </Grid>
-            </DockPanel>
+            </Grid>
         </Border>
         <Border Grid.Row="4" Style="{StaticResource borders}">
             <Grid>
@@ -224,9 +226,9 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <CheckBox x:Name="subfolders" Grid.Column="1" Content="Применить к подпапкам." Command="{Binding SubfoldersCheckBox, 
-                        UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=subfolders, Path=IsChecked, 
-                        UpdateSourceTrigger=PropertyChanged}">
+                    <CheckBox x:Name="subfolders" Grid.Column="1" Content="{Binding Headers[14], UpdateSourceTrigger=PropertyChanged}" 
+                              Command="{Binding SubfoldersCheckBox, UpdateSourceTrigger=PropertyChanged}" 
+                              CommandParameter="{Binding ElementName=subfolders, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                         <CheckBox.Style>
                             <Style TargetType="CheckBox">
                                 <Style.Triggers>
