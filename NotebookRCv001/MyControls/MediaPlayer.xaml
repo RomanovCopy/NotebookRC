@@ -11,7 +11,7 @@
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="MediaPlayer"
+      Title="MediaPlayer" 
       x:Name="page">
     <Page.Resources>
         <viewmodels:MediaPlayerViewModel x:Key="viewmodel"/>
@@ -92,7 +92,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
-                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="3" >
+                          Stretch="Uniform" Grid.Row="0" Grid.RowSpan="3">
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorMediaElement x:Name="mediabehavior"/>
                 </i:Interaction.Behaviors>

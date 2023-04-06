@@ -73,6 +73,7 @@ namespace NotebookRCv001.Helpers
 
         static BehaviorMediaElement()
         {
+            
         }
 
         protected override void OnAttached()
