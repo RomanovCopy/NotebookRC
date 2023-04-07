@@ -16,6 +16,7 @@ using Forms = System.Windows.Forms;
 using windows = System.Windows;
 using System.Security.Cryptography;
 using System.Windows.Media.Imaging;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Command_executors
 {
@@ -137,6 +138,16 @@ namespace Command_executors
         }
 
         public static Action DownloadCanceled { get; set; }
+
+        /// <summary>
+        /// токен паузы при загрузке файла
+        /// </summary>
+        public static CancellationToken pause;
+        /// <summary>
+        /// токен отмены при загрузке файла
+        /// </summary>
+        public static CancellationToken cancel;
+
 
         /// <summary>
         /// добавление строки substring в конец каждой строки коллекции L1
@@ -967,15 +978,16 @@ namespace Command_executors
             catch { }
         }
 
+
         /// <summary>
         /// асинхронная загрузка файла
         /// </summary>
         /// <param name="uploaded">делегат информирующий о размере уже загруженных байт</param>
         /// <param name="response">экземляр HttpWebResponse ответа сервера </param>
-        /// <param name="token"'>токен отмены загрузки</param>
+        /// <param name="cancel"'>токен отмены загрузки</param>
         /// <param name="path">полный путь для сохранения файла на диск</param>
         /// <param name="offset">позиция в загружаемом файле, с которой необходимо начать загрузку</param>
-        public static async Task<bool> DownloadAsinc(Action<long> uploaded, HttpWebResponse response, CancellationToken token, string path)
+        public static async Task<bool> DownloadAsinc(Action<long> uploaded, HttpWebResponse response, string path)
         {
             try
             {
@@ -986,71 +998,28 @@ namespace Command_executors
                 int count = 3;//допустимое колличество попыток загрузки
                 using (Stream streamResponse = response?.GetResponseStream())
                 {
-                    if (!File.Exists(path))
-                    {//файл на диске еще не создан
-                        using (FileStream = new FileStream(path, FileMode.Append, FileAccess.Write))
+                    using (FileStream = new FileStream(path, FileMode.Append, FileAccess.Write))
+                    {
+                        await Task.Factory.StartNew(() =>
                         {
-                            await Task.Factory.StartNew(() =>
+                            do
                             {
-                                do
+                                try
                                 {
-                                    try
-                                    {
-                                        ByteSize = streamResponse.Read(bufer, 0, bufer.Length);
-                                        FileStream.Write(bufer, 0, ByteSize);//пишем на диск
-                                        SizeUploaded += ByteSize;
-                                        uploaded?.Invoke(SizeUploaded);
-                                    }
-                                    catch { count--; }
+                                    ByteSize = streamResponse.Read(bufer, 0, pause.IsCancellationRequested ? 0 : bufer.Length);
+                                    FileStream.Write(bufer, 0, ByteSize);
+                                    SizeUploaded += ByteSize;
+                                    uploaded?.Invoke(SizeUploaded);
                                 }
-                                while (!token.IsCancellationRequested &&
-                                ByteSize > 0 ||
-                                (ByteSize == 0 && count >= 0 && (SizeUploaded < FileSize) ||
-                                FileSize < 0));
-                            });
-                        }
-                    }
-                    else
-                    {//файл на диске создан, но его необходимо дописать
-                        SizeUploaded = new FileInfo(path).Length;
-                        //response = await Request(response.ResponseUri.AbsoluteUri, 50000, SizeUploaded);
-                        using (Stream stream = response.GetResponseStream())
-                        {
-                            //if (stream.CanSeek)
-                            //    stream.Seek(SizeUploaded, SeekOrigin.Begin);
-                            //else
-                            //{
-                            //    SizeUploaded = 0;
-                            //    File.Delete(path);
-                            //    return await DownloadAsinc(uploaded, response, token, path);
-                            //}
-                            using (FileStream = File.OpenWrite(path))
-                            {
-                                FileStream.Seek(SizeUploaded, SeekOrigin.Begin);
-                                await Task.Factory.StartNew(() =>
-                                {
-                                    do
-                                    {
-                                        try
-                                        {
-                                            ByteSize = stream.Read(bufer, 0, bufer.Length);
-                                            FileStream.Write(bufer, 0, ByteSize);//пишем на диск
-                                            SizeUploaded += ByteSize;
-                                            uploaded?.Invoke(SizeUploaded);
-                                        }
-                                        catch { count--; }
-                                    }
-                                    while
-                                    (!token.IsCancellationRequested &&
-                                    ByteSize > 0 ||
-                                    (ByteSize == 0 && count >= 0 && (SizeUploaded < response?.ContentLength) ||
-                                    response?.ContentLength < 0));
-                                });
+                                catch { count--; }
                             }
-                        }
+                            while (!cancel.IsCancellationRequested && ByteSize > 0 ||
+                            (ByteSize == 0 && count >= 0 && (SizeUploaded < FileSize) ||
+                            FileSize < 0));
+                        });
                     }
                 }
-                return true;
+                return count > 0 && !cancel.IsCancellationRequested;
             }
             catch (Exception e)
             { Forms.MessageBox.Show(e.Message); return false; }
