@@ -1013,17 +1013,17 @@ namespace Command_executors
                     else
                     {//файл на диске создан, но его необходимо дописать
                         SizeUploaded = new FileInfo(path).Length;
-                        response = await Request(response.ResponseUri.AbsoluteUri, 50000, SizeUploaded);
+                        //response = await Request(response.ResponseUri.AbsoluteUri, 50000, SizeUploaded);
                         using (Stream stream = response.GetResponseStream())
                         {
-                            if (stream.CanSeek)
-                                stream.Seek(SizeUploaded, SeekOrigin.Begin);
-                            else
-                            {
-                                SizeUploaded = 0;
-                                File.Delete(path);
-                                return await DownloadAsinc(uploaded, response, token, path);
-                            }
+                            //if (stream.CanSeek)
+                            //    stream.Seek(SizeUploaded, SeekOrigin.Begin);
+                            //else
+                            //{
+                            //    SizeUploaded = 0;
+                            //    File.Delete(path);
+                            //    return await DownloadAsinc(uploaded, response, token, path);
+                            //}
                             using (FileStream = File.OpenWrite(path))
                             {
                                 FileStream.Seek(SizeUploaded, SeekOrigin.Begin);

@@ -62,3 +62,6 @@ dotnet_diagnostic.SYSLIB0022.severity = none
 
 # SYSLIB0014: Тип или член устарел
 dotnet_diagnostic.SYSLIB0014.severity = none
+
+# CS1998: В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
+dotnet_diagnostic.CS1998.severity = none

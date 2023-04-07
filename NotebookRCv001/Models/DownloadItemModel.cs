@@ -258,7 +258,7 @@ namespace NotebookRCv001.Models
             {
                 bool c = false;
                 if (webResponse != null)
-                    c = Status == "Download" && webResponse.GetResponseStream().CanSeek;
+                    c = Status == "Download" /*&& webResponse.GetResponseStream().CanSeek*/;
                 return c;
             }
             catch (Exception e) { ErrorWindow( e ); return false; };
@@ -543,7 +543,7 @@ namespace NotebookRCv001.Models
                 messagesVM.CenterButtonContent = FileSizeUnknown || ReceivedBytes < TotalBytes ? messagesVM.Headers[3] : null;
                 messagesVM.LeftButtonContent = messagesVM.Headers[4];
                 messagesVM.RightButtonContent = messagesVM.Headers[5];
-                messages.Closed += ( s, e ) =>
+                messages.Closed += async ( s, e ) =>
                 {//Получение и обработка результатов запроса
                     var result = messagesVM.Result;
                     if (result == "leftbutton")
@@ -568,6 +568,8 @@ namespace NotebookRCv001.Models
                     else if (result == "centerbutton")
                     {//файл загружен, но не полностью, требуется дописать
                         ReceivedBytes = new FileInfo( fullPath ).Length;
+                        webResponse = await Task<HttpWebResponse>.Factory.StartNew(() => 
+                        Executors.Request(Url, 50000, ReceivedBytes).Result);
                         if (FileSizeUnknown)
                         {
 
