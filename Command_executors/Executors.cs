@@ -1006,7 +1006,15 @@ namespace Command_executors
                             {
                                 try
                                 {
-                                    ByteSize = streamResponse.Read(bufer, 0, pause.IsCancellationRequested ? 0 : bufer.Length);
+                                    if(pause.IsCancellationRequested)
+                                    {
+                                        Thread.Sleep(1000);
+                                        ByteSize = streamResponse.Read(bufer, 0, 0 );
+                                    }
+                                    else
+                                    {
+                                        ByteSize = streamResponse.Read(bufer, 0, bufer.Length);
+                                    }
                                     FileStream.Write(bufer, 0, ByteSize);
                                     SizeUploaded += ByteSize;
                                     uploaded?.Invoke(SizeUploaded);
