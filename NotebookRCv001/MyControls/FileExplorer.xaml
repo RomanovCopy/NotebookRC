@@ -9,12 +9,20 @@
       mc:Ignorable="d"
       Title="FileExplorer">
     <Page.Resources>
-        <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
+        <viewmodels:FileOverviewViewModel x:Key="viewmodel"/>
     </Page.Resources>
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
     </Page.DataContext>
     <Grid>
-        
+        <ListView >
+            <ListView.ItemTemplate>
+                <ItemContainerTemplate>
+                    <WrapPanel>
+                        
+                    </WrapPanel>
+                </ItemContainerTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>
