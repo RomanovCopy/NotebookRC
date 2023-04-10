@@ -266,7 +266,7 @@ namespace NotebookRCv001.Models
             {
                 bool c = false;
                 if (webResponse != null)
-                    c = Status == "Download" /*&& webResponse.GetResponseStream().CanSeek*/;
+                    c = Status == "Download";
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; };
