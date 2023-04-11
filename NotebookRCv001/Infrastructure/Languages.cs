@@ -497,6 +497,7 @@ namespace NotebookRCv001.Infrastructure
                     "Открыть",//05
                     "Папка",//06
                     "Обложки",//07
+                    "Плитки",//08
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -509,6 +510,7 @@ namespace NotebookRCv001.Infrastructure
                      "Open",//05
                      "Folder",//06
                      "Covers",//07
+                     "Tiles",//08
                 }
                 }
             };

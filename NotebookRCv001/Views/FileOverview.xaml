@@ -17,7 +17,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
-            <viewmodels:FileOverviewViewModel x:Key="viewmodel"/>
+            <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
             <converters:ColumnsWidthConverter x:Key="columnswidth"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -60,10 +60,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                  SelectedIndex="{Binding SelectedIndexDrives, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
-                                    <i:InvokeCommandAction Command="{Binding ComboBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                    <i:InvokeCommandAction Command="{Binding ComboBoxDrivesLoaded, UpdateSourceTrigger=PropertyChanged}"
                                                            CommandParameter="{Binding ElementName=drives, UpdateSourceTrigger=PropertyChanged}"/>
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="SelectionChanged">
