@@ -364,6 +364,7 @@ namespace NotebookRCv001.Models
             try
             {
                 SelectedIndex = 0;
+                UpdateDrives();
                 if (CanExecute_ComboBoxSelectionChanged( DriveInfos[SelectedIndex] ))
                     Execute_ComboBoxSelectionChanged( DriveInfos[SelectedIndex] );
                 CurrentDirectoryFullName = DriveInfos[SelectedIndex].Name;

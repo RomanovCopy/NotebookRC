@@ -10,19 +10,106 @@
       Title="FileExplorer">
     <Page.Resources>
         <viewmodels:FileOverviewViewModel x:Key="viewmodel"/>
+        <DataTemplate x:Key="listTemplate">
+            <StackPanel Margin="5">
+                <Image Height="32" Source="{StaticResource catalogV001}" />
+            </StackPanel>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="listPanelTemplate">
+            <WrapPanel />
+        </ItemsPanelTemplate>
     </Page.Resources>
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
     </Page.DataContext>
-    <Grid>
-        <ListView >
-            <ListView.ItemTemplate>
-                <ItemContainerTemplate>
-                    <WrapPanel>
-                        
-                    </WrapPanel>
-                </ItemContainerTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+    <Grid >
+        <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
+            <GroupBox HorizontalContentAlignment="Stretch" >
+                <GroupBox.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:InvokeCommandAction Command="{Binding ComboBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=drives, UpdateSourceTrigger=PropertyChanged}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding ComboBoxSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=drives, Path=SelectedItem, 
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                        <Button Grid.Column="1" Width="24" Height="24" Template="{StaticResource FlatButtonControlTemplate}"
+                                Command="{Binding ToParentDirectory, UpdateSourceTrigger=PropertyChanged}">
+                            <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True" />
+                        </Button>
+                        <Border Grid.Column="2" BorderBrush="White" BorderThickness="1" CornerRadius="10" >
+                            <TextBlock Height="20" Text="{Binding CurrentDirectoryFullName , UpdateSourceTrigger=PropertyChanged}" 
+                                   Width="450" Margin="10,0,10,0" />
+                        </Border>
+                        <Border Grid.Column="3" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
+                                Margin="10,0,0,0" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
+                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                          VerticalContentAlignment="Center" Margin="10,0,0,0">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Checked">
+                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="Unchecked">
+                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
+                                <ComboBox x:Name="iconsizes"  Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" 
+                                          ItemsSource="{Binding IconSizes, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
+                                          SelectedIndex="{Binding IconSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Loaded">
+                                            <i:InvokeCommandAction Command="{Binding IconSizesLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=iconsizes, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding IconSizesSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=iconsizes, Path=SelectedItem, 
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </GroupBox.Header>
+                <ListView x:Name="list" Background="Black" 
+                 ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
+                 ItemTemplate="{StaticResource listTemplate}"
+                 ItemsPanel="{StaticResource listPanelTemplate}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                </ListView>
+            </GroupBox>
+        </Border>
+
     </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ComboBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                   CommandParameter="{Binding ElementName=list}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </Page>

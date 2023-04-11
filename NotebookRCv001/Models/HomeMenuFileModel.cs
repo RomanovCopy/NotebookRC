@@ -503,9 +503,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                var overview = new Views.FileOverview();
-                overview.Owner = Application.Current.MainWindow;
-                overview.Show();
+                var page = new MyControls.FileExplorer();
+                mainWindowViewModel.FrameListAddPage.Execute(page);
+                //var overview = new Views.FileOverview();
+                //overview.Owner = Application.Current.MainWindow;
+                //overview.Show();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
