@@ -28,7 +28,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Background="Black">
             <Grid.ColumnDefinitions >
                 <ColumnDefinition x:Name="formenu" Width="*"/>
                 <ColumnDefinition x:Name="forbuttons" Width="Auto"/>

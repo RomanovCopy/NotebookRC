@@ -10,6 +10,7 @@
       Title="FileExplorer">
     <Page.Resources>
         <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
+        <local:ButtonsClearAndClose x:Key="buttonsclose"/>
         <DataTemplate x:Key="listTemplate">
             <StackPanel Margin="5">
                 <Image Height="32" Source="{StaticResource catalogV001}" />
@@ -30,9 +31,10 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
@@ -102,21 +104,234 @@
                                 </CheckBox>
                             </Grid>
                         </Border>
+                        <Border Grid.Column="5" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
+                                Margin="10,0,0,0">
+                            <ContentControl Content="{StaticResource buttonsclose}" Margin="10,0,10,0" />
+                        </Border>
                     </Grid>
                 </GroupBox.Header>
-                <ListView x:Name="list_tiles" Background="Black" 
+                <Grid>
+                    <Border x:Name="forpanels" BorderThickness="0">
+                        <!--<ListView x:Name="list_tiles" Background="Black" 
                  ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
                  ItemTemplate="{StaticResource listTemplate}"
                  ItemsPanel="{StaticResource listPanelTemplate}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
-                </ListView>
+                            <ListView.Style>
+                                <Style TargetType="ListView">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
+                                    ,Mode=FindAncestor},Path=DataContext.IsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                             Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.Style>
+                        </ListView>-->
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
+                                        ,Mode=FindAncestor}, Path=DataContext.IsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                                 Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                    <Border x:Name="forlist" BorderThickness="0">
+                        <!--<ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
+                          HorizontalAlignment="Stretch" Focusable="True" VirtualizingPanel.IsVirtualizing="True" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden" Style="{x:Null}" Background="Black">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn x:Name="name" Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Image Stretch="UniformToFill" SnapsToDevicePixels="False" Margin="0,0,10,0" >
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Style.Triggers>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <MultiDataTrigger.Setters>
+                                                                            <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
+                                                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                                                        </MultiDataTrigger.Setters>
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="False"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <MultiDataTrigger.Setters>
+                                                                            <Setter Property="Source" Value="{StaticResource catalogV001}"/>
+                                                                        </MultiDataTrigger.Setters>
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <MultiDataTrigger.Setters>
+                                                                            <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
+                                                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                                                        </MultiDataTrigger.Setters>
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="False"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <MultiDataTrigger.Setters>
+                                                                            <Setter Property="Source" Value="{StaticResource fileV001}"/>
+                                                                        </MultiDataTrigger.Setters>
+                                                                    </MultiDataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                    <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
+                                                       Grid.Column="1"
+                                                       Margin="0,5,0,0"
+                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" >
+                                                        <TextBlock.ContextMenu>
+                                                            <ContextMenu>
+                                                                <MenuItem Header="{Binding Source={StaticResource viewmodel}, Path=Headers[5], 
+                                                        UpdateSourceTrigger=PropertyChanged}" 
+                                                              Command="{Binding Source={StaticResource viewmodel}, 
+                                                        Path=ListViewNameContextMenuOpen, UpdateSourceTrigger=PropertyChanged}" 
+                                                              CommandParameter="{Binding Path=Tag, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            </ContextMenu>
+                                                        </TextBlock.ContextMenu>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, Path=ListViewNameMouseLeftButtonDown}"
+                                                                           CommandParameter="{Binding Path=Tag, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Name="extension" Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}"
+                                            Width="{Binding ListView_ColumnsWidth[1], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  Foreground="White"
+                                                   TextAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                                    <Setter Property="Text" Value="{Binding FileExtension, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                                    <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, 
+                                                                Mode=FindAncestor}, Path=DataContext.Headers[6]}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Name="size" Header="{Binding Headers[3], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[2], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Size, UpdateSourceTrigger=PropertyChanged}" Foreground="White"
+                                                   TextAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Name="date" Header="{Binding Headers[4], UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="{Binding ListView_ColumnsWidth[3], Converter={StaticResource columnswidth}, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}" Foreground="White"
+                                                   TextAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Name="last" Header="" Width="{Binding ListView_ColumnsWidth[4], Converter={StaticResource columnswidth}, 
+                                ConverterParameter=last, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="" Foreground="White"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Black"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Black"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:InvokeCommandAction Command="{Binding ListViewLoaded}" CommandParameter="{Binding ElementName=list}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ListView>-->
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
+                                        ,Mode=FindAncestor}, Path=DataContext.IsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                                 Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </Grid>
             </GroupBox>
         </Border>
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding ComboBoxLoaded, UpdateSourceTrigger=PropertyChanged}"
-                                   CommandParameter="{Binding ElementName=list}"/>
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 </Page>

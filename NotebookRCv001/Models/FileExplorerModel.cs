@@ -5,16 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Interfaces;
+using NotebookRCv001.ViewModels;
 
 namespace NotebookRCv001.Models
 {
     internal class FileExplorerModel:ViewModelBase
     {
-
+        private readonly MainWindowViewModel mainWindowViewModel;
 
 
         internal ObservableCollection<string> Headers => throw new NotImplementedException();
@@ -71,7 +73,8 @@ namespace NotebookRCv001.Models
 
         internal FileExplorerModel()
         {
-
+            mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
+            //IsTilesEnabled = true;
         }
 
 
@@ -85,11 +88,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_CheckedIsTilesEnabled(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_CheckedIsTilesEnabled(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// активация/дезактивация IsCoverEnabled
@@ -99,11 +112,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_CheckedIsCover(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_CheckedIsCover(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// переход к родительскому элементу
@@ -113,11 +136,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ClickToParentDirectory(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_ClickToParentDirectory(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// изменение выбора размера обложки
@@ -127,11 +160,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_CoverSizesSelectionChanged(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_CoverSizesSelectionChanged(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// выбор диска
@@ -141,11 +184,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ComboBoxDrivesSelectionChanged(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_ComboBoxDrivesSelectionChanged(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// окончание загрузки коллекции размеров обложек (ComboBox)
@@ -155,11 +208,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_CoverSizesLoaded(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_CoverSizesLoaded(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// окончание загрузки коллекции доступных дисков(ComboBox)
@@ -169,11 +232,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_ComboBoxDrivesLoaded(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_ComboBoxDrivesLoaded(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// окончание загрузки страницы
@@ -183,11 +256,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_PageLoaded(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_PageLoaded(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// закрытие страницы
@@ -197,11 +280,24 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_PageClose(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                c = obj != null;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_PageClose(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(obj is MyControls.FileExplorer exp && mainWindowViewModel.FrameListRemovePage.CanExecute(exp))
+                {
+                    mainWindowViewModel.FrameListRemovePage.Execute(exp);
+                }
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
         /// очистка страницы
@@ -211,11 +307,21 @@ namespace NotebookRCv001.Models
         /// <exception cref="NotImplementedException"></exception>
         internal bool CanExecute_PageClear(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool c = false;
+                //c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_PageClear(object obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
     }

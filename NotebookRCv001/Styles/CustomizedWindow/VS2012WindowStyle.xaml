@@ -217,7 +217,8 @@
                         <ContentPresenter
                             Content="C"
                             TextBlock.FontWeight="DemiBold"
-                            HorizontalAlignment="Center"/>
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

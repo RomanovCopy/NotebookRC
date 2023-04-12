@@ -9,7 +9,7 @@
              x:Name="control">
     
     <Grid>
-        <StackPanel Orientation="Horizontal" Background="Black">
+        <StackPanel Orientation="Horizontal" Background="Transparent">
             <Button x:Name="clear" Style="{StaticResource ClearButton}" Content="C" Padding="3,0,3,0" Margin="1"
                     Command="{Binding PageClear, UpdateSourceTrigger=PropertyChanged}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page},Mode=FindAncestor}}"/>
