@@ -66,27 +66,21 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
-                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                          VerticalContentAlignment="Center" Margin="10,0,0,0">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Checked">
-                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="Unchecked">
-                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
+                                          IsChecked="{Binding IsCoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                          VerticalContentAlignment="Center" Margin="10,0,0,0" 
+                                          Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"
+                                          CommandParameter="{Binding ElementName=cover, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                 </CheckBox>
                                 <ComboBox x:Name="iconsizes"  Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" 
-                                          ItemsSource="{Binding IconSizes, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
-                                          SelectedIndex="{Binding IconSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
+                                          ItemsSource="{Binding CoverSizes, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
+                                          SelectedIndex="{Binding CoverSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
-                                            <i:InvokeCommandAction Command="{Binding IconSizesLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                            <i:InvokeCommandAction Command="{Binding CoverSizesLoaded, UpdateSourceTrigger=PropertyChanged}"
                                                            CommandParameter="{Binding ElementName=iconsizes, UpdateSourceTrigger=PropertyChanged}"/>
                                         </i:EventTrigger>
                                         <i:EventTrigger EventName="SelectionChanged">
-                                            <i:InvokeCommandAction Command="{Binding IconSizesSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                            <i:InvokeCommandAction Command="{Binding CoverSizesSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
                                                            CommandParameter="{Binding ElementName=iconsizes, Path=SelectedItem, 
                                         UpdateSourceTrigger=PropertyChanged}"/>
                                         </i:EventTrigger>
@@ -100,23 +94,17 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <CheckBox x:Name="tiles" Content="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
-                                          IsChecked="{Binding CoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                <CheckBox x:Name="tiles" Content="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}"  Grid.Row="0"
+                                          IsChecked="{Binding IsTilesEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                          Command="{Binding CheckedIsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                          CommandParameter="{Binding ElementName=tiles, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                           VerticalContentAlignment="Center" Margin="10,0,10,0">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Checked">
-                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="Unchecked">
-                                            <i:InvokeCommandAction Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
                                 </CheckBox>
                             </Grid>
                         </Border>
                     </Grid>
                 </GroupBox.Header>
-                <ListView x:Name="list" Background="Black" 
+                <ListView x:Name="list_tiles" Background="Black" 
                  ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
                  ItemTemplate="{StaticResource listTemplate}"
                  ItemsPanel="{StaticResource listPanelTemplate}"
@@ -124,7 +112,6 @@
                 </ListView>
             </GroupBox>
         </Border>
-
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
