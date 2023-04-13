@@ -37,7 +37,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                  SelectedIndex="{Binding SelectedIndexDrives, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
                                     <i:InvokeCommandAction Command="{Binding ComboBoxDrivesLoaded, UpdateSourceTrigger=PropertyChanged}"/>
@@ -112,23 +112,12 @@
                 </GroupBox.Header>
                 <Grid>
                     <Border x:Name="forpanels" BorderThickness="0">
-                        <!--<ListView x:Name="list_tiles" Background="Black" 
+                        <ListView x:Name="list_tiles" Background="Black" 
                  ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
                  ItemTemplate="{StaticResource listTemplate}"
                  ItemsPanel="{StaticResource listPanelTemplate}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
-                            <ListView.Style>
-                                <Style TargetType="ListView">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
-                                    ,Mode=FindAncestor},Path=DataContext.IsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                             Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListView.Style>
-                        </ListView>-->
+                        </ListView>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>

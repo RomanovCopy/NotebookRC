@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.ViewModels;
+using NotebookRCv001.Helpers;
 
 namespace NotebookRCv001.Models
 {
     internal class FileExplorerModel:ViewModelBase
     {
         private readonly MainWindowViewModel mainWindowViewModel;
+        private HomeMenuEncryptionViewModel homeMenuEncryptionViewModel { get; set; }
 
 
         internal ObservableCollection<string> Headers => throw new NotImplementedException();
@@ -25,6 +29,7 @@ namespace NotebookRCv001.Models
 
         internal Action<object> BehaviorReady { get => throw new NotImplementedException(); 
             set => throw new NotImplementedException(); }
+
 
         /// <summary>
         /// коллекция доступных дисков
@@ -244,7 +249,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                SelectedIndexDrives = 0;
+                UpdateDrives();
+                if (CanExecute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]))
+                    Execute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]);
+                CurrentDirectoryFullName = DriveInfos[SelectedIndexDrives].Name;
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -322,6 +331,255 @@ namespace NotebookRCv001.Models
 
             }
             catch (Exception e) { ErrorWindow(e); }
+        }
+
+
+        /// <summary>
+        /// открытие файла/директории
+        /// </summary>
+        /// <param name="obj"></param>
+        private async void OpenFileDirectory(object obj)
+        {
+            try
+            {
+                if (obj is DirectoryInfo dirInfo)
+                {//выбран каталог
+                    await Task.Factory.StartNew(() => CurrentDirectoryList = GetCurrentDirectoryList(dirInfo));
+                    if (IsCoverEnabled)
+                    {
+                        await Task.Factory.StartNew(() => { AddingIcons(Cove); });
+                    }
+                }
+                else if (obj is FileInfo fileInfo)
+                {//выбран файл
+                    var player = mainWindowViewModel.FrameList.Where((x) => x is MyControls.MediaPlayer).FirstOrDefault();
+                    if (player == null)
+                    {
+                        player = new MyControls.MediaPlayer();
+                        mainWindowViewModel.FrameListAddPage.Execute(player);
+                    }
+                    var playerVM = (MediaPlayerViewModel)player.DataContext;
+                    if (playerVM.SetContent.CanExecute(fileInfo.FullName))
+                        playerVM.SetContent.Execute(fileInfo.FullName);
+                }
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// дешифровка(если установлен ключ) и открытие файла в дефолтном приложении
+        /// </summary>
+        /// <param name="fileInfo">информация об открываемом файле (FileInfo)</param>
+        /// <param name="newWindow">открыть файл в новом окне( True )</param>
+        private async Task OpenAFileInTheDefaultApplication(FileInfo fileInfo, bool newWindow)
+        {
+            try
+            {
+                string path = fileInfo.FullName;
+                string ext = fileInfo.Extension;
+                using (var myProcess = new Process())
+                {
+                    if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
+                    {
+                        byte[] bytes = new byte[fileInfo.Length];
+                        using (var fs = new FileStream(path, FileMode.OpenOrCreate))
+                        {
+                            await fs.ReadAsync(bytes, 0, bytes.Length);
+                            bytes = Command_executors.Executors.Decrypt(bytes, homeMenuEncryptionViewModel.EncryptionKey);
+                        }
+                        path = $"{Environment.CurrentDirectory}/temp/temp{ext}";
+                        using (var fs = new FileStream(path, FileMode.Create))
+                        {
+                            await fs.WriteAsync(bytes, 0, bytes.Length);
+                        }
+                    }
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.CreateNoWindow = newWindow;
+                    myProcess.StartInfo.FileName = path;
+                    myProcess.Start();
+                }
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// обновление коллекции доступных дисков
+        /// </summary>
+        private void UpdateDrives()
+        {
+            try
+            {
+                DriveInfos = new ObservableCollection<DriveInfo>();
+                foreach (var info in GetDraveInfos())
+                    DriveInfos.Add(info);
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// получение информации о всех дисках готовых к работе
+        /// </summary>
+        /// <returns></returns>
+        private DriveInfo[] GetDraveInfos()
+        {
+            var driveInfos = new DriveInfo[DriveInfo.GetDrives().Length];
+            try
+            {
+                int count = 0;
+                //загрузка дисков готовых к работе
+                foreach (DriveInfo drive in DriveInfo.GetDrives())
+                {
+                    if (drive.IsReady)//диск готов к работе
+                    {
+                        driveInfos[count] = drive;
+                        count++;
+                    }
+                }
+                return driveInfos;
+            }
+            catch (Exception e) { ErrorWindow(e); return driveInfos; }
+        }
+        /// <summary>
+        /// получение всех папок и файлов из заданного каталога
+        /// </summary>
+        /// <param name="directoryInfo">каталог</param>
+        /// <returns>коллекция папок и файлов</returns>
+        private ObservableCollection<DirectoryItem> GetCurrentDirectoryList(DirectoryInfo directoryInfo)
+        {
+            ObservableCollection<DirectoryItem> list = new();
+            try
+            {
+                string key = homeMenuEncryptionViewModel.EncryptionKey;
+                foreach (var folder in directoryInfo.GetDirectories())
+                    list.Add(new DirectoryItem(folder, key));
+                foreach (var file in directoryInfo.GetFiles())
+                    list.Add(new DirectoryItem(file, key));
+                CurrentDirectory = directoryInfo;
+                CurrentDirectoryFullName = directoryInfo.FullName;
+                return list;
+            }
+            catch (Exception e) { ErrorWindow(e); return CurrentDirectoryList; }
+        }
+        /// <summary>
+        /// добавление Icons
+        /// </summary>
+        private void AddingIcons(int height)
+        {
+            try
+            {
+                BitmapImage bitmap = null;
+                string path = null;
+                foreach (var item in CurrentDirectoryList)
+                {
+                    bitmap = null;
+                    item.IsCover = CoverEnabled;
+                    if (item.IsFolder && item.Tag is DirectoryInfo dir)
+                    {
+                        FileInfo icon = null;
+                        try
+                        {//на случай, когда каталог закрыт для просмотра
+                            icon = dir.GetFiles().Where((x) => x.Extension.ToLower() == ".jpg" ||
+                            x.Extension.ToLower() == ".jpeg").FirstOrDefault();
+                        }
+                        catch { item.IsCover = false; continue; }
+                        if (icon != null)
+                        {
+                            path = icon.FullName;
+                            try
+                            {
+                                if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
+                                {
+                                    bitmap = Command_executors.Executors.ImageDecrypt(path, homeMenuEncryptionViewModel.EncryptionKey, height).Result;
+                                    if (bitmap == null)
+                                        item.IsCover = false;
+                                    else
+                                        item.Icon = bitmap;
+                                    continue;
+                                }
+                                else
+                                {
+                                    bitmap = new BitmapImage();
+                                }
+                            }
+                            catch { item.IsCover = false; continue; }
+                        }
+                    }
+                    else if (item.IsFile && item.Tag is FileInfo info)
+                    {
+                        path = info.FullName;
+                        if (info.Extension.ToLower() == ".jpg" || info.Extension.ToLower() == ".jpeg")
+                        {
+                            try
+                            {
+                                if (homeMenuEncryptionViewModel.EncryptionKey != null)
+                                {
+                                    bitmap = Command_executors.Executors.ImageDecrypt(path, homeMenuEncryptionViewModel.EncryptionKey, height).Result;
+                                    item.Icon = bitmap;
+                                    continue;
+                                }
+                                else
+                                {
+                                    bitmap = new BitmapImage();
+                                }
+                            }
+                            catch
+                            {
+                                item.IsCover = false;
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                        continue;
+                    if (bitmap != null && !string.IsNullOrWhiteSpace(path))
+                    {
+                        try
+                        {
+                            bitmap.BeginInit();
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.BaseUri = bitmap.UriSource = new Uri(path);
+                            bitmap.DecodePixelHeight = height;
+                            bitmap.EndInit();
+                            bitmap.Freeze();
+                            item.Icon = bitmap;
+                        }
+                        catch { item.IsCover = false; continue; }
+                    }
+                    else
+                    {
+                        item.IsCover = false;
+                    }
+                }
+                OnPropertyChanged("CurrentDirectoryList");
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        internal async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
+        {
+            BitmapImage bitmap = null;
+            try
+            {
+                string path = Path.Combine(dir.FullName, imageName);
+                if (File.Exists(path))
+                {
+                    if (dir.GetFiles().Any((x) => x.Name == imageName))
+                    {
+                        using (FileStream fs = new(path, FileMode.Open))
+                        {
+                            if (!string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
+                                bitmap = await Command_executors.Executors.ImageDecrypt(path, homeMenuEncryptionViewModel.EncryptionKey, 24);
+                            else
+                            {
+                                bitmap = new BitmapImage(new Uri(path));
+                                bitmap.BeginInit();
+                                bitmap.DecodePixelHeight = 24;
+                                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                bitmap.EndInit();
+                                bitmap.Freeze();
+                            }
+                        }
+                    }
+                }
+                return bitmap;
+            }
+            catch (Exception e) { ErrorWindow(e); return bitmap; }
         }
 
     }
