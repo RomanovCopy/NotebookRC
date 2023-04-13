@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Models;
+using NotebookRCv001.Helpers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.IO;

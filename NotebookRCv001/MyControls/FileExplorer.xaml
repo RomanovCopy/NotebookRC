@@ -5,12 +5,76 @@
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+      xmlns:converters="clr-namespace:NotebookRCv001.Converters"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
+      
       mc:Ignorable="d"
       Title="FileExplorer">
     <Page.Resources>
         <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="buttonsclose"/>
+        <converters:ColumnsWidthConverter x:Key="columnswidth"/>
+
+        <Image Stretch="UniformToFill" SnapsToDevicePixels="False" Margin="0,0,10,0" x:Key="image">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition 
+                                    Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                <Condition 
+                                    Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
+                                                                        UpdateSourceTrigger=PropertyChanged}"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Source" Value="{StaticResource catalogV001}"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
+                                                                        UpdateSourceTrigger=PropertyChanged}"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="True"/>
+                                <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
+                                                                               Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Source" Value="{StaticResource fileV001}"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+
+
         <DataTemplate x:Key="listTemplate">
             <StackPanel Margin="5">
                 <Image Height="32" Source="{StaticResource catalogV001}" />
@@ -131,7 +195,7 @@
                         </Border.Style>
                     </Border>
                     <Border x:Name="forlist" BorderThickness="0">
-                        <!--<ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
+                        <ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
                           HorizontalAlignment="Stretch" Focusable="True" VirtualizingPanel.IsVirtualizing="True" 
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden" Style="{x:Null}" Background="Black">
                             <ListView.View>
@@ -146,64 +210,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Image Stretch="UniformToFill" SnapsToDevicePixels="False" Margin="0,0,10,0" >
-                                                        <Image.Style>
-                                                            <Style TargetType="Image">
-                                                                <Style.Triggers>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <MultiDataTrigger.Setters>
-                                                                            <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                                                                            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
-                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
-                                                                        UpdateSourceTrigger=PropertyChanged}"/>
-                                                                        </MultiDataTrigger.Setters>
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="False"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <MultiDataTrigger.Setters>
-                                                                            <Setter Property="Source" Value="{StaticResource catalogV001}"/>
-                                                                        </MultiDataTrigger.Setters>
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <MultiDataTrigger.Setters>
-                                                                            <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                                                                            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
-                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
-                                                                        UpdateSourceTrigger=PropertyChanged}"/>
-                                                                        </MultiDataTrigger.Setters>
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                                                            <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="False"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <MultiDataTrigger.Setters>
-                                                                            <Setter Property="Source" Value="{StaticResource fileV001}"/>
-                                                                        </MultiDataTrigger.Setters>
-                                                                    </MultiDataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Image.Style>
-                                                    </Image>
+                                                    <ContentControl Content="{Binding Source={StaticResource image}}" Grid.Column="0"/>
                                                     <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
                                                        Grid.Column="1"
                                                        Margin="0,5,0,0"
@@ -301,7 +308,7 @@
                                     <i:InvokeCommandAction Command="{Binding ListViewLoaded}" CommandParameter="{Binding ElementName=list}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </ListView>-->
+                        </ListView>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>

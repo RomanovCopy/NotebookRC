@@ -14,23 +14,45 @@ using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.ViewModels;
 using NotebookRCv001.Helpers;
+using NotebookRCv001.Converters;
 
 namespace NotebookRCv001.Models
 {
-    internal class FileExplorerModel:ViewModelBase
+    internal class FileExplorerModel : ViewModelBase
     {
         private readonly MainWindowViewModel mainWindowViewModel;
-        private HomeMenuEncryptionViewModel homeMenuEncryptionViewModel { get; set; }
+        private readonly HomeMenuFileViewModel homeMenuFileViewModel;
+        private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
 
 
         internal ObservableCollection<string> Headers => throw new NotImplementedException();
 
         internal ObservableCollection<string> ToolTips => throw new NotImplementedException();
 
-        internal Action<object> BehaviorReady { get => throw new NotImplementedException(); 
-            set => throw new NotImplementedException(); }
+        internal Action<object> BehaviorReady
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
 
 
+        /// <summary>
+        /// коллекция размеров колонок по горизонтали(Width)
+        /// </summary>
+        internal ObservableCollection<double> ListView_ColumnsWidth
+        {
+            get => listView_ColumnsWidth ??= new ObservableCollection<double>();
+            set => SetProperty(ref listView_ColumnsWidth, value);
+        }
+        ObservableCollection<double> listView_ColumnsWidth;
+
+        private Languages language => mainWindowViewModel.Language;
+
+        /// <summary>
+        /// открытый в окне каталог(для диска - null)
+        /// </summary>
+        internal DirectoryInfo CurrentDirectory { get => currentDirectory; set => SetProperty(ref currentDirectory, value); }
+        private DirectoryInfo currentDirectory;
         /// <summary>
         /// коллекция доступных дисков
         /// </summary>
@@ -39,8 +61,11 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// коллекция элементов из отображаемой директории
         /// </summary>
-        internal ObservableCollection<DirectoryItem> CurrentDirectoryList { get => currentDirectoryList;
-            set => SetProperty(ref currentDirectoryList, value); }
+        internal ObservableCollection<DirectoryItem> CurrentDirectoryList
+        {
+            get => currentDirectoryList;
+            set => SetProperty(ref currentDirectoryList, value);
+        }
         private ObservableCollection<DirectoryItem> currentDirectoryList;
         /// <summary>
         /// коллекция размеров обложек
@@ -60,8 +85,11 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// полный путь к текущей дирректории
         /// </summary>
-        internal string CurrentDirectoryFullName { get => currentDirectoryFullName; 
-            set => SetProperty(ref currentDirectoryFullName, value); }
+        internal string CurrentDirectoryFullName
+        {
+            get => currentDirectoryFullName;
+            set => SetProperty(ref currentDirectoryFullName, value);
+        }
         private string currentDirectoryFullName;
         /// <summary>
         /// флаг: отображение обложек
@@ -73,20 +101,47 @@ namespace NotebookRCv001.Models
         /// </summary>
         internal bool IsTilesEnabled { get => isTilesEnabled; set => SetProperty(ref isTilesEnabled, value); }
         private bool isTilesEnabled;
-
+        /// <summary>
+        /// Возможные размеры иконки обложки(высота)
+        /// </summary>
+        internal ObservableCollection<int> IconSizes { get => iconSizes; set => SetProperty(ref iconSizes, value); }
+        private ObservableCollection<int> iconSizes;
+        /// <summary>
+        /// индекс выбранного размера иконки
+        /// </summary>
+        internal int IconSizesIndex { get => iconSizesIndex; set => SetProperty(ref iconSizesIndex, value); }
+        private int iconSizesIndex;
+        /// <summary>
+        /// текущая высота иконок задается для выравнивания
+        /// </summary>
+        internal int ImageHeight { get => imageHeight; set => SetProperty(ref imageHeight, value); }
+        private int imageHeight;
 
 
         internal FileExplorerModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
-            //IsTilesEnabled = true;
+            language.PropertyChanged += (s, e) => OnPropertyChanged(new string[] { "Headers", "Tooltips" });
+            var home = (Views.Home)mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
+            var menu = (MyControls.MenuHome)home.FindResource("menuhome");
+            homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
+            homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
+            IconSizes = new ObservableCollection<int>() { 16, 24, 32, 40, 48, 56, 64, 72, 80 };
+            //устанавливаем размеры колонок
+            //Properties.Settings.Default.FileOverview_ListViewColumnsWidth = null;//сброс размеров колонок
+            if (Properties.Settings.Default.FileOverview_ListViewColumnsWidth == null)
+                Properties.Settings.Default.FileOverview_ListViewColumnsWidth =
+                    new System.Collections.Specialized.StringCollection() { "40", "20", "15", "15", "10" };
+            ListView_ColumnsWidth.Clear();
+            for (int i = 0; i < Properties.Settings.Default.FileOverview_ListViewColumnsWidth.Count; i++)
+                ListView_ColumnsWidth.Add(double.Parse(Properties.Settings.Default.FileOverview_ListViewColumnsWidth[i]));
         }
 
 
 
 
         /// <summary>
-        /// активация/дезактивация CheckedIsTilesEnabled
+        /// активация/дезактивация IsTilesEnabled
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -99,7 +154,7 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch(Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_CheckedIsTilesEnabled(object obj)
         {
@@ -144,16 +199,24 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = CurrentDirectory?.Parent != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ClickToParentDirectory(object obj)
+        internal async void Execute_ClickToParentDirectory(object obj)
         {
             try
             {
-
+                if (CurrentDirectory.Parent != null)
+                {
+                    await Task.Factory.StartNew(() =>
+                    {
+                        CurrentDirectoryList = GetCurrentDirectoryList(CurrentDirectory.Parent);
+                        if (IsCoverEnabled)
+                            AddingIcons(ImageHeight);
+                    });
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -177,7 +240,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                if (obj is int height)
+                {
+                    ImageHeight = height;
+                    Task.Factory.StartNew(() => { AddingIcons(height); });
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -197,11 +264,26 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ComboBoxDrivesSelectionChanged(object obj)
+        internal async void Execute_ComboBoxDrivesSelectionChanged(object obj)
         {
             try
             {
-
+                if (obj is DriveInfo driveInfo)
+                {
+                    await Task.Factory.StartNew(() =>
+                    {
+                        string encryptionKey = homeMenuEncryptionViewModel.EncryptionKey;
+                        CurrentDirectoryFullName = driveInfo.Name;
+                        CurrentDirectoryList = new();
+                        foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
+                            CurrentDirectoryList.Add(new DirectoryItem(folder, encryptionKey));
+                        foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
+                            CurrentDirectoryList.Add(new DirectoryItem(file, encryptionKey));
+                        if (IsCoverEnabled)
+                            AddingIcons(ImageHeight);
+                        CurrentDirectory = null;
+                    });
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -277,7 +359,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
-
+                var window = (Window)Application.Current.MainWindow;
+                var convert = (ColumnsWidthConverter)window.FindResource("columnswidth");
+                convert.window = window;
+                OnPropertyChanged("ListView_ColumnsWidth");
+                UpdateDrives();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -301,7 +387,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if(obj is MyControls.FileExplorer exp && mainWindowViewModel.FrameListRemovePage.CanExecute(exp))
+                if (obj is MyControls.FileExplorer exp && mainWindowViewModel.FrameListRemovePage.CanExecute(exp))
                 {
                     mainWindowViewModel.FrameListRemovePage.Execute(exp);
                 }
@@ -347,7 +433,7 @@ namespace NotebookRCv001.Models
                     await Task.Factory.StartNew(() => CurrentDirectoryList = GetCurrentDirectoryList(dirInfo));
                     if (IsCoverEnabled)
                     {
-                        await Task.Factory.StartNew(() => { AddingIcons(Cove); });
+                        await Task.Factory.StartNew(() => { AddingIcons(ImageHeight); });
                     }
                 }
                 else if (obj is FileInfo fileInfo)
@@ -469,7 +555,7 @@ namespace NotebookRCv001.Models
                 foreach (var item in CurrentDirectoryList)
                 {
                     bitmap = null;
-                    item.IsCover = CoverEnabled;
+                    item.IsCover = IsCoverEnabled;
                     if (item.IsFolder && item.Tag is DirectoryInfo dir)
                     {
                         FileInfo icon = null;
