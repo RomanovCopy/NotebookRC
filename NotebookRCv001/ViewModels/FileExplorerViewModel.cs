@@ -22,6 +22,8 @@ namespace NotebookRCv001.ViewModels
         public ObservableCollection<string> ToolTips => fileExplorerModel.ToolTips;
         public Action<object> BehaviorReady { get => fileExplorerModel.BehaviorReady;
             set => fileExplorerModel.BehaviorReady = value; }
+        public ObservableCollection<double> ListView_ColumnsWidth { get => fileExplorerModel.ListView_ColumnsWidth; 
+            set => fileExplorerModel.ListView_ColumnsWidth = value; }
         public ObservableCollection<DriveInfo> DriveInfos { get => fileExplorerModel.DriveInfos; 
             set => fileExplorerModel.DriveInfos=value; }
         public ObservableCollection<DirectoryItem> CurrentDirectoryList

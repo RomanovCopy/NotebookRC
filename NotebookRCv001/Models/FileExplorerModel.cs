@@ -359,11 +359,12 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                var window = (Window)Application.Current.MainWindow;
-                var convert = (ColumnsWidthConverter)window.FindResource("columnswidth");
-                convert.window = window;
-                OnPropertyChanged("ListView_ColumnsWidth");
-                UpdateDrives();
+                if (obj is ColumnsWidthConverter convert)
+                {
+                    convert.window = Application.Current.MainWindow;
+                    OnPropertyChanged("ListView_ColumnsWidth");
+                    UpdateDrives();
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }

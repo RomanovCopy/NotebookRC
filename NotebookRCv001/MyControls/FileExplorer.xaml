@@ -7,14 +7,13 @@
       xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
       xmlns:converters="clr-namespace:NotebookRCv001.Converters"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
-      
       mc:Ignorable="d"
+      x:Name="page"
       Title="FileExplorer">
     <Page.Resources>
         <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="buttonsclose"/>
         <converters:ColumnsWidthConverter x:Key="columnswidth"/>
-
         <Image Stretch="UniformToFill" SnapsToDevicePixels="False" Margin="0,0,10,0" x:Key="image">
             <Image.Style>
                 <Style TargetType="Image">
@@ -22,23 +21,25 @@
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition 
-                                    Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                    Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor},Path=DataContext.IsFolder, 
+                                    UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                 <Condition 
-                                    Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                    Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor},Path=DataContext.IsCover, 
+                                    UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
-                                <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
-                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
-                                                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Source" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor},
+                                    Path=DataContext.Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, Mode=FindAncestor}, 
+                                    Path=DataContext.ImageHeight, UpdateSourceTrigger=PropertyChanged}"/>
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.IsCover, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="Source" Value="{StaticResource catalogV001}"/>
@@ -46,24 +47,24 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
-                                <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource 
-                                                                        AncestorType={x:Type Window}, Mode=FindAncestor}, Path=DataContext.ImageHeight,
-                                                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Source" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
+                                    Mode=FindAncestor}, Path=DataContext.ImageHeight, UpdateSourceTrigger=PropertyChanged}"/>
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="True"/>
-                                <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}"
-                                                                               Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, 
+                                    Mode=FindAncestor},Path=DataContext.IsCover, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="Source" Value="{StaticResource fileV001}"/>
@@ -73,8 +74,6 @@
                 </Style>
             </Image.Style>
         </Image>
-
-
         <DataTemplate x:Key="listTemplate">
             <StackPanel Margin="5">
                 <Image Height="32" Source="{StaticResource catalogV001}" />
@@ -201,8 +200,8 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn x:Name="name" Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" 
-                                            Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, 
-                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            Width="{Binding ListView_ColumnsWidth[0], Converter={StaticResource columnswidth}, Mode=TwoWay, 
+                                        UpdateSourceTrigger=PropertyChanged}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid >
@@ -210,10 +209,9 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ContentControl Content="{Binding Source={StaticResource image}}" Grid.Column="0"/>
+                                                    <ContentControl Content="{StaticResource image}" Grid.Column="0"/>
                                                     <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
-                                                       Grid.Column="1"
-                                                       Margin="0,5,0,0"
+                                                       Grid.Column="1" Margin="0,5,0,0"
                                                    Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" >
                                                         <TextBlock.ContextMenu>
                                                             <ContextMenu>
@@ -314,7 +312,7 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
                                         ,Mode=FindAncestor}, Path=DataContext.IsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                                 Value="True">
+                                                 Value="False">
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -327,7 +325,8 @@
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"/>
+            <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"
+                                   CommandParameter="{StaticResource columnswidth}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 </Page>
