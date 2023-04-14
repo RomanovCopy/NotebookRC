@@ -640,6 +640,12 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+        /// <summary>
+        /// извлечение изображения с заданным именем из заданного каталога
+        /// </summary>
+        /// <param name="dir">каталог в котором находится изображение</param>
+        /// <param name="imageName">имя изображения вместе с расширением(.jpg)</param>
+        /// <returns></returns>
         internal async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
         {
             BitmapImage bitmap = null;

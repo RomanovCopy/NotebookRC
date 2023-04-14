@@ -42,6 +42,16 @@ namespace NotebookRCv001.Helpers
         public bool IsFolder { get => isFolder; set => SetProperty(ref isFolder, value); }
         private bool isFolder;
         /// <summary>
+        /// файл/директория является системным
+        /// </summary>
+        public bool IsSystem { get => isSystem; set => SetProperty(ref isSystem, value); }
+        private bool isSystem;
+        /// <summary>
+        /// файл/директория является скрытым
+        /// </summary>
+        public bool IsHidden { get => isHidden; set => SetProperty(ref isHidden, value); }
+        private bool isHidden;
+        /// <summary>
         /// расширение файла
         /// </summary>
         public string FileExtension { get => fileExtension; private set => SetProperty(ref fileExtension, value); }
@@ -72,11 +82,15 @@ namespace NotebookRCv001.Helpers
         {
             Tag = info;
             this.encryptionKey = encryptionKey;
+            string atributes = null;
             IsFile = false;
             IsFolder = false;
             IsDrive = false;
+            IsSystem = false;
+            IsHidden = false;
             if (info is DirectoryInfo dir)
             {
+                atributes = dir.Attributes.ToString();
                 IsFolder = true;
                 GetDirectoryInfo(dir);
             }
@@ -87,11 +101,17 @@ namespace NotebookRCv001.Helpers
             }
             else if (info is FileInfo file)
             {
+                atributes = file.Attributes.ToString();
                 GetFileInfo(file);
                 IsFile = true;
             }
             else
                 return;
+            if (atributes != null)
+            {
+                IsSystem = atributes.Contains("System");
+                IsHidden = atributes.Contains("Hidden");
+            }
         }
         /// <summary>
         /// извлечение информации о диске
@@ -127,46 +147,6 @@ namespace NotebookRCv001.Helpers
             FileExtension = fileInfo.Extension;
             Size = fileInfo.Length.ToString();
             Date = fileInfo.LastWriteTime.ToString("MM/dd/yy H:mm:ss");
-        }
-        /// <summary>
-        /// извлечение изображения с заданным именем из заданного каталога
-        /// </summary>
-        /// <param name="dir">каталог в котором находится изображение</param>
-        /// <param name="imageName">имя изображения вместе с расширением(.jpg)</param>
-        /// <returns></returns>
-        private async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
-        {
-            BitmapImage bitmap = null;
-            try
-            {
-                string path = Path.Combine(dir.FullName, imageName);
-                if (File.Exists(path) && Path.GetExtension(path) == ".jpg")
-                {
-                    if (dir.GetFiles().Any((x) => x.Name == imageName))
-                    {
-                        if (!string.IsNullOrWhiteSpace(encryptionKey))
-                            bitmap = await Command_executors.Executors.ImageDecrypt(path, encryptionKey, 24);
-                        else
-                        {
-                            using (FileStream fs = new(path, FileMode.Open))
-                            {
-                                await Task.Factory.StartNew(() =>
-                                {
-                                    bitmap = new BitmapImage();
-                                    bitmap.BeginInit();
-                                    bitmap.StreamSource = fs;
-                                    bitmap.DecodePixelHeight = 32;
-                                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                                    bitmap.EndInit();
-                                    bitmap.Freeze();
-                                });
-                            }
-                        }
-                    }
-                }
-                return bitmap;
-            }
-            catch (Exception e) { ErrorWindow(e); return bitmap; }
         }
     }
 }
