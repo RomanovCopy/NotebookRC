@@ -25,9 +25,9 @@ namespace NotebookRCv001.Models
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
 
 
-        internal ObservableCollection<string> Headers => throw new NotImplementedException();
+        internal ObservableCollection<string> Headers => language.HeadersFileOverview;
 
-        internal ObservableCollection<string> ToolTips => throw new NotImplementedException();
+        internal ObservableCollection<string> ToolTips => language.ToolTipsFileOverview;
 
         internal Action<object> BehaviorReady
         {
@@ -332,7 +332,6 @@ namespace NotebookRCv001.Models
             try
             {
                 SelectedIndexDrives = 0;
-                UpdateDrives();
                 if (CanExecute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]))
                     Execute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]);
                 CurrentDirectoryFullName = DriveInfos[SelectedIndexDrives].Name;
@@ -496,7 +495,10 @@ namespace NotebookRCv001.Models
             {
                 DriveInfos = new ObservableCollection<DriveInfo>();
                 foreach (var info in GetDraveInfos())
-                    DriveInfos.Add(info);
+                {
+                    if (info!=null && info.IsReady)
+                        DriveInfos.Add(info);
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
