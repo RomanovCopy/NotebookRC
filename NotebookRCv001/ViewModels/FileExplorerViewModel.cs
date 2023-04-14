@@ -34,6 +34,7 @@ namespace NotebookRCv001.ViewModels
             set => fileExplorerModel.SelectedIndexDrives = value; }
         public int CoverSizesIndex { get => fileExplorerModel.CoverSizesIndex;
             set => fileExplorerModel.CoverSizesIndex = value; }
+        public int ImageHeight { get => fileExplorerModel.ImageHeight; set => fileExplorerModel.ImageHeight = value; }
         public string CurrentDirectoryFullName { get => fileExplorerModel.CurrentDirectoryFullName; 
             set => fileExplorerModel.CurrentDirectoryFullName = value; }
         public bool IsCoverEnabled { get => fileExplorerModel.IsCoverEnabled; set => fileExplorerModel.IsCoverEnabled = value; }
