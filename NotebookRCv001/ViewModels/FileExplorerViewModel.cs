@@ -49,6 +49,10 @@ namespace NotebookRCv001.ViewModels
         }
 
 
+
+        public ICommand ListViewNameMouseLeftButtonDown => listViewNameMouseLeftButtonDown ??=
+            new RelayCommand(fileExplorerModel.Execute_ListViewNameMouseLeftButtonDown, fileExplorerModel.CanExecute_ListViewNameMouseLeftButtonDown);
+        private RelayCommand listViewNameMouseLeftButtonDown;
         public ICommand CheckedIsTilesEnabled => checkedIsTilesEnabled ??= 
             new RelayCommand(fileExplorerModel.Execute_CheckedIsTilesEnabled, fileExplorerModel.CanExecute_CheckedIsTilesEnabled);
         private RelayCommand checkedIsTilesEnabled;

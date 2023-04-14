@@ -21,9 +21,7 @@
                 <MultiDataTrigger x:Name="isfolderTrue_iscoverTrue">
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"  Value="True"/>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
-                            Mode=FindAncestor}, Path=DataContext.IsCoverEnabled, 
-                            UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
@@ -34,8 +32,7 @@
                 <MultiDataTrigger x:Name="isfolderTrue_iscoverFalse">
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
-                            Mode=FindAncestor}, Path=DataContext.IsCoverEnabled, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Source" Value="{StaticResource catalogV001}"/>
@@ -44,8 +41,7 @@
                 <MultiDataTrigger x:Name="isfileTrue_iscoverTrue">
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
-                            Mode=FindAncestor}, Path=DataContext.IsCoverEnabled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Source" Value="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
@@ -56,8 +52,7 @@
                 <MultiDataTrigger x:Name="isfileTrue_iscoverFalse">
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding IsFile, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
-                            Mode=FindAncestor}, Path=DataContext.IsCoverEnabled, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                        <Condition Binding="{Binding IsCover, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
                         <Setter Property="Source" Value="{StaticResource fileV001}"/>
@@ -88,6 +83,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
@@ -158,7 +154,7 @@
                                 </CheckBox>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="5" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
+                        <Border Grid.Column="6" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
                                 Margin="10,0,0,0">
                             <ContentControl Content="{StaticResource buttonsclose}" Margin="10,0,10,0" />
                         </Border>
@@ -168,17 +164,13 @@
                     <Border x:Name="forpanels" BorderThickness="0">
                         <ListView x:Name="list_tiles" Background="Black" 
                             ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                  ItemsPanel="{StaticResource listPanelTemplate}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Style="{StaticResource imagestyle}"/>
+                                        <Image Style="{StaticResource imagestyle}" Height="24"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
-                            <ListView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ListView.ItemsPanel>
                         </ListView>
                         <Border.Style>
                             <Style TargetType="Border">

@@ -126,7 +126,8 @@ namespace NotebookRCv001.Models
             var menu = (MyControls.MenuHome)home.FindResource("menuhome");
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
-            IconSizes = new ObservableCollection<int>() { 16, 24, 32, 40, 48, 56, 64, 72, 80 };
+            CoverSizes = new ObservableCollection<int>() { 16, 24, 32, 40, 48, 56, 64, 72, 80 };
+            ImageHeight = 24;
             //устанавливаем размеры колонок
             //Properties.Settings.Default.FileOverview_ListViewColumnsWidth = null;//сброс размеров колонок
             if (Properties.Settings.Default.FileOverview_ListViewColumnsWidth == null)
@@ -138,8 +139,30 @@ namespace NotebookRCv001.Models
         }
 
 
-
-
+        /// <summary>
+        /// обработка события MouseLeftButtonClick на имени каталога
+        /// </summary>
+        /// <param name="obj"> DirectoryInfo/FileInfo</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_ListViewNameMouseLeftButtonDown(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_ListViewNameMouseLeftButtonDown(object obj)
+        {
+            try
+            {
+                OpenFileDirectory(obj);
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
         /// <summary>
         /// активация/дезактивация IsTilesEnabled
         /// </summary>
@@ -495,10 +518,7 @@ namespace NotebookRCv001.Models
             {
                 DriveInfos = new ObservableCollection<DriveInfo>();
                 foreach (var info in GetDraveInfos())
-                {
-                    if (info!=null && info.IsReady)
-                        DriveInfos.Add(info);
-                }
+                    DriveInfos.Add(info);
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -640,12 +660,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-        /// <summary>
-        /// извлечение изображения с заданным именем из заданного каталога
-        /// </summary>
-        /// <param name="dir">каталог в котором находится изображение</param>
-        /// <param name="imageName">имя изображения вместе с расширением(.jpg)</param>
-        /// <returns></returns>
         internal async Task<BitmapImage> RetrievingAnImageFromADirectory(DirectoryInfo dir, string imageName)
         {
             BitmapImage bitmap = null;
