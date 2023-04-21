@@ -203,11 +203,18 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_CheckedIsCover(object obj)
+        internal async void Execute_CheckedIsCover(object obj)
         {
             try
             {
-
+                if (IsCoverEnabled)
+                {
+                    await Task.Factory.StartNew(() => AddingIcons(ImageHeight));
+                }
+                else
+                {
+                    await Task.Factory.StartNew(() => AddingIcons(ImageHeight));
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
