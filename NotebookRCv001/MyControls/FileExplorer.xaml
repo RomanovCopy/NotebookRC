@@ -66,7 +66,9 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Style="{StaticResource imagestyle}" Grid.Row="0"/>
+                <Image Style="{StaticResource imagestyle}" Grid.Row="0" />
+                <TextBlock Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                           MaxWidth="50" ToolTip="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="listPanelTemplate">
