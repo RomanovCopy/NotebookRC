@@ -15,7 +15,7 @@
         <local:ButtonsClearAndClose x:Key="buttonsclose"/>
         <converters:ColumnsWidthConverter x:Key="columnswidth"/>
         <Style x:Key="imagestyle" TargetType="Image">
-            <Setter Property="Stretch" Value="UniformToFill"/>
+            <Setter Property="Stretch" Value="None"/>
             <Setter Property="SnapsToDevicePixels" Value="False"/>
             <Style.Triggers>
                 <MultiDataTrigger x:Name="isfolderTrue_iscoverTrue">
@@ -61,9 +61,13 @@
             </Style.Triggers>
         </Style>
         <DataTemplate x:Key="listTemplate">
-            <StackPanel Margin="5">
-                <Image Style="{StaticResource imageStyle}" />
-            </StackPanel>
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Image Style="{StaticResource imagestyle}" Grid.Row="0"/>
+            </Grid>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="listPanelTemplate">
             <WrapPanel />
@@ -162,15 +166,14 @@
                 </GroupBox.Header>
                 <Grid>
                     <Border x:Name="forpanels" BorderThickness="0">
-                        <ListView x:Name="list_tiles" Background="Black" 
+                        <ListView x:Name="list_tiles" Background="Black" ItemTemplate="{StaticResource listTemplate}"
                             ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                                  ItemsPanel="{StaticResource listPanelTemplate}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                        <Image Style="{StaticResource imagestyle}" Height="24"/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
                         </ListView>
                         <Border.Style>
                             <Style TargetType="Border">
