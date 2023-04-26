@@ -14,6 +14,9 @@
         <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="buttonsclose"/>
         <converters:ColumnsWidthConverter x:Key="columnswidth"/>
+        <ContextMenu x:Key="mc1">
+            <MenuItem Header="Open"/>
+        </ContextMenu>
         <Style x:Key="imagestyle" TargetType="Image">
             <Setter Property="Stretch" Value="None"/>
             <Setter Property="SnapsToDevicePixels" Value="False"/>
@@ -66,14 +69,20 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Style="{StaticResource imagestyle}" Grid.Row="0" />
-                <TextBlock Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
-                           MaxWidth="50" ToolTip="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <Image Style="{StaticResource imagestyle}" Grid.Row="0" ContextMenu="{StaticResource mc1}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
+                                ,Mode=FindAncestor},Path=DataContext.ListViewNameMouseLeftButtonDown, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding Tag, UpdateSourceTrigger=PropertyChanged}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Image>
+                <TextBlock x:Name="name" Grid.Row="1" Text="{Binding Tag.Name, UpdateSourceTrigger=PropertyChanged}" 
+                           MaxWidth="50" ToolTip="{Binding Path=Tag.Name, UpdateSourceTrigger=PropertyChanged}"
+                           FontSize="12" ContextMenu="{StaticResource mc1}"/>
             </Grid>
         </DataTemplate>
-        <ItemsPanelTemplate x:Key="listPanelTemplate">
-            <WrapPanel />
-        </ItemsPanelTemplate>
     </Page.Resources>
     <Page.DataContext>
         <Binding Source="{StaticResource viewmodel}"/>
@@ -173,7 +182,7 @@
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel/>
+                                    <WrapPanel Background="Black" />
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
                         </ListView>
