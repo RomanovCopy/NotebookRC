@@ -23,7 +23,10 @@ namespace NotebookRCv001.Models
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
-
+        /// <summary>
+        /// разрешение на обновление содержимого 
+        /// </summary>
+        private bool permissionToUpdate { get; set; }
 
         internal ObservableCollection<string> Headers => language.HeadersFileOverview;
 
@@ -136,6 +139,7 @@ namespace NotebookRCv001.Models
             ListView_ColumnsWidth.Clear();
             for (int i = 0; i < Properties.Settings.Default.FileOverview_ListViewColumnsWidth.Count; i++)
                 ListView_ColumnsWidth.Add(double.Parse(Properties.Settings.Default.FileOverview_ListViewColumnsWidth[i]));
+            permissionToUpdate = true;
         }
 
 
@@ -360,11 +364,15 @@ namespace NotebookRCv001.Models
         internal void Execute_ComboBoxDrivesLoaded(object obj)
         {
             try
-            {
-                SelectedIndexDrives = 0;
-                if (CanExecute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]))
-                    Execute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]);
-                CurrentDirectoryFullName = DriveInfos[SelectedIndexDrives].Name;
+            {//методо должен срабатывать только при первой загрузке
+                if (permissionToUpdate)
+                {
+                    SelectedIndexDrives = 0;
+                    if (CanExecute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]))
+                        Execute_ComboBoxDrivesSelectionChanged(DriveInfos[SelectedIndexDrives]);
+                    CurrentDirectoryFullName = DriveInfos[SelectedIndexDrives].Name;
+                    permissionToUpdate = false;
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -387,8 +395,8 @@ namespace NotebookRCv001.Models
         internal void Execute_PageLoaded(object obj)
         {
             try
-            {
-                if (obj is ColumnsWidthConverter convert)
+            {//методо должен срабатывать только при первой загрузке
+                if (obj is ColumnsWidthConverter convert && permissionToUpdate)
                 {
                     convert.window = Application.Current.MainWindow;
                     OnPropertyChanged("ListView_ColumnsWidth");

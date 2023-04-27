@@ -8,15 +8,12 @@
       xmlns:converters="clr-namespace:NotebookRCv001.Converters"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
       mc:Ignorable="d"
-      x:Name="page"
+      x:Name="page" KeepAlive="True"
       Title="FileExplorer">
     <Page.Resources>
         <viewmodels:FileExplorerViewModel x:Key="viewmodel"/>
         <local:ButtonsClearAndClose x:Key="buttonsclose"/>
         <converters:ColumnsWidthConverter x:Key="columnswidth"/>
-        <ContextMenu x:Key="mc1">
-            <MenuItem Header="Open"/>
-        </ContextMenu>
         <Style x:Key="imagestyle" TargetType="Image">
             <Setter Property="Stretch" Value="None"/>
             <Setter Property="SnapsToDevicePixels" Value="False"/>
@@ -69,18 +66,16 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Style="{StaticResource imagestyle}" Grid.Row="0" ContextMenu="{StaticResource mc1}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
+                <Image Style="{StaticResource imagestyle}" Grid.Row="0" >
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}
                                 ,Mode=FindAncestor},Path=DataContext.ListViewNameMouseLeftButtonDown, UpdateSourceTrigger=PropertyChanged}"
                                                    CommandParameter="{Binding Tag, UpdateSourceTrigger=PropertyChanged}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    </Image.InputBindings>
                 </Image>
                 <TextBlock x:Name="name" Grid.Row="1" Text="{Binding Tag.Name, UpdateSourceTrigger=PropertyChanged}" 
                            MaxWidth="50" ToolTip="{Binding Path=Tag.Name, UpdateSourceTrigger=PropertyChanged}"
-                           FontSize="12" ContextMenu="{StaticResource mc1}"/>
+                           FontSize="12" />
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -216,23 +211,13 @@
                                                     </Grid.ColumnDefinitions>
                                                     <Image  Grid.Column="0" Style="{StaticResource imagestyle}"/>
                                                     <TextBlock x:Name="tbname" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
-                                                       Grid.Column="1" Margin="0,5,0,0"
-                                                   Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" >
-                                                        <TextBlock.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="{Binding Source={StaticResource viewmodel}, Path=Headers[5], 
-                                                        UpdateSourceTrigger=PropertyChanged}" 
-                                                              Command="{Binding Source={StaticResource viewmodel}, 
-                                                        Path=ListViewNameContextMenuOpen, UpdateSourceTrigger=PropertyChanged}" 
-                                                              CommandParameter="{Binding Path=Tag, UpdateSourceTrigger=PropertyChanged}"/>
-                                                            </ContextMenu>
-                                                        </TextBlock.ContextMenu>
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, Path=ListViewNameMouseLeftButtonDown}"
-                                                                           CommandParameter="{Binding Path=Tag, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
+                                                       Grid.Column="1" Margin="0,5,0,0" Tag="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" >
+                                                        <TextBlock.InputBindings>
+                                                            <MouseBinding MouseAction="LeftDoubleClick" 
+                                                                          Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page},Mode=FindAncestor},
+                                                                Path=DataContext.ListViewNameMouseLeftButtonDown, UpdateSourceTrigger=PropertyChanged}" CommandParameter=
+                                                                          "{Binding Tag, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </TextBlock.InputBindings>
                                                     </TextBlock>
                                                 </Grid>
                                             </DataTemplate>
