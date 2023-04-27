@@ -75,6 +75,7 @@
     <Compile Remove="Infrastructure\RTB_DependencyPropertiesi.cs" />
     <Compile Remove="Interfaces\IPD_Page_ViewModel.cs" />
     <Compile Remove="Models\ContextMenuImageModel.cs" />
+    <Compile Remove="Models\FileOverviewModel.cs" />
     <Compile Remove="MyControls\ContextMenuHome.xaml.cs" />
     <Compile Remove="MyControls\ContextMenuImage.xaml.cs" />
     <Compile Remove="MyControls\MediaElementExample.xaml.cs" />
@@ -89,6 +90,8 @@
     <Compile Remove="TextRange.cs" />
     <Compile Remove="ViewModels\ContextMenuHomeViewModel.cs" />
     <Compile Remove="ViewModels\ContextMenuImageViewModel.cs" />
+    <Compile Remove="ViewModels\FileOverviewViewModel.cs" />
+    <Compile Remove="Views\FileOverview.xaml.cs" />
     <Compile Remove="Views\FlowDocRead.xaml.cs" />
     <Compile Remove="Views\FlowDocumentEditor.xaml.cs" />
   </ItemGroup>
@@ -146,6 +149,7 @@
     <Page Remove="MyControls\ContextMenuImage.xaml" />
     <Page Remove="MyControls\MediaElementExample.xaml" />
     <Page Remove="MyControls\SfRichTextBox.xaml" />
+    <Page Remove="Views\FileOverview.xaml" />
     <Page Remove="Views\FlowDocRead.xaml" />
     <Page Remove="Views\FlowDocumentEditor.xaml" />
   </ItemGroup>

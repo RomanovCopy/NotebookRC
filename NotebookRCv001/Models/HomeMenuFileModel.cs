@@ -486,14 +486,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = true;
-                foreach (var win in Application.Current.Windows)
-                {
-                    if (win is Views.FileOverview)
-                    {
-                        c = false;
-                        break;
-                    }
-                }
+                c = !mainWindowViewModel.FrameList.Any((x) => x is MyControls.FileExplorer);
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -505,9 +498,6 @@ namespace NotebookRCv001.Models
             {
                 var page = new MyControls.FileExplorer();
                 mainWindowViewModel.FrameListAddPage.Execute(page);
-                //var overview = new Views.FileOverview();
-                //overview.Owner = Application.Current.MainWindow;
-                //overview.Show();
             }
             catch (Exception e) { ErrorWindow(e); }
         }

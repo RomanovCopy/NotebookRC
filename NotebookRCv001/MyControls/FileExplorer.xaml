@@ -86,21 +86,26 @@
         <Binding Source="{StaticResource viewmodel}"/>
     </Page.DataContext>
     <Grid >
-        <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10" Background="Gray">
-            <GroupBox HorizontalContentAlignment="Stretch" >
-                <GroupBox.Header>
-                    <Grid>
+        <Border Grid.Row="0" BorderBrush="White" BorderThickness="1" CornerRadius="10,10,0,0" Background="Gray">
+                <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    <Border BorderBrush="White" BorderThickness="1" CornerRadius="10" Grid.Row="0" VerticalAlignment="Center">
+                    <Grid >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox x:Name="drives"  Grid.Column="0" ItemsSource="{Binding DriveInfos, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedIndex="{Binding SelectedIndexDrives, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                  SelectedIndex="{Binding SelectedIndexDrives, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  Margin="5,0,5,0">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
                                     <i:InvokeCommandAction Command="{Binding ComboBoxDrivesLoaded, UpdateSourceTrigger=PropertyChanged}"/>
@@ -116,16 +121,16 @@
                                 Command="{Binding ClickToParentDirectory, UpdateSourceTrigger=PropertyChanged}">
                             <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True" />
                         </Button>
-                        <Border Grid.Column="2">
-                            <TextBlock Height="20" Text="{Binding CurrentDirectoryFullName , UpdateSourceTrigger=PropertyChanged}" 
-                                   Width="450" Margin="5,0,0,0" >
+                        <Border Grid.Column="2" >
+                            <TextBlock  Text="{Binding CurrentDirectoryFullName , UpdateSourceTrigger=PropertyChanged}" 
+                                   Margin="5,0,0,0" VerticalAlignment="Center" >
                                 <TextBlock.InputBindings>
                                     <MouseBinding MouseAction="LeftClick" Command="{Binding ComboBoxDrivesSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
                                                            CommandParameter="{Binding ElementName=drives, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
                                 </TextBlock.InputBindings>
                             </TextBlock>
                         </Border>
-                        <Border Grid.Column="3" Height="24" VerticalAlignment="Center" Margin="5,0,0,0" >
+                        <Border Grid.Column="4" Height="24" VerticalAlignment="Center" Margin="5,0,0,0" >
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -138,7 +143,7 @@
                                 </CheckBox>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="4" Height="24" VerticalAlignment="Center" Margin="5,0,0,0" >
+                        <Border Grid.Column="5" Height="24" VerticalAlignment="Center" Margin="5,0,0,0" >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -149,12 +154,12 @@
                                 </Grid.RowDefinitions>
                                 <CheckBox x:Name="cover" Content="{Binding Headers[7], UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
                                           IsChecked="{Binding IsCoverEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                          VerticalContentAlignment="Center" Margin="10,0,0,0" 
+                                          VerticalContentAlignment="Center" Margin="10,0,5,0" 
                                           Command="{Binding CheckedIsCover, UpdateSourceTrigger=PropertyChanged}"
                                           CommandParameter="{Binding ElementName=cover, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                 </CheckBox>
-                                <ComboBox x:Name="iconsizes"  Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" 
-                                          ItemsSource="{Binding CoverSizes, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
+                                <ComboBox x:Name="iconsizes"  Grid.Column="1" Grid.Row="0"  
+                                          ItemsSource="{Binding CoverSizes, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0"
                                           SelectedIndex="{Binding CoverSizesIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
@@ -170,17 +175,15 @@
                                 </ComboBox>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="5" HorizontalAlignment="Stretch"/>
-                        <Border Grid.Column="6" Height="24" VerticalAlignment="Center" >
-                            <ContentControl Content="{StaticResource buttonsclose}"/>
+                        <Border Grid.Column="6" VerticalAlignment="Center" >
+                            <ContentControl Content="{StaticResource buttonsclose}" Margin="5,0,5,0"/>
                         </Border>
                     </Grid>
-                </GroupBox.Header>
-                <Grid>
-                    <Border x:Name="forpanels" BorderThickness="0">
+                    </Border>
+                    <Border x:Name="forpanels" BorderThickness="0" Grid.Row="1">
                         <ListView x:Name="list_tiles" Background="Black" ItemTemplate="{StaticResource listTemplate}"
                             ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Background="Black" />
@@ -199,7 +202,7 @@
                             </Style>
                         </Border.Style>
                     </Border>
-                    <Border x:Name="forlist" BorderThickness="0">
+                    <Border x:Name="forlist" BorderThickness="0" Grid.Row="1">
                         <ListView x:Name="list" ItemsSource="{Binding CurrentDirectoryList, UpdateSourceTrigger=PropertyChanged}" 
                           HorizontalAlignment="Stretch" Focusable="True" VirtualizingPanel.IsVirtualizing="True" 
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden" Style="{x:Null}" Background="Black">
@@ -316,7 +319,6 @@
                         </Border.Style>
                     </Border>
                 </Grid>
-            </GroupBox>
         </Border>
     </Grid>
     <i:Interaction.Triggers>

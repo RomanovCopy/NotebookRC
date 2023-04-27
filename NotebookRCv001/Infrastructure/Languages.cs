@@ -496,7 +496,7 @@ namespace NotebookRCv001.Infrastructure
                     "Дата",//04
                     "Открыть",//05
                     "Папка",//06
-                    "Обложки",//07
+                    "Эскизы",//07
                     "Плитки",//08
                 }
                 },
@@ -509,7 +509,7 @@ namespace NotebookRCv001.Infrastructure
                      "Date",//04
                      "Open",//05
                      "Folder",//06
-                     "Covers",//07
+                     "Sketches",//07
                      "Tiles",//08
                 }
                 }

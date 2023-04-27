@@ -293,30 +293,27 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = true;
+                c = obj is DriveInfo driveInfo && CurrentDirectoryFullName != driveInfo.Name;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal async void Execute_ComboBoxDrivesSelectionChanged(object obj)
+        internal void Execute_ComboBoxDrivesSelectionChanged(object obj)
         {
             try
             {
-                if (obj is DriveInfo driveInfo)
+                if (obj is DriveInfo driveInfo )
                 {
-                    await Task.Factory.StartNew(() =>
-                    {
-                        string encryptionKey = homeMenuEncryptionViewModel.EncryptionKey;
-                        CurrentDirectoryFullName = driveInfo.Name;
-                        CurrentDirectoryList = new();
-                        foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
-                            CurrentDirectoryList.Add(new DirectoryItem(folder, encryptionKey));
-                        foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
-                            CurrentDirectoryList.Add(new DirectoryItem(file, encryptionKey));
-                        if (IsCoverEnabled)
-                            AddingIcons(ImageHeight);
-                        CurrentDirectory = null;
-                    });
+                    string encryptionKey = homeMenuEncryptionViewModel.EncryptionKey;
+                    CurrentDirectoryFullName = driveInfo.Name;
+                    CurrentDirectoryList = new();
+                    foreach (var folder in driveInfo.RootDirectory.EnumerateDirectories())
+                        CurrentDirectoryList.Add(new DirectoryItem(folder, encryptionKey));
+                    foreach (var file in driveInfo.RootDirectory.EnumerateFiles())
+                        CurrentDirectoryList.Add(new DirectoryItem(file, encryptionKey));
+                    if (IsCoverEnabled)
+                        AddingIcons(ImageHeight);
+                    CurrentDirectory = null;
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -419,7 +416,7 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch(Exception e) { ErrorWindow(e); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
         internal void Execute_PageSizeChanged(object obj)
         {
