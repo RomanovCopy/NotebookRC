@@ -92,7 +92,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                    <Border BorderBrush="White" BorderThickness="1" CornerRadius="10" Grid.Row="0" VerticalAlignment="Center">
+                    <Border BorderBrush="White" BorderThickness="1" CornerRadius="10,10,0,0" Grid.Row="0" VerticalAlignment="Center">
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>

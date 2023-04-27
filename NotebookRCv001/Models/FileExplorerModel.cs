@@ -105,11 +105,6 @@ namespace NotebookRCv001.Models
         internal bool IsTilesEnabled { get => isTilesEnabled; set => SetProperty(ref isTilesEnabled, value); }
         private bool isTilesEnabled;
         /// <summary>
-        /// Возможные размеры иконки обложки(высота)
-        /// </summary>
-        internal ObservableCollection<int> IconSizes { get => iconSizes; set => SetProperty(ref iconSizes, value); }
-        private ObservableCollection<int> iconSizes;
-        /// <summary>
         /// индекс выбранного размера иконки
         /// </summary>
         internal int IconSizesIndex { get => iconSizesIndex; set => SetProperty(ref iconSizesIndex, value); }
@@ -140,6 +135,8 @@ namespace NotebookRCv001.Models
             for (int i = 0; i < Properties.Settings.Default.FileOverview_ListViewColumnsWidth.Count; i++)
                 ListView_ColumnsWidth.Add(double.Parse(Properties.Settings.Default.FileOverview_ListViewColumnsWidth[i]));
             permissionToUpdate = true;
+            ImageHeight = Properties.Settings.Default.FileOverviewIconSize;
+            CoverSizesIndex = CoverSizes.IndexOf(ImageHeight);
         }
 
 
@@ -446,10 +443,17 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                Properties.Settings.Default.FileOverviewIconSize = ImageHeight;
+                Properties.Settings.Default.FileOverview_ListViewColumnsWidth = new();
+                foreach(var val in ListView_ColumnsWidth)
+                {
+                    Properties.Settings.Default.FileOverview_ListViewColumnsWidth.Add(val.ToString());
+                }
                 if (obj is MyControls.FileExplorer exp && mainWindowViewModel.FrameListRemovePage.CanExecute(exp))
                 {
                     mainWindowViewModel.FrameListRemovePage.Execute(exp);
                 }
+                Properties.Settings.Default.Save();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
