@@ -395,13 +395,37 @@ namespace NotebookRCv001.Models
         internal void Execute_PageLoaded(object obj)
         {
             try
-            {//методо должен срабатывать только при первой загрузке
+            {//метод должен срабатывать только при первой загрузке
                 if (obj is ColumnsWidthConverter convert && permissionToUpdate)
                 {
                     convert.window = Application.Current.MainWindow;
                     OnPropertyChanged("ListView_ColumnsWidth");
                     UpdateDrives();
                 }
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// изменение размера страницы
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal bool CanExecute_PageSizeChanged(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch(Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_PageSizeChanged(object obj)
+        {
+            try
+            {
+                OnPropertyChanged("ListView_ColumnsWidth");
             }
             catch (Exception e) { ErrorWindow(e); }
         }

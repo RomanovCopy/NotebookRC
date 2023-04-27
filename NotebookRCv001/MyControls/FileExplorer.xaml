@@ -7,7 +7,7 @@
       xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
       xmlns:converters="clr-namespace:NotebookRCv001.Converters"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
-      mc:Ignorable="d"
+      mc:Ignorable="d" 
       x:Name="page" KeepAlive="True"
       Title="FileExplorer">
     <Page.Resources>
@@ -18,6 +18,9 @@
             <Setter Property="Stretch" Value="None"/>
             <Setter Property="SnapsToDevicePixels" Value="False"/>
             <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
                 <MultiDataTrigger x:Name="isfolderTrue_iscoverTrue">
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding IsFolder, UpdateSourceTrigger=PropertyChanged}"  Value="True"/>
@@ -90,7 +93,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -113,12 +116,29 @@
                                 Command="{Binding ClickToParentDirectory, UpdateSourceTrigger=PropertyChanged}">
                             <Image Source="{StaticResource fileOverviewUp}" Stretch="None" SnapsToDevicePixels="True" />
                         </Button>
-                        <Border Grid.Column="2" BorderBrush="White" BorderThickness="1" CornerRadius="10" >
+                        <Border Grid.Column="2">
                             <TextBlock Height="20" Text="{Binding CurrentDirectoryFullName , UpdateSourceTrigger=PropertyChanged}" 
-                                   Width="450" Margin="10,0,10,0" />
+                                   Width="450" Margin="5,0,0,0" >
+                                <TextBlock.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ComboBoxDrivesSelectionChanged, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding ElementName=drives, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
                         </Border>
-                        <Border Grid.Column="3" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
-                                Margin="10,0,0,0" >
+                        <Border Grid.Column="3" Height="24" VerticalAlignment="Center" Margin="5,0,0,0" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="tiles" Content="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}"  Grid.Row="0"
+                                          IsChecked="{Binding IsTilesEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                          Command="{Binding CheckedIsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                          CommandParameter="{Binding ElementName=tiles, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                          VerticalContentAlignment="Center" Margin="10,0,10,0">
+                                </CheckBox>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="4" Height="24" VerticalAlignment="Center" Margin="5,0,0,0" >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -150,23 +170,9 @@
                                 </ComboBox>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="4" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
-                                Margin="10,0,0,0" >
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <CheckBox x:Name="tiles" Content="{Binding Headers[8], UpdateSourceTrigger=PropertyChanged}"  Grid.Row="0"
-                                          IsChecked="{Binding IsTilesEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                          Command="{Binding CheckedIsTilesEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                          CommandParameter="{Binding ElementName=tiles, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                          VerticalContentAlignment="Center" Margin="10,0,10,0">
-                                </CheckBox>
-                            </Grid>
-                        </Border>
-                        <Border Grid.Column="6" BorderBrush="White" BorderThickness="1" Height="24" CornerRadius="10" VerticalAlignment="Center"
-                                Margin="10,0,0,0">
-                            <ContentControl Content="{StaticResource buttonsclose}" Margin="10,0,10,0" />
+                        <Border Grid.Column="5" HorizontalAlignment="Stretch"/>
+                        <Border Grid.Column="6" Height="24" VerticalAlignment="Center" >
+                            <ContentControl Content="{StaticResource buttonsclose}"/>
                         </Border>
                     </Grid>
                 </GroupBox.Header>
@@ -317,6 +323,9 @@
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding PageLoaded, UpdateSourceTrigger=PropertyChanged}"
                                    CommandParameter="{StaticResource columnswidth}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="SizeChanged">
+            <i:InvokeCommandAction Command="{Binding PageSizeChanged, UpdateSourceTrigger=PropertyChanged}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 </Page>

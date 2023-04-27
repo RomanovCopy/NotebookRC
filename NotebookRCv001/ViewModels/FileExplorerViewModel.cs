@@ -77,6 +77,9 @@ namespace NotebookRCv001.ViewModels
         public ICommand PageLoaded => pageLoaded ??= new RelayCommand(fileExplorerModel.Execute_PageLoaded,
             fileExplorerModel.CanExecute_PageLoaded);
         private RelayCommand pageLoaded;
+        public ICommand PageSizeChanged => pageSizeChanged ??= new RelayCommand(fileExplorerModel.Execute_PageSizeChanged,
+            fileExplorerModel.CanExecute_PageSizeChanged);
+        private RelayCommand pageSizeChanged;
         public ICommand PageClose => pageClose ??= new RelayCommand(fileExplorerModel.Execute_PageClose,
             fileExplorerModel.CanExecute_PageClose);
         private RelayCommand pageClose;
