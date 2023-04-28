@@ -33,4 +33,4 @@ The project is developing, but to be honest, sometimes there is simply not enoug
 
 **5.04.2023** New features for encrypting and decrypting files have been added.
 
-*28.04.2023** Big File Manager Update
+**28.04.2023** Big File Manager Update
