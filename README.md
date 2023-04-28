@@ -14,6 +14,7 @@
 
 **5.04.2023** Добавлены новые возможности по шифрованию и дешифрованию файлов.
 
+**28.04.2023** Большое обновление файлового менеджера
 
 
 By name, you can understand that this is a notebook. **But!!! Unusual notebook!**
@@ -31,3 +32,5 @@ The project is developing, but to be honest, sometimes there is simply not enoug
 **5.03.2023** Added the ability to encrypt files with any permission, both single and in directories
 
 **5.04.2023** New features for encrypting and decrypting files have been added.
+
+*28.04.2023** Big File Manager Update
