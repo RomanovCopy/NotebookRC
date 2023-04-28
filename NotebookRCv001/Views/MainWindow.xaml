@@ -11,9 +11,9 @@
         xmlns:local="clr-namespace:NotebookRCv001.Views"
         mc:Ignorable="d"
         Style="{StaticResource VS2012WindowStyle}"
-        Title="NotebookRS" 
+        Title="NotebookRC" 
         Name="window"
-        MinHeight="250" 
+        MinHeight="250" Topmost="False"
         MinWidth="820" HorizontalContentAlignment="Stretch">
     <Window.Resources>
         <ResourceDictionary>
