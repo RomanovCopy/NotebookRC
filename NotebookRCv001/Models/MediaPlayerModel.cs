@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using NotebookRCv001.Helpers;
 using System.Windows.Threading;
+using NotebookRCv001.Views;
 
 namespace NotebookRCv001.Models
 {
@@ -34,7 +35,7 @@ namespace NotebookRCv001.Models
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
 
-        internal bool UserIsDraggingSlider { get => userIsDraggingSlider; set => SetProperty( ref userIsDraggingSlider, value ); }
+        internal bool UserIsDraggingSlider { get => userIsDraggingSlider; set => SetProperty(ref userIsDraggingSlider, value); }
         private bool userIsDraggingSlider;
         /// <summary>
         /// текущая позиция воспроизведения плеера
@@ -51,24 +52,24 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// текущее положение ползунка слейдера
         /// </summary>
-        internal double Value { get => behaviorSlider==null?0:behaviorSlider.Value; set => behaviorSlider.Value = value; }
+        internal double Value { get => behaviorSlider == null ? 0 : behaviorSlider.Value; set => behaviorSlider.Value = value; }
 
         public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action<object> behaviorReady;
 
         //internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
         //private Uri content;
-        internal string Content { get => content; set => SetProperty( ref content, value ); }
+        internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
-        internal BitmapImage Bitmap { get => bitmap; set => SetProperty( ref bitmap, value ); }
+        internal BitmapImage Bitmap { get => bitmap; set => SetProperty(ref bitmap, value); }
         private BitmapImage bitmap;
 
-        internal bool ThisVideo { get => thisVideo; private set => SetProperty( ref thisVideo, value ); }
+        internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
-        internal bool ThisAudio { get => thisAudio; private set => SetProperty( ref thisAudio, value ); }
+        internal bool ThisAudio { get => thisAudio; private set => SetProperty(ref thisAudio, value); }
         private bool thisAudio;
-        internal bool ThisImage { get => thisImage; private set => SetProperty( ref thisImage, value ); }
+        internal bool ThisImage { get => thisImage; private set => SetProperty(ref thisImage, value); }
         private bool thisImage;
 
         internal string[] VideoFileExtensions => videoFileExtensions ??= new string[] { ".mp4", ".mpg", ".avi" };
@@ -83,25 +84,25 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// список воспроизведения(пути к файлам) PlayList
         /// </summary>
-        internal ObservableCollection<string> PlayList { get => playList; set => SetProperty( ref playList, value ); }
+        internal ObservableCollection<string> PlayList { get => playList; set => SetProperty(ref playList, value); }
         private ObservableCollection<string> playList;
 
         /// <summary>
         /// индекс текущего элемента в PlayList
         /// </summary>
-        internal int PlayIndex { get => playIndex; set => SetProperty( ref playIndex, value ); }
+        internal int PlayIndex { get => playIndex; set => SetProperty(ref playIndex, value); }
         private int playIndex;
 
         /// <summary>
         /// прогресс выполнения 
         /// </summary>
-        public double ProgressValue { get => progressValue; set => SetProperty( ref progressValue, value ); }
+        public double ProgressValue { get => progressValue; set => SetProperty(ref progressValue, value); }
         private double progressValue;
 
 
         internal string PathToLastFile { get => pathToLastFile; set => SetProperty(ref pathToLastFile, value); }
         private string pathToLastFile;
-        internal string LastFileName { get => lastFileName; set => SetProperty( ref lastFileName, value ); }
+        internal string LastFileName { get => lastFileName; set => SetProperty(ref lastFileName, value); }
         private string lastFileName;
 
 
@@ -109,15 +110,15 @@ namespace NotebookRCv001.Models
         internal MediaPlayerModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
-            language.PropertyChanged += ( s, e ) => OnPropertyChanged( new string[] { "Headers", "ToolTips" } );
-            var home = mainWindowViewModel.FrameList.Where( ( x ) => x is Views.Home ).FirstOrDefault();
-            var menu = (MyControls.MenuHome)home.FindResource( "menuhome" );
-            homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource( "menuencryption" );
+            language.PropertyChanged += (s, e) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
+            var home = mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
+            var menu = (MyControls.MenuHome)home.FindResource("menuhome");
+            homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
             play = false;
-            BehaviorReady += ( x ) => { InitializePlayerAndSlider( x ); };
+            BehaviorReady += (x) => { InitializePlayerAndSlider(x); };
         }
 
-        internal bool CanExecute_Play( object obj )
+        internal bool CanExecute_Play(object obj)
         {
             try
             {
@@ -125,19 +126,19 @@ namespace NotebookRCv001.Models
                 c = behaviorMediaElement != null && behaviorSlider != null && !play;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_Play( object obj )
+        internal void Execute_Play(object obj)
         {
             try
             {
                 behaviorMediaElement.Play();
                 play = true;
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_Pause( object obj )
+        internal bool CanExecute_Pause(object obj)
         {
             try
             {
@@ -145,19 +146,19 @@ namespace NotebookRCv001.Models
                 c = behaviorMediaElement != null && behaviorSlider != null && play;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_Pause( object obj )
+        internal void Execute_Pause(object obj)
         {
             try
             {
                 behaviorMediaElement.Pause();
                 play = false;
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_Stop( object obj )
+        internal bool CanExecute_Stop(object obj)
         {
             try
             {
@@ -165,16 +166,16 @@ namespace NotebookRCv001.Models
                 c = behaviorMediaElement != null && behaviorSlider != null && behaviorSlider.Value > 0;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_Stop( object obj )
+        internal void Execute_Stop(object obj)
         {
             try
             {
                 behaviorMediaElement.Stop();
                 play = false;
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_Back( object obj )
+        internal bool CanExecute_Back(object obj)
         {
             try
             {
@@ -191,26 +192,26 @@ namespace NotebookRCv001.Models
                 c = PlayIndex > 0;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal async void Execute_Back( object obj )
+        internal async void Execute_Back(object obj)
         {
             try
             {
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.EncryptionKey ))
+                    if (string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
                     {
-                        Bitmap = new BitmapImage( new Uri( PlayList[PlayIndex] ) );
+                        Bitmap = new BitmapImage(new Uri(PlayList[PlayIndex]));
                     }
                     else
                     {
-                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt(PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey);
                     }
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -219,7 +220,7 @@ namespace NotebookRCv001.Models
         /// <param name="obj"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_Forward( object obj )
+        internal bool CanExecute_Forward(object obj)
         {
             try
             {
@@ -227,26 +228,26 @@ namespace NotebookRCv001.Models
                 c = PlayIndex < PlayList?.Count - 1;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal async void Execute_Forward( object obj )
+        internal async void Execute_Forward(object obj)
         {
             try
             {
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    if (string.IsNullOrWhiteSpace( homeMenuEncryptionViewModel.EncryptionKey ))
+                    if (string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
                     {
-                        Bitmap = new BitmapImage( new Uri( PlayList[PlayIndex] ) );
+                        Bitmap = new BitmapImage(new Uri(PlayList[PlayIndex]));
                     }
                     else
                     {
-                        Bitmap = await Command_executors.Executors.ImageDecrypt( PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey );
+                        Bitmap = await Command_executors.Executors.ImageDecrypt(PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey);
                     }
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         /// <summary>
@@ -254,29 +255,61 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool CanExecute_SetContent( object obj )
+        internal bool CanExecute_SetContent(object obj)
         {
             try
             {
                 bool c = false;
-                c = obj is string str && !string.IsNullOrWhiteSpace( str ) && File.Exists( str );
+                c = obj is string str && !string.IsNullOrWhiteSpace(str) && File.Exists(str);
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal async void Execute_SetContent( object obj )
+        internal async void Execute_SetContent(object obj)
         {
             try
             {
                 string path = (string)obj;
-                SetContentType( path );
+                SetContentType(path);
                 string key = homeMenuEncryptionViewModel.EncryptionKey;
+                var messages = new MyMessages();
+                var messagesVM = (ViewModels.MyMessagesViewModel)messages.DataContext;
+                messagesVM.SetTitle.Execute(language.MyMessagesHeaders[1]);
+                messagesVM.SetButtonText.Execute(language.MyMessagesHeaders[5]);
                 if (ThisImage)
                 {
-                    if (string.IsNullOrWhiteSpace( key ))
-                        Bitmap = new BitmapImage( new Uri( path ) );
+                    if (string.IsNullOrWhiteSpace(key))
+                    {
+                        try
+                        {
+                            Bitmap = new BitmapImage(new Uri(path));
+                        }
+                        catch
+                        {
+                            messagesVM.SetMessage.Execute(language.MessagesMyMessages[8]);
+                            messages.ShowDialog();
+                        }
+
+                    }
                     else
-                        Bitmap = await Command_executors.Executors.ImageDecrypt( path, key );
+                    {
+                        try
+                        {
+                            Bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
+                        }
+                        catch
+                        {
+                            try
+                            {
+                                Bitmap = new BitmapImage(new Uri(path));
+                            }
+                            catch
+                            {
+                                messagesVM.SetMessage.Execute(language.MessagesMyMessages[9]);
+                                messages.ShowDialog();
+                            }
+                        }
+                    }
                 }
                 else if (ThisAudio)
                 {
@@ -284,20 +317,20 @@ namespace NotebookRCv001.Models
                 }
                 else if (ThisVideo)
                 {
-                    if (string.IsNullOrWhiteSpace( key ))
+                    if (string.IsNullOrWhiteSpace(key))
                         Content = path;
                     else
-                        Content = await VideoDecrypt( path, key );
-                    if( CanExecute_Play(obj) )
-                        Execute_Play( null );
+                        Content = await VideoDecrypt(path, key);
+                    if (CanExecute_Play(obj))
+                        Execute_Play(null);
                     else
-                        BehaviorReady += ( obj ) => { Execute_Play( obj ); };
+                        BehaviorReady += (obj) => { Execute_Play(obj); };
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch { }
         }
 
-        internal bool CanExecute_MediaPlayerLoaded( object obj )
+        internal bool CanExecute_MediaPlayerLoaded(object obj)
         {
             try
             {
@@ -305,19 +338,19 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_MediaPlayerLoaded( object obj )
+        internal void Execute_MediaPlayerLoaded(object obj)
         {
             try
             {
                 if (BehaviorReady != null)
-                    BehaviorReady.Invoke( obj );
+                    BehaviorReady.Invoke(obj);
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_ThumbDragStarted( object obj )
+        internal bool CanExecute_ThumbDragStarted(object obj)
         {
             try
             {
@@ -325,18 +358,18 @@ namespace NotebookRCv001.Models
                 c = behaviorMediaElement != null && behaviorSlider != null;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ThumbDragStarted( object obj )
+        internal void Execute_ThumbDragStarted(object obj)
         {
             try
             {
                 UserIsDraggingSlider = true;
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_ThumbDragCompleted( object obj )
+        internal bool CanExecute_ThumbDragCompleted(object obj)
         {
             try
             {
@@ -344,19 +377,19 @@ namespace NotebookRCv001.Models
                 c = UserIsDraggingSlider;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_ThumbDragCompleted( object obj )
+        internal void Execute_ThumbDragCompleted(object obj)
         {
             try
             {
-                behaviorMediaElement.Position = TimeSpan.FromSeconds( behaviorSlider.Value );
+                behaviorMediaElement.Position = TimeSpan.FromSeconds(behaviorSlider.Value);
                 UserIsDraggingSlider = false;
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_SliderLoaded( object obj )
+        internal bool CanExecute_SliderLoaded(object obj)
         {
             try
             {
@@ -364,19 +397,19 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_SliderLoaded( object obj )
+        internal void Execute_SliderLoaded(object obj)
         {
             try
             {
                 if (BehaviorReady != null)
-                    BehaviorReady.Invoke( obj );
+                    BehaviorReady.Invoke(obj);
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_PageLoaded( object obj )
+        internal bool CanExecute_PageLoaded(object obj)
         {
             try
             {
@@ -384,9 +417,9 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_PageLoaded( object obj )
+        internal void Execute_PageLoaded(object obj)
         {
             try
             {
@@ -395,27 +428,27 @@ namespace NotebookRCv001.Models
                     page = p;
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_PageClear( object obj )
+        internal bool CanExecute_PageClear(object obj)
         {
             try
             {
                 bool c = false;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_PageClear( object obj )
+        internal void Execute_PageClear(object obj)
         {
             try
             {
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        internal bool CanExecute_PageClose( object obj )
+        internal bool CanExecute_PageClose(object obj)
         {
             try
             {
@@ -423,27 +456,27 @@ namespace NotebookRCv001.Models
                 c = true;
                 return c;
             }
-            catch (Exception e) { ErrorWindow( e ); return false; }
+            catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_PageClose( object obj )
+        internal void Execute_PageClose(object obj)
         {
             try
             {
-                if (mainWindowViewModel.FrameListRemovePage.CanExecute( page ))
-                    mainWindowViewModel.FrameListRemovePage.Execute( page );
+                if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
+                    mainWindowViewModel.FrameListRemovePage.Execute(page);
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        private void SetCurrentPositionForSlider( TimeSpan time )
+        private void SetCurrentPositionForSlider(TimeSpan time)
         {
             try
             {
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        private void InitializePlayerAndSlider( object obj )
+        private void InitializePlayerAndSlider(object obj)
         {
             try
             {
@@ -459,15 +492,15 @@ namespace NotebookRCv001.Models
                 {
                     BehaviorReady = null;
                     DispatcherTimer timer = new DispatcherTimer();
-                    timer.Interval = TimeSpan.FromSeconds( 1 );
+                    timer.Interval = TimeSpan.FromSeconds(1);
                     timer.Tick += TimerTick;
                     timer.Start();
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
-        private void TimerTick( object sender, EventArgs e )
+        private void TimerTick(object sender, EventArgs e)
         {
             try
             {
@@ -478,27 +511,27 @@ namespace NotebookRCv001.Models
                     behaviorSlider.Value = behaviorMediaElement.MediaElement.Position.TotalSeconds;
                     if (behaviorSlider.Value >= behaviorSlider.Maximum)
                     {
-                        Execute_Stop( null );
+                        Execute_Stop(null);
                         behaviorSlider.Value = 0;
-                        behaviorMediaElement.Position = TimeSpan.FromSeconds( 0 );
+                        behaviorMediaElement.Position = TimeSpan.FromSeconds(0);
                     }
                 }
             }
-            catch (Exception ex) { ErrorWindow( ex ); }
+            catch (Exception ex) { ErrorWindow(ex); }
         }
 
-        private async Task<string> VideoDecrypt( string path, string key )
+        private async Task<string> VideoDecrypt(string path, string key)
         {
             FileStream stream = null;
             try
             {
-                string ext = Path.GetExtension( path );
-                string newDir = Path.Combine( Directory.GetCurrentDirectory(), "temp" );
-                if (!Directory.Exists( newDir ))
-                    Directory.CreateDirectory( newDir );
-                string newPath = Path.Combine( newDir, $"temp{ext}" );
-                stream = File.OpenRead( path );
-                await Task.Factory.StartNew( () => Command_executors.Executors.DecryptFromStream( stream, newPath, key ) );
+                string ext = Path.GetExtension(path);
+                string newDir = Path.Combine(Directory.GetCurrentDirectory(), "temp");
+                if (!Directory.Exists(newDir))
+                    Directory.CreateDirectory(newDir);
+                string newPath = Path.Combine(newDir, $"temp{ext}");
+                stream = File.OpenRead(path);
+                await Task.Factory.StartNew(() => Command_executors.Executors.DecryptFromStream(stream, newPath, key));
                 return newPath;
             }
             catch (Exception e)
@@ -508,7 +541,7 @@ namespace NotebookRCv001.Models
                     stream.Close();
                     stream.Dispose();
                 }
-                ErrorWindow( e );
+                ErrorWindow(e);
                 return path;
             }
         }
@@ -517,43 +550,43 @@ namespace NotebookRCv001.Models
         /// переключение типа контента
         /// </summary>
         /// <param name="path"></param>
-        private void SetContentType( string path )
+        private void SetContentType(string path)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace( path ) && File.Exists( path ))
+                if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
                 {
                     //включаем нужную панель
-                    var ext = Path.GetExtension( path ).ToLower();
-                    ThisAudio = AudioFileExtensions.Any( ( x ) => x == ext );
-                    ThisImage = ImageFileExtensions.Any( ( x ) => x == ext );
-                    ThisVideo = VideoFileExtensions.Any( ( x ) => x == ext );
+                    var ext = Path.GetExtension(path).ToLower();
+                    ThisAudio = AudioFileExtensions.Any((x) => x == ext);
+                    ThisImage = ImageFileExtensions.Any((x) => x == ext);
+                    ThisVideo = VideoFileExtensions.Any((x) => x == ext);
                     //родительская папка
-                    var dirpath = Path.GetDirectoryName( path );
+                    var dirpath = Path.GetDirectoryName(path);
                     //создаем и заполняем коллекцию файлов для плей листа
                     PlayList = new();
-                    foreach (var file in Directory.GetFiles( dirpath ))
+                    foreach (var file in Directory.GetFiles(dirpath))
                     {
                         if (ThisImage)
                         {
-                            if (ImageFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
-                                PlayList.Add( file );
+                            if (ImageFileExtensions.Any((x) => x == Path.GetExtension(file).ToLower()))
+                                PlayList.Add(file);
                         }
                         else if (ThisAudio)
                         {
-                            if (AudioFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
-                                PlayList.Add( file );
+                            if (AudioFileExtensions.Any((x) => x == Path.GetExtension(file).ToLower()))
+                                PlayList.Add(file);
                         }
                         else if (ThisVideo)
                         {
-                            if (VideoFileExtensions.Any( ( x ) => x == Path.GetExtension( file ).ToLower() ))
-                                PlayList.Add( file );
+                            if (VideoFileExtensions.Any((x) => x == Path.GetExtension(file).ToLower()))
+                                PlayList.Add(file);
                         }
                     }
-                    PlayIndex = PlayList.IndexOf( path );
+                    PlayIndex = PlayList.IndexOf(path);
                 }
             }
-            catch (Exception e) { ErrorWindow( e ); }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
 

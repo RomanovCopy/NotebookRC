@@ -1199,6 +1199,8 @@ namespace NotebookRCv001.Infrastructure
                             "Перед синхронизацией, во избежание возможной потери данных, " +
                             "создайте резервные копии синхронизируемых каталогов",//06
                             "Задайте рабочую директорию для загрузки файлов",//07
+                            "Возможно, файл зашифрован.\nУстановите ключ и повторите попытку.",//08
+                            "Файл поврежден или указанный ключ шифрования неверен.",//09
                         }
                     },
                     {
@@ -1214,6 +1216,8 @@ namespace NotebookRCv001.Infrastructure
                             "Before synchronization, to avoid possible data loss, " +
                              "back up your synchronized directories",//06
                             "Set the working directory to download files",//07
+                            "The file may be encrypted .\nSet the key and try again.",//08
+                            "The file is corrupt or the specified encryption key is incorrect.",//09
                         }
                     }
             };
