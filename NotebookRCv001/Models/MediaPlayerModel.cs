@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xaml.Behaviors;
 
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Infrastructure;
@@ -19,6 +20,7 @@ using System.Windows.Media.Imaging;
 using NotebookRCv001.Helpers;
 using System.Windows.Threading;
 using NotebookRCv001.Views;
+using System.Windows.Input;
 
 namespace NotebookRCv001.Models
 {
@@ -267,48 +269,24 @@ namespace NotebookRCv001.Models
         }
         internal async void Execute_SetContent(object obj)
         {
+            string key = homeMenuEncryptionViewModel.EncryptionKey;
+            string path = (string)obj;
             try
             {
-                string path = (string)obj;
                 SetContentType(path);
-                string key = homeMenuEncryptionViewModel.EncryptionKey;
-                var messages = new MyMessages();
-                var messagesVM = (ViewModels.MyMessagesViewModel)messages.DataContext;
-                messagesVM.SetTitle.Execute(language.MyMessagesHeaders[1]);
-                messagesVM.SetButtonText.Execute(language.MyMessagesHeaders[5]);
                 if (ThisImage)
                 {
                     if (string.IsNullOrWhiteSpace(key))
                     {
-                        try
-                        {
-                            Bitmap = new BitmapImage(new Uri(path));
-                        }
-                        catch
-                        {
-                            messagesVM.SetMessage.Execute(language.MessagesMyMessages[8]);
-                            messages.ShowDialog();
-                        }
-
+                        Bitmap = new BitmapImage(new Uri(path));
+                        if (Bitmap == null)
+                            EncryptionKeyError(path);
                     }
                     else
                     {
-                        try
-                        {
-                            Bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
-                        }
-                        catch
-                        {
-                            try
-                            {
-                                Bitmap = new BitmapImage(new Uri(path));
-                            }
-                            catch
-                            {
-                                messagesVM.SetMessage.Execute(language.MessagesMyMessages[9]);
-                                messages.ShowDialog();
-                            }
-                        }
+                        Bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
+                        if (Bitmap == null)
+                            EncryptionKeyError(path);
                     }
                 }
                 else if (ThisAudio)
@@ -320,14 +298,23 @@ namespace NotebookRCv001.Models
                     if (string.IsNullOrWhiteSpace(key))
                         Content = path;
                     else
+                    {
                         Content = await VideoDecrypt(path, key);
-                    if (CanExecute_Play(obj))
-                        Execute_Play(null);
-                    else
-                        BehaviorReady += (obj) => { Execute_Play(obj); };
+                        if (!File.Exists(Content))
+                        {
+                            EncryptionKeyError(Content);
+                        }
+                        if (CanExecute_Play(obj))
+                            Execute_Play(null);
+                        else
+                            BehaviorReady += (obj) => { Execute_Play(obj); };
+                    }
                 }
             }
-            catch { }
+            catch
+            {
+                EncryptionKeyError(path);
+            }
         }
 
         internal bool CanExecute_MediaPlayerLoaded(object obj)
@@ -589,6 +576,44 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
-
+        /// <summary>
+        /// обработка ошибок ключа шифрования
+        /// </summary>
+        private async void EncryptionKeyError(string path)
+        {
+            var messages = new MyMessages();
+            var messagesVM = (ViewModels.MyMessagesViewModel)messages.DataContext;
+            try
+            {
+                messagesVM.SetTitle.Execute(language.MyMessagesHeaders[1]);
+                messagesVM.SetButtonText.Execute(language.MyMessagesHeaders[5]);
+                var key = homeMenuEncryptionViewModel.EncryptionKey;
+                if (string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(path))
+                {
+                    messagesVM.SetMessage.Execute(language.MessagesMyMessages[8]);
+                    messages.ShowDialog();
+                }
+                else if (!string.IsNullOrWhiteSpace(path))
+                {
+                    if (ThisImage)
+                    {
+                        Bitmap = new BitmapImage(new Uri(path));
+                    }
+                    else if (ThisVideo)
+                    {
+                        if (File.Exists(path))
+                            Content = path;
+                        else
+                            Execute_PageClose(null);
+                    }
+                }
+            }
+            catch
+            {
+                messagesVM.SetMessage.Execute(language.MessagesMyMessages[9]);
+                messages.ShowDialog();
+                Execute_PageClose(null);
+            }
+        }
     }
 }

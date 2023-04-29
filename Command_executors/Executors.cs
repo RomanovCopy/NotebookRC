@@ -1006,10 +1006,10 @@ namespace Command_executors
                             {
                                 try
                                 {
-                                    if(pause.IsCancellationRequested)
+                                    if (pause.IsCancellationRequested)
                                     {
                                         Thread.Sleep(1000);
-                                        ByteSize = streamResponse.Read(bufer, 0, 0 );
+                                        ByteSize = streamResponse.Read(bufer, 0, 0);
                                     }
                                     else
                                     {
@@ -1479,9 +1479,9 @@ namespace Command_executors
         /// <param name="key">ключ шифрования</param>
         public static void DecryptFromStream(FileStream fileStream, string path, string key)
         {
+            SymmetricAlgorithm Sa = Rijndael.Create();
             try
             {
-                SymmetricAlgorithm Sa = Rijndael.Create();
                 using (var fs = new FileStream(path, FileMode.Create))
                 {
                     using (var decryptor = Sa.CreateDecryptor((new PasswordDeriveBytes(key, null)).GetBytes(16), new byte[16]))
@@ -1496,7 +1496,13 @@ namespace Command_executors
                 fileStream.Dispose();
                 Sa.Dispose();
             }
-            catch { }
+            catch 
+            { 
+                fileStream.Dispose(); 
+                Sa.Dispose();
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
         }
 
         /// <summary>
