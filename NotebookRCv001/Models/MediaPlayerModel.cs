@@ -301,10 +301,7 @@ namespace NotebookRCv001.Models
                         if (CanExecute_Play(obj))
                             Execute_Play(null);
                         else
-                            BehaviorReady += (obj) => 
-                            {
-                                Execute_Play(obj); 
-                            };
+                            BehaviorReady += (obj) => { Execute_Play(obj);};
                     }
                     else
                     {
@@ -318,10 +315,7 @@ namespace NotebookRCv001.Models
                             if (CanExecute_Play(obj))
                                 Execute_Play(null);
                             else
-                                BehaviorReady += (obj) => 
-                                {
-                                    Execute_Play(obj); 
-                                };
+                                BehaviorReady += (obj) => { Execute_Play(obj);};
                         }
                     }
                 }
@@ -623,7 +617,7 @@ namespace NotebookRCv001.Models
                         if (File.Exists(path))
                             Content = path;
                         else
-                            Execute_PageClose(null);
+                            throw new Exception();
                     }
                 }
                 messages.Close();
