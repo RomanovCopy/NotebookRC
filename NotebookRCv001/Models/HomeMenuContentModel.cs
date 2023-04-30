@@ -28,7 +28,6 @@ namespace NotebookRCv001.Models
         private MenuHomeViewModel menuHomeViewModel { get; set; }
         private HomeMenuFileViewModel homeMenuFileViewModel { get; set; }
         private RichTextBoxViewModel richTextBoxViewModel { get; set; }
-        private FlowDocumentReaderViewModel flowDocumentReaderViewModel { get; set; }
         private string Filter => "All files (*.*)|*.*|Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
         internal ObservableCollection<string> Headers => language.HomeMenuContent;
         internal ObservableCollection<string> ToolTips => language.ToolTipsHomeMenuContent;
@@ -42,7 +41,6 @@ namespace NotebookRCv001.Models
                 {
                     var richtextbox = (MyControls.RichTextBox)home.FindResource("richtextbox");
                     richTextBoxViewModel = (RichTextBoxViewModel)richtextbox.FindResource("viewmodel");
-                    flowDocumentReaderViewModel = (FlowDocumentReaderViewModel)richtextbox.FindResource("viewmodelreader");
                     var homemenu = (MyControls.MenuHome)home.FindResource("menuhome");
                     menuHomeViewModel = (MenuHomeViewModel)homemenu.DataContext;
                     homeMenuFileViewModel = (HomeMenuFileViewModel)homemenu.FindResource("menufile");

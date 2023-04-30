@@ -296,18 +296,33 @@ namespace NotebookRCv001.Models
                 else if (ThisVideo)
                 {
                     if (string.IsNullOrWhiteSpace(key))
+                    {
                         Content = path;
+                        if (CanExecute_Play(obj))
+                            Execute_Play(null);
+                        else
+                            BehaviorReady += (obj) => 
+                            {
+                                Execute_Play(obj); 
+                            };
+                    }
                     else
                     {
                         Content = await VideoDecrypt(path, key);
                         if (!File.Exists(Content))
                         {
-                            EncryptionKeyError(Content);
+                            EncryptionKeyError(path);
                         }
-                        if (CanExecute_Play(obj))
-                            Execute_Play(null);
                         else
-                            BehaviorReady += (obj) => { Execute_Play(obj); };
+                        {
+                            if (CanExecute_Play(obj))
+                                Execute_Play(null);
+                            else
+                                BehaviorReady += (obj) => 
+                                {
+                                    Execute_Play(obj); 
+                                };
+                        }
                     }
                 }
             }
@@ -470,6 +485,7 @@ namespace NotebookRCv001.Models
                 if (obj is BehaviorMediaElement mediaElement)
                 {
                     behaviorMediaElement = mediaElement;
+                    behaviorMediaElement.MediaFailed += (s, e) => { EncryptionKeyError((s as MediaElement).Source.LocalPath); };
                 }
                 else if (obj is BehaviorSlider slider)
                 {
@@ -592,12 +608,15 @@ namespace NotebookRCv001.Models
                 {
                     messagesVM.SetMessage.Execute(language.MessagesMyMessages[8]);
                     messages.ShowDialog();
+                    Execute_PageClose(null);
                 }
                 else if (!string.IsNullOrWhiteSpace(path))
                 {
                     if (ThisImage)
                     {
                         Bitmap = new BitmapImage(new Uri(path));
+                        if (Bitmap == null)
+                            throw new Exception();
                     }
                     else if (ThisVideo)
                     {
@@ -607,6 +626,7 @@ namespace NotebookRCv001.Models
                             Execute_PageClose(null);
                     }
                 }
+                messages.Close();
             }
             catch
             {

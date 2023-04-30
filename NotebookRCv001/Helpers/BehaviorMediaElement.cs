@@ -78,7 +78,6 @@ namespace NotebookRCv001.Helpers
 
         protected override void OnAttached()
         {
-
         }
 
         protected override void OnDetaching()
@@ -113,6 +112,18 @@ namespace NotebookRCv001.Helpers
             remove
             {
                 base.AssociatedObject.BufferingEnded -= value;
+            }
+        }
+
+        public event EventHandler<ExceptionRoutedEventArgs> MediaFailed
+        {
+            add
+            {
+                base.AssociatedObject.MediaFailed += value;
+            }
+            remove
+            {
+                base.AssociatedObject.MediaFailed -= value;
             }
         }
 
