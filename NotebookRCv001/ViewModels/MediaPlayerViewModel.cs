@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.IO;
 using NotebookRCv001.Helpers;
+using NotebookRCv001.MyControls;
 
 namespace NotebookRCv001.ViewModels
 {
@@ -47,10 +48,12 @@ namespace NotebookRCv001.ViewModels
 
         public BitmapImage Bitmap  => mediaPlayerModel.Bitmap;
 
-        public ObservableCollection<MediaImageViewModel> MediaImageViewModels 
-        { get => mediaPlayerModel.MediaImageViewModels; set => mediaPlayerModel.MediaImageViewModels = value; }
+        public ObservableCollection<MediaImage> MediaImages 
+        { get => mediaPlayerModel.MediaImages; set => mediaPlayerModel.MediaImages = value; }
 
-        public MediaImageViewModel CurrentMediaImage 
+        public ObservableCollection<string> PlayList => mediaPlayerModel.PlayList;
+
+        public MediaImage CurrentMediaImage 
         { get => mediaPlayerModel.CurrentMediaImage; set => mediaPlayerModel.CurrentMediaImage= value; }
 
         public bool ThisVideo => mediaPlayerModel.ThisVideo;

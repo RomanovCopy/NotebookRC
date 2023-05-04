@@ -21,7 +21,7 @@ using NotebookRCv001.Helpers;
 using System.Windows.Threading;
 using NotebookRCv001.Views;
 using System.Windows.Input;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 
 namespace NotebookRCv001.Models
 {
@@ -68,19 +68,19 @@ namespace NotebookRCv001.Models
         internal BitmapImage Bitmap { get => bitmap; set => SetProperty(ref bitmap, value); }
         private BitmapImage bitmap;
 
-        internal ObservableCollection<MediaImageViewModel> MediaImageViewModels
+        internal ObservableCollection<MediaImage> MediaImages
         {
-            get => mediaImageViewModels, 
-                set => SetProperty(ref mediaImageViewModels, value);
+            get => mediaImages ??= new ObservableCollection<MediaImage>();
+            set => SetProperty(ref mediaImages, value);
         }
-        private ObservableCollection<MediaImageViewModel> mediaImageViewModels;
+        private ObservableCollection<MediaImage> mediaImages;
 
-        internal MediaImageViewModel CurrentMediaImage
+        internal MediaImage CurrentMediaImage
         {
             get => currentMediaImage;
             set => SetProperty(ref currentMediaImage, value);
         }
-        private MediaImageViewModel currentMediaImage;
+        private MediaImage currentMediaImage;
 
         internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
@@ -218,7 +218,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    CurrentMediaImage = MediaImageViewModels[PlayIndex];
+                    CurrentMediaImage = MediaImages[PlayIndex];
                     //if (string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
                     //{
                     //    //Bitmap = new BitmapImage(new Uri(PlayList[PlayIndex]));
@@ -255,7 +255,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    CurrentMediaImage = MediaImageViewModels[PlayIndex];
+                    CurrentMediaImage = MediaImages[PlayIndex];
                     //if (string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
                     //{
                     //    Bitmap = new BitmapImage(new Uri(PlayList[PlayIndex]));
@@ -293,18 +293,21 @@ namespace NotebookRCv001.Models
                 SetContentType(path);
                 if (ThisImage)
                 {
-                    //if (string.IsNullOrWhiteSpace(key))
-                    //{
-                    //    Bitmap = new BitmapImage(new Uri(path));
-                    //    if (Bitmap == null)
-                    //        EncryptionKeyError(path);
-                    //}
-                    //else
-                    //{
-                    //    Bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
-                    //    if (Bitmap == null)
-                    //        EncryptionKeyError(path);
-                    //}
+                    foreach(var item in MediaImages)
+                    {
+                        if(item.DataContext is MediaImageViewModel vm)
+                        {
+                            if (Path.GetFileName(vm.Bitmap.UriSource.AbsolutePath) == Path.GetFileName( path))
+                            {
+                                CurrentMediaImage = item;
+                                break;
+                            }
+                        }
+                    }
+                    //CurrentMediaImage = MediaImages.Where
+                    //    ((x) => ((MediaImageViewModel)x.DataContext).Bitmap.UriSource.AbsolutePath == path).FirstOrDefault();
+                    PlayIndex = MediaImages.IndexOf(CurrentMediaImage);
+                    //CurrentMediaImage = MediaImages[1];
                 }
                 else if (ThisAudio)
                 {
@@ -599,10 +602,13 @@ namespace NotebookRCv001.Models
                                     if (Bitmap == null)
                                         EncryptionKeyError(path);
                                 }
-                                if(Bitmap!=null)
-                                {
-                                    MediaImageViewModels.Add(new MediaImageViewModel() { Bitmap = Bitmap });
-                                }
+                            }
+                            if (Bitmap != null)
+                            {
+                                var item = new MediaImage();
+                                var vm = (MediaImageViewModel)item.DataContext;
+                                vm.Bitmap = Bitmap;
+                                MediaImages.Add(item);
                             }
                         }
                         else if (ThisAudio)
@@ -616,8 +622,6 @@ namespace NotebookRCv001.Models
                                 PlayList.Add(file);
                         }
                     }
-                    PlayIndex = PlayList.IndexOf(path);
-                    CurrentMediaImage = MediaImageViewModels[PlayIndex];
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
