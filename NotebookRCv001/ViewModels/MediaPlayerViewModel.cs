@@ -46,6 +46,13 @@ namespace NotebookRCv001.ViewModels
 
 
         public BitmapImage Bitmap  => mediaPlayerModel.Bitmap;
+
+        public ObservableCollection<MediaImageViewModel> MediaImageViewModels 
+        { get => mediaPlayerModel.MediaImageViewModels; set => mediaPlayerModel.MediaImageViewModels = value; }
+
+        public MediaImageViewModel CurrentMediaImage 
+        { get => mediaPlayerModel.CurrentMediaImage; set => mediaPlayerModel.CurrentMediaImage= value; }
+
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;
         public bool ThisImage => mediaPlayerModel.ThisImage;

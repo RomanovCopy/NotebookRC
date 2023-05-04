@@ -112,7 +112,7 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <Image x:Name="image" Source="{Binding Bitmap, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.RowSpan="3">
+            <!--<Image x:Name="image" Source="{Binding Bitmap, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.RowSpan="3">
                 <Image.Style>
                     <Style TargetType="Image">
                         <Style.Triggers>
@@ -123,7 +123,21 @@
                         </Style.Triggers>
                     </Style>
                 </Image.Style>
-            </Image>
+            </Image>-->
+            <Frame x:Name="frame" Content="{Binding CurrentMediaImage, UpdateSourceTrigger=PropertyChanged}" 
+               NavigationUIVisibility="Visible" Background="Transparent"  Grid.Row="0" Grid.RowSpan="3">
+                <Frame.Style>
+                    <Style TargetType="Frame">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
+                                Mode=FindAncestor},
+                                Path=DataContext.ThisImage, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Frame.Style>
+            </Frame>
             <Slider x:Name="mpslider" Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorSlider x:Name="sliderbehavior"/>

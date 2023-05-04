@@ -22,7 +22,6 @@ namespace NotebookRCv001.Infrastructure
             }
             return propertyChanged;
         }
-
         protected virtual bool SetProperty<T>(ref T field, T value, string[] names)
         {
             bool propertyChanged = false;

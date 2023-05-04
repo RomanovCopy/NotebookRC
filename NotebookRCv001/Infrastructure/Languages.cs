@@ -261,7 +261,51 @@ namespace NotebookRCv001.Infrastructure
 
         #endregion
 
+        #region ******************** MediaImage ***************************************
 
+        /// <summary>
+        /// заголовки и подсказки для MediaImage
+        /// </summary>
+        public ObservableCollection<string> HeadersMediaImage => DictionaryHeadersMediaImage[Key];
+        private Dictionary<string, ObservableCollection<string>> DictionaryHeadersMediaImage
+        {
+            get => dictionaryHeadersMediaImage ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                    {
+                        "ru-RU", new ObservableCollection<string>()
+                        {
+
+                        }
+                    },
+                    {
+                        "en-US", new ObservableCollection<string>()
+                        {
+
+                        }
+                    }
+            };
+        }
+        private Dictionary<string, ObservableCollection<string>> dictionaryHeadersMediaImage;
+        public ObservableCollection<string> ToolTipsMediaImage => DictionaryToolTipsMediaImage[Key];
+        private Dictionary<string, ObservableCollection<string>> DictionaryToolTipsMediaImage
+        {
+            get => dictionaryToolTipsMediaImage ??= new Dictionary<string, ObservableCollection<string>>()
+            {
+                    {
+                        "ru-RU", new ObservableCollection<string>()
+                        {
+                        }
+                    },
+                    {
+                        "en-US", new ObservableCollection<string>()
+                        {
+                        }
+                    }
+            };
+        }
+        private Dictionary<string, ObservableCollection<string>> dictionaryToolTipsMediaImage;
+
+        #endregion
 
         #region _____________________________FolderBrowserDialog_____________________
 
