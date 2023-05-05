@@ -9,11 +9,12 @@ using System.Collections.ObjectModel;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Models;
-using System.Drawing;
+//using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.IO;
 using NotebookRCv001.Helpers;
 using NotebookRCv001.MyControls;
+using System.Windows.Controls;
 
 namespace NotebookRCv001.ViewModels
 {
@@ -48,13 +49,13 @@ namespace NotebookRCv001.ViewModels
 
         public BitmapImage Bitmap  => mediaPlayerModel.Bitmap;
 
-        public ObservableCollection<MediaImage> MediaImages 
-        { get => mediaPlayerModel.MediaImages; set => mediaPlayerModel.MediaImages = value; }
+        public ObservableCollection<Image> Images 
+        { get => mediaPlayerModel.Images; set => mediaPlayerModel.Images = value; }
 
         public ObservableCollection<string> PlayList => mediaPlayerModel.PlayList;
 
-        public MediaImage CurrentMediaImage 
-        { get => mediaPlayerModel.CurrentMediaImage; set => mediaPlayerModel.CurrentMediaImage= value; }
+        public Image CurrentImage 
+        { get => mediaPlayerModel.CurrentImage; set => mediaPlayerModel.CurrentImage= value; }
 
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;

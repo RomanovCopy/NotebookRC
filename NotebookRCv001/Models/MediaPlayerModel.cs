@@ -68,19 +68,19 @@ namespace NotebookRCv001.Models
         internal BitmapImage Bitmap { get => bitmap; set => SetProperty(ref bitmap, value); }
         private BitmapImage bitmap;
 
-        internal ObservableCollection<MediaImage> MediaImages
+        internal ObservableCollection<Image> Images
         {
-            get => mediaImages ??= new ObservableCollection<MediaImage>();
-            set => SetProperty(ref mediaImages, value);
+            get => images;
+            set => SetProperty(ref images, value);
         }
-        private ObservableCollection<MediaImage> mediaImages;
+        private ObservableCollection<Image> images;
 
-        internal MediaImage CurrentMediaImage
+        internal Image CurrentImage
         {
-            get => currentMediaImage;
-            set => SetProperty(ref currentMediaImage, value);
+            get => currentImage;
+            set => SetProperty(ref currentImage, value);
         }
-        private MediaImage currentMediaImage;
+        private Image currentImage;
 
         internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
@@ -218,15 +218,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    CurrentMediaImage = MediaImages[PlayIndex];
-                    //if (string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
-                    //{
-                    //    //Bitmap = new BitmapImage(new Uri(PlayList[PlayIndex]));
-                    //}
-                    //else
-                    //{
-                    //    Bitmap = await Command_executors.Executors.ImageDecrypt(PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey);
-                    //}
+                    CurrentImage = Images[PlayIndex];
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -255,15 +247,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    CurrentMediaImage = MediaImages[PlayIndex];
-                    //if (string.IsNullOrWhiteSpace(homeMenuEncryptionViewModel.EncryptionKey))
-                    //{
-                    //    Bitmap = new BitmapImage(new Uri(PlayList[PlayIndex]));
-                    //}
-                    //else
-                    //{
-                    //    Bitmap = await Command_executors.Executors.ImageDecrypt(PlayList[PlayIndex], homeMenuEncryptionViewModel.EncryptionKey);
-                    //}
+                    CurrentImage = Images[PlayIndex];
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -293,21 +277,9 @@ namespace NotebookRCv001.Models
                 SetContentType(path);
                 if (ThisImage)
                 {
-                    foreach(var item in MediaImages)
-                    {
-                        if(item.DataContext is MediaImageViewModel vm)
-                        {
-                            if (Path.GetFileName(vm.Bitmap.UriSource.AbsolutePath) == Path.GetFileName( path))
-                            {
-                                CurrentMediaImage = item;
-                                break;
-                            }
-                        }
-                    }
-                    //CurrentMediaImage = MediaImages.Where
-                    //    ((x) => ((MediaImageViewModel)x.DataContext).Bitmap.UriSource.AbsolutePath == path).FirstOrDefault();
-                    PlayIndex = MediaImages.IndexOf(CurrentMediaImage);
-                    //CurrentMediaImage = MediaImages[1];
+                    CurrentImage = (Image)Images.Where((x) => (string)x.Tag == path).FirstOrDefault();
+                    if (CurrentImage != null)
+                        PlayIndex = Images.IndexOf(CurrentImage);
                 }
                 else if (ThisAudio)
                 {
@@ -582,33 +554,30 @@ namespace NotebookRCv001.Models
                     var dirpath = Path.GetDirectoryName(path);
                     //создаем и заполняем коллекцию файлов для плей листа
                     PlayList = new();
+                    Images = new();
                     string key = homeMenuEncryptionViewModel.EncryptionKey;
                     foreach (var file in Directory.GetFiles(dirpath))
                     {
                         if (ThisImage)
                         {
-                            if (ImageFileExtensions.Any((x) => x == Path.GetExtension(file).ToLower()))
+                            PlayList.Add(file);
+                            if (string.IsNullOrWhiteSpace(key))
                             {
-                                PlayList.Add(file);
-                                if (string.IsNullOrWhiteSpace(key))
-                                {
-                                    Bitmap = new BitmapImage(new Uri(path));
-                                    if (Bitmap == null)
-                                        EncryptionKeyError(path);
-                                }
-                                else
-                                {
-                                    Bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
-                                    if (Bitmap == null)
-                                        EncryptionKeyError(path);
-                                }
+                                Bitmap = new BitmapImage(new Uri(file));
+                                if (Bitmap == null)
+                                    EncryptionKeyError(file);
+                            }
+                            else
+                            {
+                                Bitmap = await Command_executors.Executors.ImageDecrypt(file, key);
+                                if (Bitmap == null)
+                                    EncryptionKeyError(file);
                             }
                             if (Bitmap != null)
                             {
-                                var item = new MediaImage();
-                                var vm = (MediaImageViewModel)item.DataContext;
-                                vm.Bitmap = Bitmap;
-                                MediaImages.Add(item);
+                                var image = new Image() { Source = Bitmap };
+                                image.Tag = file;
+                                Images.Add(image);
                             }
                         }
                         else if (ThisAudio)

@@ -124,8 +124,8 @@
                     </Style>
                 </Image.Style>
             </Image>-->
-            <Frame x:Name="frame" Content="{Binding CurrentMediaImage, UpdateSourceTrigger=PropertyChanged}" 
-               NavigationUIVisibility="Visible" Background="Transparent"  Grid.Row="0" Grid.RowSpan="3">
+            <Frame x:Name="frame" Content="{Binding CurrentImage, UpdateSourceTrigger=PropertyChanged}" 
+               NavigationUIVisibility="Hidden" Background="Transparent"  Grid.Row="0" Grid.RowSpan="3">
                 <Frame.Style>
                     <Style TargetType="Frame">
                         <Style.Triggers>
