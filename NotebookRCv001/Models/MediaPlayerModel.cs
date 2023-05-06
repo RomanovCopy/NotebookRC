@@ -66,16 +66,6 @@ namespace NotebookRCv001.Models
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
-        internal BitmapImage Bitmap { get => bitmap; set => SetProperty(ref bitmap, value); }
-        private BitmapImage bitmap;
-
-        internal ObservableCollection<Image> Images
-        {
-            get => images;
-            set => SetProperty(ref images, value);
-        }
-        private ObservableCollection<Image> images;
-
         internal Image CurrentImage
         {
             get => currentImage;

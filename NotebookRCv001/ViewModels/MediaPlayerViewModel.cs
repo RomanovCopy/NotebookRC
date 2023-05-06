@@ -46,12 +46,6 @@ namespace NotebookRCv001.ViewModels
 
         public string Content => mediaPlayerModel.Content;
 
-
-        public BitmapImage Bitmap  => mediaPlayerModel.Bitmap;
-
-        public ObservableCollection<Image> Images 
-        { get => mediaPlayerModel.Images; set => mediaPlayerModel.Images = value; }
-
         public ObservableCollection<string> PlayList => mediaPlayerModel.PlayList;
 
         public Image CurrentImage 
@@ -74,6 +68,7 @@ namespace NotebookRCv001.ViewModels
             mediaPlayerModel.PropertyChanged += ( s, e ) => OnPropertyChanged( e.PropertyName );
 
         }
+
         public ICommand Play => play ??= new RelayCommand( mediaPlayerModel.Execute_Play, mediaPlayerModel.CanExecute_Play );
         private RelayCommand play;
         public ICommand Pause => pause ??= new RelayCommand( mediaPlayerModel.Execute_Pause, mediaPlayerModel.CanExecute_Pause );

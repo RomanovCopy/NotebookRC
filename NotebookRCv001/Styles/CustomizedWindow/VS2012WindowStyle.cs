@@ -32,7 +32,11 @@ namespace NotebookRCv001.Styles.CustomizedWindow
 
         BehaviorComboBox BehaviorComboBox { get; set; }
         MediaPlayerViewModel mediaPlayerViewModel { get; set; }
-
+        /// <summary>
+        /// разрешение на получение фокуса для textbox search для MediaPlayer
+        /// </summary>
+        public bool TextBoxSearchFocusabble { get => textBoxSearchFocusabble; set => SetProperty(ref textBoxSearchFocusabble, value); }
+        bool textBoxSearchFocusabble;
 
         public ObservableCollection<string> ToolTips => MainWindowViewModel.Language.ToolTipsMainWindow;
 
@@ -57,6 +61,7 @@ namespace NotebookRCv001.Styles.CustomizedWindow
             //заносим адреса изображений в коллекции для дальнейшего помещения их в ресурсы
             MainWindowViewModel.Language.PropertyChanged += (s, e) =>
             OnPropertyChanged(new string[] { "ToolTips", "Headers" });
+            TextBoxSearchFocusabble = true;
         }
 
         private void FrameList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -85,13 +90,17 @@ namespace NotebookRCv001.Styles.CustomizedWindow
                                     LastFileName = lastname.LastFileName;
                                     PathToLastFile = lastname.PathToLastFile;
                                     if (p is MyControls.MediaPlayer player && player.DataContext is MediaPlayerViewModel playerVM)
+                                    {
                                         mediaPlayerViewModel = playerVM;
+                                        TextBoxSearchFocusabble = false;
+                                    }
                                 };
                                 p.Unloaded += (s, e) =>
                                 {
                                     LastFileName = "";
                                     PathToLastFile = "";
                                     mediaPlayerViewModel = null;
+                                    TextBoxSearchFocusabble = true;
                                 };
                             }
                             else
@@ -312,14 +321,18 @@ namespace NotebookRCv001.Styles.CustomizedWindow
         }
 
 
-
+        /// <summary>
+        /// перетакскивание слайдера старт
+        /// </summary>
         public ICommand DragStarted => dragStarted ??= new RelayCommand( ( obj ) => 
         {
             if (mediaPlayerViewModel != null)
                 mediaPlayerViewModel.UserIsDraggingSlider = true;
         } );
         private RelayCommand dragStarted;
-
+        /// <summary>
+        /// перетаскивание слайдера окончание
+        /// </summary>
         public ICommand DragCompleted => dragCompleted ??= new RelayCommand( ( obj ) =>
         {
             if(mediaPlayerViewModel!=null)
