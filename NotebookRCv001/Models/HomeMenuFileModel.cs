@@ -600,7 +600,7 @@ namespace NotebookRCv001.Models
                 string path = null;
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = filter;
-                if (!string.IsNullOrWhiteSpace(initialDirectory))
+                if (!string.IsNullOrWhiteSpace(initialDirectory) && Directory.Exists(initialDirectory))
                     sfd.InitialDirectory = initialDirectory;
                 if ((bool)sfd.ShowDialog())
                 {
