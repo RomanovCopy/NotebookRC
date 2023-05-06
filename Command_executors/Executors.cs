@@ -1477,7 +1477,7 @@ namespace Command_executors
         /// <param name="fileStream">читает зашифрованный файл с диска</param>
         /// <param name="path">путь сохранения дешифрованного файла</param>
         /// <param name="key">ключ шифрования</param>
-        public static void DecryptFromStream(FileStream fileStream, string path, string key)
+        public static async Task DecryptFromStream(FileStream fileStream, string path, string key)
         {
             SymmetricAlgorithm Sa = Rijndael.Create();
             try

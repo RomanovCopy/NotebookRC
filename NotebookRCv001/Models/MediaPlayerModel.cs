@@ -309,6 +309,7 @@ namespace NotebookRCv001.Models
             {
                 if (BehaviorReady != null)
                     BehaviorReady.Invoke(obj);
+                //BehaviorReady = null;
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -368,6 +369,7 @@ namespace NotebookRCv001.Models
             {
                 if (BehaviorReady != null)
                     BehaviorReady.Invoke(obj);
+                //BehaviorReady = null;
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -706,7 +708,10 @@ namespace NotebookRCv001.Models
                     else if (ThisVideo)
                     {
                         if (File.Exists(path))
+                        {
                             Content = path;
+                            Execute_Play(null);
+                        }
                         else
                             throw new Exception();
                     }

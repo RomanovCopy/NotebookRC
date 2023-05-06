@@ -87,8 +87,8 @@ namespace NotebookRCv001.Models
             "RichText files (*.rtf)|*.rtf|" +
             "Image files (*.jpg)|*.jpg|" +
             "Image files (*.jpeg)|*.jpeg|" +
-            "Video files (*.mp4)|*.mp4|"+
-            "Video files (*.avi)|*.avi|"+
+            "Video files (*.mp4)|*.mp4|" +
+            "Video files (*.avi)|*.avi|" +
             "Source Code Files (*.cs)|*.cs|" +
             "Xaml files (*.xaml)|*.xaml|" +
             "PDF files (*.pdf)|*.pdf|" +
@@ -294,21 +294,19 @@ namespace NotebookRCv001.Models
                         {
 
                         }
-                        else if (extension == ".jpg" || extension == ".jpeg" || extension==".mp4" || extension==".avi")
+                        else if (extension == ".jpg" || extension == ".jpeg" || extension == ".mp4" || extension == ".avi")
                         {
+                            fs.Close();
+                            fs.Dispose();
                             var player = mainWindowViewModel.FrameList.Where((x) => x is MyControls.MediaPlayer).FirstOrDefault();
                             if (player == null)
                             {
                                 player = new MyControls.MediaPlayer();
-                                if (mainWindowViewModel.FrameListAddPage.CanExecute(player))
-                                    mainWindowViewModel.FrameListAddPage.Execute(player);
+                                mainWindowViewModel.FrameListAddPage.Execute(player);
                             }
-                            var mediaPlayer = (MyControls.MediaPlayer)player;
-                            var mediaPlayerVM = (ViewModels.MediaPlayerViewModel)mediaPlayer.DataContext;
-                            mediaPlayerVM.BehaviorReady += (obj) =>
-                            {
-                                mediaPlayerVM.SetContent.Execute(path);
-                            };
+                            var playerVM = (MediaPlayerViewModel)player.DataContext;
+                            if (playerVM.SetContent.CanExecute(path))
+                                playerVM.SetContent.Execute(path);
                         }
                         else
                         {
