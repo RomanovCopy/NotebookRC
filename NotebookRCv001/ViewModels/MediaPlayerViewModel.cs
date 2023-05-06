@@ -93,6 +93,12 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public ICommand SetContent => setContent ??= new RelayCommand( mediaPlayerModel.Execute_SetContent, mediaPlayerModel.CanExecute_SetContent );
         private RelayCommand setContent;
+
+        public ICommand FrameLoaded => frameLoaded ??= new RelayCommand(mediaPlayerModel.Execute_FrameLoaded, mediaPlayerModel.CanExecute_FrameLoaded);
+        private RelayCommand frameLoaded;
+
+        public ICommand FrameUnloaded => frameUnloaded ??= new RelayCommand(mediaPlayerModel.Execute_FrameUnloaded, mediaPlayerModel.CanExecute_FrameUnloaded);
+        private RelayCommand frameUnloaded;
         public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
             mediaPlayerModel.CanExecute_MediaPlayerLoaded );
         private RelayCommand mediaPlayerLoaded;

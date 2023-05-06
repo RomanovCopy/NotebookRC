@@ -21,6 +21,7 @@ using NotebookRCv001.Helpers;
 using System.Windows.Threading;
 using NotebookRCv001.Views;
 using System.Windows.Input;
+//using forms = System.Windows.Forms;
 //using System.Windows.Forms;
 
 namespace NotebookRCv001.Models
@@ -215,10 +216,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                string key = homeMenuEncryptionViewModel.EncryptionKey;
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    CurrentImage = Images[PlayIndex];
+                    CurrentImage = ImageFromPath(PlayList[PlayIndex], key).Result;
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -244,10 +246,11 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                string key = homeMenuEncryptionViewModel.EncryptionKey;
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    CurrentImage = Images[PlayIndex];
+                    CurrentImage = ImageFromPath(PlayList[PlayIndex], key).Result;
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -277,9 +280,13 @@ namespace NotebookRCv001.Models
                 SetContentType(path);
                 if (ThisImage)
                 {
-                    CurrentImage = (Image)Images.Where((x) => (string)x.Tag == path).FirstOrDefault();
-                    if (CurrentImage != null)
-                        PlayIndex = Images.IndexOf(CurrentImage);
+                    CurrentImage = ImageFromPath(path, key).Result;
+                    if (CurrentImage.Tag != null)
+                        PlayIndex = PlayList.IndexOf(path);
+                    else
+                        CurrentImage = ImageFromPath(path, null).Result;
+                    if (CurrentImage.Tag == null)
+                        throw new Exception();
                 }
                 else if (ThisAudio)
                 {
@@ -287,29 +294,7 @@ namespace NotebookRCv001.Models
                 }
                 else if (ThisVideo)
                 {
-                    if (string.IsNullOrWhiteSpace(key))
-                    {
-                        Content = path;
-                        if (CanExecute_Play(obj))
-                            Execute_Play(null);
-                        else
-                            BehaviorReady += (obj) => { Execute_Play(obj); };
-                    }
-                    else
-                    {
-                        Content = await VideoDecrypt(path, key);
-                        if (!File.Exists(Content))
-                        {
-                            EncryptionKeyError(path);
-                        }
-                        else
-                        {
-                            if (CanExecute_Play(obj))
-                                Execute_Play(null);
-                            else
-                                BehaviorReady += (obj) => { Execute_Play(obj); };
-                        }
-                    }
+                    VideoFromPath(path);
                 }
             }
             catch
@@ -396,6 +381,54 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+        /// <summary>
+        /// окончание загрузки фрейма
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal bool CanExecute_FrameLoaded(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_FrameLoaded(object obj)
+        {
+            try
+            {
+                var window = Window.GetWindow(Application.Current.MainWindow);
+                window.Focusable = true;
+                window.KeyDown += MainWindow_KeyDown;
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// выгрузка фрейма
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal bool CanExecute_FrameUnloaded(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = true;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_FrameUnloaded(object obj)
+        {
+            try
+            {
+                Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
 
         internal bool CanExecute_PageLoaded(object obj)
         {
@@ -454,6 +487,27 @@ namespace NotebookRCv001.Models
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
             }
             catch (Exception e) { ErrorWindow(e); }
+        }
+
+        /// <summary>
+        /// управление клавишами клавиатуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            try
+            {
+                if ((e.Key == Key.A || e.Key == Key.Left) && CanExecute_Back(null))
+                {
+                    Execute_Back(null);
+                }
+                else if ((e.Key == Key.D || e.Key == Key.Right) && CanExecute_Forward(null))
+                {
+                    Execute_Forward(null);
+                }
+            }
+            catch (Exception ex) { ErrorWindow(ex); }
         }
 
         private void SetCurrentPositionForSlider(TimeSpan time)
@@ -535,6 +589,66 @@ namespace NotebookRCv001.Models
             }
         }
 
+        private async Task<Image> ImageFromPath(string path, string key)
+        {
+            BitmapImage bitmap = null;
+            Image image = new();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(key))
+                {
+                    bitmap = new BitmapImage(new Uri(path));
+                    if (bitmap == null)
+                        EncryptionKeyError(path);
+                }
+                else
+                {
+                    bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
+                    if (bitmap == null)
+                        EncryptionKeyError(path);
+                }
+                if (bitmap != null)
+                {
+                    image.Source = bitmap;
+                    image.Tag = path;
+                }
+                return image;
+            }
+            catch (Exception e) { ErrorWindow(e); return image; }
+        }
+
+        private async void VideoFromPath(string path)
+        {
+            try
+            {
+                var key = homeMenuEncryptionViewModel.EncryptionKey;
+                if (string.IsNullOrWhiteSpace(key))
+                {
+                    Content = path;
+                    if (CanExecute_Play(null))
+                        Execute_Play(null);
+                    else
+                        BehaviorReady += (obj) => { Execute_Play(obj); };
+                }
+                else
+                {
+                    Content = await VideoDecrypt(path, key);
+                    if (!File.Exists(Content))
+                    {
+                        EncryptionKeyError(path);
+                    }
+                    else
+                    {
+                        if (CanExecute_Play(null))
+                            Execute_Play(null);
+                        else
+                            BehaviorReady += (obj) => { Execute_Play(obj); };
+                    }
+                }
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+
         /// <summary>
         /// переключение типа контента
         /// </summary>
@@ -554,41 +668,20 @@ namespace NotebookRCv001.Models
                     var dirpath = Path.GetDirectoryName(path);
                     //создаем и заполняем коллекцию файлов для плей листа
                     PlayList = new();
-                    Images = new();
                     string key = homeMenuEncryptionViewModel.EncryptionKey;
                     foreach (var file in Directory.GetFiles(dirpath))
                     {
                         if (ThisImage)
                         {
                             PlayList.Add(file);
-                            if (string.IsNullOrWhiteSpace(key))
-                            {
-                                Bitmap = new BitmapImage(new Uri(file));
-                                if (Bitmap == null)
-                                    EncryptionKeyError(file);
-                            }
-                            else
-                            {
-                                Bitmap = await Command_executors.Executors.ImageDecrypt(file, key);
-                                if (Bitmap == null)
-                                    EncryptionKeyError(file);
-                            }
-                            if (Bitmap != null)
-                            {
-                                var image = new Image() { Source = Bitmap };
-                                image.Tag = file;
-                                Images.Add(image);
-                            }
                         }
                         else if (ThisAudio)
                         {
-                            if (AudioFileExtensions.Any((x) => x == Path.GetExtension(file).ToLower()))
-                                PlayList.Add(file);
+                            PlayList.Add(file);
                         }
                         else if (ThisVideo)
                         {
-                            if (VideoFileExtensions.Any((x) => x == Path.GetExtension(file).ToLower()))
-                                PlayList.Add(file);
+                            PlayList.Add(file);
                         }
                     }
                 }
@@ -618,9 +711,7 @@ namespace NotebookRCv001.Models
                 {
                     if (ThisImage)
                     {
-                        Bitmap = new BitmapImage(new Uri(path));
-                        if (Bitmap == null)
-                            throw new Exception();
+                        CurrentImage = ImageFromPath(path, null).Result;
                     }
                     else if (ThisVideo)
                     {
@@ -639,5 +730,6 @@ namespace NotebookRCv001.Models
                 Execute_PageClose(null);
             }
         }
+
     }
 }

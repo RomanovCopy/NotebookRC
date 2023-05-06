@@ -449,6 +449,7 @@
                                             VerticalAlignment="Center"
                                             FontFamily="Segoe UI"        
                                             FontSize="12"
+                                            Focusable="False"
                                             FontWeight="Medium"
                                             Foreground="Black">
                                             <i:Interaction.Triggers>
@@ -488,6 +489,7 @@
                                             FontWeight="Medium"
                                             Foreground="White"
                                             FontSize="12"
+                                            Focusable="False"
                                             Opacity="1">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">

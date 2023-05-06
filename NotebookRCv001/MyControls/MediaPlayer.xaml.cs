@@ -26,5 +26,6 @@ namespace NotebookRCv001.MyControls
         {
             InitializeComponent();
         }
+
     }
 }
