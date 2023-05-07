@@ -30,6 +30,7 @@ namespace NotebookRCv001.Models
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private readonly HomeMenuEncryptionViewModel homeMenuEncryptionViewModel;
+        private readonly HomeMenuFileViewModel homeMenuFileViewModel;
         private Languages language => mainWindowViewModel.Language;
         private Page page { get; set; }
         private BehaviorMediaElement behaviorMediaElement { get; set; }
@@ -122,8 +123,64 @@ namespace NotebookRCv001.Models
             var home = mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
             var menu = (MyControls.MenuHome)home.FindResource("menuhome");
             homeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
+            homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             play = false;
             BehaviorReady += (x) => { InitializePlayerAndSlider(x); };
+        }
+
+
+        /// <summary>
+        /// открыть файл                             
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal bool CanExecute_OpenFile(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = behaviorMediaElement != null && behaviorSlider != null && !play;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_OpenFile(object obj)
+        {
+            try
+            {
+                homeMenuFileViewModel.OpenFile.Execute(null);
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+        /// <summary>
+        /// закрыть файл                                  
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal bool CanExecute_CloseFile(object obj)
+        {
+            try
+            {
+                bool c = false;
+                c = behaviorMediaElement != null && behaviorSlider != null && !play;
+                return c;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
+        internal void Execute_CloseFile(object obj)
+        {
+            try
+            {
+                Execute_Stop(null);
+                behaviorSlider.Value = 0;
+                behaviorSlider.Maximum = 0;
+                behaviorMediaElement.Position = TimeSpan.FromSeconds(0);
+                Content = string.Empty;
+                CurrentImage = null;
+                PlayList.Clear();
+                PlayIndex = 0;
+            }
+            catch (Exception e) { ErrorWindow(e); }
         }
 
         internal bool CanExecute_Play(object obj)
@@ -131,7 +188,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = behaviorMediaElement != null && behaviorSlider != null && !play;
+                c = behaviorMediaElement != null && behaviorSlider != null && !string.IsNullOrWhiteSpace(Content) && !play;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -725,6 +782,5 @@ namespace NotebookRCv001.Models
                 Execute_PageClose(null);
             }
         }
-
     }
 }

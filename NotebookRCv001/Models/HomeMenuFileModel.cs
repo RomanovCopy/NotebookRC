@@ -172,6 +172,7 @@ namespace NotebookRCv001.Models
                 Encoding encoding = menuVM.HomeEncoding;
                 //определяем текущий режим (чтение/редактирование)
                 FlowDocument flowDocument = null;
+                TextRange textRange = null;
                 if (mainWindowViewModel.CurrentPage.Equals(home))
                 {
                     flowDocument = richTextBoxViewModel.Document;//редактирование
@@ -185,7 +186,8 @@ namespace NotebookRCv001.Models
                     viewmodel.PathToLastFile = PathToLastFile;
                     viewmodel.LastFileName = LastFileName;
                 }
-                TextRange textRange = new(flowDocument?.ContentStart, flowDocument?.ContentEnd);
+                if (flowDocument != null)
+                    textRange = new(flowDocument?.ContentStart, flowDocument?.ContentEnd);
                 string extension = Path.GetExtension(path).ToLower();
                 string keyCrypt = HomeMenuEncryptionViewModel.EncryptionKey;
                 byte[] bytes = null;

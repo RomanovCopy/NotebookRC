@@ -14,8 +14,8 @@ namespace NotebookRCv001.Infrastructure
             get => key;
             set
             {
-                if (LanguagesKey.Any( ( x ) => x == value ))
-                    SetProperty( ref key, value );
+                if (LanguagesKey.Any((x) => x == value))
+                    SetProperty(ref key, value);
             }
         }
         string key;
@@ -23,7 +23,7 @@ namespace NotebookRCv001.Infrastructure
         public ObservableCollection<string> LanguagesKey
         {
             get => languagesKey;
-            set => SetProperty( ref languagesKey, value );
+            set => SetProperty(ref languagesKey, value);
         }
         private ObservableCollection<string> languagesKey;
 
@@ -31,7 +31,7 @@ namespace NotebookRCv001.Infrastructure
         public Languages()
         {
             LanguagesKey = new ObservableCollection<string>() { "ru-RU", "en-US" };
-            if (LanguagesKey.Any( ( x ) => x == Properties.Settings.Default.LanguageKey ))
+            if (LanguagesKey.Any((x) => x == Properties.Settings.Default.LanguageKey))
                 Key = Properties.Settings.Default.LanguageKey;
             else
                 Key = "en-US";
@@ -487,12 +487,16 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-
+                    "Файл",//00
+                    "Открыть файл",//01
+                    "Закрыть файл",//02
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
                 {
-
+                    "File",//00
+                    "Open file",//01
+                    "Close file",//02
                 }
                 }
             };
@@ -505,7 +509,7 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-
+                    
                 }
                 },
                 {"en-US", new ObservableCollection<string>()

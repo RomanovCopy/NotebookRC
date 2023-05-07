@@ -69,6 +69,12 @@ namespace NotebookRCv001.ViewModels
 
         }
 
+
+
+        public ICommand OpenFile => openFile ??= new RelayCommand(mediaPlayerModel.Execute_OpenFile, mediaPlayerModel.CanExecute_OpenFile);
+        private RelayCommand openFile;
+        public ICommand CloseFile => closeFile ??= new RelayCommand(mediaPlayerModel.Execute_CloseFile, mediaPlayerModel.CanExecute_CloseFile);
+        private RelayCommand closeFile;
         public ICommand Play => play ??= new RelayCommand( mediaPlayerModel.Execute_Play, mediaPlayerModel.CanExecute_Play );
         private RelayCommand play;
         public ICommand Pause => pause ??= new RelayCommand( mediaPlayerModel.Execute_Pause, mediaPlayerModel.CanExecute_Pause );

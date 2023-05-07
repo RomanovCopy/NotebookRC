@@ -83,10 +83,10 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Menu Grid.Column="0">
-                <MenuItem Header="File">
-                    <MenuItem Header="Open File"/>
-                    <MenuItem Header="Close File"/>
+            <Menu Grid.Column="0" Focusable="False">
+                <MenuItem Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" >
+                    <MenuItem Header="{Binding Headers[1], UpdateSourceTrigger=PropertyChanged}" Command="{Binding OpenFile, UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem Header="{Binding Headers[2], UpdateSourceTrigger=PropertyChanged}" Command="{Binding CloseFile, UpdateSourceTrigger=PropertyChanged}"/>
                 </MenuItem>
             </Menu>
             <ContentPresenter Grid.Column="2" Height="18" Content="{Binding Source={StaticResource closeandclear}}"/>
