@@ -179,6 +179,7 @@ namespace NotebookRCv001.Models
                 CurrentImage = null;
                 PlayList.Clear();
                 PlayIndex = 0;
+                play = false;
             }
             catch (Exception e) { ErrorWindow(e); }
         }
