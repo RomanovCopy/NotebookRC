@@ -77,12 +77,18 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="Gray">
+        <Grid Grid.Row="0" Background="Black">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Menu Grid.Column="0">
+                <MenuItem Header="File">
+                    <MenuItem Header="Open File"/>
+                    <MenuItem Header="Close File"/>
+                </MenuItem>
+            </Menu>
             <ContentPresenter Grid.Column="2" Height="18" Content="{Binding Source={StaticResource closeandclear}}"/>
         </Grid>
         <Grid Grid.Row="1" >

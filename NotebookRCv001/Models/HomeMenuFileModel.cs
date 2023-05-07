@@ -283,114 +283,6 @@ namespace NotebookRCv001.Models
             }
         }
 
-        /// <summary>
-        /// получение адреса открываемого файла
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private string GettingTheAddressOfTheOpenedFile(object obj)
-        {
-            try
-            {
-                string path = null;
-                if (!(obj is string p && File.Exists(p)))
-                {//путь к файлу еще не выбран
-                    //информационное сообщение
-                    var result = mainWindowViewModel.NewSelectWindow.Invoke(
-                        mainWindowViewModel.Language.SelectWindowHeaders[0],
-                        mainWindowViewModel.Language.MessagesSelectWindow[0], null,
-                        mainWindowViewModel.Language.SelectWindowHeaders[1], null);
-                    if (string.IsNullOrWhiteSpace(result))
-                        return string.Empty;
-                    //выбор файла для открытия
-                    if (string.IsNullOrEmpty(path = OpenFileDialog(Filter, CurrentDirectoryOpen)))
-                        //выбор файла отменен
-                        return string.Empty;
-                    else
-                    {//файл выбран
-                        PathToLastFile = Path.GetFullPath(path);
-                        CurrentDirectoryOpen = Path.GetDirectoryName(path);
-                    }
-                }
-                else if (obj is string p1 && File.Exists(p1))
-                {//путь к файлу уже подан на вход метода
-                    path = p1;
-                    PathToLastFile = Path.GetFullPath(path);
-                    CurrentDirectoryOpen = Path.GetDirectoryName(path);
-                }
-                return path;
-            }
-            catch (Exception e) { ErrorWindow(e); return string.Empty; }
-        }
-
-        private object GettingAnObjectToInsertData(string path)
-        {
-            try
-            {
-                object result = null;
-                var home = (Views.Home)mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
-                if (home == null) return null;
-                var menu = (MyControls.MenuHome)home.FindResource("menuhome");
-                var menuVM = ((ViewModels.MenuHomeViewModel)menu.DataContext);
-                Encoding encoding = menuVM.HomeEncoding;
-                string extension = Path.GetExtension(path).ToLower();
-                if (extension == ".rtf" || extension == ".xaml" || extension == ".txt" || extension == ".cs")
-                {
-                    mainWindowViewModel.CurrentPage = home;
-                    result = new TextRange(richTextBoxViewModel.Document.ContentStart, richTextBoxViewModel.Document.ContentEnd);
-                }
-                else if (extension == ".xps")
-                {
-                    var page = mainWindowViewModel.FrameList.Where((x) => x is FixedDocumentReader).LastOrDefault();
-                    if (page == null)
-                    {
-                        page = new FixedDocumentReader() { KeepAlive = true };
-                        if (mainWindowViewModel.FrameListAddPage.CanExecute(page))
-                        {
-                            mainWindowViewModel.FrameListAddPage.Execute(page);
-                            var viewmodel = (FixedDocumentReaderViewModel)page.DataContext;
-                            viewmodel.BehaviorReady = (x) =>
-                            {
-                                viewmodel.Document = new XpsDocument(path, FileAccess.Read);
-                            };
-                        }
-                    }
-                    else
-                    {
-                        var viewmodel = (FixedDocumentReaderViewModel)page.DataContext;
-                        viewmodel.Document = new XpsDocument(path, FileAccess.Read);
-                    }
-                    mainWindowViewModel.CurrentPage = page;
-                }
-                //определяем текущий режим (чтение/редактирование)
-                FlowDocument flowDocument = null;
-                if (mainWindowViewModel.CurrentPage.Equals(home))
-                {
-                    result = richTextBoxViewModel.Document;//редактирование
-                    var viewmodel = (HomeViewModel)home.DataContext;
-                    viewmodel.PathToLastFile = PathToLastFile;
-                }
-                else if (mainWindowViewModel.CurrentPage is Views.FlowDocumentReader reader)
-                {
-                    var viewmodel = (FlowDocumentReaderViewModel)reader.DataContext;
-                    result = viewmodel.Document;//чтение
-                    viewmodel.PathToLastFile = PathToLastFile;
-                    viewmodel.LastFileName = LastFileName;
-                }
-                else if (mainWindowViewModel.CurrentPage is FixedDocumentReader fxreader)
-                {
-                    result = fxreader;
-                }
-                else if (mainWindowViewModel.CurrentPage is MyControls.MediaPlayer player)
-                {
-                    result = player;
-                }
-                return result;
-            }
-            catch (Exception e) { ErrorWindow(e); return null; }
-
-        }
-
         internal bool CanExecute_SaveFile(object obj)
         {
             try
@@ -693,6 +585,47 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); return null; }
         }
+
+        /// <summary>
+        /// получение адреса открываемого файла
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private string GettingTheAddressOfTheOpenedFile(object obj)
+        {
+            try
+            {
+                string path = null;
+                if (!(obj is string p && File.Exists(p)))
+                {//путь к файлу еще не выбран
+                    //информационное сообщение
+                    var result = mainWindowViewModel.NewSelectWindow.Invoke(
+                        mainWindowViewModel.Language.SelectWindowHeaders[0],
+                        mainWindowViewModel.Language.MessagesSelectWindow[0], null,
+                        mainWindowViewModel.Language.SelectWindowHeaders[1], null);
+                    if (string.IsNullOrWhiteSpace(result))
+                        return string.Empty;
+                    //выбор файла для открытия
+                    if (string.IsNullOrEmpty(path = OpenFileDialog(Filter, CurrentDirectoryOpen)))
+                        //выбор файла отменен
+                        return string.Empty;
+                    else
+                    {//файл выбран
+                        PathToLastFile = Path.GetFullPath(path);
+                        CurrentDirectoryOpen = Path.GetDirectoryName(path);
+                    }
+                }
+                else if (obj is string p1 && File.Exists(p1))
+                {//путь к файлу уже подан на вход метода
+                    path = p1;
+                    PathToLastFile = Path.GetFullPath(path);
+                    CurrentDirectoryOpen = Path.GetDirectoryName(path);
+                }
+                return path;
+            }
+            catch (Exception e) { ErrorWindow(e); return string.Empty; }
+        }
+
 
         /// <summary>
         /// синхронизация содержимого двух каталогов
