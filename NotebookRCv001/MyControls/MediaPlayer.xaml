@@ -119,16 +119,10 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" 
+                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 
-                <Image x:Name="img" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}" Stretch="None"
-                       RenderTransformOrigin="{Binding ElementName=behaviorimg, Path=MousePosition, UpdateSourceTrigger=PropertyChanged}">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleX="1" ScaleY="1"/>
-                    </Image.RenderTransform>
-                    <Image.LayoutTransform>
-                        <ScaleTransform ScaleX="1" ScaleY="1"/>
-                    </Image.LayoutTransform>
+                <Image x:Name="img" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"

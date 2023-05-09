@@ -38,7 +38,6 @@ namespace NotebookRCv001.Models
         private BehaviorSlider behaviorSlider { get; set; }
         private BehaviorImage behaviorImage { get; set; }
         private bool play { get; set; }
-        private Size sizeImage { get; set; }
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
@@ -65,8 +64,6 @@ namespace NotebookRCv001.Models
         public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action<object> behaviorReady;
 
-        //internal Uri Content { get => content; private set => SetProperty( ref content, value ); }
-        //private Uri content;
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
@@ -79,9 +76,6 @@ namespace NotebookRCv001.Models
             set => SetProperty(ref currentImage, value);
         }
         private Image currentImage;
-
-        internal double CurrentImageScale { get => currentImageScale; set => SetProperty(ref currentImageScale, value); }
-        private double currentImageScale;
 
         internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
@@ -133,7 +127,6 @@ namespace NotebookRCv001.Models
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             play = false;
             BehaviorReady += (x) => { InitializePlayerAndSlider(x); };
-            CurrentImageScale = 1;
         }
 
 
@@ -277,7 +270,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    CurrentImage = ImageFromPath(PlayList[PlayIndex], key).Result;
+                    CurrentBitmap = BitmapFromPath(PlayList[PlayIndex], key).Result;
                     homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
             }
@@ -308,7 +301,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    CurrentImage = ImageFromPath(PlayList[PlayIndex], key).Result;
+                    CurrentBitmap = BitmapFromPath(PlayList[PlayIndex], key).Result;
                     homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
             }
@@ -339,17 +332,8 @@ namespace NotebookRCv001.Models
                 SetContentType(path);
                 if (ThisImage)
                 {
-                    CurrentBitmap = await BitmapFromPath(path, key, (int)sizeImage.Height);
-                    sizeImage = new Size(CurrentBitmap.Width, CurrentBitmap.Height);
+                    CurrentBitmap = await BitmapFromPath(path, key);
                     PlayIndex = PlayList.IndexOf(path);
-                    //CurrentImage = ImageFromPath(path, key).Result;
-                    //if (CurrentImage.Tag != null)
-                    //    PlayIndex = PlayList.IndexOf(path);
-                    //else
-                    //    CurrentImage = ImageFromPath(path, null).Result;
-                    //if (CurrentImage.Tag == null)
-                    //    throw new Exception();
-
                 }
                 else if (ThisAudio)
                 {
@@ -382,7 +366,6 @@ namespace NotebookRCv001.Models
             {
                 if (BehaviorReady != null)
                     BehaviorReady.Invoke(obj);
-                //BehaviorReady = null;
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -442,10 +425,10 @@ namespace NotebookRCv001.Models
             {
                 if (BehaviorReady != null)
                     BehaviorReady.Invoke(obj);
-                //BehaviorReady = null;
             }
             catch (Exception e) { ErrorWindow(e); }
         }
+
         /// <summary>
         /// окончание загрузки изображения
         /// </summary>
@@ -491,6 +474,7 @@ namespace NotebookRCv001.Models
                 if (obj is Page p)
                 {
                     page = p;
+                    Application.Current.MainWindow.KeyDown += MainWindow_KeyDown;
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -527,8 +511,10 @@ namespace NotebookRCv001.Models
         {
             try
             {
+                Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
+
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -554,28 +540,6 @@ namespace NotebookRCv001.Models
             catch (Exception ex) { ErrorWindow(ex); }
         }
 
-        /// <summary>
-        /// управление зуммом (колесико мыши)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            try
-            {
-                if (e.Delta > 0)
-                    CurrentImageScale += 0.1;
-                else
-                    CurrentImageScale -= 0.1;
-                Application.Current.MainWindow.Focus();
-                var newheight = sizeImage.Height * CurrentImageScale;
-                var path = CurrentBitmap.UriSource.AbsolutePath;
-                var bitmap = CreateBitmapImageFromPath(path, (int)newheight);
-                CurrentBitmap = bitmap;
-                //CurrentImage = new Image() { Source = bitmap, Tag = path, Stretch=Stretch.None };
-            }
-            catch (Exception ex) { ErrorWindow(ex); }
-        }
 
         private BitmapImage CreateBitmapImageFromPath(string path, int height=0)
         {
@@ -593,11 +557,11 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); return null; }
         }
-
         private void SetCurrentPositionForSlider(TimeSpan time)
         {
             try
             {
+
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -626,7 +590,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-
         private void TimerTick(object sender, EventArgs e)
         {
             try
@@ -646,7 +609,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception ex) { ErrorWindow(ex); }
         }
-
         private async Task<string> VideoDecrypt(string path, string key)
         {
             FileStream stream = null;
@@ -672,7 +634,6 @@ namespace NotebookRCv001.Models
                 return path;
             }
         }
-
         private async Task<Image> ImageFromPath(string path, string key)
         {
             BitmapImage bitmap = null;
@@ -694,14 +655,12 @@ namespace NotebookRCv001.Models
                 if (bitmap != null)
                 {
                     image.Source = bitmap;
-                    sizeImage = new(bitmap.PixelWidth, bitmap.PixelHeight);
                     image.Tag = path;
                 }
                 return image;
             }
             catch (Exception e) { ErrorWindow(e); return image; }
         }
-
         private async Task<BitmapImage> BitmapFromPath(string path, string key, int height=0)
         {
             BitmapImage bitmap = new BitmapImage();
@@ -755,11 +714,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-
-        /// <summary>
-        /// переключение типа контента
-        /// </summary>
-        /// <param name="path"></param>
         private async void SetContentType(string path)
         {
             try
@@ -793,7 +747,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-
         /// <summary>
         /// обработка ошибок ключа шифрования
         /// </summary>

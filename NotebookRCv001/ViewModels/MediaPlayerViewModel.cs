@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Models;
-//using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.IO;
 using NotebookRCv001.Helpers;
@@ -49,8 +48,6 @@ namespace NotebookRCv001.ViewModels
 
         public ObservableCollection<string> PlayList => mediaPlayerModel.PlayList;
         public BitmapImage CurrentBitmap { get => mediaPlayerModel.CurrentBitmap; set => mediaPlayerModel.CurrentBitmap = value; }
-        public Image CurrentImage 
-        { get => mediaPlayerModel.CurrentImage; set => mediaPlayerModel.CurrentImage= value; }
 
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;
