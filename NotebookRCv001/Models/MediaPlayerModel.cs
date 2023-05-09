@@ -21,6 +21,7 @@ using NotebookRCv001.Helpers;
 using System.Windows.Threading;
 using NotebookRCv001.Views;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
 //using forms = System.Windows.Forms;
 //using System.Windows.Forms;
 
@@ -35,7 +36,9 @@ namespace NotebookRCv001.Models
         private Page page { get; set; }
         private BehaviorMediaElement behaviorMediaElement { get; set; }
         private BehaviorSlider behaviorSlider { get; set; }
+        private BehaviorImage behaviorImage { get; set; }
         private bool play { get; set; }
+        private Size sizeImage { get; set; }
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
@@ -67,12 +70,18 @@ namespace NotebookRCv001.Models
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
+        internal BitmapImage CurrentBitmap { get => currentBitmap; set => SetProperty(ref currentBitmap, value); }
+        private BitmapImage currentBitmap;
+
         internal Image CurrentImage
         {
             get => currentImage;
             set => SetProperty(ref currentImage, value);
         }
         private Image currentImage;
+
+        internal double CurrentImageScale { get => currentImageScale; set => SetProperty(ref currentImageScale, value); }
+        private double currentImageScale;
 
         internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
@@ -114,8 +123,6 @@ namespace NotebookRCv001.Models
         internal string LastFileName { get => lastFileName; set => SetProperty(ref lastFileName, value); }
         private string lastFileName;
 
-
-
         internal MediaPlayerModel()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
@@ -126,6 +133,7 @@ namespace NotebookRCv001.Models
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             play = false;
             BehaviorReady += (x) => { InitializePlayerAndSlider(x); };
+            CurrentImageScale = 1;
         }
 
 
@@ -180,6 +188,7 @@ namespace NotebookRCv001.Models
                 PlayList.Clear();
                 PlayIndex = 0;
                 play = false;
+                homeMenuFileViewModel.PathToLastFile = "";
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -269,6 +278,7 @@ namespace NotebookRCv001.Models
                 if (ThisImage)
                 {
                     CurrentImage = ImageFromPath(PlayList[PlayIndex], key).Result;
+                    homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -299,6 +309,7 @@ namespace NotebookRCv001.Models
                 if (ThisImage)
                 {
                     CurrentImage = ImageFromPath(PlayList[PlayIndex], key).Result;
+                    homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -328,13 +339,17 @@ namespace NotebookRCv001.Models
                 SetContentType(path);
                 if (ThisImage)
                 {
-                    CurrentImage = ImageFromPath(path, key).Result;
-                    if (CurrentImage.Tag != null)
-                        PlayIndex = PlayList.IndexOf(path);
-                    else
-                        CurrentImage = ImageFromPath(path, null).Result;
-                    if (CurrentImage.Tag == null)
-                        throw new Exception();
+                    CurrentBitmap = await BitmapFromPath(path, key, (int)sizeImage.Height);
+                    sizeImage = new Size(CurrentBitmap.Width, CurrentBitmap.Height);
+                    PlayIndex = PlayList.IndexOf(path);
+                    //CurrentImage = ImageFromPath(path, key).Result;
+                    //if (CurrentImage.Tag != null)
+                    //    PlayIndex = PlayList.IndexOf(path);
+                    //else
+                    //    CurrentImage = ImageFromPath(path, null).Result;
+                    //if (CurrentImage.Tag == null)
+                    //    throw new Exception();
+
                 }
                 else if (ThisAudio)
                 {
@@ -432,53 +447,32 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
         /// <summary>
-        /// окончание загрузки фрейма
+        /// окончание загрузки изображения
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool CanExecute_FrameLoaded(object obj)
+        internal bool CanExecute_ImageLoaded(object obj)
         {
             try
             {
                 bool c = false;
-                c = true;
+                c = obj != null;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_FrameLoaded(object obj)
+        internal void Execute_ImageLoaded(object obj)
         {
             try
             {
-                var window = Window.GetWindow(Application.Current.MainWindow);
-                window.Focusable = true;
-                window.KeyDown += MainWindow_KeyDown;
+                if(obj is BehaviorImage behavior)
+                {
+                    behaviorImage = behavior;
+                }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-        /// <summary>
-        /// выгрузка фрейма
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal bool CanExecute_FrameUnloaded(object obj)
-        {
-            try
-            {
-                bool c = false;
-                c = true;
-                return c;
-            }
-            catch (Exception e) { ErrorWindow(e); return false; }
-        }
-        internal void Execute_FrameUnloaded(object obj)
-        {
-            try
-            {
-                Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
-            }
-            catch (Exception e) { ErrorWindow(e); }
-        }
+
 
         internal bool CanExecute_PageLoaded(object obj)
         {
@@ -558,6 +552,46 @@ namespace NotebookRCv001.Models
                 }
             }
             catch (Exception ex) { ErrorWindow(ex); }
+        }
+
+        /// <summary>
+        /// управление зуммом (колесико мыши)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            try
+            {
+                if (e.Delta > 0)
+                    CurrentImageScale += 0.1;
+                else
+                    CurrentImageScale -= 0.1;
+                Application.Current.MainWindow.Focus();
+                var newheight = sizeImage.Height * CurrentImageScale;
+                var path = CurrentBitmap.UriSource.AbsolutePath;
+                var bitmap = CreateBitmapImageFromPath(path, (int)newheight);
+                CurrentBitmap = bitmap;
+                //CurrentImage = new Image() { Source = bitmap, Tag = path, Stretch=Stretch.None };
+            }
+            catch (Exception ex) { ErrorWindow(ex); }
+        }
+
+        private BitmapImage CreateBitmapImageFromPath(string path, int height=0)
+        {
+            try
+            {
+                BitmapImage bitmapImage = new();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.BeginInit();
+                bitmapImage.UriSource = new Uri(path);
+                //bitmapImage.Rotation = Rotation.Rotate0;
+                if (height > 0)
+                    bitmapImage.DecodePixelHeight = (int)((double)height * (96.0 / 72.0));
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+            catch (Exception e) { ErrorWindow(e); return null; }
         }
 
         private void SetCurrentPositionForSlider(TimeSpan time)
@@ -660,6 +694,7 @@ namespace NotebookRCv001.Models
                 if (bitmap != null)
                 {
                     image.Source = bitmap;
+                    sizeImage = new(bitmap.PixelWidth, bitmap.PixelHeight);
                     image.Tag = path;
                 }
                 return image;
@@ -667,6 +702,28 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); return image; }
         }
 
+        private async Task<BitmapImage> BitmapFromPath(string path, string key, int height=0)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            try
+            {
+                bitmap.BeginInit();
+                if (string.IsNullOrWhiteSpace(key))
+                {
+                    bitmap = CreateBitmapImageFromPath(path, height);
+                    if (bitmap == null)
+                        EncryptionKeyError(path);
+                }
+                else
+                {
+                    bitmap = await Command_executors.Executors.ImageDecrypt(path, key, height);
+                    if (bitmap == null)
+                        EncryptionKeyError(path);
+                }
+                return bitmap;
+            }
+            catch (Exception e) { ErrorWindow(e); return bitmap; }
+        }
         private async void VideoFromPath(string path)
         {
             try
@@ -716,22 +773,20 @@ namespace NotebookRCv001.Models
                     ThisVideo = VideoFileExtensions.Any((x) => x == ext);
                     //родительская папка
                     var dirpath = Path.GetDirectoryName(path);
-                    //создаем и заполняем коллекцию файлов для плей листа
+                    //создаем и заполняем коллекцию файлов для плейлиста
                     PlayList = new();
                     string key = homeMenuEncryptionViewModel.EncryptionKey;
-                    foreach (var file in Directory.GetFiles(dirpath))
+                    if (ThisImage || ThisAudio || ThisVideo)
                     {
-                        if (ThisImage)
+                        foreach (var file in Directory.GetFiles(dirpath))
                         {
-                            PlayList.Add(file);
-                        }
-                        else if (ThisAudio)
-                        {
-                            PlayList.Add(file);
-                        }
-                        else if (ThisVideo)
-                        {
-                            PlayList.Add(file);
+                            ext = Path.GetExtension(file);
+                            if (ThisAudio && AudioFileExtensions.Any((x) => x == ext))
+                                PlayList.Add(file);
+                            else if (ThisImage && ImageFileExtensions.Any((x) => x == ext))
+                                PlayList.Add(file);
+                            else if (ThisVideo && VideoFileExtensions.Any((x) => x == ext))
+                                PlayList.Add(file);
                         }
                     }
                 }

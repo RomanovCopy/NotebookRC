@@ -68,6 +68,7 @@
     <Compile Remove="Converters\ToStringMultiConverter.cs" />
     <Compile Remove="docxaml.cs" />
     <Compile Remove="Executors.cs" />
+    <Compile Remove="Helpers\MousePositionHelper.cs" />
     <Compile Remove="Helpers\TextBoxHeleper.cs" />
     <Compile Remove="Helpers\WordHelper.cs" />
     <Compile Remove="Helpers\WordHelper2.cs" />

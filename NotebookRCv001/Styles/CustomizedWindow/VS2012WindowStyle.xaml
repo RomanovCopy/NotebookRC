@@ -356,8 +356,7 @@
                             <DockPanel   
                                 HorizontalAlignment="Stretch"
                                 Background="Transparent"
-                                VerticalAlignment="Stretch"
-                                >
+                                VerticalAlignment="Stretch" >
                                 <Border
                                     x:Name="TitleBar"
                                     DockPanel.Dock="Top"

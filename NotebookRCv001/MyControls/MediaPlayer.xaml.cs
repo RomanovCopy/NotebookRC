@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using NotebookRCv001.Helpers;
+
 namespace NotebookRCv001.MyControls
 {
     /// <summary>
@@ -21,7 +23,6 @@ namespace NotebookRCv001.MyControls
     /// </summary>
     public partial class MediaPlayer : Page
     {
-
         public MediaPlayer()
         {
             InitializeComponent();

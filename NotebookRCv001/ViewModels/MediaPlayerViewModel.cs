@@ -15,6 +15,7 @@ using System.IO;
 using NotebookRCv001.Helpers;
 using NotebookRCv001.MyControls;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace NotebookRCv001.ViewModels
 {
@@ -47,7 +48,7 @@ namespace NotebookRCv001.ViewModels
         public string Content => mediaPlayerModel.Content;
 
         public ObservableCollection<string> PlayList => mediaPlayerModel.PlayList;
-
+        public BitmapImage CurrentBitmap { get => mediaPlayerModel.CurrentBitmap; set => mediaPlayerModel.CurrentBitmap = value; }
         public Image CurrentImage 
         { get => mediaPlayerModel.CurrentImage; set => mediaPlayerModel.CurrentImage= value; }
 
@@ -59,7 +60,6 @@ namespace NotebookRCv001.ViewModels
 
         public string PathToLastFile { get => mediaPlayerModel.PathToLastFile; set => mediaPlayerModel.PathToLastFile=value; }
         public string LastFileName { get => mediaPlayerModel.LastFileName; set => mediaPlayerModel.LastFileName = value; }
-
 
 
         public MediaPlayerViewModel()
@@ -89,17 +89,16 @@ namespace NotebookRCv001.ViewModels
 
         public ICommand SliderLoaded => sliderLoaded ??= new RelayCommand( mediaPlayerModel.Execute_SliderLoaded, mediaPlayerModel.CanExecute_SliderLoaded );
         private RelayCommand sliderLoaded;
+
         /// <summary>
         /// установка источника контента
         /// </summary>
         public ICommand SetContent => setContent ??= new RelayCommand( mediaPlayerModel.Execute_SetContent, mediaPlayerModel.CanExecute_SetContent );
         private RelayCommand setContent;
 
-        public ICommand FrameLoaded => frameLoaded ??= new RelayCommand(mediaPlayerModel.Execute_FrameLoaded, mediaPlayerModel.CanExecute_FrameLoaded);
-        private RelayCommand frameLoaded;
+        public ICommand ImageLoaded => imageLoaded ??= new RelayCommand(mediaPlayerModel.Execute_ImageLoaded, mediaPlayerModel.CanExecute_ImageLoaded);
+        private RelayCommand imageLoaded;
 
-        public ICommand FrameUnloaded => frameUnloaded ??= new RelayCommand(mediaPlayerModel.Execute_FrameUnloaded, mediaPlayerModel.CanExecute_FrameUnloaded);
-        private RelayCommand frameUnloaded;
         public ICommand MediaPlayerLoaded => mediaPlayerLoaded ??= new RelayCommand( mediaPlayerModel.Execute_MediaPlayerLoaded,
             mediaPlayerModel.CanExecute_MediaPlayerLoaded );
         private RelayCommand mediaPlayerLoaded;
