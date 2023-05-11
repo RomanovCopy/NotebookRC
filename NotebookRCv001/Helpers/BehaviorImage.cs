@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Forms.Design.Behavior;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,6 +15,7 @@ using Microsoft.Xaml.Behaviors;
 
 using NotebookRCv001.MyControls;
 using NotebookRCv001.ViewModels;
+
 
 namespace NotebookRCv001.Helpers
 {
@@ -54,6 +54,7 @@ namespace NotebookRCv001.Helpers
             SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
                 new PropertyMetadata(new PropertyChangedCallback(SourceChanged)));
         }
+
         protected override void OnAttached()
         {
             AssociatedObject.MouseDown += AssociatedObject_MouseDown;
@@ -61,6 +62,7 @@ namespace NotebookRCv001.Helpers
             AssociatedObject.MouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseWheel += AssociatedObject_MouseWheel;
         }
+
         protected override void OnDetaching()
         {
         }
@@ -73,40 +75,15 @@ namespace NotebookRCv001.Helpers
                 if(d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
                 {
                     behavior.AssociatedObject.Source = bitmap;
-                    //трансформируем изображение под размер страницы
                     var page = behavior.mainWindowViewModel.CurrentPage;
+                    //трансформация изображения при изменении размеров страницы
                     page.SizeChanged += (s,e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
+                    //начальная трансформация изображения под размер страницы
                     behavior.ImageTransformationToFitThePage(page, bitmap);
                 }
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
-        /// <summary>
-        /// трансформация изображения под размер страницы
-        /// </summary>
-        /// <param name="page">страница</param>
-        /// <param name="bitmap">изображение</param>
-        /// <exception cref="Exception"></exception>
-        private void ImageTransformationToFitThePage( Page page, BitmapImage bitmap )
-        {
-            try
-            {
-                //трансформируем изображение под размер страницы
-                var height = page.ActualHeight;
-                var width = page.ActualWidth;
-                var imgHeight = bitmap.Height;
-                var imgWidth = bitmap.Width;
-                double scaleX = (double)width / imgWidth;
-                double scaleY = (double)height / imgHeight;
-                double scale = Math.Min(scaleX, scaleY);
-
-                AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);
-            }
-            catch (Exception ex) { throw new Exception(ex.Message); }
-        }
-
-
         /// <summary>
         /// изменение положения указателя мыши             
         /// </summary>
@@ -120,8 +97,6 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
-
         /// <summary>
         /// прокручивание колесика мыши
         /// </summary>
@@ -141,7 +116,6 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
         /// <summary>
         /// перемещение указателя мыши над изображением                           
         /// </summary>
@@ -171,7 +145,6 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
         private void AssociatedObject_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try
@@ -181,7 +154,6 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try
@@ -191,7 +163,29 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
+        /// <summary>
+        /// трансформация изображения под размер страницы
+        /// </summary>
+        /// <param name="page">страница</param>
+        /// <param name="bitmap">изображение</param>
+        /// <exception cref="Exception"></exception>
+        private void ImageTransformationToFitThePage(Page page, BitmapImage bitmap)
+        {
+            try
+            {
+                //трансформируем изображение под размер страницы
+                var height = page.ActualHeight;
+                var width = page.ActualWidth;
+                var imgHeight = bitmap.Height;
+                var imgWidth = bitmap.Width;
+                double scaleX = (double)width / imgWidth;
+                double scaleY = (double)height / imgHeight;
+                double scale = Math.Min(scaleX, scaleY);
 
+                AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
         /// <summary>
         /// возврат фокуса клавиатуры(костыль!)
         /// </summary>
@@ -203,7 +197,5 @@ namespace NotebookRCv001.Helpers
             keyEvent.RoutedEvent = Keyboard.KeyUpEvent;
             InputManager.Current.ProcessInput(keyEvent);
         }
-
-
     }
 }
