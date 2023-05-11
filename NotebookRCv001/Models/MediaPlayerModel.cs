@@ -64,6 +64,9 @@ namespace NotebookRCv001.Models
         public Action<object> BehaviorReady { get => behaviorReady; set => behaviorReady = value; }
         private Action<object> behaviorReady;
 
+        public Action<object> BehaviorImageReady { get => behaviorImageReady; set => behaviorImageReady = value; }
+        private Action<object> behaviorImageReady;
+
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
@@ -162,7 +165,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                var a=behaviorMediaElement != null && behaviorSlider != null && !play;
+                var a = behaviorMediaElement != null && behaviorSlider != null && !play;
                 var b = !string.IsNullOrWhiteSpace(Content) || CurrentBitmap != null;
                 c = a && b;
                 return c;
@@ -336,8 +339,19 @@ namespace NotebookRCv001.Models
                 SetContentType(path);
                 if (ThisImage)
                 {
-                    CurrentBitmap = await BitmapFromPath(path, key);
-                    PlayIndex = PlayList.IndexOf(path);
+                    if (behaviorImage == null)
+                    {
+                        BehaviorImageReady += async (obj) =>
+                        {
+                            CurrentBitmap = await BitmapFromPath(path, key);
+                            PlayIndex = PlayList.IndexOf(path);
+                        };
+                    }
+                    else
+                    {
+                        CurrentBitmap = await BitmapFromPath(path, key);
+                        PlayIndex = PlayList.IndexOf(path);
+                    }
                 }
                 else if (ThisAudio)
                 {
@@ -455,6 +469,7 @@ namespace NotebookRCv001.Models
                 if (obj is BehaviorImage behavior)
                 {
                     behaviorImage = behavior;
+                    BehaviorImageReady.Invoke(behavior);
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -670,7 +685,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                BitmapImage bitmap = new ();
+                BitmapImage bitmap = new();
                 if (string.IsNullOrWhiteSpace(key))
                 {
                     bitmap = CreateBitmapImageFromPath(path, height);
