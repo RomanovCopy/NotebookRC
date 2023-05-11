@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms.Design.Behavior;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 using Microsoft.Xaml.Behaviors;
 
@@ -27,6 +30,9 @@ namespace NotebookRCv001.Helpers
         internal Point MousePosition { get => (Point)GetValue(MousePositionProperty); set => SetValue(MousePositionProperty, value); }
         public static readonly DependencyProperty MousePositionProperty;
 
+        internal BitmapImage Source { get => (BitmapImage)GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
+        public static readonly DependencyProperty SourceProperty;
+
         public BehaviorImage()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
@@ -45,8 +51,9 @@ namespace NotebookRCv001.Helpers
             MousePositionProperty = DependencyProperty.Register("MousePosition", typeof(Point), typeof(BehaviorImage),
                 new PropertyMetadata(new PropertyChangedCallback(MousePositionChanged)));
 
+            SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
+                new PropertyMetadata(new PropertyChangedCallback(SourceChanged)));
         }
-
         protected override void OnAttached()
         {
             AssociatedObject.MouseDown += AssociatedObject_MouseDown;
@@ -54,11 +61,50 @@ namespace NotebookRCv001.Helpers
             AssociatedObject.MouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseWheel += AssociatedObject_MouseWheel;
         }
-
         protected override void OnDetaching()
         {
         }
 
+
+        private static void SourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            try
+            {
+                if(d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
+                {
+                    behavior.AssociatedObject.Source = bitmap;
+                    //трансформируем изображение под размер страницы
+                    var page = behavior.mainWindowViewModel.CurrentPage;
+                    page.SizeChanged += (s,e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
+                    behavior.ImageTransformationToFitThePage(page, bitmap);
+                }
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
+        /// <summary>
+        /// трансформация изображения под размер страницы
+        /// </summary>
+        /// <param name="page">страница</param>
+        /// <param name="bitmap">изображение</param>
+        /// <exception cref="Exception"></exception>
+        private void ImageTransformationToFitThePage( Page page, BitmapImage bitmap )
+        {
+            try
+            {
+                //трансформируем изображение под размер страницы
+                var height = page.ActualHeight;
+                var width = page.ActualWidth;
+                var imgHeight = bitmap.Height;
+                var imgWidth = bitmap.Width;
+                double scaleX = (double)width / imgWidth;
+                double scaleY = (double)height / imgHeight;
+                double scale = Math.Min(scaleX, scaleY);
+
+                AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
 
 
         /// <summary>
@@ -86,14 +132,11 @@ namespace NotebookRCv001.Helpers
         {
             try
             {
-                if (sender is Image image)
+                if (sender is Image img)
                 {
-                    ScrollViewer scrollViewer = (ScrollViewer)image.Parent;
                     double zoom = e.Delta > 0 ? .2 : -.2; // определяем направление масштабирования
-                    double newScale = Math.Min(Math.Max(image.LayoutTransform.Value.M11 + zoom, .1), 10); // ограничиваем масштабирование
-                    scrollViewer.RenderTransformOrigin = e.GetPosition(image);
-                    ScaleTransform scaleTransform = new ScaleTransform(newScale, newScale);
-                    image.LayoutTransform = scaleTransform;
+                    double newScale = Math.Min(Math.Max(img.LayoutTransform.Value.M11 + zoom, .1), 10); // ограничиваем масштабирование
+                    img.LayoutTransform = new ScaleTransform(newScale, newScale, 0, 0);
                 }
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
@@ -111,7 +154,6 @@ namespace NotebookRCv001.Helpers
             {
                 if (sender is Image img)
                 {
-                    //MousePosition = e.GetPosition(img);
                     if (isDragging)
                     {
                         Point currentPoint = e.GetPosition(null);
@@ -135,6 +177,7 @@ namespace NotebookRCv001.Helpers
             try
             {
                 isDragging = false;
+                KeyboardFocus();
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
@@ -147,6 +190,18 @@ namespace NotebookRCv001.Helpers
                 isDragging = true;
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
+        /// <summary>
+        /// возврат фокуса клавиатуры(костыль!)
+        /// </summary>
+        private void KeyboardFocus()
+        {
+            var keyEvent = new KeyEventArgs(Keyboard.PrimaryDevice, PresentationSource.FromVisual((ScrollViewer)AssociatedObject.Parent), 0, Key.Tab);
+            keyEvent.RoutedEvent = Keyboard.KeyDownEvent;
+            InputManager.Current.ProcessInput(keyEvent);
+            keyEvent.RoutedEvent = Keyboard.KeyUpEvent;
+            InputManager.Current.ProcessInput(keyEvent);
         }
 
 

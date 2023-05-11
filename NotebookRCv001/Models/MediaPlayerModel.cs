@@ -67,8 +67,7 @@ namespace NotebookRCv001.Models
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
-        internal BitmapImage CurrentBitmap { get => currentBitmap; set => SetProperty(ref currentBitmap, value); }
-        private BitmapImage currentBitmap;
+        internal BitmapImage CurrentBitmap { get => behaviorImage.Source; set => behaviorImage.Source = value; }
 
         internal Image CurrentImage
         {
@@ -163,7 +162,9 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = behaviorMediaElement != null && behaviorSlider != null && !play;
+                var a=behaviorMediaElement != null && behaviorSlider != null && !play;
+                var b = !string.IsNullOrWhiteSpace(Content) || CurrentBitmap != null;
+                c = a && b;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -178,6 +179,9 @@ namespace NotebookRCv001.Models
                 behaviorMediaElement.Position = TimeSpan.FromSeconds(0);
                 Content = string.Empty;
                 CurrentImage = null;
+                if (CurrentBitmap != null)
+                    CurrentBitmap.StreamSource.Dispose();
+                CurrentBitmap = null;
                 PlayList.Clear();
                 PlayIndex = 0;
                 play = false;
@@ -346,7 +350,7 @@ namespace NotebookRCv001.Models
             }
             catch
             {
-                EncryptionKeyError(path);
+                CurrentBitmap = EncryptionKeyError(path).Result;
             }
         }
 
@@ -448,7 +452,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if(obj is BehaviorImage behavior)
+                if (obj is BehaviorImage behavior)
                 {
                     behaviorImage = behavior;
                 }
@@ -512,6 +516,8 @@ namespace NotebookRCv001.Models
             try
             {
                 Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
+                if (CurrentBitmap != null)
+                    CurrentBitmap.StreamSource.Dispose();
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
 
@@ -541,15 +547,14 @@ namespace NotebookRCv001.Models
         }
 
 
-        private BitmapImage CreateBitmapImageFromPath(string path, int height=0)
+        private BitmapImage CreateBitmapImageFromPath(string path, int height = 0)
         {
             try
             {
                 BitmapImage bitmapImage = new();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.BeginInit();
-                bitmapImage.UriSource = new Uri(path);
-                //bitmapImage.Rotation = Rotation.Rotate0;
+                bitmapImage.StreamSource = File.OpenRead(path);
                 if (height > 0)
                     bitmapImage.DecodePixelHeight = (int)((double)height * (96.0 / 72.0));
                 bitmapImage.EndInit();
@@ -661,27 +666,26 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); return image; }
         }
-        private async Task<BitmapImage> BitmapFromPath(string path, string key, int height=0)
+        private async Task<BitmapImage> BitmapFromPath(string path, string key, int height = 0)
         {
-            BitmapImage bitmap = new BitmapImage();
             try
             {
-                bitmap.BeginInit();
+                BitmapImage bitmap = new ();
                 if (string.IsNullOrWhiteSpace(key))
                 {
                     bitmap = CreateBitmapImageFromPath(path, height);
                     if (bitmap == null)
-                        EncryptionKeyError(path);
+                        bitmap = await EncryptionKeyError(path);
                 }
                 else
                 {
                     bitmap = await Command_executors.Executors.ImageDecrypt(path, key, height);
                     if (bitmap == null)
-                        EncryptionKeyError(path);
+                        bitmap = await EncryptionKeyError(path);
                 }
                 return bitmap;
             }
-            catch (Exception e) { ErrorWindow(e); return bitmap; }
+            catch (Exception e) { ErrorWindow(e); return null; }
         }
         private async void VideoFromPath(string path)
         {
@@ -750,7 +754,7 @@ namespace NotebookRCv001.Models
         /// <summary>
         /// обработка ошибок ключа шифрования
         /// </summary>
-        private async void EncryptionKeyError(string path)
+        private async Task<BitmapImage> EncryptionKeyError(string path)
         {
             var messages = new MyMessages();
             var messagesVM = (ViewModels.MyMessagesViewModel)messages.DataContext;
@@ -759,6 +763,7 @@ namespace NotebookRCv001.Models
                 messagesVM.SetTitle.Execute(language.MyMessagesHeaders[1]);
                 messagesVM.SetButtonText.Execute(language.MyMessagesHeaders[5]);
                 var key = homeMenuEncryptionViewModel.EncryptionKey;
+                BitmapImage bitmap = null;
                 if (string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(path))
                 {
                     messagesVM.SetMessage.Execute(language.MessagesMyMessages[8]);
@@ -769,7 +774,7 @@ namespace NotebookRCv001.Models
                 {
                     if (ThisImage)
                     {
-                        CurrentImage = ImageFromPath(path, null).Result;
+                        bitmap = await BitmapFromPath(path, null);
                     }
                     else if (ThisVideo)
                     {
@@ -783,12 +788,14 @@ namespace NotebookRCv001.Models
                     }
                 }
                 messages.Close();
+                return bitmap;
             }
             catch
             {
                 messagesVM.SetMessage.Execute(language.MessagesMyMessages[9]);
                 messages.ShowDialog();
                 Execute_PageClose(null);
+                return null;
             }
         }
     }

@@ -12,7 +12,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       ScrollViewer.VerticalScrollBarVisibility="Visible"
-      Title="MediaPlayer" 
+      Title="MediaPlayer" KeepAlive="True"
       x:Name="page">
     <Page.Resources>
         <viewmodels:MediaPlayerViewModel x:Key="viewmodel"/>
@@ -92,7 +92,7 @@
             </Menu>
             <ContentPresenter Grid.Column="2" Height="18" Content="{Binding Source={StaticResource closeandclear}}"/>
         </Grid>
-        <Grid Grid.Row="1"  ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <Grid x:Name="grid" Grid.Row="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -120,9 +120,10 @@
                 </MediaElement.Style>
             </MediaElement>
             <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" 
-                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                          HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Center">
 
-                <Image x:Name="img" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform">
+                <Image x:Name="img"  Stretch="None" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"
