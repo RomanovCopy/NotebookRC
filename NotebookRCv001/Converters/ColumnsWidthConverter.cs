@@ -27,7 +27,8 @@ namespace NotebookRCv001.Converters
 
         public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
         {
-            if (window == null) return null;
+            if (window == null)
+                window = Application.Current.MainWindow;
             try
             {
                 if (parameter is string str && str == "last")

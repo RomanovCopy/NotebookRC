@@ -486,8 +486,9 @@
                                             VerticalAlignment="Center"
                                             TextWrapping="NoWrap"
                                             FontWeight="Medium"
+                                            Background="Black"
                                             Foreground="White"
-                                            FontSize="12"
+                                            FontSize="14"
                                             Opacity="1">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">

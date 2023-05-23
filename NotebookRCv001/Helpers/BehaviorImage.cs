@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 using Microsoft.Xaml.Behaviors;
@@ -16,22 +20,26 @@ using Microsoft.Xaml.Behaviors;
 using NotebookRCv001.MyControls;
 using NotebookRCv001.ViewModels;
 
-
 namespace NotebookRCv001.Helpers
 {
     public class BehaviorImage : Behavior<Image>
     {
         private readonly MainWindowViewModel mainWindowViewModel;
 
-        private MediaPlayerViewModel mediaPlayerViewModel { get; set; }
+        public Image Image => AssociatedObject;
+        private ScrollViewer scrollViewer { get; set; }
+
         private bool isDragging { get; set; }
         private Point startPoint { get; set; }
+        private double scale { get; set; }
 
         internal Point MousePosition { get => (Point)GetValue(MousePositionProperty); set => SetValue(MousePositionProperty, value); }
         public static readonly DependencyProperty MousePositionProperty;
+        public static PropertyChangedCallback MousePositionChanged { get; set; }
 
         internal BitmapImage Source { get => (BitmapImage)GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
         public static readonly DependencyProperty SourceProperty;
+        public static PropertyChangedCallback SourceChanged { get; set; }
 
         public BehaviorImage()
         {
@@ -40,27 +48,23 @@ namespace NotebookRCv001.Helpers
             {
                 if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems[0] is NotebookRCv001.MyControls.MediaPlayer player)
                 {
-                    mediaPlayerViewModel = (MediaPlayerViewModel)player.DataContext;
+
                 }
             };
             isDragging = false;
+            scale = 1.0;
         }
-
         static BehaviorImage()
         {
             MousePositionProperty = DependencyProperty.Register("MousePosition", typeof(Point), typeof(BehaviorImage),
                 new PropertyMetadata(new PropertyChangedCallback(MousePositionChanged)));
 
             SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
-                new PropertyMetadata(new PropertyChangedCallback(SourceChanged)));
+                new PropertyMetadata(SourceChanged));
         }
 
         protected override void OnAttached()
         {
-            AssociatedObject.MouseDown += AssociatedObject_MouseDown;
-            AssociatedObject.MouseUp += AssociatedObject_MouseUp;
-            AssociatedObject.MouseMove += AssociatedObject_MouseMove;
-            AssociatedObject.MouseWheel += AssociatedObject_MouseWheel;
         }
 
         protected override void OnDetaching()
@@ -68,35 +72,92 @@ namespace NotebookRCv001.Helpers
         }
 
 
-        private static void SourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public event RoutedEventHandler Loaded
         {
-            try
+            add
             {
-                if(d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
-                {
-                    behavior.AssociatedObject.Source = bitmap;
-                    var page = behavior.mainWindowViewModel.CurrentPage;
-                    //трансформация изображения при изменении размеров страницы
-                    page.SizeChanged += (s,e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
-                    //начальная трансформация изображения под размер страницы
-                    behavior.ImageTransformationToFitThePage(page, bitmap);
-                }
+                AssociatedObject.Loaded += value;
             }
-            catch (Exception ex) { throw new Exception(ex.Message); }
+            remove
+            {
+                AssociatedObject.Loaded -= value;
+            }
         }
+        public event MouseEventHandler MouseMove
+        {
+            add
+            {
+                AssociatedObject.MouseMove += value;
+            }
+            remove
+            {
+                AssociatedObject.MouseMove -= value;
+            }
+        }
+        public event MouseButtonEventHandler MouseDown
+        {
+            add
+            {
+                AssociatedObject.MouseDown += value;
+            }
+            remove
+            {
+                AssociatedObject.MouseDown -= value;
+            }
+        }
+        public event MouseButtonEventHandler MouseUp
+        {
+            add
+            {
+                AssociatedObject.MouseUp += value;
+            }
+            remove
+            {
+                AssociatedObject.MouseUp -= value;
+            }
+        }
+        public event MouseWheelEventHandler MouseWheel
+        {
+            add
+            {
+                AssociatedObject.MouseWheel += value;
+            }
+            remove
+            {
+                AssociatedObject.MouseWheel -= value;
+            }
+        }
+
+
+        //private static void SourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
+        //        {
+        //            behavior.AssociatedObject.Source = bitmap;
+        //            var page = behavior.mainWindowViewModel.CurrentPage;
+        //            //трансформация изображения при изменении размеров страницы
+        //            page.SizeChanged += (s, e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
+        //            //начальная трансформация изображения под размер страницы
+        //            behavior.ImageTransformationToFitThePage(page, bitmap);
+        //        }
+        //    }
+        //    catch (Exception ex) { throw new Exception(ex.Message); }
+        //}
         /// <summary>
         /// изменение положения указателя мыши             
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
         /// <exception cref="Exception"></exception>
-        private static void MousePositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex) { throw new Exception(ex.Message); }
-        }
+        //private static void MousePositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //    }
+        //    catch (Exception ex) { throw new Exception(ex.Message); }
+        //}
         /// <summary>
         /// прокручивание колесика мыши
         /// </summary>
@@ -107,15 +168,25 @@ namespace NotebookRCv001.Helpers
         {
             try
             {
-                if (sender is Image img)
+
+                double zoom = e.Delta > 0 ? 0.1 : -0.1;
+                scale += zoom;
+                if (scale <= 5 && scale >= 0.5)
                 {
-                    double zoom = e.Delta > 0 ? .2 : -.2; // определяем направление масштабирования
-                    double newScale = Math.Min(Math.Max(img.LayoutTransform.Value.M11 + zoom, .1), 10); // ограничиваем масштабирование
-                    img.LayoutTransform = new ScaleTransform(newScale, newScale, 0, 0);
+                    //mediaPlayerViewModel.ScaleX = 1.1;
+                    //mediaPlayerViewModel.ScaleY = 1.1;
+                    //var position = e.GetPosition(image);
+                    //var transformGroup = new TransformGroup();
+                    //transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
+                    //image.RenderTransform = transformGroup;
                 }
+
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
+
+
         /// <summary>
         /// перемещение указателя мыши над изображением                           
         /// </summary>
@@ -126,21 +197,32 @@ namespace NotebookRCv001.Helpers
         {
             try
             {
-                if (sender is Image img)
-                {
-                    if (isDragging)
-                    {
-                        Point currentPoint = e.GetPosition(null);
-                        double diffX = startPoint.X - currentPoint.X;
-                        double diffY = startPoint.Y - currentPoint.Y;
-
-                        ScrollViewer scrollViewer = img.Parent as ScrollViewer;
-                        scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + diffX);
-                        scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + diffY);
-
-                        startPoint = currentPoint;
-                    }
-                }
+                //if (isDragging)
+                //{
+                //    if (image.RenderTransform is TransformGroup transform)
+                //    {
+                //        TranslateTransform translateTransform = null;
+                //        foreach (var t in transform.Children)
+                //        {
+                //            if (t is TranslateTransform tt)
+                //            {
+                //                translateTransform = tt;
+                //                break;
+                //            }
+                //        }
+                //        if (translateTransform != null)
+                //        {
+                //            Point currentPoint = e.GetPosition(image);
+                //            double diffX = currentPoint.X - startPoint.X;
+                //            double diffY = currentPoint.Y - startPoint.Y;
+                //            //scrollViewer.ScrollToVerticalOffset(diffY);
+                //            //scrollViewer.ScrollToHorizontalOffset(diffX);
+                //            translateTransform.X += diffX;
+                //            translateTransform.Y += diffY;
+                //            startPoint = currentPoint;
+                //        }
+                //    }
+                //}
 
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
@@ -149,6 +231,14 @@ namespace NotebookRCv001.Helpers
         {
             try
             {
+                //if (isDragging)
+                //{
+                //    var currentPoint = e.GetPosition(scrollViewer);
+                //    double diffX = currentPoint.X - startPoint.X;
+                //    double diffY = currentPoint.Y - startPoint.Y;
+                //    scrollViewer.ScrollToVerticalOffset(diffY);
+                //    scrollViewer.ScrollToHorizontalOffset(diffX);
+                //}
                 isDragging = false;
                 KeyboardFocus();
             }
@@ -158,11 +248,27 @@ namespace NotebookRCv001.Helpers
         {
             try
             {
-                startPoint = e.GetPosition(null);
+                startPoint = e.GetPosition(scrollViewer);
                 isDragging = true;
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
+
+        private void UpdateImagePosition()
+        {
+            //if (image.ActualWidth > scrollViewer.ViewportWidth)
+            //{
+            //    double horizontalOffset = (image.ActualWidth - scrollViewer.ViewportWidth) / 2;
+            //    scrollViewer.ScrollToHorizontalOffset(horizontalOffset);
+            //}
+
+            //if (image.ActualHeight > scrollViewer.ViewportHeight)
+            //{
+            //    double verticalOffset = (image.ActualHeight - scrollViewer.ViewportHeight) / 2;
+            //    scrollViewer.ScrollToVerticalOffset(verticalOffset);
+            //}
+        }
+
         /// <summary>
         /// трансформация изображения под размер страницы
         /// </summary>
@@ -180,7 +286,7 @@ namespace NotebookRCv001.Helpers
                 var imgWidth = bitmap.Width;
                 double scaleX = (double)width / imgWidth;
                 double scaleY = (double)height / imgHeight;
-                double scale = Math.Min(scaleX, scaleY);
+                scale = Math.Min(scaleX, scaleY);
 
                 AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);
             }

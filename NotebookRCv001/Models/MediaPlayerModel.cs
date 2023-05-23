@@ -70,7 +70,8 @@ namespace NotebookRCv001.Models
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
-        internal BitmapImage CurrentBitmap { get => behaviorImage.Source; set => behaviorImage.Source = value; }
+        internal BitmapImage CurrentBitmap { get => currentBitmap; set => SetProperty(ref currentBitmap, value); }
+        private BitmapImage currentBitmap;
 
         internal Image CurrentImage
         {
@@ -78,6 +79,14 @@ namespace NotebookRCv001.Models
             set => SetProperty(ref currentImage, value);
         }
         private Image currentImage;
+
+        internal Point MousePosition { get => mousePosition; set => SetProperty(ref mousePosition, value); }
+        private Point mousePosition;
+
+        internal double ScaleX { get => scaleX; set => SetProperty(ref scaleX, value); }
+        private double scaleX;
+        internal double ScaleY { get => scaleY; set => SetProperty(ref scaleY, value); }
+        private double scaleY;
 
         internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
@@ -129,6 +138,8 @@ namespace NotebookRCv001.Models
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             play = false;
             BehaviorReady += (x) => { InitializePlayerAndSlider(x); };
+            ScaleX = 1;
+            ScaleY = 1;
         }
 
 
@@ -457,7 +468,7 @@ namespace NotebookRCv001.Models
             try
             {
                 bool c = false;
-                c = obj != null;
+                c = true;
                 return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
@@ -469,12 +480,36 @@ namespace NotebookRCv001.Models
                 if (obj is BehaviorImage behavior)
                 {
                     behaviorImage = behavior;
-                    BehaviorImageReady.Invoke(behavior);
+                    behaviorImage.MouseWheel += BehaviorImage_MouseWheel;
+                    if (BehaviorImageReady != null)
+                        BehaviorImageReady.Invoke(behavior);
+                    
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
         }
 
+        private void BehaviorImage_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            try
+            {
+                double zoom = e.Delta > 0 ? 0.1 : -0.1;
+                var scale = Math.Min(ScaleX, ScaleY);
+                scale += zoom;
+                if (scale <= 10 && scale >= 0.5)
+                {
+                    MousePosition = e.GetPosition(sender as Image);
+                    ScaleX += zoom;
+                    ScaleY +=zoom;
+                    //var transformGroup = new TransformGroup();
+                    //transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
+                    //MousePosition = transformGroup;
+                }
+
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
 
         internal bool CanExecute_PageLoaded(object obj)
         {

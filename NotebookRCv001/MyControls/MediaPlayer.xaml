@@ -10,8 +10,6 @@
       xmlns:helpers="clr-namespace:NotebookRCv001.Helpers"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      ScrollViewer.VerticalScrollBarVisibility="Visible"
       Title="MediaPlayer" KeepAlive="True"
       x:Name="page">
     <Page.Resources>
@@ -119,11 +117,15 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" 
-                          HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                          VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Center">
+            <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3">
 
-                <Image x:Name="img"  Stretch="None" >
+                <Image x:Name="img"  Stretch="None" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}">
+                    <Image.RenderTransform>
+                        <ScaleTransform ScaleX="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged}"
+                                        ScaleY="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged}"
+                                        CenterX="{Binding MousePosition.X, UpdateSourceTrigger=PropertyChanged}"
+                                        CenterY="{Binding MousePosition.Y, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Image.RenderTransform>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"
@@ -134,6 +136,7 @@
                         <helpers:BehaviorImage x:Name="behaviorimg"/>
                     </i:Interaction.Behaviors>
                 </Image>
+                
                 <ScrollViewer.Style>
                     <Style TargetType="ScrollViewer">
                         <Style.Triggers>
