@@ -96,7 +96,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <MediaElement Name="mplayer" LoadedBehavior="Manual" Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+            <MediaElement Name="mplayer" LoadedBehavior="Manual" 
+                          Source="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
                           Stretch="Uniform" Grid.Row="0" Grid.RowSpan="3">
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorMediaElement x:Name="mediabehavior"/>
@@ -118,14 +119,15 @@
                 </MediaElement.Style>
             </MediaElement>
             <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3">
-
-                <Image x:Name="img"  Stretch="None" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleX="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged}"
-                                        ScaleY="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged}"
-                                        CenterX="{Binding MousePosition.X, UpdateSourceTrigger=PropertyChanged}"
-                                        CenterY="{Binding MousePosition.Y, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Image.RenderTransform>
+                <Image x:Name="img"  Stretch="None" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}"
+                           HorizontalAlignment="Center">
+                    <!--<Image.RenderTransform>
+                        <ScaleTransform 
+                                ScaleX="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged}"
+                                ScaleY="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged}"
+                                CenterX="{Binding MousePosition.X, UpdateSourceTrigger=PropertyChanged}"
+                                CenterY="{Binding MousePosition.Y, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Image.RenderTransform>-->
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"
@@ -136,7 +138,6 @@
                         <helpers:BehaviorImage x:Name="behaviorimg"/>
                     </i:Interaction.Behaviors>
                 </Image>
-                
                 <ScrollViewer.Style>
                     <Style TargetType="ScrollViewer">
                         <Style.Triggers>
@@ -149,13 +150,15 @@
                     </Style>
                 </ScrollViewer.Style>
             </ScrollViewer>
-            <Slider x:Name="mpslider" Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
+            <Slider x:Name="mpslider" 
+                    Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
                 <i:Interaction.Behaviors>
                     <helpers:BehaviorSlider x:Name="sliderbehavior"/>
                 </i:Interaction.Behaviors>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
-                        <i:InvokeCommandAction Command="{Binding SliderLoaded, UpdateSourceTrigger=PropertyChanged}"
+                        <i:InvokeCommandAction Command="{Binding SliderLoaded, 
+                            UpdateSourceTrigger=PropertyChanged}"
                                                CommandParameter="{Binding ElementName=sliderbehavior, UpdateSourceTrigger=PropertyChanged}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>

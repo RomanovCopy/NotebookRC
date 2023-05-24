@@ -355,12 +355,14 @@ namespace NotebookRCv001.Models
                         BehaviorImageReady += async (obj) =>
                         {
                             CurrentBitmap = await BitmapFromPath(path, key);
+                            ImageTransformationToFitThePage(CurrentBitmap);
                             PlayIndex = PlayList.IndexOf(path);
                         };
                     }
                     else
                     {
                         CurrentBitmap = await BitmapFromPath(path, key);
+                        ImageTransformationToFitThePage(CurrentBitmap);
                         PlayIndex = PlayList.IndexOf(path);
                     }
                 }
@@ -736,6 +738,30 @@ namespace NotebookRCv001.Models
                 return bitmap;
             }
             catch (Exception e) { ErrorWindow(e); return null; }
+        }
+        /// <summary>
+        /// трансформация изображения под размер страницы
+        /// </summary>
+        /// <param name="page">страница</param>
+        /// <param name="bitmap">изображение</param>
+        /// <exception cref="Exception"></exception>
+        private void ImageTransformationToFitThePage(BitmapImage bitmap)
+        {
+            try
+            {
+                //трансформируем изображение под размер страницы
+                var height = page.ActualHeight;
+                var width = page.ActualWidth;
+                var imgHeight = bitmap.Height;
+                var imgWidth = bitmap.Width;
+                double scaleX = (double)width / imgWidth;
+                double scaleY = (double)height / imgHeight;
+                var scale = Math.Min(scaleX, scaleY);
+                MousePosition = new((width - bitmap.Width) / 2, 0);
+                ScaleX = scale;
+                ScaleY = scale;
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
         private async void VideoFromPath(string path)
         {
