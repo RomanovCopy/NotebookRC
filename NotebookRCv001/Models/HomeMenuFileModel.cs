@@ -22,6 +22,7 @@ using System.Windows.Xps.Packaging;
 using NotebookRCv001.Interfaces;
 using NotebookRCv001.Helpers;
 using System.Windows.Media;
+using System.ComponentModel;
 
 namespace NotebookRCv001.Models
 {
@@ -97,6 +98,14 @@ namespace NotebookRCv001.Models
         /// </summary>
         public double ProgressValue { get => progressValue; set => SetProperty(ref progressValue, value); }
         double progressValue;
+        /// <summary>
+        /// обработано файлов при синхронизации
+        /// </summary>
+        private double copiedFiles { get; set; }
+        /// <summary>
+        /// общее колличество файлов для синхронизации
+        /// </summary>
+        private double totalFiles { get; set; }
 
         public HomeMenuFileModel()
         {
@@ -525,16 +534,18 @@ namespace NotebookRCv001.Models
                         string path = viewmodel.WorkingDirectory;
                         if (path != null)
                         {
+                            ProgressValue = 0;
                             var progress = new DisplayProgress();
                             var progressVM = (DisplayProgressViewModel)progress.DataContext;
                             progressVM.Target = this;
                             PropertyChanged += (s, e) => progressVM.OnPropertyChanged(e.PropertyName);
                             progress.Show();
-
                             messages = new MyMessages();
                             messagesVM = (ViewModels.MyMessagesViewModel)messages.DataContext;
                             messagesVM.SetButtonText.Execute("Ok");
-                            var task = await Task<bool>.Factory.StartNew(() => SynchronizationOfTwoDirectories(path, WorkingDirectory));
+                            copiedFiles = 0;//обнуляем колличество скопированных файлов
+                            totalFiles = (double)CountFiles(path);//подсчитываем файлы
+                            var task = await Task<bool>.Factory.StartNew(() => SyncDirectories(progressVM, path, WorkingDirectory)); ;
                             if (task)
                             {//синхронизация прошла успешно
                                 messagesVM.SetMessage.Execute(mainWindowViewModel.Language.MessagesMyMessages[4]);
@@ -724,6 +735,63 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); return false; }
         }
 
+        public bool SyncDirectories(DisplayProgressViewModel viewModel, string sourceDir, string destDir)
+        {
+            try
+            {
+                // Создаем объекты для исходного и целевого каталогов
+                DirectoryInfo source = new DirectoryInfo(sourceDir);
+                DirectoryInfo dest = new DirectoryInfo(destDir);
+                //блокируем возможность деления на 0
+                totalFiles = totalFiles == 0 ? 1 : totalFiles;
+                // Создаем целевой каталог, если он не существует
+                if (!dest.Exists)
+                {
+                    dest.Create();
+                }
+                // Копируем файлы из исходного каталога в целевой, только если они более новые
+                foreach (FileInfo file in source.GetFiles())
+                {
+                    string destFilePath = Path.Combine(dest.FullName, file.Name);
+                    if (!File.Exists(destFilePath) || file.LastWriteTime > File.GetLastWriteTime(destFilePath))
+                    {
+                        file.CopyTo(destFilePath, true);
+                    }
+                    // Обновляем прогресс
+                    copiedFiles++;
+                    ProgressValue = copiedFiles / totalFiles * 100.0;
+                }
+                // Рекурсивно вызываем этот же метод для всех подкаталогов
+                foreach (DirectoryInfo subDir in source.GetDirectories())
+                {
+                    string destSubDirPath = Path.Combine(dest.FullName, subDir.Name);
+                    SyncDirectories(viewModel, subDir.FullName, destSubDirPath);
+                }
+                return true;
+            }
+            catch (Exception e) { ErrorWindow(e); return false; }
+        }
 
+        /// <summary>
+        /// подсчет файлов в каталоге и подкаталогах
+        /// </summary>
+        /// <param name="dirPath"></param>
+        /// <returns></returns>
+        private int CountFiles(string dirPath)
+        {
+            // Создаем объект для каталога
+            DirectoryInfo dir = new DirectoryInfo(dirPath);
+
+            // Считаем количество файлов в текущем каталоге
+            int count = dir.GetFiles().Length;
+
+            // Рекурсивно вызываем эту же функцию для каждого подкаталога
+            foreach (DirectoryInfo subDir in dir.GetDirectories())
+            {
+                count += CountFiles(subDir.FullName);
+            }
+
+            return count;
+        }
     }
 }
