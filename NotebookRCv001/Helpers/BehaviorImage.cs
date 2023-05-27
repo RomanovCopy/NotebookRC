@@ -35,11 +35,9 @@ namespace NotebookRCv001.Helpers
 
         internal Point MousePosition { get => (Point)GetValue(MousePositionProperty); set => SetValue(MousePositionProperty, value); }
         public static readonly DependencyProperty MousePositionProperty;
-        public static PropertyChangedCallback MousePositionChanged { get; set; }
 
         internal BitmapImage Source { get => (BitmapImage)GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
         public static readonly DependencyProperty SourceProperty;
-        public static PropertyChangedCallback SourceChanged { get; set; }
 
         public BehaviorImage()
         {
@@ -62,6 +60,7 @@ namespace NotebookRCv001.Helpers
             SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
                 new PropertyMetadata(SourceChanged));
         }
+
 
         protected override void OnAttached()
         {
@@ -129,35 +128,36 @@ namespace NotebookRCv001.Helpers
         }
 
 
-        //private static void SourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
-        //        {
-        //            behavior.AssociatedObject.Source = bitmap;
-        //            var page = behavior.mainWindowViewModel.CurrentPage;
-        //            //трансформация изображения при изменении размеров страницы
-        //            page.SizeChanged += (s, e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
-        //            //начальная трансформация изображения под размер страницы
-        //            behavior.ImageTransformationToFitThePage(page, bitmap);
-        //        }
-        //    }
-        //    catch (Exception ex) { throw new Exception(ex.Message); }
-        //}
+        private static void SourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            try
+            {
+                //if (d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
+                //{
+                //    behavior.AssociatedObject.Source = bitmap;
+                //    var page = behavior.mainWindowViewModel.CurrentPage;
+                //    //трансформация изображения при изменении размеров страницы
+                //    page.SizeChanged += (s, e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
+                //    //начальная трансформация изображения под размер страницы
+                //    behavior.ImageTransformationToFitThePage(page, bitmap);
+                //}
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
         /// <summary>
         /// изменение положения указателя мыши             
         /// </summary>
-        /// <param name="d"></param>
-        /// <param name="e"></param>
-        /// <exception cref="Exception"></exception>
-        //private static void MousePositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    try
-        //    {
-        //    }
-        //    catch (Exception ex) { throw new Exception(ex.Message); }
-        //}
+        /// <param name = "d" ></ param >
+        /// < param name="e"></param>
+        /// <exception cref = "Exception" ></ exception >
+        private static void MousePositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
         /// <summary>
         /// прокручивание колесика мыши
         /// </summary>
