@@ -66,6 +66,7 @@ namespace NotebookRCv001.Models
                 WindowHeight = Properties.Settings.Default.DisplayProgressHeight;
                 WindowWidth = Properties.Settings.Default.DisplayProgressWidth;
             }
+            language.PropertyChanged += (s, e) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
         }
 
         private void WindowClose( double value)
