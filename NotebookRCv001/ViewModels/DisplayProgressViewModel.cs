@@ -25,15 +25,16 @@ namespace NotebookRCv001.ViewModels
 
         public double ProgressValue { get => displayProgressModel.ProgressValue; set => displayProgressModel.ProgressValue = value; }
 
-        public ObservableCollection<string> Headers => null;
+        public ObservableCollection<string> Headers => displayProgressModel.Headers;
 
-        public ObservableCollection<string> ToolTips => null;
+        public ObservableCollection<string> ToolTips => displayProgressModel.ToolTips;
 
         public DisplayProgressViewModel()
         {
             displayProgressModel = new DisplayProgressModel();
             displayProgressModel.PropertyChanged += (s, e) => OnPropertyChanged(e.PropertyName);
         }
+
 
         public ICommand WindowLoaded => windowLoaded ??= new RelayCommand(displayProgressModel.Execute_WindowLoaded);
         private RelayCommand windowLoaded;

@@ -41,7 +41,7 @@
         <Binding Path="WindowState" Converter="{StaticResource sizeconverter}" 
                  ConverterParameter="state" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.WindowState>
-    <Grid>
+    <Grid Background="Gray">
         <Grid.RowDefinitions>
             <RowDefinition Height="33*"/>
             <RowDefinition Height="33*"/>
@@ -53,9 +53,13 @@
                 <ColumnDefinition Width="90*"/>
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
-            <ProgressBar x:Name="progress" Grid.Column="1" Minimum="0" Maximum="100" 
+            <Grid Grid.Column="1">
+             <ProgressBar x:Name="progress" Minimum="0" Maximum="100" 
                          Value="{Binding ProgressValue, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                         HorizontalAlignment="Stretch"/>
+                         HorizontalAlignment="Stretch" />
+                <TextBlock Text="{Binding ElementName=progress, Path=Value, StringFormat={}{0:F2}%}" FontWeight="Bold"
+                           Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
         </Grid>
     </Grid>
     <i:Interaction.Triggers>

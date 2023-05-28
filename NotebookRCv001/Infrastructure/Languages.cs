@@ -509,7 +509,7 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                 {
-                    
+
                 }
                 },
                 {"en-US", new ObservableCollection<string>()
@@ -1572,12 +1572,13 @@ namespace NotebookRCv001.Infrastructure
             {
                 {"ru-RU", new ObservableCollection<string>()
                     {
+                    "Синхронизация рабочего каталога",//00
 
                     }
                 },
                 {"en-US", new ObservableCollection<string>()
                     {
-
+                    "Working Directory Synchronization",//00
                     }
                 }
             };
@@ -1594,7 +1595,7 @@ namespace NotebookRCv001.Infrastructure
                 },
                 {"en-US", new ObservableCollection<string>()
                    {
-                }
+                   }
                 }
             };
         }

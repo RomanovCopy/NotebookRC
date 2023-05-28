@@ -8,6 +8,7 @@ using System.Windows;
 using NotebookRCv001.Infrastructure;
 using System.Threading;
 using NotebookRCv001.Interfaces;
+using NotebookRCv001.ViewModels;
 
 namespace NotebookRCv001.Models
 {
@@ -15,6 +16,9 @@ namespace NotebookRCv001.Models
     {
         private object window { get; set; }
         internal object Target { get; set; }
+
+        private Languages language = ((MainWindowViewModel)Application.Current.MainWindow.DataContext).Language;
+
         internal double WindowWidth { get => windowWidth; set => SetProperty(ref windowWidth, value); }
         private double windowWidth;
         internal double WindowHeight { get => windowHeight; set => SetProperty(ref windowHeight, value); }
@@ -41,9 +45,9 @@ namespace NotebookRCv001.Models
         }
         private double progressValue;
 
-        public ObservableCollection<string> Headers => throw new NotImplementedException();
+        public ObservableCollection<string> Headers => language.DisplayProgress;
 
-        public ObservableCollection<string> ToolTips => throw new NotImplementedException();
+        public ObservableCollection<string> ToolTips => language.ToolTipsDisplayProgress;
 
         internal DisplayProgressModel()
         {

@@ -742,6 +742,7 @@ namespace NotebookRCv001.Models
                 // Создаем объекты для исходного и целевого каталогов
                 DirectoryInfo source = new DirectoryInfo(sourceDir);
                 DirectoryInfo dest = new DirectoryInfo(destDir);
+                bool c = true;
                 //блокируем возможность деления на 0
                 totalFiles = totalFiles == 0 ? 1 : totalFiles;
                 // Создаем целевой каталог, если он не существует
@@ -765,9 +766,10 @@ namespace NotebookRCv001.Models
                 foreach (DirectoryInfo subDir in source.GetDirectories())
                 {
                     string destSubDirPath = Path.Combine(dest.FullName, subDir.Name);
-                    SyncDirectories(viewModel, subDir.FullName, destSubDirPath);
+                    if (!(c = SyncDirectories(viewModel, subDir.FullName, destSubDirPath)))
+                        break;
                 }
-                return true;
+                return c;
             }
             catch (Exception e) { ErrorWindow(e); return false; }
         }
