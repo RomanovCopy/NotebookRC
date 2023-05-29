@@ -483,12 +483,42 @@ namespace NotebookRCv001.Models
                 {
                     behaviorImage = behavior;
                     behaviorImage.MouseWheel += BehaviorImage_MouseWheel;
+                    behaviorImage.MouseDown += BehaviorImage_MouseDown;
+                    behaviorImage.MouseUp += BehaviorImage_MouseUp;
+                    behaviorImage.MouseMove += BehaviorImage_MouseMove;
                     if (BehaviorImageReady != null)
                         BehaviorImageReady.Invoke(behavior);
                     
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
+        }
+
+        private void BehaviorImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch(Exception ex) { ErrorWindow(ex); }
+        }
+
+        private void BehaviorImage_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex) { ErrorWindow(ex); }
+        }
+
+        private void BehaviorImage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex) { ErrorWindow(ex); }
         }
 
         private void BehaviorImage_MouseWheel(object sender, MouseWheelEventArgs e)

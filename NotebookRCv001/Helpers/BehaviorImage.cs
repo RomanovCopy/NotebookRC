@@ -39,6 +39,9 @@ namespace NotebookRCv001.Helpers
         internal BitmapImage Source { get => (BitmapImage)GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
         public static readonly DependencyProperty SourceProperty;
 
+        internal double Scale { get => (double)GetValue(ScaleProperty); set => SetValue(ScaleProperty, value); }
+        public static readonly DependencyProperty ScaleProperty;
+
         public BehaviorImage()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
@@ -59,6 +62,9 @@ namespace NotebookRCv001.Helpers
 
             SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
                 new PropertyMetadata(SourceChanged));
+
+            ScaleProperty = DependencyProperty.Register("Scale", typeof(double), typeof(BehaviorImage),
+                new PropertyMetadata(ScaleChanged));
         }
 
 
@@ -128,23 +134,29 @@ namespace NotebookRCv001.Helpers
         }
 
 
+
+        /// <summary>
+        /// изменение источника             
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        /// <exception cref="Exception"></exception>
         private static void SourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             try
             {
-                //if (d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
-                //{
-                //    behavior.AssociatedObject.Source = bitmap;
-                //    var page = behavior.mainWindowViewModel.CurrentPage;
-                //    //трансформация изображения при изменении размеров страницы
-                //    page.SizeChanged += (s, e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
-                //    //начальная трансформация изображения под размер страницы
-                //    behavior.ImageTransformationToFitThePage(page, bitmap);
-                //}
+                if (d is BehaviorImage behavior && e.NewValue is BitmapImage bitmap)
+                {
+                    behavior.AssociatedObject.Source = bitmap;
+                    var page = behavior.mainWindowViewModel.CurrentPage;
+                    //трансформация изображения при изменении размеров страницы
+                    page.SizeChanged += (s, e) => { behavior.ImageTransformationToFitThePage(page, bitmap); };
+                    //начальная трансформация изображения под размер страницы
+                    behavior.ImageTransformationToFitThePage(page, bitmap);
+                }
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
         /// <summary>
         /// изменение положения указателя мыши             
         /// </summary>
@@ -158,6 +170,24 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
+        /// <summary>
+        /// изменение коэффициента масштабирования
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        /// <exception cref="Exception"></exception>
+        private static void ScaleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
+
+
+
         /// <summary>
         /// прокручивание колесика мыши
         /// </summary>
@@ -185,8 +215,6 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
-
-
         /// <summary>
         /// перемещение указателя мыши над изображением                           
         /// </summary>
@@ -292,6 +320,7 @@ namespace NotebookRCv001.Helpers
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
+
         /// <summary>
         /// возврат фокуса клавиатуры(костыль!)
         /// </summary>

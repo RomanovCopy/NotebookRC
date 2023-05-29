@@ -119,15 +119,7 @@
                 </MediaElement.Style>
             </MediaElement>
             <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3">
-                <Image x:Name="img"  Stretch="None" Source="{Binding CurrentBitmap, UpdateSourceTrigger=PropertyChanged}"
-                           HorizontalAlignment="Center">
-                    <!--<Image.RenderTransform>
-                        <ScaleTransform 
-                                ScaleX="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged}"
-                                ScaleY="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged}"
-                                CenterX="{Binding MousePosition.X, UpdateSourceTrigger=PropertyChanged}"
-                                CenterY="{Binding MousePosition.Y, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Image.RenderTransform>-->
+                <Image x:Name="img"  HorizontalAlignment="Center" Stretch="None">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"
