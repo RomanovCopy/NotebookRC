@@ -38,6 +38,7 @@ namespace NotebookRCv001.Models
         private BehaviorSlider behaviorSlider { get; set; }
         private BehaviorImage behaviorImage { get; set; }
         private bool play { get; set; }
+        private FileStream imageStream { get; set; }
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
@@ -79,6 +80,8 @@ namespace NotebookRCv001.Models
             set => SetProperty(ref currentImage, value);
         }
         private Image currentImage;
+
+
 
         internal Point MousePosition { get => mousePosition; set => SetProperty(ref mousePosition, value); }
         private Point mousePosition;
@@ -354,15 +357,15 @@ namespace NotebookRCv001.Models
                     {
                         BehaviorImageReady += async (obj) =>
                         {
-                            CurrentBitmap = await BitmapFromPath(path, key);
-                            ImageTransformationToFitThePage(CurrentBitmap);
+                            behaviorImage.Source = await BitmapFromPath(path, key);
+                            //ImageTransformationToFitThePage(CurrentBitmap);
                             PlayIndex = PlayList.IndexOf(path);
                         };
                     }
                     else
                     {
-                        CurrentBitmap = await BitmapFromPath(path, key);
-                        ImageTransformationToFitThePage(CurrentBitmap);
+                        behaviorImage.Source = await BitmapFromPath(path, key);
+                        //ImageTransformationToFitThePage(CurrentBitmap);
                         PlayIndex = PlayList.IndexOf(path);
                     }
                 }
@@ -602,7 +605,8 @@ namespace NotebookRCv001.Models
                     CurrentBitmap.StreamSource.Dispose();
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
-
+                if (imageStream != null)
+                    imageStream.Dispose();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -636,7 +640,8 @@ namespace NotebookRCv001.Models
                 BitmapImage bitmapImage = new();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.BeginInit();
-                bitmapImage.StreamSource = File.OpenRead(path);
+                imageStream=File.OpenRead(path);
+                bitmapImage.StreamSource = imageStream;
                 if (height > 0)
                     bitmapImage.DecodePixelHeight = (int)((double)height * (96.0 / 72.0));
                 bitmapImage.EndInit();
