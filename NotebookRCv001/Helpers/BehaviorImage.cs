@@ -31,7 +31,6 @@ namespace NotebookRCv001.Helpers
 
         private bool isDragging { get; set; }
         private Point startPoint { get; set; }
-        private double scale { get; set; }
 
         internal Point MousePosition { get => (Point)GetValue(MousePositionProperty); set => SetValue(MousePositionProperty, value); }
         public static readonly DependencyProperty MousePositionProperty;
@@ -39,7 +38,9 @@ namespace NotebookRCv001.Helpers
         internal BitmapImage Source { get => (BitmapImage)GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
         public static readonly DependencyProperty SourceProperty;
 
-        internal double Scale { get => (double)GetValue(ScaleProperty); set => SetValue(ScaleProperty, value); }
+        internal (double, double) Scale { 
+            get => ((double, double))GetValue(ScaleProperty); 
+            set => SetValue(ScaleProperty, value); }
         public static readonly DependencyProperty ScaleProperty;
 
         public BehaviorImage()
@@ -53,7 +54,7 @@ namespace NotebookRCv001.Helpers
                 }
             };
             isDragging = false;
-            scale = 1.0;
+            Scale = (1.0,1.0);
         }
         static BehaviorImage()
         {
@@ -63,7 +64,7 @@ namespace NotebookRCv001.Helpers
             SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
                 new PropertyMetadata(SourceChanged));
 
-            ScaleProperty = DependencyProperty.Register("Scale", typeof(double), typeof(BehaviorImage),
+            ScaleProperty = DependencyProperty.Register("Scale", typeof((double, double)), typeof(BehaviorImage),
                 new PropertyMetadata(ScaleChanged));
         }
 
@@ -200,6 +201,7 @@ namespace NotebookRCv001.Helpers
             {
 
                 double zoom = e.Delta > 0 ? 0.1 : -0.1;
+                var scale = Math.Min(Scale.Item1, Scale.Item2);
                 scale += zoom;
                 if (scale <= 5 && scale >= 0.5)
                 {
@@ -314,9 +316,10 @@ namespace NotebookRCv001.Helpers
                 var imgWidth = bitmap.Width;
                 double scaleX = (double)width / imgWidth;
                 double scaleY = (double)height / imgHeight;
-                scale = Math.Min(scaleX, scaleY);
+                double scale = Math.Min(scaleX, scaleY);
+                Scale = (scale, scale);
 
-                AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);
+                AssociatedObject.LayoutTransform = new ScaleTransform(Scale.Item1, Scale.Item2);
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }

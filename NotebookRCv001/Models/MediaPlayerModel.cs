@@ -291,7 +291,8 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    CurrentBitmap = BitmapFromPath(PlayList[PlayIndex], key).Result;
+                    imageStream?.Dispose();
+                    behaviorImage.Source = BitmapFromPath(PlayList[PlayIndex], key).Result;
                     homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
             }
@@ -322,7 +323,8 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    CurrentBitmap = BitmapFromPath(PlayList[PlayIndex], key).Result;
+                    imageStream?.Dispose();
+                    behaviorImage.Source = BitmapFromPath(PlayList[PlayIndex], key).Result;
                     homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
             }
@@ -491,7 +493,7 @@ namespace NotebookRCv001.Models
                     behaviorImage.MouseMove += BehaviorImage_MouseMove;
                     if (BehaviorImageReady != null)
                         BehaviorImageReady.Invoke(behavior);
-                    
+
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -503,7 +505,7 @@ namespace NotebookRCv001.Models
             {
 
             }
-            catch(Exception ex) { ErrorWindow(ex); }
+            catch (Exception ex) { ErrorWindow(ex); }
         }
 
         private void BehaviorImage_MouseUp(object sender, MouseButtonEventArgs e)
@@ -535,9 +537,9 @@ namespace NotebookRCv001.Models
                 {
                     MousePosition = e.GetPosition(sender as Image);
                     ScaleX += zoom;
-                    ScaleY +=zoom;
-                    //var transformGroup = new TransformGroup();
-                    //transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    ScaleY += zoom;
+                    var transformGroup = new TransformGroup();
+                    transformGroup.Children.Add(new TranslateTransform(0, 0));
                     //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
                     //MousePosition = transformGroup;
                 }
@@ -605,8 +607,7 @@ namespace NotebookRCv001.Models
                     CurrentBitmap.StreamSource.Dispose();
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
-                if (imageStream != null)
-                    imageStream.Dispose();
+                imageStream?.Dispose();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -640,7 +641,7 @@ namespace NotebookRCv001.Models
                 BitmapImage bitmapImage = new();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.BeginInit();
-                imageStream=File.OpenRead(path);
+                imageStream = File.OpenRead(path);
                 bitmapImage.StreamSource = imageStream;
                 if (height > 0)
                     bitmapImage.DecodePixelHeight = (int)((double)height * (96.0 / 72.0));
