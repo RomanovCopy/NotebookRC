@@ -38,8 +38,8 @@ namespace NotebookRCv001.Helpers
         internal BitmapImage Source { get => (BitmapImage)GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
         public static readonly DependencyProperty SourceProperty;
 
-        internal (double, double) Scale { 
-            get => ((double, double))GetValue(ScaleProperty); 
+        internal Tuple<double, double> Scale { 
+            get => (Tuple<double, double>)GetValue(ScaleProperty); 
             set => SetValue(ScaleProperty, value); }
         public static readonly DependencyProperty ScaleProperty;
 
@@ -54,7 +54,7 @@ namespace NotebookRCv001.Helpers
                 }
             };
             isDragging = false;
-            Scale = (1.0,1.0);
+            Scale = new Tuple<double, double>(1.0, 1.0);
         }
         static BehaviorImage()
         {
@@ -64,7 +64,7 @@ namespace NotebookRCv001.Helpers
             SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(BehaviorImage),
                 new PropertyMetadata(SourceChanged));
 
-            ScaleProperty = DependencyProperty.Register("Scale", typeof((double, double)), typeof(BehaviorImage),
+            ScaleProperty = DependencyProperty.Register("Scale", typeof(Tuple<double, double>), typeof(BehaviorImage),
                 new PropertyMetadata(ScaleChanged));
         }
 
@@ -181,7 +181,27 @@ namespace NotebookRCv001.Helpers
         {
             try
             {
+                if(d is BehaviorImage behavior && behavior.AssociatedObject!=null)
+                {
+                    //var position = behavior.MousePosition;
+                    var tuple = (Tuple<double, double>)e.NewValue;
+                    var scale = Math.Min(tuple.Item1, tuple.Item2);
 
+                    var transformGroup = new TransformGroup();
+                    transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    var scaleTransform = new ScaleTransform(scale, scale);
+                    var element = (Image)behavior.AssociatedObject;// объект, на котором происходит масштабирование
+                    var container = (ScrollViewer)element.Parent;// родительский контейнер объекта
+                    var transform = element.TransformToVisual(container);
+                    var position = transform.Transform(new Point(element.ActualWidth / 2, element.ActualHeight / 2));
+                    transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
+
+                    ////var transformGroup = new TransformGroup();
+                    ////transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    ////transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
+                    //if (behavior.AssociatedObject != null)
+                        behavior.AssociatedObject.RenderTransform = transformGroup;
+                }
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
@@ -317,7 +337,7 @@ namespace NotebookRCv001.Helpers
                 double scaleX = (double)width / imgWidth;
                 double scaleY = (double)height / imgHeight;
                 double scale = Math.Min(scaleX, scaleY);
-                Scale = (scale, scale);
+                Scale = new Tuple<double, double>(scale, scale);
 
                 AssociatedObject.LayoutTransform = new ScaleTransform(Scale.Item1, Scale.Item2);
             }

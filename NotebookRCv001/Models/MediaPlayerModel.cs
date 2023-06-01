@@ -531,15 +531,19 @@ namespace NotebookRCv001.Models
             try
             {
                 double zoom = e.Delta > 0 ? 0.1 : -0.1;
-                var scale = Math.Min(ScaleX, ScaleY);
+                var scaleX = behaviorImage.Scale.Item1;
+                var scaleY = behaviorImage.Scale.Item2;
+                var scale = Math.Min(scaleX, scaleY);
                 scale += zoom;
                 if (scale <= 10 && scale >= 0.5)
                 {
-                    MousePosition = e.GetPosition(sender as Image);
-                    ScaleX += zoom;
-                    ScaleY += zoom;
-                    var transformGroup = new TransformGroup();
-                    transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    behaviorImage.MousePosition = e.GetPosition(sender as Image);
+                    behaviorImage.Scale = new Tuple<double, double>(scale, scale);
+                    //MousePosition = e.GetPosition(sender as Image);
+                    //ScaleX += zoom;
+                    //ScaleY += zoom;
+                    //var transformGroup = new TransformGroup();
+                    //transformGroup.Children.Add(new TranslateTransform(0, 0));
                     //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
                     //MousePosition = transformGroup;
                 }
