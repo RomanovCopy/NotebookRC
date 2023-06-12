@@ -187,19 +187,19 @@ namespace NotebookRCv001.Helpers
                     var tuple = (Tuple<double, double>)e.NewValue;
                     var scale = Math.Min(tuple.Item1, tuple.Item2);
 
+                    //var transformGroup = new TransformGroup();
+                    //transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    //var scaleTransform = new ScaleTransform(scale, scale);
+                    //var element = (Image)behavior.AssociatedObject;// объект, на котором происходит масштабирование
+                    //var container = (ScrollViewer)element.Parent;// родительский контейнер объекта
+                    //var transform = element.TransformToVisual(container);
+                    //var position = transform.Transform(new Point(element.ActualWidth / 2, element.ActualHeight / 2));
+                    //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
+
                     var transformGroup = new TransformGroup();
                     transformGroup.Children.Add(new TranslateTransform(0, 0));
-                    var scaleTransform = new ScaleTransform(scale, scale);
-                    var element = (Image)behavior.AssociatedObject;// объект, на котором происходит масштабирование
-                    var container = (ScrollViewer)element.Parent;// родительский контейнер объекта
-                    var transform = element.TransformToVisual(container);
-                    var position = transform.Transform(new Point(element.ActualWidth / 2, element.ActualHeight / 2));
-                    transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
-
-                    ////var transformGroup = new TransformGroup();
-                    ////transformGroup.Children.Add(new TranslateTransform(0, 0));
-                    ////transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
-                    //if (behavior.AssociatedObject != null)
+                    //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
+                    if (behavior.AssociatedObject != null)
                         behavior.AssociatedObject.RenderTransform = transformGroup;
                 }
             }

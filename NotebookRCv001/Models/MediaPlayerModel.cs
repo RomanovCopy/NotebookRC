@@ -487,16 +487,55 @@ namespace NotebookRCv001.Models
                 if (obj is BehaviorImage behavior)
                 {
                     behaviorImage = behavior;
-                    behaviorImage.MouseWheel += BehaviorImage_MouseWheel;
+                    //behaviorImage.MouseWheel += BehaviorImage_MouseWheel;
                     behaviorImage.MouseDown += BehaviorImage_MouseDown;
                     behaviorImage.MouseUp += BehaviorImage_MouseUp;
                     behaviorImage.MouseMove += BehaviorImage_MouseMove;
+                    ScrollViewer scrollViewer = (ScrollViewer)behaviorImage.Image.Parent;
+                    scrollViewer.PreviewMouseWheel += ScrollViewer_MouseWheel;
                     if (BehaviorImageReady != null)
                         BehaviorImageReady.Invoke(behavior);
 
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
+        }
+
+        private void ScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            try
+            {
+                var image = behaviorImage.Image;
+                var scrol = sender as ScrollViewer;
+                // Получаем текущий масштаб изображения
+                double scale = image.LayoutTransform.Value.M11;
+                //var source = behaviorImage.Source;
+                //double scale = image.ActualHeight / source.PixelHeight;
+
+                // Определяем новый масштаб в зависимости от направления прокрутки колеса мыши
+                if (e.Delta > 0)
+                {
+                    scale *= 1.1;
+                }
+                else
+                {
+                    scale /= 1.1;
+                }
+
+                // Получаем координаты курсора мыши относительно изображения
+                Point mousePos = e.GetPosition(image);
+                double offsetX = mousePos.X / image.ActualWidth;
+                double offsetY = mousePos.Y / image.ActualHeight;
+
+                // Создаем трансформацию масштабирования с привязкой к центру изображения
+                ScaleTransform scaleTransform = new ScaleTransform(scale, scale, offsetX, offsetY);
+                //ScaleTransform scaleTransform = new ScaleTransform(scale, scale, mousePos.X, mousePos.Y);
+
+
+                // Применяем трансформацию к изображению
+                image.LayoutTransform = scaleTransform;
+            }
+            catch (Exception ex) { ErrorWindow(ex); }
         }
 
         private void BehaviorImage_MouseMove(object sender, MouseEventArgs e)
@@ -762,7 +801,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                BitmapImage bitmap = new();
+                BitmapImage bitmap = null;
                 if (string.IsNullOrWhiteSpace(key))
                 {
                     bitmap = CreateBitmapImageFromPath(path, height);
