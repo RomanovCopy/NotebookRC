@@ -118,8 +118,8 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" HorizontalContentAlignment="Center">
-                <Image x:Name="img"  Stretch="None">
+            <!--<ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" HorizontalContentAlignment="Center">-->
+                <Image x:Name="img"  Stretch="None" Grid.Row="0" Grid.RowSpan="3">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"
@@ -130,7 +130,7 @@
                         <helpers:ImageZoomBehavior x:Name="behaviorimg" />
                     </i:Interaction.Behaviors>
                 </Image>
-                <ScrollViewer.Style>
+                <!--<ScrollViewer.Style>
                     <Style TargetType="ScrollViewer">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}, 
@@ -141,7 +141,7 @@
                         </Style.Triggers>
                     </Style>
                 </ScrollViewer.Style>
-            </ScrollViewer>
+            </ScrollViewer>-->
             <Slider x:Name="mpslider" 
                     Style="{StaticResource Horizontal_Slider}" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" TickFrequency="1" >
                 <i:Interaction.Behaviors>
