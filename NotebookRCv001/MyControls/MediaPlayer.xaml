@@ -119,7 +119,7 @@
                 </MediaElement.Style>
             </MediaElement>
             <ScrollViewer x:Name="scrollViewer"  Grid.Row="0" Grid.RowSpan="3" HorizontalContentAlignment="Center">
-                <Image x:Name="img"  Stretch="Uniform">
+                <Image x:Name="img"  Stretch="None">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"
@@ -127,7 +127,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <i:Interaction.Behaviors>
-                        <helpers:BehaviorImage x:Name="behaviorimg"/>
+                        <helpers:ImageZoomBehavior x:Name="behaviorimg" />
                     </i:Interaction.Behaviors>
                 </Image>
                 <ScrollViewer.Style>

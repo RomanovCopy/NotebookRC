@@ -36,7 +36,7 @@ namespace NotebookRCv001.Models
         private Page page { get; set; }
         private BehaviorMediaElement behaviorMediaElement { get; set; }
         private BehaviorSlider behaviorSlider { get; set; }
-        private BehaviorImage behaviorImage { get; set; }
+        private ImageZoomBehavior behaviorImage { get; set; }
         private bool play { get; set; }
         private FileStream imageStream { get; set; }
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
@@ -484,17 +484,17 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is BehaviorImage behavior)
+                if (obj is ImageZoomBehavior behavior)
                 {
                     behaviorImage = behavior;
                     //behaviorImage.MouseWheel += BehaviorImage_MouseWheel;
-                    behaviorImage.MouseDown += BehaviorImage_MouseDown;
-                    behaviorImage.MouseUp += BehaviorImage_MouseUp;
-                    behaviorImage.MouseMove += BehaviorImage_MouseMove;
-                    ScrollViewer scrollViewer = (ScrollViewer)behaviorImage.Image.Parent;
-                    scrollViewer.PreviewMouseWheel += ScrollViewer_MouseWheel;
-                    if (BehaviorImageReady != null)
-                        BehaviorImageReady.Invoke(behavior);
+                    //behaviorImage.MouseDown += BehaviorImage_MouseDown;
+                    //behaviorImage.MouseUp += BehaviorImage_MouseUp;
+                    //behaviorImage.MouseMove += BehaviorImage_MouseMove;
+                    //ScrollViewer scrollViewer = (ScrollViewer)behaviorImage.Image.Parent;
+                    //scrollViewer.PreviewMouseWheel += ScrollViewer_MouseWheel;
+                    //if (BehaviorImageReady != null)
+                    //    BehaviorImageReady.Invoke(behavior);
 
                 }
             }
@@ -505,35 +505,35 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                var image = behaviorImage.Image;
-                var scrol = sender as ScrollViewer;
-                // Получаем текущий масштаб изображения
-                double scale = image.LayoutTransform.Value.M11;
-                //var source = behaviorImage.Source;
-                //double scale = image.ActualHeight / source.PixelHeight;
+                //var image = behaviorImage.Image;
+                //var scrol = sender as ScrollViewer;
+                //// Получаем текущий масштаб изображения
+                //double scale = image.LayoutTransform.Value.M11;
+                ////var source = behaviorImage.Source;
+                ////double scale = image.ActualHeight / source.PixelHeight;
 
-                // Определяем новый масштаб в зависимости от направления прокрутки колеса мыши
-                if (e.Delta > 0)
-                {
-                    scale *= 1.1;
-                }
-                else
-                {
-                    scale /= 1.1;
-                }
+                //// Определяем новый масштаб в зависимости от направления прокрутки колеса мыши
+                //if (e.Delta > 0)
+                //{
+                //    scale *= 1.1;
+                //}
+                //else
+                //{
+                //    scale /= 1.1;
+                //}
 
-                // Получаем координаты курсора мыши относительно изображения
-                Point mousePos = e.GetPosition(image);
-                double offsetX = mousePos.X / image.ActualWidth;
-                double offsetY = mousePos.Y / image.ActualHeight;
+                //// Получаем координаты курсора мыши относительно изображения
+                //Point mousePos = e.GetPosition(image);
+                //double offsetX = mousePos.X / image.ActualWidth;
+                //double offsetY = mousePos.Y / image.ActualHeight;
 
-                // Создаем трансформацию масштабирования с привязкой к центру изображения
-                ScaleTransform scaleTransform = new ScaleTransform(scale, scale, offsetX, offsetY);
-                //ScaleTransform scaleTransform = new ScaleTransform(scale, scale, mousePos.X, mousePos.Y);
+                //// Создаем трансформацию масштабирования с привязкой к центру изображения
+                //ScaleTransform scaleTransform = new ScaleTransform(scale, scale, offsetX, offsetY);
+                ////ScaleTransform scaleTransform = new ScaleTransform(scale, scale, mousePos.X, mousePos.Y);
 
 
-                // Применяем трансформацию к изображению
-                image.LayoutTransform = scaleTransform;
+                //// Применяем трансформацию к изображению
+                //image.LayoutTransform = scaleTransform;
             }
             catch (Exception ex) { ErrorWindow(ex); }
         }
@@ -569,15 +569,15 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                double zoom = e.Delta > 0 ? 0.1 : -0.1;
-                var scaleX = behaviorImage.Scale.Item1;
-                var scaleY = behaviorImage.Scale.Item2;
-                var scale = Math.Min(scaleX, scaleY);
-                scale += zoom;
-                if (scale <= 10 && scale >= 0.5)
-                {
-                    behaviorImage.MousePosition = e.GetPosition(sender as Image);
-                    behaviorImage.Scale = new Tuple<double, double>(scale, scale);
+                //double zoom = e.Delta > 0 ? 0.1 : -0.1;
+                //var scaleX = behaviorImage.Scale.Item1;
+                //var scaleY = behaviorImage.Scale.Item2;
+                //var scale = Math.Min(scaleX, scaleY);
+                //scale += zoom;
+                //if (scale <= 10 && scale >= 0.5)
+                //{
+                //    behaviorImage.MousePosition = e.GetPosition(sender as Image);
+                //    behaviorImage.Scale = new Tuple<double, double>(scale, scale);
                     //MousePosition = e.GetPosition(sender as Image);
                     //ScaleX += zoom;
                     //ScaleY += zoom;
@@ -585,7 +585,7 @@ namespace NotebookRCv001.Models
                     //transformGroup.Children.Add(new TranslateTransform(0, 0));
                     //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
                     //MousePosition = transformGroup;
-                }
+                //}
 
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
