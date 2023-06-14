@@ -47,12 +47,7 @@ namespace NotebookRCv001.ViewModels
         public string Content => mediaPlayerModel.Content;
 
         public ObservableCollection<string> PlayList => mediaPlayerModel.PlayList;
-        public BitmapImage CurrentBitmap { get => mediaPlayerModel.CurrentBitmap; set => mediaPlayerModel.CurrentBitmap = value; }
 
-        public Point MousePosition { get => mediaPlayerModel.MousePosition; set => mediaPlayerModel.MousePosition = value; }
-
-        public double ScaleX { get => mediaPlayerModel.ScaleX; set => mediaPlayerModel.ScaleX = value; }
-        public double ScaleY { get => mediaPlayerModel.ScaleY; set => mediaPlayerModel.ScaleY = value; }
 
         public bool ThisVideo => mediaPlayerModel.ThisVideo;
         public bool ThisAudio => mediaPlayerModel.ThisAudio;

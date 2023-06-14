@@ -38,9 +38,9 @@ namespace NotebookRCv001.Models
         private BehaviorSlider behaviorSlider { get; set; }
         private ImageZoomBehavior behaviorImage { get; set; }
         private bool play { get; set; }
-        private FileStream imageStream { get; set; }
-        internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
 
+
+        internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
         internal ObservableCollection<string> ToolTips => language.ToolTipsMediaPlayer;
 
         internal bool UserIsDraggingSlider { get => userIsDraggingSlider; set => SetProperty(ref userIsDraggingSlider, value); }
@@ -71,20 +71,7 @@ namespace NotebookRCv001.Models
         internal string Content { get => content; set => SetProperty(ref content, value); }
         private string content;
 
-        internal BitmapImage CurrentBitmap { get => currentBitmap; set => SetProperty(ref currentBitmap, value); }
-        private BitmapImage currentBitmap;
 
-        internal Image CurrentImage
-        {
-            get => currentImage;
-            set => SetProperty(ref currentImage, value);
-        }
-        private Image currentImage;
-
-
-
-        internal Point MousePosition { get => mousePosition; set => SetProperty(ref mousePosition, value); }
-        private Point mousePosition;
 
         internal double ScaleX { get => scaleX; set => SetProperty(ref scaleX, value); }
         private double scaleX;
@@ -141,8 +128,6 @@ namespace NotebookRCv001.Models
             homeMenuFileViewModel = (HomeMenuFileViewModel)menu.FindResource("menufile");
             play = false;
             BehaviorReady += (x) => { InitializePlayerAndSlider(x); };
-            ScaleX = 1;
-            ScaleY = 1;
         }
 
 
@@ -180,7 +165,7 @@ namespace NotebookRCv001.Models
             {
                 bool c = false;
                 var a = behaviorMediaElement != null && behaviorSlider != null && !play;
-                var b = !string.IsNullOrWhiteSpace(Content) || CurrentBitmap != null;
+                var b = !string.IsNullOrWhiteSpace(Content);
                 c = a && b;
                 return c;
             }
@@ -195,10 +180,6 @@ namespace NotebookRCv001.Models
                 behaviorSlider.Maximum = 0;
                 behaviorMediaElement.Position = TimeSpan.FromSeconds(0);
                 Content = string.Empty;
-                CurrentImage = null;
-                if (CurrentBitmap != null)
-                    CurrentBitmap.StreamSource.Dispose();
-                CurrentBitmap = null;
                 PlayList.Clear();
                 PlayIndex = 0;
                 play = false;
@@ -291,7 +272,6 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex - 1;
                 if (ThisImage)
                 {
-                    imageStream?.Dispose();
                     behaviorImage.Source = BitmapFromPath(PlayList[PlayIndex], key).Result;
                     homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
@@ -323,7 +303,6 @@ namespace NotebookRCv001.Models
                 PlayIndex = PlayIndex + 1;
                 if (ThisImage)
                 {
-                    imageStream?.Dispose();
                     behaviorImage.Source = BitmapFromPath(PlayList[PlayIndex], key).Result;
                     homeMenuFileViewModel.PathToLastFile = PlayList[PlayIndex];
                 }
@@ -360,14 +339,12 @@ namespace NotebookRCv001.Models
                         BehaviorImageReady += async (obj) =>
                         {
                             behaviorImage.Source = await BitmapFromPath(path, key);
-                            //ImageTransformationToFitThePage(CurrentBitmap);
                             PlayIndex = PlayList.IndexOf(path);
                         };
                     }
                     else
                     {
                         behaviorImage.Source = await BitmapFromPath(path, key);
-                        //ImageTransformationToFitThePage(CurrentBitmap);
                         PlayIndex = PlayList.IndexOf(path);
                     }
                 }
@@ -382,7 +359,8 @@ namespace NotebookRCv001.Models
             }
             catch
             {
-                CurrentBitmap = EncryptionKeyError(path).Result;
+                if (thisImage)
+                    behaviorImage.Source = EncryptionKeyError(path).Result;
             }
         }
 
@@ -487,108 +465,11 @@ namespace NotebookRCv001.Models
                 if (obj is ImageZoomBehavior behavior)
                 {
                     behaviorImage = behavior;
-                    //behaviorImage.MouseWheel += BehaviorImage_MouseWheel;
-                    //behaviorImage.MouseDown += BehaviorImage_MouseDown;
-                    //behaviorImage.MouseUp += BehaviorImage_MouseUp;
-                    //behaviorImage.MouseMove += BehaviorImage_MouseMove;
-                    //ScrollViewer scrollViewer = (ScrollViewer)behaviorImage.Image.Parent;
-                    //scrollViewer.PreviewMouseWheel += ScrollViewer_MouseWheel;
-                    //if (BehaviorImageReady != null)
-                    //    BehaviorImageReady.Invoke(behavior);
-
+                    if (behaviorImageReady != null)
+                        behaviorImageReady.Invoke(behavior);
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
-        }
-
-        private void ScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            try
-            {
-                //var image = behaviorImage.Image;
-                //var scrol = sender as ScrollViewer;
-                //// Получаем текущий масштаб изображения
-                //double scale = image.LayoutTransform.Value.M11;
-                ////var source = behaviorImage.Source;
-                ////double scale = image.ActualHeight / source.PixelHeight;
-
-                //// Определяем новый масштаб в зависимости от направления прокрутки колеса мыши
-                //if (e.Delta > 0)
-                //{
-                //    scale *= 1.1;
-                //}
-                //else
-                //{
-                //    scale /= 1.1;
-                //}
-
-                //// Получаем координаты курсора мыши относительно изображения
-                //Point mousePos = e.GetPosition(image);
-                //double offsetX = mousePos.X / image.ActualWidth;
-                //double offsetY = mousePos.Y / image.ActualHeight;
-
-                //// Создаем трансформацию масштабирования с привязкой к центру изображения
-                //ScaleTransform scaleTransform = new ScaleTransform(scale, scale, offsetX, offsetY);
-                ////ScaleTransform scaleTransform = new ScaleTransform(scale, scale, mousePos.X, mousePos.Y);
-
-
-                //// Применяем трансформацию к изображению
-                //image.LayoutTransform = scaleTransform;
-            }
-            catch (Exception ex) { ErrorWindow(ex); }
-        }
-
-        private void BehaviorImage_MouseMove(object sender, MouseEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex) { ErrorWindow(ex); }
-        }
-
-        private void BehaviorImage_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex) { ErrorWindow(ex); }
-        }
-
-        private void BehaviorImage_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex) { ErrorWindow(ex); }
-        }
-
-        private void BehaviorImage_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            try
-            {
-                //double zoom = e.Delta > 0 ? 0.1 : -0.1;
-                //var scaleX = behaviorImage.Scale.Item1;
-                //var scaleY = behaviorImage.Scale.Item2;
-                //var scale = Math.Min(scaleX, scaleY);
-                //scale += zoom;
-                //if (scale <= 10 && scale >= 0.5)
-                //{
-                //    behaviorImage.MousePosition = e.GetPosition(sender as Image);
-                //    behaviorImage.Scale = new Tuple<double, double>(scale, scale);
-                    //MousePosition = e.GetPosition(sender as Image);
-                    //ScaleX += zoom;
-                    //ScaleY += zoom;
-                    //var transformGroup = new TransformGroup();
-                    //transformGroup.Children.Add(new TranslateTransform(0, 0));
-                    //transformGroup.Children.Add(new ScaleTransform(scale, scale, position.X, position.Y));
-                    //MousePosition = transformGroup;
-                //}
-
-            }
-            catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
         internal bool CanExecute_PageLoaded(object obj)
@@ -646,11 +527,8 @@ namespace NotebookRCv001.Models
             try
             {
                 Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
-                if (CurrentBitmap != null)
-                    CurrentBitmap.StreamSource.Dispose();
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
-                imageStream?.Dispose();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -684,7 +562,7 @@ namespace NotebookRCv001.Models
                 BitmapImage bitmapImage = new();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.BeginInit();
-                imageStream = File.OpenRead(path);
+                var imageStream = File.OpenRead(path);
                 bitmapImage.StreamSource = imageStream;
                 if (height > 0)
                     bitmapImage.DecodePixelHeight = (int)((double)height * (96.0 / 72.0));
@@ -701,7 +579,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-
         private void InitializePlayerAndSlider(object obj)
         {
             try
@@ -780,13 +657,13 @@ namespace NotebookRCv001.Models
                 {
                     bitmap = new BitmapImage(new Uri(path));
                     if (bitmap == null)
-                        EncryptionKeyError(path);
+                        bitmap = await EncryptionKeyError(path);
                 }
                 else
                 {
                     bitmap = await Command_executors.Executors.ImageDecrypt(path, key);
                     if (bitmap == null)
-                        EncryptionKeyError(path);
+                        bitmap = await EncryptionKeyError(path);
                 }
                 if (bitmap != null)
                 {
@@ -817,30 +694,6 @@ namespace NotebookRCv001.Models
                 return bitmap;
             }
             catch (Exception e) { ErrorWindow(e); return null; }
-        }
-        /// <summary>
-        /// трансформация изображения под размер страницы
-        /// </summary>
-        /// <param name="page">страница</param>
-        /// <param name="bitmap">изображение</param>
-        /// <exception cref="Exception"></exception>
-        private void ImageTransformationToFitThePage(BitmapImage bitmap)
-        {
-            try
-            {
-                //трансформируем изображение под размер страницы
-                var height = page.ActualHeight;
-                var width = page.ActualWidth;
-                var imgHeight = bitmap.Height;
-                var imgWidth = bitmap.Width;
-                double scaleX = (double)width / imgWidth;
-                double scaleY = (double)height / imgHeight;
-                var scale = Math.Min(scaleX, scaleY);
-                MousePosition = new((width - bitmap.Width) / 2, 0);
-                ScaleX = scale;
-                ScaleY = scale;
-            }
-            catch (Exception ex) { throw new Exception(ex.Message); }
         }
         private async void VideoFromPath(string path)
         {
