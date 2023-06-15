@@ -20,7 +20,8 @@ namespace NotebookRCv001.Helpers
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private Point lastMousePosition { get; set; }
-        private bool isMouseDragging { get; set; }
+        private bool isDragging { get; set; }
+        private bool isZoom { get; set; }
         private double scale { get; set; }
 
 
@@ -49,7 +50,7 @@ namespace NotebookRCv001.Helpers
 
                 }
             };
-            isMouseDragging = false;
+            isDragging = false;
             scale = 1;
         }
 
@@ -72,104 +73,53 @@ namespace NotebookRCv001.Helpers
         }
 
 
-        private Point center; // Центр масштабирования
-
         private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            isZoom = true;
             var transform = AssociatedObject.RenderTransform as MatrixTransform;
             var matrix = transform.Matrix;
             var position = e.GetPosition(AssociatedObject);
-
             var step = 0.1; // Размер шага масштабирования
             var scaleFactor = e.Delta > 0 ? 1 + step : 1 - step; // Фактор масштабирования
-
             scale *= scaleFactor; // Применяем масштаб
-
-            // Пересчитываем центр масштабирования относительно изображения
-            var imagePosition = position - new Point(AssociatedObject.ActualWidth / 2, AssociatedObject.ActualHeight / 2);
-            var scaledImagePosition = new Vector(imagePosition.X * scaleFactor, imagePosition.Y * scaleFactor);
-            center = position - scaledImagePosition;
-
-            // Корректируем смещение, чтобы изображение не выходило за пределы контейнера
-            var offsetX = AssociatedObject.ActualWidth / 2 - center.X;
-            var offsetY = AssociatedObject.ActualHeight / 2 - center.Y;
-
             matrix = new Matrix();
-            matrix.ScaleAt(scale, scale, center.X, center.Y);
-            matrix.OffsetX = offsetX;
-            matrix.OffsetY = offsetY;
-
+            matrix.Scale(scale, scale);
             AssociatedObject.RenderTransform = new MatrixTransform(matrix);
 
+        }
+        private void Image_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isZoom)
+            {
+
+            }
+            else if(isd)
+            Image img = AssociatedObject;
+            Point position = e.GetPosition(img);
+            double offsetX = position.X / img.ActualWidth;
+            double offsetY = position.Y / img.ActualHeight;
+            img.RenderTransformOrigin = new Point(offsetX, offsetY);
+            isZoom = false;
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var position = e.GetPosition(AssociatedObject);
             lastMousePosition = position;
-            isMouseDragging = true;
-            //AssociatedObject.CaptureMouse();
+            isDragging = true;
         }
 
-        private void Image_MouseMove(object sender, MouseEventArgs e)
-        {
-            //if (isMouseDragging)
-            //{
-            //    var position = e.GetPosition(AssociatedObject);
-
-            //    var transform = AssociatedObject.RenderTransform as MatrixTransform;
-            //    var matrix = transform.Matrix;
-
-            //    var offsetX = position.X - lastMousePosition.X;
-            //    var offsetY = position.Y - lastMousePosition.Y;
-
-            //    matrix.Translate(offsetX, offsetY);
-
-            //    transform.Matrix = matrix;
-
-            //    lastMousePosition = position;
-            //}
-
-            if (isMouseDragging)
-            {
-                var image = AssociatedObject;
-                if (image.RenderTransform is TransformGroup transform)
-                {
-                    TranslateTransform translateTransform = null;
-                    foreach (var t in transform.Children)
-                    {
-                        if (t is TranslateTransform tt)
-                        {
-                            translateTransform = tt;
-                            break;
-                        }
-                    }
-                    if (translateTransform != null)
-                    {
-                        Point currentPoint = e.GetPosition(image);
-                        double diffX = currentPoint.X - lastMousePosition.X;
-                        double diffY = currentPoint.Y - lastMousePosition.Y;
-                        //scrollViewer.ScrollToVerticalOffset(diffY);
-                        //scrollViewer.ScrollToHorizontalOffset(diffX);
-                        translateTransform.X += diffX;
-                        translateTransform.Y += diffY;
-                        lastMousePosition = currentPoint;
-                    }
-                }
-            }
-        }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            isMouseDragging = false;
-            //AssociatedObject.ReleaseMouseCapture();
+            isDragging = false;
         }
 
         private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is BehaviorImageZoom behavior)
             {
-                //behavior.ImageTransformationToFitThePage(behavior.mainWindowViewModel.CurrentPage, (BitmapImage)e.NewValue);
+                behavior.ImageTransformationToFitThePage(behavior.mainWindowViewModel.CurrentPage, (BitmapImage)e.NewValue);
                 behavior.AssociatedObject.Source = (ImageSource)e.NewValue;
 
             }
