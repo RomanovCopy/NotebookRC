@@ -89,17 +89,22 @@ namespace NotebookRCv001.Helpers
         }
         private void Image_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isZoom)
-            {
-
-            }
-            else if(isd)
             Image img = AssociatedObject;
             Point position = e.GetPosition(img);
             double offsetX = position.X / img.ActualWidth;
             double offsetY = position.Y / img.ActualHeight;
-            img.RenderTransformOrigin = new Point(offsetX, offsetY);
-            isZoom = false;
+            if (isZoom)
+            {
+                img.RenderTransformOrigin = new Point(offsetX, offsetY);
+                isZoom = false;
+            }
+            else if (isDragging)
+            {
+                var transform = AssociatedObject.RenderTransform as MatrixTransform;
+                var matrix = transform.Matrix;
+                matrix.ScaleAt(1,1,offsetX, offsetY);
+                AssociatedObject.RenderTransform = new MatrixTransform(matrix);
+            }
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
