@@ -36,7 +36,7 @@ namespace NotebookRCv001.Models
         private Page page { get; set; }
         private BehaviorMediaElement behaviorMediaElement { get; set; }
         private BehaviorSlider behaviorSlider { get; set; }
-        private ImageZoomBehavior behaviorImage { get; set; }
+        private BehaviorImageZoom behaviorImage { get; set; }
         private bool play { get; set; }
 
 
@@ -462,7 +462,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                if (obj is ImageZoomBehavior behavior)
+                if (obj is BehaviorImageZoom behavior)
                 {
                     behaviorImage = behavior;
                     if (behaviorImageReady != null)

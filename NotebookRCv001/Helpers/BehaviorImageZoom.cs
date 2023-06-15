@@ -16,7 +16,7 @@ using NotebookRCv001.ViewModels;
 
 namespace NotebookRCv001.Helpers
 {
-    public class ImageZoomBehavior : Behavior<Image>
+    public class BehaviorImageZoom : Behavior<Image>
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private Point lastMousePosition { get; set; }
@@ -33,13 +33,13 @@ namespace NotebookRCv001.Helpers
 
 
 
-        static ImageZoomBehavior()
+        static BehaviorImageZoom()
         {
             SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource),
-                typeof(ImageZoomBehavior), new PropertyMetadata(null, OnSourceChanged));
+                typeof(BehaviorImageZoom), new PropertyMetadata(null, OnSourceChanged));
         }
 
-        public ImageZoomBehavior()
+        public BehaviorImageZoom()
         {
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             mainWindowViewModel.FrameList.CollectionChanged += (s, e) =>
@@ -71,21 +71,36 @@ namespace NotebookRCv001.Helpers
             AssociatedObject.MouseLeftButtonUp -= Image_MouseLeftButtonUp;
         }
 
+
+        private Point center; // Центр масштабирования
+
         private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             var transform = AssociatedObject.RenderTransform as MatrixTransform;
             var matrix = transform.Matrix;
+            var position = e.GetPosition(AssociatedObject);
 
             var step = 0.1; // Размер шага масштабирования
-            scale += step * (e.Delta > 0 ? 1 : -1); // Изменение масштаба
+            var scaleFactor = e.Delta > 0 ? 1 + step : 1 - step; // Фактор масштабирования
 
-            var position = e.GetPosition(AssociatedObject);
-            var newMatrix = Matrix.Identity;
-            newMatrix.ScaleAt(scale, scale, position.X, position.Y);
-            newMatrix.OffsetX = matrix.OffsetX;
-            newMatrix.OffsetY = matrix.OffsetY;
+            scale *= scaleFactor; // Применяем масштаб
 
-            AssociatedObject.RenderTransform = new MatrixTransform(newMatrix);
+            // Пересчитываем центр масштабирования относительно изображения
+            var imagePosition = position - new Point(AssociatedObject.ActualWidth / 2, AssociatedObject.ActualHeight / 2);
+            var scaledImagePosition = new Vector(imagePosition.X * scaleFactor, imagePosition.Y * scaleFactor);
+            center = position - scaledImagePosition;
+
+            // Корректируем смещение, чтобы изображение не выходило за пределы контейнера
+            var offsetX = AssociatedObject.ActualWidth / 2 - center.X;
+            var offsetY = AssociatedObject.ActualHeight / 2 - center.Y;
+
+            matrix = new Matrix();
+            matrix.ScaleAt(scale, scale, center.X, center.Y);
+            matrix.OffsetX = offsetX;
+            matrix.OffsetY = offsetY;
+
+            AssociatedObject.RenderTransform = new MatrixTransform(matrix);
+
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -93,39 +108,68 @@ namespace NotebookRCv001.Helpers
             var position = e.GetPosition(AssociatedObject);
             lastMousePosition = position;
             isMouseDragging = true;
-            AssociatedObject.CaptureMouse();
+            //AssociatedObject.CaptureMouse();
         }
 
         private void Image_MouseMove(object sender, MouseEventArgs e)
         {
+            //if (isMouseDragging)
+            //{
+            //    var position = e.GetPosition(AssociatedObject);
+
+            //    var transform = AssociatedObject.RenderTransform as MatrixTransform;
+            //    var matrix = transform.Matrix;
+
+            //    var offsetX = position.X - lastMousePosition.X;
+            //    var offsetY = position.Y - lastMousePosition.Y;
+
+            //    matrix.Translate(offsetX, offsetY);
+
+            //    transform.Matrix = matrix;
+
+            //    lastMousePosition = position;
+            //}
+
             if (isMouseDragging)
             {
-                var position = e.GetPosition(AssociatedObject);
-
-                var transform = AssociatedObject.RenderTransform as MatrixTransform;
-                var matrix = transform.Matrix;
-
-                var offsetX = position.X - lastMousePosition.X;
-                var offsetY = position.Y - lastMousePosition.Y;
-
-                matrix.Translate(offsetX, offsetY);
-
-                transform.Matrix = matrix;
-
-                lastMousePosition = position;
+                var image = AssociatedObject;
+                if (image.RenderTransform is TransformGroup transform)
+                {
+                    TranslateTransform translateTransform = null;
+                    foreach (var t in transform.Children)
+                    {
+                        if (t is TranslateTransform tt)
+                        {
+                            translateTransform = tt;
+                            break;
+                        }
+                    }
+                    if (translateTransform != null)
+                    {
+                        Point currentPoint = e.GetPosition(image);
+                        double diffX = currentPoint.X - lastMousePosition.X;
+                        double diffY = currentPoint.Y - lastMousePosition.Y;
+                        //scrollViewer.ScrollToVerticalOffset(diffY);
+                        //scrollViewer.ScrollToHorizontalOffset(diffX);
+                        translateTransform.X += diffX;
+                        translateTransform.Y += diffY;
+                        lastMousePosition = currentPoint;
+                    }
+                }
             }
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             isMouseDragging = false;
-            AssociatedObject.ReleaseMouseCapture();
+            //AssociatedObject.ReleaseMouseCapture();
         }
 
         private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ImageZoomBehavior behavior)
+            if (d is BehaviorImageZoom behavior)
             {
+                //behavior.ImageTransformationToFitThePage(behavior.mainWindowViewModel.CurrentPage, (BitmapImage)e.NewValue);
                 behavior.AssociatedObject.Source = (ImageSource)e.NewValue;
 
             }
