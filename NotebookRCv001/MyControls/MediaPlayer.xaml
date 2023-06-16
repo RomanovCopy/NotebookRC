@@ -118,9 +118,10 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <ScrollViewer Grid.Row="0" Grid.RowSpan="3" VerticalScrollBarVisibility="Auto"
+            <ScrollViewer Grid.Row="0" Grid.RowSpan="3" 
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto" 
-                          VerticalContentAlignment="Center"
+                          VerticalContentAlignment="Stretch"
                           HorizontalContentAlignment="Center">
                 <Image x:Name="img"  Stretch="None" >
                     <i:Interaction.Triggers>
