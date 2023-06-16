@@ -77,12 +77,6 @@ namespace NotebookRCv001.Models
         private string content;
 
 
-
-        internal double ScaleX { get => scaleX; set => SetProperty(ref scaleX, value); }
-        private double scaleX;
-        internal double ScaleY { get => scaleY; set => SetProperty(ref scaleY, value); }
-        private double scaleY;
-
         internal bool ThisVideo { get => thisVideo; private set => SetProperty(ref thisVideo, value); }
         private bool thisVideo;
         internal bool ThisAudio { get => thisAudio; private set => SetProperty(ref thisAudio, value); }
@@ -495,7 +489,7 @@ namespace NotebookRCv001.Models
                 if (obj is Page p)
                 {
                     page = p;
-                    Application.Current.MainWindow.KeyDown += MainWindow_KeyDown;
+                    Application.Current.MainWindow.PreviewKeyDown += MainWindow_KeyDown;
                 }
             }
             catch (Exception e) { ErrorWindow(e); }
@@ -532,7 +526,7 @@ namespace NotebookRCv001.Models
         {
             try
             {
-                Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
+                Application.Current.MainWindow.PreviewKeyDown -= MainWindow_KeyDown;
                 if (imageStream != null) imageStream.Dispose();
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
@@ -556,6 +550,20 @@ namespace NotebookRCv001.Models
                 else if ((e.Key == Key.D || e.Key == Key.Right) && CanExecute_Forward(null))
                 {
                     Execute_Forward(null);
+                }
+                else if ((e.Key == Key.W || e.Key == Key.Up) )
+                {
+                    if (behaviorImage.Parent is ScrollViewer scrol)
+                    {
+                        scrol.ScrollToVerticalOffset(scrol.VerticalOffset - 50);
+                    }
+                }
+                else if ((e.Key == Key.S || e.Key == Key.Down) )
+                {
+                    if (behaviorImage.Parent is ScrollViewer scrol)
+                    {
+                        scrol.ScrollToVerticalOffset(scrol.VerticalOffset + 50);
+                    }
                 }
             }
             catch (Exception ex) { ErrorWindow(ex); }

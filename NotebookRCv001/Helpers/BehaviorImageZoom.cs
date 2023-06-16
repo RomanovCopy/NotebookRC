@@ -19,10 +19,17 @@ namespace NotebookRCv001.Helpers
     public class BehaviorImageZoom : Behavior<Image>
     {
         private readonly MainWindowViewModel mainWindowViewModel;
-        private Point lastMousePosition { get; set; }
-        private bool isDragging { get; set; }
-        private bool isZoom { get; set; }
-        private double scale { get; set; }
+        /// <summary>
+        /// автомасштаб
+        /// </summary>
+        private double autoScale { get; set; }
+        /// <summary>
+        /// текущий масштаб
+        /// </summary>
+        private double currentScale { get; set; }
+
+
+        public object Parent => AssociatedObject.Parent;
 
 
         public ImageSource Source
@@ -47,90 +54,68 @@ namespace NotebookRCv001.Helpers
             {
                 if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems[0] is NotebookRCv001.MyControls.MediaPlayer player)
                 {
-
+                    player.SizeChanged += (s, e) => { 
+                        if(currentScale==autoScale) 
+                            ImageTransformationToFitThePage(); 
+                    };
                 }
             };
-            isDragging = false;
-            scale = 1;
         }
 
         protected override void OnAttached()
         {
             base.OnAttached();
             AssociatedObject.MouseWheel += Image_MouseWheel;
-            AssociatedObject.MouseLeftButtonDown += Image_MouseLeftButtonDown;
-            AssociatedObject.MouseMove += Image_MouseMove;
-            AssociatedObject.MouseLeftButtonUp += Image_MouseLeftButtonUp;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
             AssociatedObject.MouseWheel -= Image_MouseWheel;
-            AssociatedObject.MouseLeftButtonDown -= Image_MouseLeftButtonDown;
-            AssociatedObject.MouseMove -= Image_MouseMove;
-            AssociatedObject.MouseLeftButtonUp -= Image_MouseLeftButtonUp;
         }
 
 
         private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (sender is Image image && image.Parent is ScrollViewer scroll)
+            if (sender is Image image)
             {
                 var step = 0.1; // Размер шага масштабирования
-                scale += step * (e.Delta > 0 ? 1 : -1); // Применяем масштаб
-                image.LayoutTransform = new ScaleTransform(scale, scale);
+                currentScale += step * (e.Delta > 0 ? 1 : -1); // Применяем масштаб
+                currentScale = currentScale >= 5 ? 5 : currentScale <= autoScale ? autoScale : currentScale;
+                image.LayoutTransform = new ScaleTransform(currentScale, currentScale);
             }
         }
-        private void Image_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isDragging)
-            {
-
-            }
-        }
-
-        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            lastMousePosition = e.GetPosition(AssociatedObject);
-            isDragging = true;
-        }
-
-
-        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            isDragging = false;
-        }
-
         private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is BehaviorImageZoom behavior)
             {
-                behavior.ImageTransformationToFitThePage(behavior.mainWindowViewModel.CurrentPage, (BitmapImage)e.NewValue);
                 behavior.AssociatedObject.Source = (ImageSource)e.NewValue;
+                if (behavior.autoScale == behavior.currentScale)
+                    behavior.ImageTransformationToFitThePage();
             }
         }
-
-
         /// <summary>
         /// трансформация изображения под размер страницы
         /// </summary>
         /// <param name="page">страница</param>
         /// <param name="bitmap">изображение</param>
         /// <exception cref="Exception"></exception>
-        private void ImageTransformationToFitThePage(Page page, BitmapImage bitmap)
+        internal void ImageTransformationToFitThePage()
         {
             try
             {
-                //трансформируем изображение под размер страницы
-                var height = page.ActualHeight;
-                var width = page.ActualWidth;
-                var imgHeight = bitmap.Height;
-                var imgWidth = bitmap.Width;
-                double scaleX = (double)width / imgWidth;
-                double scaleY = (double)height / imgHeight;
-                scale = Math.Min(scaleX, scaleY);
-                AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);
+                if (Source is BitmapImage bitmap && mainWindowViewModel.CurrentPage is MyControls.MediaPlayer page)
+                {
+                    //трансформируем изображение под размер страницы
+                    var height = page.ActualHeight;
+                    var width = page.ActualWidth;
+                    var imgHeight = bitmap.Height;
+                    var imgWidth = bitmap.Width;
+                    double scaleX = (double)width / imgWidth;
+                    double scaleY = (double)height / imgHeight;
+                    autoScale = currentScale = Math.Min(scaleX, scaleY);
+                    AssociatedObject.LayoutTransform = new ScaleTransform(autoScale, autoScale);
+                }
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
         }
