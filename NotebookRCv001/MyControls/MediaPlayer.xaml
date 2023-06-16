@@ -118,10 +118,11 @@
                     </Style>
                 </MediaElement.Style>
             </MediaElement>
-            <ScrollViewer Grid.Row="0" Grid.RowSpan="3">
-                <Image x:Name="img"  Stretch="None" Grid.Row="0" Grid.RowSpan="3"
-                       ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                       ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="0" Grid.RowSpan="3" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto" 
+                          VerticalContentAlignment="Center"
+                          HorizontalContentAlignment="Center">
+                <Image x:Name="img"  Stretch="None" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding ImageLoaded, UpdateSourceTrigger=PropertyChanged}"

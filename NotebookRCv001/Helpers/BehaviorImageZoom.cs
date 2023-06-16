@@ -51,7 +51,7 @@ namespace NotebookRCv001.Helpers
                 }
             };
             isDragging = false;
-            scale = 1;
+            //scale = 1;
         }
 
         protected override void OnAttached()
@@ -75,35 +75,44 @@ namespace NotebookRCv001.Helpers
 
         private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            isZoom = true;
-            var transform = AssociatedObject.RenderTransform as MatrixTransform;
-            var matrix = transform.Matrix;
-            var position = e.GetPosition(AssociatedObject);
-            var step = 0.1; // Размер шага масштабирования
-            var scaleFactor = e.Delta > 0 ? 1 + step : 1 - step; // Фактор масштабирования
-            scale *= scaleFactor; // Применяем масштаб
-            matrix = new Matrix();
-            matrix.Scale(scale, scale);
-            AssociatedObject.RenderTransform = new MatrixTransform(matrix);
+            if (sender is Image image && image.Parent is ScrollViewer scroll)
+            {
+                var step = 0.1; // Размер шага масштабирования
+                scale += step * (e.Delta > 0 ? 1 : -1); // Применяем масштаб
+                AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale, 0.5, 0.5);
+                var scrolHeight = scroll.ActualHeight;
+                var scrolWidth = scroll.ActualWidth;
+                var imageHeight = image.ActualHeight * scale;
+                var imageWidth = image.ActualWidth * scale;
+                var a = true;
+            }
+            //isZoom = true;
+            //var transform = AssociatedObject.RenderTransform as MatrixTransform;
+            //var matrix = transform.Matrix;
+            //var position = e.GetPosition(AssociatedObject);
+            //var scaleFactor = e.Delta > 0 ? 1 + step : 1 - step; // Фактор масштабирования
+            //var matrix = new Matrix();
+            //matrix.Scale(scale, scale);
+            //AssociatedObject.RenderTransform = new MatrixTransform(matrix);
 
         }
         private void Image_MouseMove(object sender, MouseEventArgs e)
         {
-            Image img = AssociatedObject;
-            Point position = e.GetPosition(img);
-            double offsetX = position.X / img.ActualWidth;
-            double offsetY = position.Y / img.ActualHeight;
             if (isZoom)
             {
+                Image img = AssociatedObject;
+                Point position = e.GetPosition(img);
+                double offsetX = (position.X * scale) / (img.ActualWidth * scale);
+                double offsetY = (position.Y * scale) / (img.ActualHeight * scale);
                 img.RenderTransformOrigin = new Point(offsetX, offsetY);
                 isZoom = false;
             }
             else if (isDragging)
             {
-                var transform = AssociatedObject.RenderTransform as MatrixTransform;
-                var matrix = transform.Matrix;
-                matrix.ScaleAt(1,1,offsetX, offsetY);
-                AssociatedObject.RenderTransform = new MatrixTransform(matrix);
+                //var transform = AssociatedObject.RenderTransform as MatrixTransform;
+                //var matrix = transform.Matrix;
+                //matrix.ScaleAt(1, 1, offsetX, offsetY);
+                //AssociatedObject.RenderTransform = new MatrixTransform(matrix);
             }
         }
 
@@ -148,7 +157,7 @@ namespace NotebookRCv001.Helpers
                 var imgWidth = bitmap.Width;
                 double scaleX = (double)width / imgWidth;
                 double scaleY = (double)height / imgHeight;
-                double scale = Math.Min(scaleX, scaleY);
+                //double scale = Math.Min(scaleX, scaleY);
                 scale = Math.Min(scaleX, scaleY);
 
                 AssociatedObject.LayoutTransform = new ScaleTransform(scale, scale);

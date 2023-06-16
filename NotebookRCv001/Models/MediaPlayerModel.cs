@@ -38,6 +38,11 @@ namespace NotebookRCv001.Models
         private BehaviorSlider behaviorSlider { get; set; }
         private BehaviorImageZoom behaviorImage { get; set; }
         private bool play { get; set; }
+        /// <summary>
+        /// поток, в котором открывается изображение для просмотра
+        /// необходим для закрытия потока при выходе
+        /// </summary>
+        private FileStream imageStream { get; set; }
 
 
         internal ObservableCollection<string> Headers => language.HeadersMediaPlayer;
@@ -184,6 +189,7 @@ namespace NotebookRCv001.Models
                 PlayIndex = 0;
                 play = false;
                 homeMenuFileViewModel.PathToLastFile = "";
+                if (imageStream != null) imageStream.Dispose();
             }
             catch (Exception e) { ErrorWindow(e); }
         }
@@ -527,6 +533,7 @@ namespace NotebookRCv001.Models
             try
             {
                 Application.Current.MainWindow.KeyDown -= MainWindow_KeyDown;
+                if (imageStream != null) imageStream.Dispose();
                 if (mainWindowViewModel.FrameListRemovePage.CanExecute(page))
                     mainWindowViewModel.FrameListRemovePage.Execute(page);
             }
@@ -562,7 +569,7 @@ namespace NotebookRCv001.Models
                 BitmapImage bitmapImage = new();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.BeginInit();
-                var imageStream = File.OpenRead(path);
+                imageStream = File.OpenRead(path);
                 bitmapImage.StreamSource = imageStream;
                 if (height > 0)
                     bitmapImage.DecodePixelHeight = (int)((double)height * (96.0 / 72.0));
