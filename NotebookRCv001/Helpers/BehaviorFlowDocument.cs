@@ -67,8 +67,6 @@ namespace NotebookRCv001.Helpers
         {
             FlowDocumentEditorViewModel = (RichTextBoxViewModel)Application.Current.MainWindow.
                 FindResource("rsflowdocumenteditorviewmodel");
-            //if (FlowDocumentEditorViewModel.FlowDocumentLoaded.CanExecute(this))
-            //    FlowDocumentEditorViewModel.FlowDocumentLoaded.Execute(this);
         }
 
         #endregion
