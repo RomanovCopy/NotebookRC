@@ -902,10 +902,17 @@ namespace NotebookRCv001.Helpers
             {
                 if (e.Key == Key.Enter)
                 {
-                    //if (Document.Blocks.LastBlock is Paragraph paragraph)
-                    //{
-                    //    paragraph.Inlines.Add(new Run());
-                    //}
+                    RichTextBox richTextBox = (RichTextBox)sender;
+                    TextPointer caretPosition = richTextBox.CaretPosition;
+
+                    // Вставка символа новой строки
+                    caretPosition.InsertLineBreak();
+
+                    // Перевод курсора в начало добавленной строки
+                    TextPointer lineStartPosition = caretPosition.GetLineStartPosition(1);
+                    richTextBox.CaretPosition = lineStartPosition;
+
+                    e.Handled = true;
                 }
                 if (e.Key == Key.Delete)
                 {
