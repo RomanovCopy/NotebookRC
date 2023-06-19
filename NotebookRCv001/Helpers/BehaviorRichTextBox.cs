@@ -1483,9 +1483,6 @@ namespace NotebookRCv001.Helpers
                 Paragraph paragraph = null;
                 if (TargetToInsert == null)
                 {
-                    //if (Document.Blocks.LastBlock is Paragraph paragraph1 && new TextRange(paragraph1.ContentStart, paragraph1.ContentEnd).IsEmpty) 
-                    //    paragraph = paragraph1;
-                    //else
                     paragraph = new();
                     CurrentFigure = figure;
                     paragraph.Inlines.Add( figure );
@@ -1500,13 +1497,9 @@ namespace NotebookRCv001.Helpers
                         CurrentFigure = figure;
                     }
                 }
-                //paragraph = WrapImplementation(paragraph, figure);
                 RichTextBox.Focus();
                 CaretPosition = paragraph.ContentEnd;
                 Document.Blocks.Add( new Paragraph() );
-                //if (figure.WrapDirection == WrapDirection.Both)
-                //    paragraph.Inlines.Add(new TextBlock() { Text = " ", TextWrapping = TextWrapping.Wrap });
-
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
