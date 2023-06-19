@@ -902,15 +902,16 @@ namespace NotebookRCv001.Helpers
             {
                 if (e.Key == Key.Enter)
                 {
-                    RichTextBox richTextBox = (RichTextBox)sender;
-                    TextPointer caretPosition = richTextBox.CaretPosition;
+                    var richTextBox = (RichTextBox)sender;
+                    var caretPosition = richTextBox.CaretPosition;
 
                     // Вставка символа новой строки
                     caretPosition.InsertLineBreak();
 
                     // Перевод курсора в начало добавленной строки
-                    TextPointer lineStartPosition = caretPosition.GetLineStartPosition(1);
-                    richTextBox.CaretPosition = lineStartPosition;
+                    var lineStartPosition = caretPosition.GetLineStartPosition(1);
+                    if (lineStartPosition != null)
+                        richTextBox.CaretPosition = lineStartPosition;
 
                     e.Handled = true;
                 }
