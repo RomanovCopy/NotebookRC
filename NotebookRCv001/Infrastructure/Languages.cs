@@ -1162,6 +1162,7 @@ namespace NotebookRCv001.Infrastructure
                             "Увеличить отступ",//19
                             "Уменьшить отступ",//20
                             "Так будет выглядеть написание шрифта.Если нажать то фон шрифта станет прозрачным",//21
+                            "Новый параграф",//22
                         }
                     },
                     {
@@ -1189,6 +1190,7 @@ namespace NotebookRCv001.Infrastructure
                             "Increase indent",//19
                             "Decrease indent",//20
                             "This is how the font will look like. If you press it, the background of the font will become transparent",//21
+                            "New paragraph",//22
                         }
                     }
             };

@@ -661,6 +661,24 @@ namespace NotebookRCv001.Models
             catch (Exception e) { ErrorWindow(e); }
         }
 
+        /// <summary>
+        /// создание нового параграфа
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal bool CanExecute_ButtonOnNewParagraph(object obj)
+        {
+            return BehaviorRichTextBox != null;
+        }
+        internal void Execute_ButtonOnNewParagraph(object obj)
+        {
+            try
+            {
+                BehaviorRichTextBox.NewParagraph();
+            }
+            catch (Exception e) { ErrorWindow(e); }
+        }
+
 
         /// <summary>
         /// TogleButton Bold
@@ -1214,7 +1232,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-
 
     }
 }

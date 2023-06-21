@@ -350,6 +350,13 @@ namespace NotebookRCv001.ViewModels
         RelayCommand buttonOnToggleNumbering;
 
         /// <summary>
+        /// операция "New Paragraph"
+        /// </summary>
+        public ICommand ButtonOnNewParagraph => buttonOnNewParagraph ??= new RelayCommand(richTextBoxModel.Execute_ButtonOnNewParagraph,
+            richTextBoxModel.CanExecute_ButtonOnNewParagraph);
+        RelayCommand buttonOnNewParagraph;
+
+        /// <summary>
         /// быстрый выбор цвета
         /// </summary>
         public ICommand QuickColorSelection => quickColorSelection ??= new RelayCommand(richTextBoxModel.Execute_QuickColorSelection,

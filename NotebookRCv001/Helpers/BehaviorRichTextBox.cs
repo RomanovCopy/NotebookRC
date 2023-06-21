@@ -402,6 +402,10 @@ namespace NotebookRCv001.Helpers
                 PreviewKeyDown += BehaviorRichTextBox_PreviewKeyDown;
                 ServiceKeys = new Key[] { Key.Enter, Key.Back, Key.Delete, Key.Insert, Key.Return };
                 OriginalTextChanged = false;
+                if(Document.Blocks.FirstBlock is Paragraph paragraph)
+                {//задаем отступ первого знака от края документа
+                    paragraph.TextIndent = 12;
+                }
             }
             catch (Exception e) { ErrorWindow( e ); }
         }
@@ -611,6 +615,7 @@ namespace NotebookRCv001.Helpers
             {
                 if (d is BehaviorRichTextBox behavior && behavior.OriginalTextChanged)
                 {//текст изменён
+                    behavior.AssociatedObject.Focus();
                     if (behavior.newDocumentCreated)
                     {//создан новый документ
                         behavior.newDocumentCreated = false;
@@ -1206,6 +1211,26 @@ namespace NotebookRCv001.Helpers
             }
             catch { return null; }
         }
+
+        /// <summary>
+        /// создание нового параграфа, переход в его первую строку с отступом от края в 3 символа
+        /// </summary>
+        internal void NewParagraph()
+        {
+            Paragraph paragraph = new Paragraph();
+            paragraph.Margin = new Thickness(36, 0, 0, 0); // Отступ слева в 3 знака (30 пикселей)
+
+            // Добавьте пустой Run, чтобы создать новую строку
+            paragraph.Inlines.Add(new Run(Environment.NewLine));
+
+            // Добавьте новый параграф в FlowDocument
+            Document.Blocks.Add(paragraph);
+
+            // Установите курсор в начало новой строки
+            TextPointer newPosition = paragraph.ContentStart.GetNextInsertionPosition(LogicalDirection.Forward);
+            AssociatedObject.CaretPosition = newPosition;
+        }
+
 
         /// <summary>
         /// установка свойств текущего символа
