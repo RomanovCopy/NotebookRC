@@ -1217,18 +1217,24 @@ namespace NotebookRCv001.Helpers
         /// </summary>
         internal void NewParagraph()
         {
+            //добавляем новый параграф с отступом в первой строке
             Paragraph paragraph = new Paragraph();
-            paragraph.Margin = new Thickness(36, 0, 0, 0); // Отступ слева в 3 знака (30 пикселей)
-
-            // Добавьте пустой Run, чтобы создать новую строку
-            paragraph.Inlines.Add(new Run(Environment.NewLine));
-
-            // Добавьте новый параграф в FlowDocument
+            paragraph.TextIndent = 12;
+            paragraph.ContentStart.InsertTextInRun("   ");
             Document.Blocks.Add(paragraph);
-
-            // Установите курсор в начало новой строки
-            TextPointer newPosition = paragraph.ContentStart.GetNextInsertionPosition(LogicalDirection.Forward);
-            AssociatedObject.CaretPosition = newPosition;
+            AssociatedObject.CaretPosition = paragraph.ContentEnd;
+            // Устанавливаем курсор в следующую позицию после отступа
+            TextPointer caretPosition = AssociatedObject.CaretPosition;
+            // Проверить, что позиция не является null и находится внутри Run
+            if (caretPosition != null && caretPosition.Parent is Run run)
+            {
+                // Создать TextRange для текущей позиции курсора
+                TextRange textRange = new TextRange(caretPosition, caretPosition);
+                // Вставить пробел в TextRange
+                textRange.Text = " ";
+                // Установить курсор после вставленного пробела
+                AssociatedObject.CaretPosition = caretPosition.GetPositionAtOffset(1);
+            }
         }
 
 
