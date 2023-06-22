@@ -2194,6 +2194,9 @@
     </Style>
 
     <ContextMenu x:Name="contextmenu" x:Key="mycontextmenu" DataContext="{StaticResource mycontextmenuviewmodel}">
+        <MenuItem x:Name="newparagraph" Header="{Binding Headers[15], UpdateSourceTrigger=PropertyChanged}"
+                      ToolTip="{Binding ToolTips[15], UpdateSourceTrigger=PropertyChanged}"
+                      Command="{Binding NewParagraph, UpdateSourceTrigger=PropertyChanged}"/>
         <MenuItem x:Name="copy" Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}"
                       ToolTip="{Binding ToolTips[0], UpdateSourceTrigger=PropertyChanged}"
                       Command="{Binding OnCopyButtonClick, UpdateSourceTrigger=PropertyChanged}"/>

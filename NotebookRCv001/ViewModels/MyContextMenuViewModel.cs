@@ -31,6 +31,13 @@ namespace NotebookRCv001.ViewModels
         }
 
         /// <summary>
+        /// вставка нового параграфа
+        /// </summary>
+        public ICommand NewParagraph => newParagraph ??= new RelayCommand(myContextMenuModel.Execute_NewParagraph,
+            myContextMenuModel.CanExecute_NewParagraph);
+        private RelayCommand newParagraph;
+
+        /// <summary>
         /// операция Copy
         /// </summary>
         public ICommand OnCopyButtonClick => onCopyButtonClick ??= new RelayCommand

@@ -67,6 +67,19 @@ namespace NotebookRCv001.Models
         }
 
 
+        internal bool CanExecute_NewParagraph(object obj)
+        {
+            return behaviorRichTextBox != null;
+        }
+        internal void Execute_NewParagraph(object obj)
+        {
+            try
+            {
+                behaviorRichTextBox.NewParagraph();
+            }
+            catch(Exception e) { ErrorWindow(e); }
+        }
+
         internal bool CanExecute_OnCopyButtonClick(object obj)
         {
             try
@@ -456,7 +469,6 @@ namespace NotebookRCv001.Models
             }
             catch (Exception e) { ErrorWindow(e); }
         }
-
 
     }
 }

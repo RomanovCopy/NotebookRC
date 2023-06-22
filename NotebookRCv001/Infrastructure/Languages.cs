@@ -398,6 +398,7 @@ namespace NotebookRCv001.Infrastructure
                             "Изменить изображение",//12
                             "Открыть для чтения",//13
                             "Открыть для редактирования",//14
+                            "Новый параграф",//15
                         }
                     },
                     {
@@ -418,6 +419,7 @@ namespace NotebookRCv001.Infrastructure
                              "Change Image",//12
                              "Open for reading",//13
                              "Open for editing",//14
+                             "New Paragraph",//15
                         }
                     }
             };
@@ -446,6 +448,7 @@ namespace NotebookRCv001.Infrastructure
                             "Изменить выбранное изображение",//12
                             "Открыть файл для чтения",//13
                             "Открыть файл для редактирования",//14
+                            "Вставить новый паракраф( абзац )",//15
                         }
                     },
                     {
@@ -466,6 +469,7 @@ namespace NotebookRCv001.Infrastructure
                             "Change selected image",//12
                             "Open file for reading",//13
                             "Open file for editing",//14
+                            "Insert a new paragraph",//15
                         }
                     }
             };
