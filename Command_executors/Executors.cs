@@ -1160,7 +1160,7 @@ namespace Command_executors
         /// <param name="filter">текущая строка фильтра расширений файлов</param>
         /// <param name="defaultExt">расширение файла по умолчанию</param>
         /// <returns>имя файла выбранное в диалоговом окне</returns>
-        public static string SaveFileDialog(string title, string initialDirectory, string filter, string defaultExt)
+        public static string SaveFileDialog(string title, string initialDirectory, string filter, string defaultExt, string fileName = "")
         {
             try
             {
@@ -1172,7 +1172,8 @@ namespace Command_executors
                     Title = title,
                     InitialDirectory = initialDirectory,
                     RestoreDirectory = true,
-                    ValidateNames = true
+                    ValidateNames = true,
+                    FileName=fileName
                 };
                 saveFileDialog.ShowDialog();
                 return saveFileDialog.FileName;
@@ -1448,7 +1449,7 @@ namespace Command_executors
         /// <param name="fileStream">читает незашифрованный файл с диска</param>
         /// <param name="path">путь сохранения зафрованного файла</param>
         /// <param name="key">ключ шифрования</param>
-        public static void EncryptFromStream(FileStream fileStream, string path, string key)
+        public static async Task EncryptFromStream(FileStream fileStream, string path, string key)
         {
             try
             {
