@@ -413,6 +413,16 @@ namespace NotebookRCv001.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
         /// </summary>
+        public static System.Drawing.Icon icon002 {
+            get {
+                object obj = ResourceManager.GetObject("icon002", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
         public static System.Drawing.Icon icon1 {
             get {
                 object obj = ResourceManager.GetObject("icon1", resourceCulture);

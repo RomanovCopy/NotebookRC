@@ -11,7 +11,7 @@
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <Platforms>AnyCPU;x64</Platforms>
-    <ApplicationIcon>Resources\Icons\icon1.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\icon002.ico</ApplicationIcon>
     <SignAssembly>True</SignAssembly>
     <IsPublishable>True</IsPublishable>
   </PropertyGroup>
@@ -109,6 +109,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\icon002.ico" />
+    <None Remove="Resources\Icons\icon002.ico" />
     <None Remove="Resources\Icons\icon1.ico" />
     <None Remove="Resources\Images\000_aligncenter.png" />
     <None Remove="Resources\Images\001_alignjustify.png" />
@@ -193,6 +195,8 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </Resource>
+    <Resource Include="Resources\icon002.ico" />
+    <Resource Include="Resources\Icons\icon002.ico" />
     <Resource Include="Resources\Icons\icon1.ico" />
     <Resource Include="Resources\Images\000_aligncenter.png" />
     <Resource Include="Resources\Images\001_alignjustify.png" />

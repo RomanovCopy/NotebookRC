@@ -19,8 +19,7 @@
 
     <!--#region *************** IMAGES **************** -->
 
-
-    <BitmapImage x:Key="iconimage" UriSource="\Resources\Icons\icon1.ico"/>
+    <BitmapImage x:Key="iconimage" UriSource="\Resources\Icons\icon002.ico"/>
     <BitmapImage x:Key="aligncenterimage" UriSource="\Resources\Images\000_aligncenter.png"/>
     <BitmapImage x:Key="alignjustifyimage" UriSource="\Resources\Images\001_alignjustify.png"/>
     <BitmapImage x:Key="alignleftimage" UriSource="\Resources\Images\002_alignleft.PNG"/>
