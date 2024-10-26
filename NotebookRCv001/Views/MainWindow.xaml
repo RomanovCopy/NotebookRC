@@ -19,6 +19,30 @@
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
             <viewmodel:MainWindowViewModel x:Key="viewmodel"/>
+
+            <Storyboard x:Key="SlideInMenu">
+                <DoubleAnimation Storyboard.TargetName="MenuPanel"
+                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                         To="0"
+                         Duration="0:0:0.5" />
+                <ThicknessAnimation Storyboard.TargetName="ContentPanel"
+                            Storyboard.TargetProperty="Margin"
+                            To="150,0,0,0"
+                            Duration="0:0:0.5" />
+
+            </Storyboard>
+
+            <Storyboard x:Key="SlideOutMenu">
+                <DoubleAnimation Storyboard.TargetName="MenuPanel"
+                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                         To="-150"
+                         Duration="0:0:0.5" />
+                <ThicknessAnimation Storyboard.TargetName="ContentPanel"
+                            Storyboard.TargetProperty="Margin"
+                            To="0"
+                            Duration="0:0:0.5" />
+            </Storyboard>
+            
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -47,16 +71,91 @@
             <RowDefinition x:Name="frames" Height="*"/>
             <RowDefinition x:Name="status" Height="Auto"/>
         </Grid.RowDefinitions>
-        <Frame x:Name="frame" Grid.Row="0"
+        <Grid Grid.Row="0" Background="Transparent">
+
+
+            <!-- Боковое меню -->
+            <Border x:Name="MenuPanel" Background="#333" Width="150" HorizontalAlignment="Left" >
+                <Border.RenderTransform>
+                    <TranslateTransform X="-150" />
+                    <!-- Начальное положение меню за пределами окна -->
+                </Border.RenderTransform>
+
+                <StackPanel>
+                    <!-- Основные кнопки меню с подменю -->
+                    <Expander Header="Home" >
+                        <Expander.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Home" Style="{StaticResource ExpanderHeaderStyle}"/>
+                            </DataTemplate>
+                        </Expander.HeaderTemplate>
+                        <StackPanel>
+                            <Button Style="{StaticResource MenuButtonStyle}">
+                                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE700;" FontSize="16" />
+                                    <TextBlock Text=" Home" VerticalAlignment="Center" />
+                                </StackPanel>
+
+                            </Button>
+                            <Button Style="{StaticResource SubmenuButtonStyle}"
+                                Content="Dashboard"
+                                Click="Dashboard_Click"/>
+                            <Button Style="{StaticResource SubmenuButtonStyle}" Content="Reports" Click="Reports_Click"/>
+                        </StackPanel>
+                    </Expander>
+
+                    <TreeView x:Name="SideMenu" Background="#333" Width="200">
+                        <TreeViewItem Header="Home" Foreground="White">
+                            <TreeViewItem Header="Dashboard" Foreground="LightGray"/>
+                            <TreeViewItem Header="Reports" Foreground="LightGray"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Settings" Foreground="White">
+                            <TreeViewItem Header="Preferences" Foreground="LightGray"/>
+                            <TreeViewItem Header="Account" Foreground="LightGray"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="About" Foreground="White">
+                            <TreeViewItem Header="Version" Foreground="LightGray"/>
+                            <TreeViewItem Header="Help" Foreground="LightGray"/>
+                        </TreeViewItem>
+                    </TreeView>
+
+                    <Expander Header="Settings" HeaderTemplate="{StaticResource ExpanderHeaderTemplate}">
+                        <StackPanel>
+                            <Button Style="{StaticResource SubmenuButtonStyle}" Content="Preferences" Click="Preferences_Click"/>
+                            <Button Style="{StaticResource SubmenuButtonStyle}" Content="Account" Click="Account_Click"/>
+                        </StackPanel>
+                    </Expander>
+
+                    <Expander Header="About" HeaderTemplate="{StaticResource ExpanderHeaderTemplate}">
+                        <StackPanel>
+                            <Button Style="{StaticResource SubmenuButtonStyle}" Content="Version" Click="Version_Click"/>
+                            <Button Style="{StaticResource SubmenuButtonStyle}" Content="Help" Click="Help_Click"/>
+                        </StackPanel>
+                    </Expander>
+
+                    <Button Style="{StaticResource MenuButtonStyle}" Content="Exit" Click="Exit_Click"/>
+                </StackPanel>
+            </Border>
+
+            <Grid x:Name="ContentPanel" Background="LightGray" Margin="0,0,0,0" MouseDown="Overlay_MouseDown">
+                <Frame x:Name="frame" 
                Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}" 
                NavigationUIVisibility="Hidden" 
                Background="Transparent">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Navigated">
-                    <i:InvokeCommandAction Command="{Binding Source={StaticResource navigateservice}, Path=FrameNavigate, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=frame}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Frame>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Navigated">
+                            <i:InvokeCommandAction Command="{Binding Source={StaticResource navigateservice}, Path=FrameNavigate, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=frame}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Frame>
+            </Grid>
+
+            <!-- Кнопка Menu, которая скрывается при открытом меню -->
+            <Button x:Name="MenuButton" Content="☰" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Click="ToggleMenu_Click" FontSize="18" Margin="10,10,0,0" 
+                Background="DarkSlateGray" Foreground="White">
+            </Button>
+        </Grid>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="White" >
             <controls:ToolBarStatus x:Name="toolbar"/>
         </Border>
