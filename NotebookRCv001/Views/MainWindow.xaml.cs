@@ -46,7 +46,7 @@ namespace NotebookRCv001.Views
             Storyboard slideIn = (Storyboard)FindResource("SlideInMenu");
             slideIn.Begin();
             MenuButton.Visibility = Visibility.Collapsed; // Скрываем кнопку Menu
-            ContentPanel.Visibility = Visibility.Visible; // Показываем прозрачную область для закрытия меню
+            Overlay.Visibility = Visibility.Visible; // Показываем прозрачную область для закрытия меню
             isMenuOpen = true;
         }
 
@@ -55,7 +55,7 @@ namespace NotebookRCv001.Views
             Storyboard slideOut = (Storyboard)FindResource("SlideOutMenu");
             slideOut.Begin();
             MenuButton.Visibility = Visibility.Visible; // Показываем кнопку Menu
-            ContentPanel.Visibility = Visibility.Collapsed; // Скрываем прозрачную область
+            Overlay.Visibility = Visibility.Collapsed; // Скрываем прозрачную область
             isMenuOpen = false;
         }
 

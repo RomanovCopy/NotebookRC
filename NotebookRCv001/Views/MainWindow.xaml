@@ -14,7 +14,7 @@
         Title="NotebookRC" 
         Name="window"
         MinHeight="250" Topmost="False"
-        MinWidth="820" HorizontalContentAlignment="Stretch">
+        MinWidth="820" HorizontalContentAlignment="Stretch" PreviewMouseDown="Window_MouseDown">
     <Window.Resources>
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
@@ -42,7 +42,7 @@
                             To="0"
                             Duration="0:0:0.5" />
             </Storyboard>
-            
+
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -72,8 +72,7 @@
             <RowDefinition x:Name="status" Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent">
-
-
+            <Grid x:Name="Overlay" Background="Green" Visibility="Collapsed" PreviewMouseLeftButtonDown="Overlay_MouseDown"/>
             <!-- Боковое меню -->
             <Border x:Name="MenuPanel" Background="#333" Width="150" HorizontalAlignment="Left" >
                 <Border.RenderTransform>
@@ -137,7 +136,7 @@
                 </StackPanel>
             </Border>
 
-            <Grid x:Name="ContentPanel" Background="LightGray" Margin="0,0,0,0" MouseDown="Overlay_MouseDown">
+            <Grid x:Name="ContentPanel" Background="LightGray" Margin="0,0,0,0" >
                 <Frame x:Name="frame" 
                Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}" 
                NavigationUIVisibility="Hidden" 
