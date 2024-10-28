@@ -218,31 +218,50 @@ namespace NotebookRCv001.Styles.CustomizedWindow
             }
         }
 
+
         private void OpenMenu()
         {
-            Storyboard slideIn = (Storyboard)Application.Current.MainWindow.FindResource("SlideInMenu");
-            // Подписываемся на завершение анимации
-            slideIn.Completed += (s, e) =>
-            {
-                isMenuOpen = true;
-                // Отписываемся от события после выполнения
-                slideIn.Completed -= (s, e) => { };
-            };
-            slideIn.Begin();
+            AnimateMenu("SlideInMenu", () => isMenuOpen = true);
         }
 
         private void CloseMenu()
         {
-            Storyboard slideOut = (Storyboard)Application.Current.MainWindow.FindResource("SlideOutMenu");
-            // Подписываемся на завершение анимации
-            slideOut.Completed += (s, e) =>
-            {
-                isMenuOpen = false;
-                // Отписываемся от события после выполнения
-                slideOut.Completed -= (s, e) => { };
-            };
-            slideOut.Begin();
+            AnimateMenu("SlideOutMenu", () => isMenuOpen = false);
         }
+
+        /// <summary>
+        /// исполнение анимации открытия и закрытия бокового меню
+        /// </summary>
+        /// <param name="storyboardKey">ключ анимации</param>
+        /// <param name="completedAction">функция выполняемая по окончании анимации</param>
+        private void AnimateMenu(string storyboardKey, Action completedAction)
+        {
+            DependencyObject menuPanel = null;
+            DependencyObject contentPanel = null;
+            Application.Current.MainWindow.Dispatcher.Invoke(() =>
+            {
+                menuPanel = (DependencyObject)Application.Current.MainWindow.FindName("MenuPanel");
+                contentPanel= (DependencyObject)Application.Current.MainWindow.FindName("ContentPanel");
+            });
+
+            Storyboard storyboard = ((Storyboard)Application.Current.Resources[storyboardKey]).Clone();
+
+            Storyboard.SetTarget(storyboard.Children[0], menuPanel);
+            Storyboard.SetTargetProperty(storyboard.Children[0], new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+
+            ThicknessAnimation contentAnimation = (ThicknessAnimation)storyboard.Children[1];
+            Storyboard.SetTarget(contentAnimation, contentPanel);
+            Storyboard.SetTargetProperty(contentAnimation, new PropertyPath("Margin"));
+
+            storyboard.Completed += (s, e) =>
+            {
+                completedAction();
+                storyboard.Completed -= (s, e) => { };
+            };
+
+            storyboard.Begin();
+        }
+
 
 
 

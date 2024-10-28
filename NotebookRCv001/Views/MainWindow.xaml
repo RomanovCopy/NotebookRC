@@ -20,29 +20,6 @@
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
             <viewmodel:MainWindowViewModel x:Key="viewmodel"/>
 
-            <Storyboard x:Key="SlideInMenu">
-                <DoubleAnimation Storyboard.TargetName="MenuPanel"
-                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
-                         To="0"
-                         Duration="0:0:0.5" />
-                <ThicknessAnimation Storyboard.TargetName="ContentPanel"
-                            Storyboard.TargetProperty="Margin"
-                            To="150,0,0,0"
-                            Duration="0:0:0.5" />
-
-            </Storyboard>
-
-            <Storyboard x:Key="SlideOutMenu">
-                <DoubleAnimation Storyboard.TargetName="MenuPanel"
-                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
-                         To="-150"
-                         Duration="0:0:0.5" />
-                <ThicknessAnimation Storyboard.TargetName="ContentPanel"
-                            Storyboard.TargetProperty="Margin"
-                            To="0"
-                            Duration="0:0:0.5" />
-            </Storyboard>
-
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
