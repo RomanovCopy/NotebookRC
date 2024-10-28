@@ -21,12 +21,18 @@ using System.Windows.Controls;
 using NotebookRCv001.Interfaces;
 using System.Drawing;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media.Animation;
 
 namespace NotebookRCv001.Styles.CustomizedWindow
 {
     //Реализация перехода между страницами с помощью кнопок и выбора в комбобоксе
     public class NavigateService : ViewModelBase
     {
+        /// <summary>
+        /// состояние бокового меню(True - открыто, False - закрыто )
+        /// </summary>
+        private bool isMenuOpen;
+
         public MainWindowViewModel MainWindowViewModel => mainWindowViewModel ??= (MainWindowViewModel)Application.Current.MainWindow.DataContext;
         MainWindowViewModel mainWindowViewModel;
 
@@ -196,6 +202,50 @@ namespace NotebookRCv001.Styles.CustomizedWindow
             private set => items = value;
         }
         ObservableCollection<Controls.ComboBoxItem> items;
+
+
+        public ICommand ToggleMenu_Click => toggleMenu_Click ??= new RelayCommand(Execute_ToggleMenu_Click);
+        RelayCommand toggleMenu_Click;
+
+        private void Execute_ToggleMenu_Click(object obj)
+        {
+            if(isMenuOpen)
+            {
+                CloseMenu();
+            } else
+            {
+                OpenMenu();
+            }
+        }
+
+        private void OpenMenu()
+        {
+            Storyboard slideIn = (Storyboard)Application.Current.MainWindow.FindResource("SlideInMenu");
+            // Подписываемся на завершение анимации
+            slideIn.Completed += (s, e) =>
+            {
+                isMenuOpen = true;
+                // Отписываемся от события после выполнения
+                slideIn.Completed -= (s, e) => { };
+            };
+            slideIn.Begin();
+        }
+
+        private void CloseMenu()
+        {
+            Storyboard slideOut = (Storyboard)Application.Current.MainWindow.FindResource("SlideOutMenu");
+            // Подписываемся на завершение анимации
+            slideOut.Completed += (s, e) =>
+            {
+                isMenuOpen = false;
+                // Отписываемся от события после выполнения
+                slideOut.Completed -= (s, e) => { };
+            };
+            slideOut.Begin();
+        }
+
+
+
 
 
 

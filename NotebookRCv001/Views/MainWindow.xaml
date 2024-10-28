@@ -14,7 +14,7 @@
         Title="NotebookRC" 
         Name="window"
         MinHeight="250" Topmost="False"
-        MinWidth="820" HorizontalContentAlignment="Stretch" PreviewMouseDown="Window_MouseDown">
+        MinWidth="820" HorizontalContentAlignment="Stretch" >
     <Window.Resources>
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
@@ -72,7 +72,7 @@
             <RowDefinition x:Name="status" Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent">
-            <Grid x:Name="Overlay" Background="Green" Visibility="Collapsed" PreviewMouseLeftButtonDown="Overlay_MouseDown"/>
+            <Grid x:Name="Overlay" Background="Green" Visibility="Collapsed" />
             <!-- Боковое меню -->
             <Border x:Name="MenuPanel" Background="#333" Width="150" HorizontalAlignment="Left" >
                 <Border.RenderTransform>
@@ -82,16 +82,10 @@
 
                 <StackPanel>
                     <!-- Основные кнопки меню с подменю -->
-                    <Expander Header="Home" >
-                        <Expander.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Home" Style="{StaticResource ExpanderHeaderStyle}"/>
-                            </DataTemplate>
-                        </Expander.HeaderTemplate>
+                    <Expander Header="Home" HeaderTemplate="{StaticResource ExpanderHeaderTemplate}">
                         <StackPanel>
                             <Button Style="{StaticResource MenuButtonStyle}">
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE700;" FontSize="16" />
                                     <TextBlock Text=" Home" VerticalAlignment="Center" />
                                 </StackPanel>
 
@@ -149,11 +143,11 @@
                 </Frame>
             </Grid>
 
-            <!-- Кнопка Menu, которая скрывается при открытом меню -->
+            <!-- Кнопка Menu, которая скрывается при открытом меню --><!--
             <Button x:Name="MenuButton" Content="☰" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Click="ToggleMenu_Click" FontSize="18" Margin="10,10,0,0" 
                 Background="DarkSlateGray" Foreground="White">
-            </Button>
+            </Button>-->
         </Grid>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="White" >
             <controls:ToolBarStatus x:Name="toolbar"/>
