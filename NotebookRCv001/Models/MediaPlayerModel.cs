@@ -22,8 +22,6 @@ using System.Windows.Threading;
 using NotebookRCv001.Views;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
-//using forms = System.Windows.Forms;
-//using System.Windows.Forms;
 
 namespace NotebookRCv001.Models
 {

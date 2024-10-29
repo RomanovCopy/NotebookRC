@@ -25,8 +25,6 @@ namespace NotebookRCv001.ViewModels
         /// </summary>
         public Encoding HomeEncoding { get => mainWindowModel.HomeEncoding; set => mainWindowModel.HomeEncoding = value; }
 
-        //public HttpClient client => mainWindowModel.client;
-
         public ObservableCollection<EncodingInfo> HomeEncodings => mainWindowModel.HomeEncodings;
 
 
@@ -65,6 +63,9 @@ namespace NotebookRCv001.ViewModels
             set => mainWindowModel.WindowState = value;
         }
         #endregion
+
+
+
 
 
         public MainWindowViewModel()

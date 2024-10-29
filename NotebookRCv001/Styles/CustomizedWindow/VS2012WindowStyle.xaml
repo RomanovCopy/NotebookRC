@@ -2425,10 +2425,6 @@
         <Setter Property="Background" Value="Transparent"/>
     </Style>
 
-    <DataTemplate x:Key="ExpanderHeaderTemplate">
-        <TextBlock Text="{Binding}" Padding="10,5" Foreground="White" FontSize="14"/>
-    </DataTemplate>
-
     <Style x:Key="SubmenuButtonStyle" TargetType="Button">
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Padding" Value="10,5"/>
