@@ -41,7 +41,8 @@ namespace NotebookRCv001.Models
 
         internal Action<object> BehaviorReady { get; set; }
 
-        internal string PathToLastFile { get; set; }
+        internal string PathToLastFile { set => SetProperty(ref pathToLastFile, value); get => pathToLastFile; }
+        private string pathToLastFile;
 
         internal string LastFileName { get; set; }
 

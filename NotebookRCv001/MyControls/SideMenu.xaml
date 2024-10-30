@@ -1,4 +1,4 @@
-﻿<Page x:Class="NotebookRCv001.MyControls.SideMenu"
+﻿<UserControl x:Class="NotebookRCv001.MyControls.SideMenu"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
       xmlns:local="clr-namespace:NotebookRCv001.MyControls"
       mc:Ignorable="d">
-    <Page.Resources>
+    <!--<UserControl.Resources>
         <ResourceDictionary>
             <HierarchicalDataTemplate x:Key="MenuItemTemplate" ItemsSource="{Binding SubItems}">
                 <StackPanel Orientation="Horizontal" Margin="5">
@@ -15,10 +15,9 @@
                 </StackPanel>
             </HierarchicalDataTemplate>
         </ResourceDictionary>
-    </Page.Resources>
+    </UserControl.Resources>-->
     <Grid>
-        <TreeView x:Name="SideMenu" Background="#333" Width="200"
-                              ItemsSource="{Binding MenuItems}" ItemTemplate="{StaticResource MenuItemTemplate}" SelectedItemChanged="SideMenu_SelectedItemChanged">
+        <TreeView x:Name="sidemenu" Width="100" Height="200">
             
         </TreeView>
 
@@ -33,4 +32,4 @@
                         </ListView.ItemTemplate>
                     </ListView>-->
     </Grid>
-</Page>
+</UserControl>

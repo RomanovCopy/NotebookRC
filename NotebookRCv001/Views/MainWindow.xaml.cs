@@ -34,50 +34,11 @@ namespace NotebookRCv001.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<MenuItem> MenuItems { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            MenuItems = new ObservableCollection<MenuItem> 
-            { 
-                new MenuItem 
-                { 
-                    Name = "Home", 
-                    Icon = "\uE80F", 
-                    SubItems = new ObservableCollection<MenuItem> 
-                    { 
-                        new MenuItem { Name = "Dashboard", Icon = "\uE80F" }, 
-                        new MenuItem { Name = "Reports", Icon = "\uE721" } 
-                    } 
-                }, 
-                new MenuItem { 
-                    Name = "Settings", 
-                    Icon = "\uE713", 
-                    SubItems = new ObservableCollection<MenuItem> 
-                    { 
-                        new MenuItem { Name = "Preferences", Icon = "\uE713" }, 
-                        new MenuItem { Name = "Account", Icon = "\uE13D" } 
-                    } 
-                } 
-            };
-            DataContext = this;
-        }
-
-        private void SideMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        { 
-            // Обработка выбора пункта меню
-            var selectedItem = (MenuItem)SideMenu.SelectedItem; 
-            MessageBox.Show($"Selected: {selectedItem.Name}"); 
-        }
-
-        private void SideMenu_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) 
-        { 
-            if(e.NewValue is MenuItem selectedItem) 
-            { 
-                MessageBox.Show($"Selected: {selectedItem.Name}"); 
-            } 
         }
     }
 }

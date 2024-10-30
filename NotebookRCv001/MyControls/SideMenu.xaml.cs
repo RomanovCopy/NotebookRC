@@ -18,7 +18,7 @@ namespace NotebookRCv001.MyControls
     /// <summary>
     /// Логика взаимодействия для SideMenu.xaml
     /// </summary>
-    public partial class SideMenu : Page
+    public partial class SideMenu : UserControl
     {
         public SideMenu()
         {
