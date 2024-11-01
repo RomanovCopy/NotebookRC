@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace NotebookRCv001.ViewModels
 {
-    class SideMenuViewModel:ViewModelBase
+    public class SideMenuViewModel:ViewModelBase
     {
         private SideMenuModel sideMenuModel;
 

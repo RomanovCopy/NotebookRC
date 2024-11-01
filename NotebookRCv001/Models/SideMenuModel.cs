@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace NotebookRCv001.Models
 {
-    class MenuItem
+    public class MenuItem
     {
         public string Name { get; set; }
         public string Icon { get; set; }
@@ -68,6 +68,18 @@ namespace NotebookRCv001.Models
         }
 
 
+
+        private ObservableCollection<MenuItem> Create_MenuItems()
+        {
+            var menu = new ObservableCollection<MenuItem>()
+            {
+
+            };
+
+
+
+            return menu;
+        }
 
     }
 }
