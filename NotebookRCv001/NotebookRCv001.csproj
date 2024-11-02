@@ -46,21 +46,25 @@
     <Compile Remove="Command_executors\**" />
     <Compile Remove="Icons\**" />
     <Compile Remove="Views\Images\**" />
+    <Compile Remove="Views\SideMenu\**" />
     <EmbeddedResource Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
     <EmbeddedResource Remove="bin\Debug\net5.0-windows\**" />
     <EmbeddedResource Remove="Command_executors\**" />
     <EmbeddedResource Remove="Icons\**" />
     <EmbeddedResource Remove="Views\Images\**" />
+    <EmbeddedResource Remove="Views\SideMenu\**" />
     <None Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
     <None Remove="bin\Debug\net5.0-windows\**" />
     <None Remove="Command_executors\**" />
     <None Remove="Icons\**" />
     <None Remove="Views\Images\**" />
+    <None Remove="Views\SideMenu\**" />
     <Page Remove="bin\Debug\net5.0-windows10.0.17763.0\**" />
     <Page Remove="bin\Debug\net5.0-windows\**" />
     <Page Remove="Command_executors\**" />
     <Page Remove="Icons\**" />
     <Page Remove="Views\Images\**" />
+    <Page Remove="Views\SideMenu\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,11 +83,13 @@
     <Compile Remove="Models\ContextMenuImageModel.cs" />
     <Compile Remove="Models\FileOverviewModel.cs" />
     <Compile Remove="Models\MediaImageModel.cs" />
+    <Compile Remove="Models\SideMenu\SideMenu_MenuItem.cs" />
     <Compile Remove="MyControls\ContextMenuHome.xaml.cs" />
     <Compile Remove="MyControls\ContextMenuImage.xaml.cs" />
     <Compile Remove="MyControls\MediaElementExample.xaml.cs" />
     <Compile Remove="MyControls\MediaImage.xaml.cs" />
     <Compile Remove="MyControls\SfRichTextBox.xaml.cs" />
+    <Compile Remove="MyControls\SideMenu\MySideMenu.xaml.cs" />
     <Compile Remove="Resources\en-US.Designer.cs" />
     <Compile Remove="Resources\Image.Designer.cs" />
     <Compile Remove="Resources\ru-RU.Designer.cs" />
@@ -157,6 +163,7 @@
     <Page Remove="MyControls\MediaElementExample.xaml" />
     <Page Remove="MyControls\MediaImage.xaml" />
     <Page Remove="MyControls\SfRichTextBox.xaml" />
+    <Page Remove="MyControls\SideMenu\MySideMenu.xaml" />
     <Page Remove="Views\FileOverview.xaml" />
     <Page Remove="Views\FlowDocRead.xaml" />
     <Page Remove="Views\FlowDocumentEditor.xaml" />
