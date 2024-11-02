@@ -11,20 +11,10 @@ using System.Windows;
 
 
 
-namespace NotebookRCv001.Models
+namespace NotebookRCv001.Models.HomeSideMenu
 {
-    public class MenuItem
-    {
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public ObservableCollection<MenuItem> SubItems { get; set; }
-        public MenuItem()
-        {
-            SubItems = new ObservableCollection<MenuItem>();
-        }
-    }
 
-    class SideMenuModel: ViewModelBase
+    class SideMenuModel : ViewModelBase
     {
         private readonly MainWindowViewModel mainWindowViewModel;
 
@@ -58,11 +48,11 @@ namespace NotebookRCv001.Models
 
 
 
-         internal bool CanExecute_PageLoaded(object obj)
+        internal bool CanExecute_PageLoaded(object obj)
         {
             throw new NotImplementedException();
         }
-       internal void Execute_PageLoaded(object obj)
+        internal void Execute_PageLoaded(object obj)
         {
             throw new NotImplementedException();
         }

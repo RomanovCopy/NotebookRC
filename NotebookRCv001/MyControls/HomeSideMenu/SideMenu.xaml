@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="NotebookRCv001.MyControls.HomeSideMenu.SideMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels.HomeSideMenu"
+             xmlns:local="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <viewmodels:SideMenuViewModel x:Key="viewmodel"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <viewmodels:SideMenuViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
+</UserControl>

@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NotebookRCv001.MyControls
+namespace NotebookRCv001.MyControls.HomeSideMenu
 {
     /// <summary>
     /// Логика взаимодействия для SideMenu.xaml
     /// </summary>
-    public partial class SideMenu : UserControl
+    public partial class SideMenu: UserControl
     {
         public SideMenu()
         {

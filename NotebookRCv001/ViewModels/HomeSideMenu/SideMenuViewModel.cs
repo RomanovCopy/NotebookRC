@@ -1,7 +1,6 @@
 ﻿using NotebookRCv001.Infrastructure;
 using NotebookRCv001.Interfaces;
-using NotebookRCv001.Models;
-
+using NotebookRCv001.Models.HomeSideMenu;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace NotebookRCv001.ViewModels
+namespace NotebookRCv001.ViewModels.HomeSideMenu
 {
     public class SideMenuViewModel:ViewModelBase
     {
