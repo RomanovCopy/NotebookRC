@@ -17,8 +17,14 @@
     <Grid>
         <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Name}" />
+                <HierarchicalDataTemplate ItemsSource="{Binding SubItems, UpdateSourceTrigger=PropertyChanged}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" 
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="16"/>
+                        <TextBlock Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                                   FontSize="16"/>
+                    </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

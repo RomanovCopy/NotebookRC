@@ -42,6 +42,7 @@ namespace NotebookRCv001.Models.HomeSideMenu
             mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             language = mainWindowViewModel.Language;
             language.PropertyChanged += (s, e) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
+            MenuItems = Create_MenuItems();
         }
 
 
@@ -63,7 +64,24 @@ namespace NotebookRCv001.Models.HomeSideMenu
         {
             var menu = new ObservableCollection<MenuItem>()
             {
-
+                new MenuItem()
+                {
+                    Name=" File",
+                    Icon="\xE7C3",
+                    SubItems=new ObservableCollection<MenuItem>()
+                    {
+                        new MenuItem()
+                        {
+                            Name=" Open",
+                            Icon="\xE8E5"
+                        },
+                        new MenuItem()
+                        {
+                            Name=" Save",
+                            Icon="\xE74E"
+                        }
+                    }
+                }
             };
 
 

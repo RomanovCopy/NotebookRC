@@ -8,6 +8,7 @@
         xmlns:converters="clr-namespace:NotebookRCv001.Converters"
         xmlns:controls="clr-namespace:NotebookRCv001.MyControls" 
         xmlns:customized="clr-namespace:NotebookRCv001.Styles.CustomizedWindow"
+        xmlns:homesidemenu="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
         xmlns:local="clr-namespace:NotebookRCv001.Views"
         mc:Ignorable="d"
         Style="{StaticResource VS2012WindowStyle}"
@@ -19,12 +20,7 @@
         <ResourceDictionary>
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
             <viewmodel:MainWindowViewModel x:Key="viewmodel"/>
-            <HierarchicalDataTemplate x:Key="MenuItemTemplate" ItemsSource="{Binding SubItems}">
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="{Binding Icon}" FontSize="16" Foreground="White" Margin="0,0,10,0"/>
-                    <TextBlock Text="{Binding Name}" Foreground="White" VerticalAlignment="Center"/>
-                </StackPanel>
-            </HierarchicalDataTemplate>
+            <homesidemenu:SideMenu x:Key="sideMenu"/>
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -62,9 +58,8 @@
                     <!-- Начальное положение меню за пределами окна -->
                 </Border.RenderTransform>
                 <Grid>
-                    <controls:SideMenu x:Name="sideMenu"/>
+                    <homesidemenu:SideMenu x:Name="sideMenu"/>
                 </Grid>
-                
             </Border>
 
             <Grid x:Name="ContentPanel" Background="LightGray" Margin="0,0,0,0" >
