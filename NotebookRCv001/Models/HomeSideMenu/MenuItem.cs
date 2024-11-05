@@ -11,6 +11,7 @@ namespace NotebookRCv001.Models.HomeSideMenu
     {
         public string Name { get; set; }
         public string Icon { get; set; }
+        public string ToolTipe { get; set; }
         public ObservableCollection<MenuItem> SubItems { get; set; }
         public MenuItem()
         {

@@ -15,18 +15,54 @@
         <viewmodels:SideMenuViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}">
+        <ListBox ItemsSource="{Binding MenuItems, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding SubItems, UpdateSourceTrigger=PropertyChanged}">
+                 <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" 
+                                   FontFamily="Segoe MDL2 Assets" 
+                                   FontSize="16"/>
+                        <TextBlock Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" 
+                                   FontSize="16">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--<TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding SubItems, UpdateSourceTrigger=PropertyChanged}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" 
-                                   FontFamily="Segoe MDL2 Assets"
+                                   FontFamily="Segoe MDL2 Assets" 
                                    FontSize="16"/>
                         <TextBlock Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                   FontSize="16"/>
+                                   FontSize="16">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-        </TreeView>
+            <TreeView.ItemContainerStyle>
+                <StaticResource ResourceKey="TreeViewItemSideMenu"/>
+            </TreeView.ItemContainerStyle>
+        </TreeView>-->
     </Grid>
 </UserControl>
