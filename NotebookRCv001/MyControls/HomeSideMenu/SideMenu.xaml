@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels.HomeSideMenu"
              xmlns:local="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
@@ -17,15 +18,13 @@
         
     </UserControl.DataContext>
     <Grid>
-        <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}">
+        <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}" >
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding SubItems, UpdateSourceTrigger=PropertyChanged}">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                        <TextBlock Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" 
-                                   FontFamily="Segoe MDL2 Assets" 
-                                   FontSize="18" />
+                        <materialDesign:PackIcon Kind="{Binding Name}" Height="24" Width="24" Margin="0,5,0,0" />
                         <TextBlock Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                   FontSize="16" >
+                                   FontSize="16" VerticalAlignment="Bottom">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
