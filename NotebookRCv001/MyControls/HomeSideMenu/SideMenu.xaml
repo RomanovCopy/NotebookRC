@@ -6,25 +6,32 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels.HomeSideMenu"
+             xmlns:converters="clr-namespace:NotebookRCv001.Converters"
              xmlns:local="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <viewmodels:SideMenuViewModel x:Key="viewmodel"/>
+            <converters:VisibilityConverter x:Key="visibilityconverter"/>
+            <converters:SizeLocationConverter x:Key="sizeconverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.DataContext>
         <viewmodels:SideMenuViewModel/>
-        
     </UserControl.DataContext>
     <Grid>
-        <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}" >
+        <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}" 
+                  ItemContainerStyle="{StaticResource TreeViewItemSideMenu}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding SubItems, UpdateSourceTrigger=PropertyChanged}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                        <materialDesign:PackIcon Kind="{Binding Name}" Height="24" Width="24" Margin="0,5,0,0" />
-                        <TextBlock Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                   FontSize="16" VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal" >
+                        <materialDesign:PackIcon Kind="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Height="{Binding Size, Converter={StaticResource sizeconverter},ConverterParameter=height,UpdateSourceTrigger=PropertyChanged}" 
+                                                 Visibility="{Binding IconVisible,
+                            Converter={StaticResource visibilityconverter}}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" 
+                                   FontSize="{Binding Size, Converter={StaticResource sizeconverter},
+                            ConverterParameter=height,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
@@ -36,16 +43,17 @@
                             </TextBlock.Style>
                            <i:Interaction.Triggers>
                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                   <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel},Path=PageLoaded}"/>
+                                   <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel},Path=PageLoaded}"
+                                                          CommandParameter="{Binding Name}"/>
                                </i:EventTrigger>
                            </i:Interaction.Triggers>
                         </TextBlock>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-            <TreeView.ItemContainerStyle>
+            <!--<TreeView.ItemContainerStyle>
                 <StaticResource ResourceKey="TreeViewItemSideMenu"/>
-            </TreeView.ItemContainerStyle>
+            </TreeView.ItemContainerStyle>-->
         </TreeView>
     </Grid>
 </UserControl>

@@ -15,7 +15,7 @@ namespace NotebookRCv001.ViewModels.HomeSideMenu
     {
         private SideMenuModel sideMenuModel;
 
-        public ObservableCollection<MenuItem> MenuItems => sideMenuModel.MenuItems;
+        public ObservableCollection<MenuItemViewModel> MenuItems => sideMenuModel.MenuItems;
 
 
         public ObservableCollection<string> Headers => sideMenuModel.Headers;
