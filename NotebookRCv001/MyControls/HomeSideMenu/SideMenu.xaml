@@ -5,19 +5,21 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels.HomeSideMenu"
+             xmlns:menuviewmodels="clr-namespace:NotebookRCv001.ViewModels.HomeSideMenu"
+             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
              xmlns:converters="clr-namespace:NotebookRCv001.Converters"
              xmlns:local="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <viewmodels:SideMenuViewModel x:Key="viewmodel"/>
-            <converters:VisibilityConverter x:Key="visibilityconverter"/>
+            <menuviewmodels:SideMenuViewModel x:Key="menuviewmodel"/>
+            <viewmodels:HomeMenuFileViewModel x:Key="menufileviewmodel"/>
+            <converters:VisibilityConverter x:Key="visibilityconverter" />
             <converters:SizeLocationConverter x:Key="sizeconverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.DataContext>
-        <viewmodels:SideMenuViewModel/>
+        <menuviewmodels:SideMenuViewModel/>
     </UserControl.DataContext>
     <Grid>
         <TreeView ItemsSource="{Binding MenuItems,UpdateSourceTrigger=PropertyChanged}" 
@@ -43,7 +45,7 @@
                             </TextBlock.Style>
                            <i:Interaction.Triggers>
                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                   <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel},Path=PageLoaded}"
+                                   <i:InvokeCommandAction Command="{Binding Source={StaticResource menuviewmodel},Path=PageLoaded}"
                                                           CommandParameter="{Binding Name}"/>
                                </i:EventTrigger>
                            </i:Interaction.Triggers>

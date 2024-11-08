@@ -12,19 +12,20 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Windows.Interop;
 using NotebookRCv001.ViewModels.HomeSideMenu;
+using NotebookRCv001.MyControls.HomeSideMenu;
 
 
 namespace NotebookRCv001.Models.HomeSideMenu
 {
 
-    class SideMenuModel : ViewModelBase
+    class SideMenuModel: ViewModelBase
     {
         private readonly MainWindowViewModel mainWindowViewModel;
 
         internal ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
 
 
-        internal Dictionary<string, BitmapSource> Icons { get=>icons; private set=>icons=value; }
+        internal Dictionary<string, BitmapSource> Icons { get => icons; private set => icons = value; }
         Dictionary<string, BitmapSource> icons;
 
 
@@ -62,6 +63,18 @@ namespace NotebookRCv001.Models.HomeSideMenu
         }
         internal void Execute_PageLoaded(object obj)
         {
+            if(obj is string item && item == " Open")
+            {
+                var sidemenu = Application.Current.MainWindow.FindResource("sideMenu");
+                if(sidemenu != null && sidemenu is SideMenu menu)
+                {
+                    var view = menu.FindResource("menufileviewmodel");
+                    if(view != null && view is HomeMenuFileViewModel viewmodel)
+                    {
+                        viewmodel.OpenFile.Execute(null);
+                    }
+                }
+            }
         }
 
 
@@ -100,5 +113,5 @@ namespace NotebookRCv001.Models.HomeSideMenu
 
     }
 
-   
+
 }
