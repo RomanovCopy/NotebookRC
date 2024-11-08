@@ -53,9 +53,6 @@
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-            <!--<TreeView.ItemContainerStyle>
-                <StaticResource ResourceKey="TreeViewItemSideMenu"/>
-            </TreeView.ItemContainerStyle>-->
         </TreeView>
     </Grid>
 </UserControl>
