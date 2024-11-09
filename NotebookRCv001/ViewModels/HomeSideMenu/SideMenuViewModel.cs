@@ -15,9 +15,6 @@ namespace NotebookRCv001.ViewModels.HomeSideMenu
     {
         private SideMenuModel sideMenuModel;
 
-        public HomeMenuFileViewModel homeMenuFileViewModel { get; set; }
-        public HomeMenuEncryptionViewModel homeMenuEncryptionViewModel { get; set; }
-
         public ObservableCollection<MenuItemViewModel> MenuItems => sideMenuModel.MenuItems;
 
 
@@ -33,7 +30,7 @@ namespace NotebookRCv001.ViewModels.HomeSideMenu
 
 
 
-        public SideMenuViewModel(HomeMenuFileViewModel homeMenuFileViewModel, HomeMenuEncryptionViewModel homeMenuEncryptionViewModel)
+        public SideMenuViewModel()
         {
             sideMenuModel = new SideMenuModel();
             sideMenuModel.PropertyChanged += (s, e) => OnPropertyChanged(e.PropertyName);
