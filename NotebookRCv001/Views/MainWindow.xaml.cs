@@ -18,16 +18,6 @@ using System.Windows.Shapes;
 namespace NotebookRCv001.Views
 {
 
-    public class MenuItem 
-    {
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public ObservableCollection<MenuItem> SubItems { get; set; }
-        public MenuItem() 
-        { 
-            SubItems = new ObservableCollection<MenuItem>(); 
-        }
-    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -38,7 +28,6 @@ namespace NotebookRCv001.Views
         public MainWindow()
         {
             InitializeComponent();
-
         }
     }
 }

@@ -7,6 +7,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using System.Windows;
 using NotebookRCv001.Views;
+using NotebookRCv001.ViewModels;
 
 namespace NotebookRCv001.DI
 {
@@ -20,7 +21,10 @@ namespace NotebookRCv001.DI
             builder.RegisterType<MainWindow>().AsSelf();
 
             //регистрация страниц
-
+            builder.RegisterType<MainWindow>().AsSelf();
+            builder.RegisterType<MainWindowViewModel>().AsSelf();
+            builder.RegisterType<Home>().AsSelf();
+            builder.RegisterType<HomeViewModel>().AsSelf();
 
             return builder.Build();
         }

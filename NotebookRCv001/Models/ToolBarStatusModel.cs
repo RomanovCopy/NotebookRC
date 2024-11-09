@@ -57,13 +57,13 @@ namespace NotebookRCv001.Models
             try
             {
                 //устанавливаем привязку ToolBarStatus к домашней странице Home
-                var page = mainWindowViewModel.FrameList.Where((x) => x is Views.Home).LastOrDefault();
-                page.Loaded += ( s, e ) =>
-                {
-                    homeViewModel = (HomeViewModel)page.DataContext;
-                    homeViewModel.PropertyChanged += ( s, e ) => OnPropertyChanged(e.PropertyName);
-                    CurrentInputLanguageName = InputLanguageManager.Current.CurrentInputLanguage.Name;
-                };
+                //var page = mainWindowViewModel.FrameList.Where((x) => x is Views.Home).LastOrDefault();
+                //page.Loaded += ( s, e ) =>
+                //{
+                //    homeViewModel = (HomeViewModel)page.DataContext;
+                //    homeViewModel.PropertyChanged += ( s, e ) => OnPropertyChanged(e.PropertyName);
+                //    CurrentInputLanguageName = InputLanguageManager.Current.CurrentInputLanguage.Name;
+                //};
 
             }
             catch (Exception e) { ErrorWindow(e); }

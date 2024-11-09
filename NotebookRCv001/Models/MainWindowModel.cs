@@ -19,6 +19,8 @@ using System.Collections;
 using System.Net.Http;
 using System.Resources;
 using System.Globalization;
+using NotebookRCv001.Views;
+using Autofac;
 
 namespace NotebookRCv001.Models
 {
@@ -319,9 +321,10 @@ namespace NotebookRCv001.Models
                 foreach (EncodingInfo info in Encoding.GetEncodings())
                     HomeEncodings.Add(info);
                 HomeEncoding = Encoding.GetEncoding(Properties.Settings.Default.EncodingCodePage);
-                Execute_FrameListAddPage(new Views.Home() { KeepAlive = true });
-            }
-            catch (Exception e) { ErrorWindow(e); }
+                //Execute_FrameListAddPage(new Views.Home() { KeepAlive = true });
+                Execute_FrameListAddPage(App.container.Resolve<Home>());
+
+            } catch (Exception e) { ErrorWindow(e); }
         }
 
 
