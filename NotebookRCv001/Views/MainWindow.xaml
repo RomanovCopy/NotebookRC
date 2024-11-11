@@ -9,39 +9,43 @@
         xmlns:controls="clr-namespace:NotebookRCv001.MyControls" 
         xmlns:customized="clr-namespace:NotebookRCv001.Styles.CustomizedWindow"
         xmlns:homesidemenu="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
+        xmlns:locators="clr-namespace:NotebookRCv001.Locators"
         xmlns:local="clr-namespace:NotebookRCv001.Views"
         mc:Ignorable="d"
         Style="{StaticResource VS2012WindowStyle}"
         Title="NotebookRC" 
         Name="window"
         MinHeight="250" Topmost="False"
-        MinWidth="820" HorizontalContentAlignment="Stretch" >
+        MinWidth="820" HorizontalContentAlignment="Stretch">
     <Window.Resources>
         <ResourceDictionary>
-            <converters:SizeLocationConverter x:Key="sizeconverter"/>
-            <viewmodel:MainWindowViewModel x:Key="viewmodel"/>
+            <locators:MainWindowLocator x:Key="wlocator"/>
             <homesidemenu:SideMenu x:Key="sideMenu"/>
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
-        <Binding Source="{StaticResource viewmodel}"/>
+        <Binding Path="mainWindowViewModel" Source="{StaticResource wlocator}"/>
     </Window.DataContext>
+    
+
     <Window.Width>
-        <Binding Path="WindowWidth" Converter="{StaticResource sizeconverter}" 
+        <Binding Path="WindowWidth" Converter="{x:Static locators:MainWindowLocator.sizeLocationConverter}" 
                  ConverterParameter="width" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.Width>
     <Window.Height>
-        <Binding Path="WindowHeight" Converter="{StaticResource sizeconverter}" 
+        <Binding Path="WindowHeight" Converter="{x:Static locators:MainWindowLocator.sizeLocationConverter}" 
                  ConverterParameter="height" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.Height>
     <Window.Top>
-        <Binding Path="WindowTop" Converter="{StaticResource sizeconverter}" ConverterParameter="top" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+        <Binding Path="WindowTop" Converter="{x:Static locators:MainWindowLocator.sizeLocationConverter}" 
+                 ConverterParameter="top" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.Top>
     <Window.Left>
-        <Binding Path="WindowLeft" Converter="{StaticResource sizeconverter}" ConverterParameter="left" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+        <Binding Path="WindowLeft" Converter="{x:Static locators:MainWindowLocator.sizeLocationConverter}" 
+                 ConverterParameter="left" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.Left>
     <Window.WindowState>
-        <Binding Path="WindowState" Converter="{StaticResource sizeconverter}" 
+        <Binding Path="WindowState" Converter="{x:Static locators:MainWindowLocator.sizeLocationConverter}" 
                  ConverterParameter="state" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
     </Window.WindowState>
     <Grid x:Name="grid" Background="Transparent">
