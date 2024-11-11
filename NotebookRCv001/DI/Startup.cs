@@ -21,7 +21,6 @@ namespace NotebookRCv001.DI
             builder.RegisterType<MainWindow>().AsSelf();
 
             //регистрация страниц
-            builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             builder.RegisterType<Home>().AsSelf();
             builder.RegisterType<HomeViewModel>().AsSelf();
