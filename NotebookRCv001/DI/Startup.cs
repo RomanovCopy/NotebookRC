@@ -37,6 +37,7 @@ namespace NotebookRCv001.DI
             builder.RegisterType<MenuHomeViewModel>().SingleInstance();
             builder.RegisterType<ButtonsClearAndClose>().SingleInstance();
             builder.RegisterType<RichTextBox>().SingleInstance();
+            builder.RegisterType<RichTextBoxViewModel>().SingleInstance();
 
             return builder.Build();
         }

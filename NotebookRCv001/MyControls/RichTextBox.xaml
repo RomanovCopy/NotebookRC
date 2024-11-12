@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:res="clr-namespace:NotebookRCv001.Resources" 
-             xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels" 
+             xmlns:locators="clr-namespace:NotebookRCv001.Locators"
              xmlns:converters="clr-namespace:NotebookRCv001.Converters"
              xmlns:helpers="clr-namespace:NotebookRCv001.Helpers"
              xmlns:mycontrols="clr-namespace:NotebookRCv001.MyControls"
@@ -14,7 +14,7 @@
              Background="Transparent" 
              mc:Ignorable="d">
     <UserControl.Resources>
-        <viewmodels:RichTextBoxViewModel x:Key="viewmodel"/>
+        <locators:HomeLocator x:Key="locator"/>
         <converters:ColorToColorConverter x:Key="colorconvert"/>
         <Style x:Key="typeoffont" TargetType="TextBlock">
             <Style.Triggers>
@@ -57,7 +57,7 @@
             </Style.Triggers>
         </Style>
         <ContextMenu x:Key="for_quick_color_bar" 
-                     DataContext="{Binding Source={StaticResource viewmodel}}">
+                     DataContext="{Binding Source={StaticResource locator}, Path=richTextBoxViewModel}">
             <MenuItem Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" 
                       ItemsSource="{Binding MyColors, UpdateSourceTrigger=PropertyChanged}">
                 <MenuItem.ItemTemplate>
@@ -69,8 +69,8 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction 
-                                    Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=ToSetAColorInTheQuickSelectToolbar, 
+                                    Command="{Binding Source={StaticResource locator}, 
+                                        Path=richTextBoxViewModel.ToSetAColorInTheQuickSelectToolbar, 
                                         UpdateSourceTrigger=PropertyChanged}"
                                     CommandParameter="{Binding ElementName=border, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
                                 </i:EventTrigger>
@@ -82,7 +82,7 @@
         </ContextMenu>
     </UserControl.Resources>
     <UserControl.DataContext>
-        <Binding Source="{StaticResource viewmodel}"/>
+        <Binding Source="{StaticResource locator}" Path="richTextBoxViewModel"/>
     </UserControl.DataContext>
     <Grid Background="{Binding MyBackground, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
@@ -345,24 +345,9 @@
                                 ContextMenu="{StaticResource for_quick_color_bar}" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ContextMenuOpening">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=SelectAColorForTheQuickSelectToolbar, 
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource locator}, 
+                                        Path=richTextBoxViewModel.SelectAColorForTheQuickSelectToolbar, 
                                         UpdateSourceTrigger=PropertyChanged}" CommandParameter="0"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Border>
-                    </Button>
-                    <Button x:Name="color1" Style="{StaticResource quick_color_change_buttons}"
-                            Command="{Binding QuickColorSelection, UpdateSourceTrigger=PropertyChanged}" 
-                            CommandParameter="{Binding ElementName=border1, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                        <Border x:Name="border1" Background="{Binding QuickSelectColorCollection[1], UpdateSourceTrigger=PropertyChanged, 
-                            Converter={StaticResource colorconvert}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="3"
-                                ContextMenu="{StaticResource for_quick_color_bar}"  >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ContextMenuOpening">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
-                                                           CommandParameter="1"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Border>
@@ -375,8 +360,8 @@
                                 ContextMenu="{StaticResource for_quick_color_bar}" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ContextMenuOpening">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource locator}, 
+                                        Path=richTextBoxViewModel.SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
                                                            CommandParameter="2"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
@@ -390,9 +375,9 @@
                                 ContextMenu="{StaticResource for_quick_color_bar}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ContextMenuOpening">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
-                                                           CommandParameter="3"/>
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource locator},
+                                      Path=richTextBoxViewModel.SelectAColorForTheQuickSelectToolbar,
+                                        UpdateSourceTrigger=PropertyChanged}" CommandParameter="3"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Border>
@@ -405,8 +390,8 @@
                                 ContextMenu="{StaticResource for_quick_color_bar}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ContextMenuOpening">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource locator}, 
+                                        Path=richTextBoxViewModel.SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
                                                            CommandParameter="4"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>

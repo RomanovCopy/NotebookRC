@@ -17,6 +17,8 @@ namespace NotebookRCv001.Locators
         public MenuHome menuHome => App.container.Resolve<MenuHome>();
         public MenuHomeViewModel menuHomeViewModel => App.container.Resolve<MenuHomeViewModel>();
         public RichTextBox richTextBox => App.container.Resolve<RichTextBox>();
-        ButtonsClearAndClose buttonsClearAndClose => App.container.Resolve<ButtonsClearAndClose>();
+
+        public RichTextBoxViewModel richTextBoxViewModel => App.container.Resolve<RichTextBoxViewModel>();
+        public ButtonsClearAndClose buttonsClearAndClose => App.container.Resolve<ButtonsClearAndClose>();
     }
 }
