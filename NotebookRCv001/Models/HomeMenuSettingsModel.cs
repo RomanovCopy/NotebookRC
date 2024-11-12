@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using NotebookRCv001.ViewModels;
 using System.Reflection;
+using Autofac;
 
 namespace NotebookRCv001.Models
 {
@@ -73,7 +74,8 @@ namespace NotebookRCv001.Models
 
         public HomeMenuSettingsModel()
         {
-            MainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
+            MainWindowViewModel = App.container.Resolve<MainWindowViewModel>();
+            //MainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             MainWindowViewModel.Language.PropertyChanged += ( s, e ) =>
             OnPropertyChanged(new string[] { "Headers", "ToolTips", "LanguagesKey" });
             foreach (EncodingInfo info in Encoding.GetEncodings())

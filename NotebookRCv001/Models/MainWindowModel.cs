@@ -120,7 +120,7 @@ namespace NotebookRCv001.Models
         {
             FrameList = new ObservableCollection<Page>();
             //устанавливаем локализацию
-            Language = new Languages();
+            Language = App.container.Resolve<Languages>();
             Language.PropertyChanged += ( s, e ) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
             //восстанавливаем размеры и положение окна
             if (Properties.Settings.Default.FileOverviewFirstStart)

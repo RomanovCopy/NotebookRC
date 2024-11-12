@@ -8,6 +8,7 @@ using Autofac;
 
 using NotebookRCv001.Converters;
 using NotebookRCv001.Infrastructure;
+using NotebookRCv001.MyControls.HomeSideMenu;
 using NotebookRCv001.ViewModels;
 
 namespace NotebookRCv001.Locators
@@ -16,5 +17,6 @@ namespace NotebookRCv001.Locators
     {
         public MainWindowViewModel mainWindowViewModel => App.container.Resolve<MainWindowViewModel>();
         public static SizeLocationConverter sizeLocationConverter => App.container.Resolve<SizeLocationConverter>();
+
     }
 }

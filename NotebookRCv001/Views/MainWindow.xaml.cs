@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Autofac;
+
+using NotebookRCv001.MyControls.HomeSideMenu;
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -28,6 +32,7 @@ namespace NotebookRCv001.Views
         public MainWindow()
         {
             InitializeComponent();
+
         }
     }
 }

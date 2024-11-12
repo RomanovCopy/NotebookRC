@@ -9,6 +9,9 @@ using System.Windows;
 using NotebookRCv001.Views;
 using NotebookRCv001.ViewModels;
 using NotebookRCv001.Converters;
+using NotebookRCv001.MyControls.HomeSideMenu;
+using NotebookRCv001.Infrastructure;
+using NotebookRCv001.MyControls;
 
 namespace NotebookRCv001.DI
 {
@@ -19,13 +22,16 @@ namespace NotebookRCv001.DI
             var builder = new ContainerBuilder();
 
             //регистрация главного окна
-            builder.RegisterType<MainWindow>().AsSelf();
+            builder.RegisterType<MainWindow>().SingleInstance();
 
             //регистрация страниц
-            builder.RegisterType<MainWindowViewModel>().AsSelf();
-            builder.RegisterType<SizeLocationConverter>().AsSelf();
-            builder.RegisterType<Home>().AsSelf();
-            builder.RegisterType<HomeViewModel>().AsSelf();
+            builder.RegisterType<MainWindowViewModel>().SingleInstance();
+            builder.RegisterType<SizeLocationConverter>().SingleInstance();
+            builder.RegisterType<Languages>().SingleInstance();
+
+            builder.RegisterType<Home>().SingleInstance();
+            builder.RegisterType<HomeViewModel>().SingleInstance();
+            builder.RegisterType<MenuHome>().SingleInstance();
 
             return builder.Build();
         }

@@ -20,7 +20,6 @@
     <Window.Resources>
         <ResourceDictionary>
             <locators:MainWindowLocator x:Key="wlocator"/>
-            <homesidemenu:SideMenu x:Key="sideMenu"/>
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -54,14 +53,13 @@
             <RowDefinition x:Name="status" Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent">
-            <Grid x:Name="Overlay" Background="Green" Visibility="Collapsed" />
             <!-- Боковое меню -->
             <Border x:Name="MenuPanel" Background="#333" Width="150" HorizontalAlignment="Left" >
                 <Border.RenderTransform>
                     <TranslateTransform X="-150" />
                     <!-- Начальное положение меню за пределами окна -->
                 </Border.RenderTransform>
-                <Grid>
+                <Grid >
                     <homesidemenu:SideMenu x:Name="sideMenu"/>
                 </Grid>
             </Border>

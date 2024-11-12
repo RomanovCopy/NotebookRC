@@ -5,7 +5,7 @@
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:controls="clr-namespace:NotebookRCv001.MyControls"
-      xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+      xmlns:locators="clr-namespace:NotebookRCv001.Locators"
       xmlns:local="clr-namespace:NotebookRCv001.Views"
       Background="Transparent"
       mc:Ignorable="d"
@@ -13,14 +13,15 @@
       Title="Home">
     <Page.Resources>
         <ResourceDictionary>
+            <locators:HomeLocator x:Key="locator"/>
             <controls:MenuHome x:Key="menuhome"/>
             <controls:RichTextBox x:Key="richtextbox"/>
             <controls:ButtonsClearAndClose x:Key="buttonsclearandclose"/>
-            <viewmodels:HomeViewModel x:Key="homeviewmodel"/>
+            <!--<viewmodels:HomeViewModel x:Key="homeviewmodel"/>-->
         </ResourceDictionary>
     </Page.Resources>
     <Page.DataContext>
-        <Binding Source="{StaticResource homeviewmodel}"/>
+        <Binding  Source="{StaticResource locator}" Path="homeViewModel"/>
     </Page.DataContext>
     <Grid Background="White">
         <Grid.RowDefinitions>
