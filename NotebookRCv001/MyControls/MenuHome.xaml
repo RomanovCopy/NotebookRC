@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:viewmodels="clr-namespace:NotebookRCv001.ViewModels"
+             xmlns:locators="clr-namespace:NotebookRCv001.Locators"
              xmlns:converters="clr-namespace:NotebookRCv001.Converters"
              xmlns:local="clr-namespace:NotebookRCv001.MyControls"
              mc:Ignorable="d"
              x:Name="menuhome">
     <UserControl.Resources>
-        <viewmodels:MenuHomeViewModel x:Key="menuhome"/>
+        <!--<viewmodels:MenuHomeViewModel x:Key="menuhome"/>-->
+        <locators:HomeLocator x:Key="locator"/>
         <viewmodels:HomeMenuFileViewModel x:Key="menufile"/>
         <viewmodels:HomeMenuEncryptionViewModel x:Key="menuencryption"/>
         <viewmodels:HomeMenuSettingsViewModel x:Key="menusettings"/>
@@ -32,7 +34,7 @@
         </Style>
     </UserControl.Resources>
     <UserControl.DataContext>
-        <Binding Source="{StaticResource menuhome}"/>
+        <Binding Source="{StaticResource locator}" Path="menuHomeViewModel"/>
     </UserControl.DataContext>
     <Grid>
         <Menu x:Name="menu" >

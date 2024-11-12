@@ -28,10 +28,15 @@ namespace NotebookRCv001.DI
             builder.RegisterType<MainWindowViewModel>().SingleInstance();
             builder.RegisterType<SizeLocationConverter>().SingleInstance();
             builder.RegisterType<Languages>().SingleInstance();
+            builder.RegisterType<SideMenu>().SingleInstance();
+            builder.RegisterType<ToolBarStatus>().SingleInstance();
 
             builder.RegisterType<Home>().SingleInstance();
             builder.RegisterType<HomeViewModel>().SingleInstance();
             builder.RegisterType<MenuHome>().SingleInstance();
+            builder.RegisterType<MenuHomeViewModel>().SingleInstance();
+            builder.RegisterType<ButtonsClearAndClose>().SingleInstance();
+            builder.RegisterType<RichTextBox>().SingleInstance();
 
             return builder.Build();
         }

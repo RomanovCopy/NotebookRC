@@ -14,10 +14,6 @@
     <Page.Resources>
         <ResourceDictionary>
             <locators:HomeLocator x:Key="locator"/>
-            <controls:MenuHome x:Key="menuhome"/>
-            <controls:RichTextBox x:Key="richtextbox"/>
-            <controls:ButtonsClearAndClose x:Key="buttonsclearandclose"/>
-            <!--<viewmodels:HomeViewModel x:Key="homeviewmodel"/>-->
         </ResourceDictionary>
     </Page.Resources>
     <Page.DataContext>
@@ -34,10 +30,11 @@
                 <ColumnDefinition x:Name="formenu" Width="*"/>
                 <ColumnDefinition x:Name="forbuttons" Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ContentControl x:Name="menu" Content="{Binding Source={StaticResource menuhome}}" Grid.Column="0"/>
-            <ContentControl x:Name="buttons" Content="{Binding Source={StaticResource buttonsclearandclose}}" Grid.Column="1"/>
+            <ContentControl x:Name="menu" Content="{Binding Source={StaticResource locator}, Path=menuHome}" Grid.Column="0"/>
+            <ContentControl x:Name="buttons" Content="{Binding Source={StaticResource locator}, Path=buttonsClearAndClose}" Grid.Column="1"/>
         </Grid>
-        <ContentControl x:Name="rich" Content="{Binding Source={StaticResource richtextbox}}" Grid.Row="1"/>
+        <ContentControl x:Name="rich" 
+                        Content="{Binding Source={StaticResource locator}, Path=richTextBox}" Grid.Row="1"/>
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

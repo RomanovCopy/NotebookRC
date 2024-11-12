@@ -23,6 +23,8 @@ using NotebookRCv001.Interfaces;
 using NotebookRCv001.Helpers;
 using System.Windows.Media;
 using System.ComponentModel;
+using Autofac;
+using NotebookRCv001.MyControls;
 
 namespace NotebookRCv001.Models
 {
@@ -109,15 +111,15 @@ namespace NotebookRCv001.Models
 
         public HomeMenuFileModel()
         {
-            mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
+            mainWindowViewModel = App.container.Resolve<MainWindowViewModel>();
             mainWindowViewModel.Language.PropertyChanged += (s, e) => OnPropertyChanged(new string[] { "Headers", "ToolTips" });
             mainWindowViewModel.FrameList.CollectionChanged += (s, e) =>
             {
                 if (mainWindowViewModel.CurrentPage is Views.Home home)
                 {
-                    var richtextbox = (MyControls.RichTextBox)home.FindResource("richtextbox");
+                    var richtextbox = App.container.Resolve<NotebookRCv001.MyControls.RichTextBox>();
                     richTextBoxViewModel = (RichTextBoxViewModel)richtextbox.DataContext;
-                    var homemenu = (MyControls.MenuHome)home.FindResource("menuhome");
+                    var homemenu = App.container.Resolve<MenuHome>();
                     HomeMenuEncryptionViewModel = (HomeMenuEncryptionViewModel)homemenu.FindResource("menuencryption");
                     var homeViewModel = (HomeViewModel)home.DataContext;
                     richTextBoxViewModel.BehaviorReady = (x) => { behaviorRichTextBox = richTextBoxViewModel.BehaviorRichTextBox; };

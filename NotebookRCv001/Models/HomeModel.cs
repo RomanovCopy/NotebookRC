@@ -14,11 +14,13 @@ using NotebookRCv001.Helpers;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using NotebookRCv001.Styles.CustomizedWindow;
+using Autofac;
+using NotebookRCv001.MyControls;
 
 namespace NotebookRCv001.Models
 {
 
-    public class HomeModel : ViewModelBase
+    public class HomeModel: ViewModelBase
     {
         private readonly MainWindowViewModel mainWindowViewModel;
         private Languages language => mainWindowViewModel.Language;
@@ -88,24 +90,22 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool CanExecute_PageClear( object obj )
+        internal bool CanExecute_PageClear(object obj)
         {
             try
             {
                 bool c = false;
-                if (richTextBoxViewModel != null)
+                if(richTextBoxViewModel != null)
                     c = richTextBoxViewModel.PageClear.CanExecute(null);
                 return c;
-            }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            } catch(Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_PageClear( object obj )
+        internal void Execute_PageClear(object obj)
         {
             try
             {
                 richTextBoxViewModel.PageClear.Execute(null);
-            }
-            catch (Exception e) { ErrorWindow(e); }
+            } catch(Exception e) { ErrorWindow(e); }
         }
 
 
@@ -114,38 +114,38 @@ namespace NotebookRCv001.Models
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool CanExecute_HomeLoaded( object obj )
+        internal bool CanExecute_HomeLoaded(object obj)
         {
             try
             {
                 bool c = false;
                 c = true;
                 return c;
-            }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            } catch(Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_HomeLoaded( object obj )
+        internal void Execute_HomeLoaded(object obj)
         {
             try
             {
-                if (richTextBoxViewModel == null)
+                if(richTextBoxViewModel == null)
                 {
-                    if (obj is Views.Home home)
+                    if(obj is Views.Home home)
                     {
-                        var menuhome = (MyControls.MenuHome)home.FindResource("menuhome");
-                        richTextBoxViewModel ??= (RichTextBoxViewModel)((MyControls.RichTextBox)home.FindResource("richtextbox")).DataContext;
-                        menuHomeViewModel ??= (MenuHomeViewModel)((MyControls.MenuHome)home.FindResource("menuhome")).DataContext;
-                        menuHomeViewModel.PropertyChanged += ( s, e ) => OnPropertyChanged(e.PropertyName);
+                        richTextBoxViewModel ??= (RichTextBoxViewModel)App.container.Resolve<RichTextBox>().DataContext;
+                        if(menuHomeViewModel == null)
+                        {
+                            menuHomeViewModel = App.container.Resolve<MenuHomeViewModel>();
+                            menuHomeViewModel.PropertyChanged += (s, e) => OnPropertyChanged(e.PropertyName);
+                        }
                     }
                 }
-                if (BehaviorReady != null)
+                if(BehaviorReady != null)
                 {
                     BehaviorReady.Invoke(obj);
                     BehaviorReady = null;
                 }
                 OnPropertyChanged("LastFileName");
-            }
-            catch (Exception e) { ErrorWindow(e); }
+            } catch(Exception e) { ErrorWindow(e); }
         }
 
 
@@ -155,22 +155,21 @@ namespace NotebookRCv001.Models
         /// <param name="obj"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal bool CanExecute_PageClose( object obj )
+        internal bool CanExecute_PageClose(object obj)
         {
             try
             {
                 bool c = false;
-                var list = mainWindowViewModel.FrameList.Where(( x ) => x is Views.Home);
+                var list = mainWindowViewModel.FrameList.Where((x) => x is Views.Home);
                 c = list.Count() > 1;
                 return c;
-            }
-            catch (Exception e) { ErrorWindow(e); return false; }
+            } catch(Exception e) { ErrorWindow(e); return false; }
         }
-        internal void Execute_PageClose( object obj )
+        internal void Execute_PageClose(object obj)
         {
             try
             {
-                if (obj is Views.Home home && richTextBoxViewModel!=null)
+                if(obj is Views.Home home && richTextBoxViewModel != null)
                 {
                     Properties.Settings.Default.EncodingCodePage = HomeEncoding != null ? HomeEncoding.CodePage :
                         Properties.Settings.Default.EncodingCodePage;//сохранение текущей кодировки
@@ -207,10 +206,9 @@ namespace NotebookRCv001.Models
                     }
                     Properties.Settings.Default.Save();
                 }
-                if (mainWindowViewModel.PageClosed.CanExecute(obj))//удаеление страницы из коллекции страниц
+                if(mainWindowViewModel.PageClosed.CanExecute(obj))//удаеление страницы из коллекции страниц
                     mainWindowViewModel.PageClosed.Execute(obj);
-            }
-            catch (Exception e) { ErrorWindow(e); }
+            } catch(Exception e) { ErrorWindow(e); }
         }
 
     }

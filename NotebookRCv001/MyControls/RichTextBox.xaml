@@ -56,16 +56,21 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <ContextMenu x:Key="for_quick_color_bar" DataContext="{StaticResource viewmodel}">
-            <MenuItem Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MyColors, UpdateSourceTrigger=PropertyChanged}">
+        <ContextMenu x:Key="for_quick_color_bar" 
+                     DataContext="{Binding Source={StaticResource viewmodel}}">
+            <MenuItem Header="{Binding Headers[0], UpdateSourceTrigger=PropertyChanged}" 
+                      ItemsSource="{Binding MyColors, UpdateSourceTrigger=PropertyChanged}">
                 <MenuItem.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="border" Height="15" Width="100" CornerRadius="3" ToolTip="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                    Background="{Binding Path=. ,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource colorconvert}}">
+                        <Border x:Name="border" Height="15" Width="100" CornerRadius="3" 
+                                ToolTip="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Background="{Binding Path=. ,UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource colorconvert}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction 
-                                    Command="{Binding Source={StaticResource viewmodel}, Path=ToSetAColorInTheQuickSelectToolbar, 
+                                    Command="{Binding Source={StaticResource viewmodel}, 
+                                        Path=ToSetAColorInTheQuickSelectToolbar, 
                                         UpdateSourceTrigger=PropertyChanged}"
                                     CommandParameter="{Binding ElementName=border, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
                                 </i:EventTrigger>
@@ -96,8 +101,8 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Background="Gray" Grid.Column="0">
                     <!--FontFamily-->
-                    <ComboBox x:Name="FontFamilyCombo"  Margin="5,2,0,2" Tag="{Binding ElementName=TextBox}" MinWidth="100"
-                          VirtualizingPanel.VirtualizationMode="Standard"
+                    <ComboBox x:Name="FontFamilyCombo"  Margin="5,2,0,2" Tag="{Binding ElementName=TextBox}" 
+                              MinWidth="100" VirtualizingPanel.VirtualizationMode="Standard"
                           VirtualizingPanel.IsVirtualizing="True"
                         ToolTip="{Binding ToolTipsToolBar[0], UpdateSourceTrigger=PropertyChanged}" 
                           ItemsSource="{Binding FontFamilies, UpdateSourceTrigger=PropertyChanged}">
@@ -341,8 +346,8 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ContextMenuOpening">
                                     <i:InvokeCommandAction Command="{Binding Source={StaticResource viewmodel}, 
-                                        Path=SelectAColorForTheQuickSelectToolbar, UpdateSourceTrigger=PropertyChanged}"
-                                                           CommandParameter="0"/>
+                                        Path=SelectAColorForTheQuickSelectToolbar, 
+                                        UpdateSourceTrigger=PropertyChanged}" CommandParameter="0"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Border>

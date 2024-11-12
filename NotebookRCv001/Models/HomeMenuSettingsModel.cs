@@ -13,6 +13,7 @@ using System.Threading;
 using NotebookRCv001.ViewModels;
 using System.Reflection;
 using Autofac;
+using NotebookRCv001.MyControls;
 
 namespace NotebookRCv001.Models
 {
@@ -247,7 +248,7 @@ namespace NotebookRCv001.Models
                 if (MainWindowViewModel.CurrentPage is Views.Home page)
                 {
                     HomeViewModel = (HomeViewModel)page.DataContext;
-                    RichTextBoxViewModel = (RichTextBoxViewModel)((MyControls.RichTextBox)page.FindResource("richtextbox")).DataContext;
+                    RichTextBoxViewModel = (RichTextBoxViewModel)App.container.Resolve<RichTextBox>().DataContext;
                 }
             }
             catch (Exception e) { ErrorWindow(e); }

@@ -4,11 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:viewmodel="clr-namespace:NotebookRCv001.ViewModels"
         xmlns:converters="clr-namespace:NotebookRCv001.Converters"
-        xmlns:controls="clr-namespace:NotebookRCv001.MyControls" 
         xmlns:customized="clr-namespace:NotebookRCv001.Styles.CustomizedWindow"
-        xmlns:homesidemenu="clr-namespace:NotebookRCv001.MyControls.HomeSideMenu"
         xmlns:locators="clr-namespace:NotebookRCv001.Locators"
         xmlns:local="clr-namespace:NotebookRCv001.Views"
         mc:Ignorable="d"
@@ -56,17 +53,16 @@
             <!-- Боковое меню -->
             <Border x:Name="MenuPanel" Background="#333" Width="150" HorizontalAlignment="Left" >
                 <Border.RenderTransform>
-                    <TranslateTransform X="-150" />
                     <!-- Начальное положение меню за пределами окна -->
+                    <TranslateTransform X="-150" />
                 </Border.RenderTransform>
                 <Grid >
-                    <homesidemenu:SideMenu x:Name="sideMenu"/>
+                    <ContentControl  Content="{Binding Source={StaticResource wlocator}, Path=sideMenu}"/>
                 </Grid>
             </Border>
 
             <Grid x:Name="ContentPanel" Background="LightGray" Margin="0,0,0,0" >
-                <Frame x:Name="frame" 
-               Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}" 
+                <Frame x:Name="frame" Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}" 
                NavigationUIVisibility="Hidden" 
                Background="Transparent">
                     <i:Interaction.Triggers>
@@ -79,7 +75,7 @@
 
         </Grid>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="White" >
-            <controls:ToolBarStatus x:Name="toolbar"/>
+            <ContentControl Content="{Binding Source={StaticResource wlocator}, Path=toolBarStatus}"/>
         </Border>
     </Grid>
     <i:Interaction.Triggers>
