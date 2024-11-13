@@ -17,6 +17,9 @@ using System.Windows.Forms;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Windows.Documents;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Autofac;
+using NotebookRCv001.ViewModels;
+using NotebookRCv001.MyControls;
 //using System.Windows.Shapes;
 
 namespace NotebookRCv001.Models
@@ -145,10 +148,10 @@ namespace NotebookRCv001.Models
 
         internal EncryptIndividualFileModel()
         {
-            mainWindowViewModel = (ViewModels.MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
+            mainWindowViewModel = App.container.Resolve<MainWindowViewModel>();
             var home = (Views.Home)mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
             homeViewModel = (ViewModels.HomeViewModel)home.DataContext;
-            var menu = (MyControls.MenuHome)home.FindResource("menuhome");
+            var menu = App.container.Resolve<MenuHome>();
             homeMenuEncryptionViewModel = (ViewModels.HomeMenuEncryptionViewModel)menu.FindResource("menuencryption");
             string[] ex = new[] { "Headers", "ToolTips" };
             language.PropertyChanged += (s, e) => OnPropertyChanged(ex);

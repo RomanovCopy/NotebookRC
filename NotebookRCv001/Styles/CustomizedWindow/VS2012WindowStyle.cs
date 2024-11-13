@@ -22,6 +22,8 @@ using NotebookRCv001.Interfaces;
 using System.Drawing;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
+using Autofac;
+using NotebookRCv001.Views;
 
 namespace NotebookRCv001.Styles.CustomizedWindow
 {
@@ -243,6 +245,13 @@ namespace NotebookRCv001.Styles.CustomizedWindow
                 menuPanel = (DependencyObject)Application.Current.MainWindow.FindName("MenuPanel");
                 contentPanel= (DependencyObject)Application.Current.MainWindow.FindName("ContentPanel");
             });
+
+            App.container.Resolve<MainWindow>().Dispatcher.Invoke(() =>
+            {
+                menuPanel = (DependencyObject)Application.Current.MainWindow.FindName("MenuPanel");
+                contentPanel = (DependencyObject)Application.Current.MainWindow.FindName("ContentPanel");
+            });
+
 
             Storyboard storyboard = ((Storyboard)Application.Current.Resources[storyboardKey]).Clone();
 

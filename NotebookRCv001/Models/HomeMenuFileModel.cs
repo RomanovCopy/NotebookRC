@@ -178,7 +178,7 @@ namespace NotebookRCv001.Models
                 //получение объекта для вставки данных
                 var home = (Views.Home)mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
                 if (home == null) return;
-                var menu = (MyControls.MenuHome)home.FindResource("menuhome");
+                var menu = App.container.Resolve<MenuHome>();
                 var menuVM = ((ViewModels.MenuHomeViewModel)menu.DataContext);
                 Encoding encoding = menuVM.HomeEncoding;
                 //определяем текущий режим (чтение/редактирование)
@@ -319,8 +319,8 @@ namespace NotebookRCv001.Models
                     path = PathToLastFile;
                 var home = (Views.Home)mainWindowViewModel.FrameList.Where((x) => x is Views.Home).FirstOrDefault();
                 if (home == null) return;
-                var menu = (MyControls.MenuHome)home.FindResource("menuhome");
-                var menuVM = ((ViewModels.MenuHomeViewModel)menu.DataContext);
+                var menu = App.container.Resolve<MenuHome>();
+                var menuVM = (ViewModels.MenuHomeViewModel)menu.DataContext;
                 Encoding encoding = menuVM.HomeEncoding;
                 TextRange textRange = richTextBoxViewModel.BehaviorRichTextBox.TextRange;
                 HomeMenuEncryptionModel encryptionModel = HomeMenuEncryptionViewModel.HomeMenuEncryptionModel;

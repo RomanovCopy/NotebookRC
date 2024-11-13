@@ -80,7 +80,7 @@ namespace NotebookRCv001.Models
 
         public HomeModel()
         {
-            mainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
+            mainWindowViewModel = App.container.Resolve<MainWindowViewModel>();
         }
 
 

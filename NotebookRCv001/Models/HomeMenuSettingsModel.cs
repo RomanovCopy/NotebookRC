@@ -76,7 +76,6 @@ namespace NotebookRCv001.Models
         public HomeMenuSettingsModel()
         {
             MainWindowViewModel = App.container.Resolve<MainWindowViewModel>();
-            //MainWindowViewModel = (MainWindowViewModel)Application.Current.MainWindow.DataContext;
             MainWindowViewModel.Language.PropertyChanged += ( s, e ) =>
             OnPropertyChanged(new string[] { "Headers", "ToolTips", "LanguagesKey" });
             foreach (EncodingInfo info in Encoding.GetEncodings())
